@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 
 Vue.use(Vuex)
 
@@ -17,6 +18,8 @@ export default function (/* { ssrContext } */) {
 				countries:[],
 				page: 1,
 				perpage: 30,
+				holdingName: '',
+				holdingCountryId: null,
 				holding: [],
 				holdings: [],
 				token: null,
@@ -30,6 +33,7 @@ export default function (/* { ssrContext } */) {
 				perPage: 28
 			  },
 			mutations:{
+
 				countries(state, payload){
 					state.countries = payload
 				},
@@ -41,6 +45,12 @@ export default function (/* { ssrContext } */) {
 				},
 				holding(state, payload){
 					state.holding = payload
+				},
+				holdingCountryId(state, payload){
+					state.holdingCountryId = payload
+				},
+				holdingName(state, payload){
+					state.holdingName = payload
 				},
 				holdings(state, payload){
 					state.holdings = payload
@@ -77,6 +87,24 @@ export default function (/* { ssrContext } */) {
 				}
 			},
 			actions:{
+				GET_HOLDINGS(state){
+					axios.get(process.env.API + '/holdings?page='+state.getters.page+'&perPage='+state.getters.perPage)
+					.then(function(res){
+				       state.commit('holdings', res.data.holdings);
+				    })
+				},
+				GET_COUNTRIES(state){
+					axios.get(process.env.API + '/countries')
+						.then(function(res){
+							state.commit('countries', res.data.countries);
+					    })
+				},
+				GET_REGIONS(state){
+					axios.get(process.env.API + `/regions`)
+					.then(function(res){
+							state.commit('regions', res.data.regions);
+					    })
+				},
 				countries(state, payload){
 					state.commit('countries', payload)
 				},
@@ -88,6 +116,12 @@ export default function (/* { ssrContext } */) {
 				},
 				holding(state, payload){
 					state.commit('holding', payload)
+				},
+				holdingCountryId(state, payload){
+					state.commit('holdingCountryId', payload)
+				},
+				holdingName(state, payload){
+					state.commit('holdingName', payload)
 				},
 				holdings(state, payload){
 					state.commit('holdings', payload)
@@ -124,6 +158,7 @@ export default function (/* { ssrContext } */) {
 				}
 			},
 			getters:{
+
 				countries(state){
 					return state.countries
 				},
@@ -135,6 +170,12 @@ export default function (/* { ssrContext } */) {
 				},
 				holding(state){
 					return state.holding
+				},
+				holdingCountryId(state){
+					return state.holdingCountryId
+				},
+				holdingName(state){
+					return state.holdingName
 				},
 				holdings(state){
 					return state.holdings

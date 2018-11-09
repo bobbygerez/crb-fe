@@ -64,7 +64,7 @@
         <q-list-header>{{ user.firstname }} {{ user.lastname }}</q-list-header>
 
         <q-collapsible :label="menu.name" v-for="(menu, i) in user.menus " :key="i" >
-          <q-collapsible :label="subMenu.name" v-for="(subMenu, x) in menu.sub_menus" :key="x" :to="slug(`/dashboard/${subMenu.name}/${subMenu.id}`)">
+          <q-collapsible :label="subMenu.name" v-for="(subMenu, x) in menu.sub_menus" :key="x" :to="slug(`/dashboard/menu-${subMenu.name}/${subMenu.id}`)">
             <q-item link v-for="(subMenuChild,y) in subMenu.sub_menus_child" :key="y">
               <q-item-main :label="subMenuChild.description" />
             </q-item>
@@ -75,31 +75,6 @@
 
     <q-page-container>
       <router-view />
-      <!-- <q-dialog
-        v-model="customDialogModel"
-        prevent-close
-        no-esc-dismiss
-        no-backdrop-dismiss
-        cancel
-      >
-        <span slot="title">User Login</span>
-        <div slot="body">
-          <q-field
-            icon="email"
-            helper="Email"
-          >
-            <q-input v-model="text2" />
-          </q-field>
-        </div>
-        <div slot="body">
-          <q-field
-            icon="lock"
-            helper="password"
-          >
-            <q-input v-model="text2" type="password" />
-          </q-field>
-        </div>
-      </q-dialog> -->
     </q-page-container>
   </q-layout>
 </template>

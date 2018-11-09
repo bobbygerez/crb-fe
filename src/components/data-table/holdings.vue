@@ -80,9 +80,10 @@
         <q-input v-model="holding.name" float-label="Holding name" />
         
         <div class="row">
-          <div  class="col-xs-12 col-sm-6"><q-select
-          v-model="selectedCountry"
-          :options="options"
+          <div  class="col-xs-12 col-sm-6">
+          <q-select
+          v-model="holding.address.country.id"
+          :options="countries"
           float-label="Country"
           clearable
         /></div>
@@ -113,6 +114,7 @@
           float-label="Barangay"
           clearable
         /></div>
+
          
         </div>
         <br />
@@ -130,9 +132,41 @@ export default {
   data () {
     return {
        selectedCountry: '',
-       options: [
+       listOptions: [
         {
           label: 'Google',
+          icon: 'email',
+          value: 'goog'
+        },
+        {
+          label: 'Facebook',
+          icon: 'chat',
+          description: 'Enables communication',
+          value: 'fb'
+        },
+        {
+          label: 'Twitter',
+          inset: true,
+          rightIcon: 'live_help',
+          value: 'twtr'
+        },
+        {
+          label: 'Apple Inc.',
+          inset: true,
+          stamp: '10 min',
+          value: 'appl'
+        },
+        {
+          label: 'Oracle',
+          description: 'Some Java for today?',
+          icon: 'unarchive',
+          rightIcon: 'widgets',
+          value: 'ora'
+        }
+      ],
+       options: [
+        {
+          label: 'Googlee',
           value: 'goog'
         },
         {
@@ -208,6 +242,14 @@ export default {
     }
   },
   computed: {
+    countries(){
+      return this.$store.getters.countries.map(e => {
+        return {
+          label: e.description,
+          value: e.id
+        }
+      })
+    },
     holding(){
       return this.$store.getters.holding
     },
@@ -259,10 +301,11 @@ export default {
     },
     'holding.name'(val){
 
-      this.$store.dispatch('holdingsField',{
-        field: 'name',
-        value: val
-      })
+      this.$store.dispatch('holdingName', val)
+    },
+    'holding.address.country.id'(val){
+      this.$store.dispatch('holdingCountryId', val)
+      this.$store.dispatch('GET_REGIONS')
     }
   }
 }

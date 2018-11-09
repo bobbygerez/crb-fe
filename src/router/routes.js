@@ -24,7 +24,7 @@ const routes = [
     meta: { requiresAuth: true}
   },
   {
-    path: '/dashboard/holdings/:id',
+    path: '/dashboard/menu-holdings/:id',
     component: () => import('layouts/MyLayout.vue'),
     children: [
       { path: '', component: () => import('pages/dashboard/holdings/index.vue') }
