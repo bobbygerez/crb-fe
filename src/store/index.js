@@ -13,14 +13,20 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-		grandflex:{
+		pattys:{
 			state:{
+				regions:[],
 				countries:[],
 				page: 1,
 				perpage: 30,
 				holdingName: '',
 				holdingCountryId: null,
-				holding: [],
+				holding: {
+					address:{
+						country_id: null,
+						region_id: null
+					}
+				},
 				holdings: [],
 				token: null,
 				user: [],
@@ -33,7 +39,9 @@ export default function (/* { ssrContext } */) {
 				perPage: 28
 			  },
 			mutations:{
-
+				regions(state, payload){
+					state.regions = payload
+				},
 				countries(state, payload){
 					state.countries = payload
 				},
@@ -45,9 +53,6 @@ export default function (/* { ssrContext } */) {
 				},
 				holding(state, payload){
 					state.holding = payload
-				},
-				holdingCountryId(state, payload){
-					state.holdingCountryId = payload
 				},
 				holdingName(state, payload){
 					state.holdingName = payload
@@ -93,20 +98,30 @@ export default function (/* { ssrContext } */) {
 				       state.commit('holdings', res.data.holdings);
 				    })
 				},
+				HOLDING_EDIT(state, holdingId){
+				      axios.get(process.env.API + `/holdings/${holdingId}/edit`)
+				      .then(function(res){
+				      	state.commit('holding', res.data.holding);
+				      })
+				      .catch()
+				},
 				GET_COUNTRIES(state){
 					axios.get(process.env.API + '/countries')
 						.then(function(res){
 							state.commit('countries', res.data.countries);
 					    })
 				},
-				GET_REGIONS(state){
-					axios.get(process.env.API + `/regions`)
+				GET_REGIONS(state, countryId){
+					axios.get(process.env.API + `/regions/${countryId}`)
 					.then(function(res){
 							state.commit('regions', res.data.regions);
 					    })
 				},
-				countries(state, payload){
-					state.commit('countries', payload)
+				GET_PROVINCES(state, regionId){
+					axios.get(process.env.API + `/provinces/${regionId}`)
+					.then(function(res){
+							
+					    })
 				},
 				page(state, payload){
 					state.commit('page', payload)
@@ -116,9 +131,6 @@ export default function (/* { ssrContext } */) {
 				},
 				holding(state, payload){
 					state.commit('holding', payload)
-				},
-				holdingCountryId(state, payload){
-					state.commit('holdingCountryId', payload)
 				},
 				holdingName(state, payload){
 					state.commit('holdingName', payload)
@@ -158,9 +170,21 @@ export default function (/* { ssrContext } */) {
 				}
 			},
 			getters:{
-
+				regions(state){
+					return state.regions.map(e => {
+				        return {
+				          label: e.description,
+				          value: e.id
+				        }
+				      })
+				},
 				countries(state){
-					return state.countries
+					return state.countries.map(e => {
+				        return {
+				          label: e.description,
+				          value: e.id
+				        }
+				      })
 				},
 				page(state){
 					return state.page

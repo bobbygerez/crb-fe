@@ -82,14 +82,14 @@
         <div class="row">
           <div  class="col-xs-12 col-sm-6">
           <q-select
-          v-model="holding.address.country.id"
+          v-model="holding.address.country_id"
           :options="countries"
           float-label="Country"
           clearable
         /></div>
           <div class="col-xs-12 col-sm-6"><q-select
-          v-model="selectedCountry"
-          :options="options"
+          v-model="holding.address.region_id"
+          :options="regions"
           float-label="Region"
           clearable
         /></div>
@@ -242,13 +242,11 @@ export default {
     }
   },
   computed: {
+    regions(){
+      return this.$store.getters.regions
+    },
     countries(){
-      return this.$store.getters.countries.map(e => {
-        return {
-          label: e.description,
-          value: e.id
-        }
-      })
+      return this.$store.getters.countries
     },
     holding(){
       return this.$store.getters.holding
@@ -271,14 +269,8 @@ export default {
       })
     },
     edit(id){
-      let data = this
-      this.$axios.get(process.env.API + `/holdings/${id}/edit`)
-      .then(function(res){
-        data.$store.dispatch('holding', res.data.holding);
-        data.minimizedModal = true
-      })
-      .catch()
-
+      this.$store.dispatch('HOLDING_EDIT', id)
+      this.minimizedModal = true
     }
   },
   watch: {
@@ -300,12 +292,13 @@ export default {
       console.log('asdf')
     },
     'holding.name'(val){
-
       this.$store.dispatch('holdingName', val)
     },
-    'holding.address.country.id'(val){
-      this.$store.dispatch('holdingCountryId', val)
-      this.$store.dispatch('GET_REGIONS')
+    'holding.address.country_id'(val){
+      this.$store.dispatch('GET_REGIONS', val)
+    },
+    'holding.address.region_id'(val){
+      this.$store.dispatch('GET_PROVINCES', val)
     }
   }
 }
