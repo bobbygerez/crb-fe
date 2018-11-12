@@ -15,17 +15,25 @@ export default function (/* { ssrContext } */) {
     modules: {
 		pattys:{
 			state:{
+				brgys:[],
+				cities:[],
+				provinces:[],
 				regions:[],
 				countries:[],
 				page: 1,
 				perpage: 30,
 				holdingName: '',
-				holdingCountryId: null,
 				holding: {
 					address:{
 						country_id: null,
-						region_id: null
-					}
+						region_id: null,
+						province_id: null,
+						city_id: null,
+						brgy_id: null,
+						street_lot_blk: null,
+					},
+					name: null,
+					desc: null
 				},
 				holdings: [],
 				token: null,
@@ -39,6 +47,15 @@ export default function (/* { ssrContext } */) {
 				perPage: 28
 			  },
 			mutations:{
+				brgys(state, payload){
+					state.brgys = payload
+				},
+				cities(state, payload){
+					state.cities = payload
+				},
+				provinces(state, payload){
+					state.provinces = payload
+				},
 				regions(state, payload){
 					state.regions = payload
 				},
@@ -51,17 +68,32 @@ export default function (/* { ssrContext } */) {
 				perPage(state, payload){
 					state.perPage = payload
 				},
-				holding(state, payload){
-					state.holding = payload
+				holdingStreetLotBlk(state, payload){
+					state.holding.address.street_lot_blk = payload
+				},
+				holdingBrgy(state, payload){
+					state.holding.address.brgy_id = payload
+				},
+				holdingCity(state, payload){
+					state.holding.address.city_id = payload
+				},
+				holdingProvince(state, payload){
+					state.holding.address.province_id = payload
+				},
+				holdingRegion(state, payload){
+					state.holding.address.region_id = payload
+				},
+				holdingDesc(state, payload){
+					state.holding.desc = payload
 				},
 				holdingName(state, payload){
 					state.holdingName = payload
 				},
+				holding(state, payload){
+					state.holding = payload
+				},
 				holdings(state, payload){
 					state.holdings = payload
-				},
-				holdingsField(state, payload){
-					state.holdings[payload['field']] = payload['value']
 				},
 				token(state, payload){
 					state.token = payload
@@ -84,43 +116,46 @@ export default function (/* { ssrContext } */) {
 				items(state, payload){
 					state.items = payload
 				},
-				provinces(state, payload){
-					state.provinces = payload
-				},
 				categories(state, payload){
 					state.categories = payload
 				}
 			},
 			actions:{
-				GET_HOLDINGS(state){
-					axios.get(process.env.API + '/holdings?page='+state.getters.page+'&perPage='+state.getters.perPage)
+				GET_HOLDINGS({commit, state}){
+					axios.get(process.env.API + '/holdings?page='+state.page+'&perPage='+state.perPage)
 					.then(function(res){
-				       state.commit('holdings', res.data.holdings);
+				       commit('holdings', res.data.holdings);
 				    })
 				},
-				HOLDING_EDIT(state, holdingId){
-				      axios.get(process.env.API + `/holdings/${holdingId}/edit`)
-				      .then(function(res){
-				      	state.commit('holding', res.data.holding);
-				      })
-				      .catch()
-				},
-				GET_COUNTRIES(state){
+				
+				GET_COUNTRIES({commit, state}){
 					axios.get(process.env.API + '/countries')
 						.then(function(res){
-							state.commit('countries', res.data.countries);
+							commit('countries', res.data.countries);
 					    })
 				},
-				GET_REGIONS(state, countryId){
+				GET_REGIONS({commit, state}, countryId){
 					axios.get(process.env.API + `/regions/${countryId}`)
 					.then(function(res){
-							state.commit('regions', res.data.regions);
+							commit('regions', res.data.regions);
 					    })
 				},
-				GET_PROVINCES(state, regionId){
+				GET_PROVINCES({commit, state}, regionId){
 					axios.get(process.env.API + `/provinces/${regionId}`)
 					.then(function(res){
-							
+							commit('provinces', res.data.provinces)
+					    })
+				},
+				GET_CITIES({commit, state}, provinceId){
+					axios.get(process.env.API + `/cities/${provinceId}`)
+					.then(function(res){
+							commit('cities', res.data.cities)
+					    })
+				},
+				GET_BRGYS({commit, state}, cityId){
+					axios.get(process.env.API + `/brgys/${cityId}`)
+					.then(function(res){
+							commit('brgys', res.data.brgys)
 					    })
 				},
 				page(state, payload){
@@ -132,14 +167,26 @@ export default function (/* { ssrContext } */) {
 				holding(state, payload){
 					state.commit('holding', payload)
 				},
+				holdingStreetLotBlk(state, payload){
+					state.commit('holdingStreetLotBlk', payload)
+				},
 				holdingName(state, payload){
 					state.commit('holdingName', payload)
 				},
-				holdings(state, payload){
-					state.commit('holdings', payload)
+				holdingDesc(state, payload){
+					state.commit('holdingDesc', payload)
 				},
-				holdingsField(state, payload){
-					state.commit('holdingsField', payload)
+				holdingBrgy(state, payload){
+					state.commit('holdingBrgy', payload)
+				},
+				holdingCity(state, payload){
+					state.commit('holdingCity', payload)
+				},
+				holdingProvince(state, payload){
+					state.commit('holdingProvince', payload)
+				},
+				holdingRegion(state, payload){
+					state.commit('holdingRegion', payload)
 				},
 				token(state, payload){
 					state.commit('token', payload)
@@ -170,21 +217,20 @@ export default function (/* { ssrContext } */) {
 				}
 			},
 			getters:{
+				brgys(state){
+					return state.brgys
+				},
+				cities(state){
+					return state.cities
+				},
+				provinces(state){
+					return state.provinces
+				},
 				regions(state){
-					return state.regions.map(e => {
-				        return {
-				          label: e.description,
-				          value: e.id
-				        }
-				      })
+					return state.regions
 				},
 				countries(state){
-					return state.countries.map(e => {
-				        return {
-				          label: e.description,
-				          value: e.id
-				        }
-				      })
+					return state.countries
 				},
 				page(state){
 					return state.page
@@ -194,9 +240,6 @@ export default function (/* { ssrContext } */) {
 				},
 				holding(state){
 					return state.holding
-				},
-				holdingCountryId(state){
-					return state.holdingCountryId
 				},
 				holdingName(state){
 					return state.holdingName
@@ -225,9 +268,7 @@ export default function (/* { ssrContext } */) {
 				items(state){
 					return state.items
 				},
-				provinces(state){
-					return state.provinces
-				},
+				
 				categories(state){
 					return state.categories
 				}

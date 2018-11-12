@@ -6,7 +6,7 @@ export default ({ app, router, Vue, store }) => {
   createPersistedState({
        reducer: (persistedState) => {
         const stateFilter = Object.assign({}, persistedState)
-        const blackList = []
+        const blackList = ['holdings', 'holding']
 
         blackList.forEach((item) => {
           delete stateFilter[item]
