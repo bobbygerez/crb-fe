@@ -196,7 +196,7 @@
         pagination: {
           page: 2
         },
-        paginationControl: { rowsPerPage: 15, page: 1 },
+        paginationControl: { rowsPerPage: 30, page: 1 },
         loading: false,
         dark: true,
         selectedSecond: [
@@ -249,7 +249,7 @@
         return this.$store.getters.holding
       },
       holdings(){
-        return _.values(this.$store.getters.holdings)
+        return _.values(this.$store.getters.holdings.data)
       },
       perPage(){
         return this.$store.getters.perPage
@@ -282,9 +282,9 @@
                             icon: 'check',
                             message: `${data.holding.name} deleted successfully`
                           })
-                           data.$store.dispatch('GET_HOLDINGS')
+                          
                         })
-                       
+                        data.$store.dispatch('GET_HOLDINGS')
                       }
                     }
                   ]
@@ -322,6 +322,7 @@
             message: `${data.holding.name} update successfully`
           })
           data.$store.dispatch('GET_HOLDINGS')
+
         })
         .catch()
         

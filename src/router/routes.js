@@ -32,6 +32,14 @@ const routes = [
     meta: { requiresAuth: true}
   },
   {
+    path: '/dashboard/menu-holdings/:id/submenu-description/:id',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/dashboard/holdings/index.vue') }
+    ], 
+    meta: { requiresAuth: true}
+  },
+  {
     path: '/category/:name/:id',
     component: () => import('layouts/MyLayout.vue'),
     children: [
