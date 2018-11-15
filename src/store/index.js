@@ -122,10 +122,7 @@ export default function (/* { ssrContext } */) {
 			},
 			actions:{
 				GET_HOLDINGS({commit, state}){
-					axios.get(process.env.API + '/holdings?page='+state.page+'&perPage='+state.perPage)
-					.then(function(res){
-				       commit('holdings', res.data.holdings);
-				    })
+					
 				},
 				
 				GET_COUNTRIES({commit, state}){
@@ -166,6 +163,9 @@ export default function (/* { ssrContext } */) {
 				},
 				holding(state, payload){
 					state.commit('holding', payload)
+				},
+				holdings(state, payload){
+					state.commit('holdings', payload)
 				},
 				holdingStreetLotBlk(state, payload){
 					state.commit('holdingStreetLotBlk', payload)

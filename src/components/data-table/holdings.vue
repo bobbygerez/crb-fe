@@ -24,13 +24,8 @@
     </template>
     <template slot="body" slot-scope="props">
       <q-tr :props="props">
-        <q-td key="name" :props="props">
+        <q-td key="name">
           {{props.row.name}}
-          <q-popup-edit v-model="props.row.name">
-            <q-field count>
-              <q-input v-model="props.row.name" />
-            </q-field>
-          </q-popup-edit>
         </q-td>
         <q-td key="address" :props="props">
           {{props.row.address.street_lot_blk}},
@@ -295,6 +290,8 @@
       },
       edit(id){
         let data = this
+        this.$axios.defaults.headers.common['Authorization'] = `Bearer ${this.$store.getters.token}`
+
         this.$axios.get(process.env.API + `/holdings/${id}/edit`)
               .then(function(res){
                 data.$store.dispatch('holding', res.data.holding);
@@ -304,6 +301,7 @@
       },
       update(id){
         var data  = this
+        this.$axios.defaults.headers.common['Authorization'] = `Bearer ${this.$store.getters.token}`
         this.$axios.put(process.env.API + `/holdings/${this.holding.id}`,{
           name: this.holding.name,
           desc: this.holding.desc,
@@ -312,7 +310,8 @@
           province_id: this.holding.address.province_id,
           city_id: this.holding.address.city_id,
           brgy_id: this.holding.address.brgy_id,
-          street_lot_blk: this.holding.address.street_lot_blk
+          street_lot_blk: this.holding.address.street_lot_blk,
+
         })
         .then(function(res){
           data.minimizedModal = false

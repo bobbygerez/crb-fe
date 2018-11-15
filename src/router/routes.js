@@ -1,3 +1,5 @@
+
+
 const routes = [
   {
     path: '/',
@@ -24,18 +26,18 @@ const routes = [
     meta: { requiresAuth: true}
   },
   {
-    path: '/dashboard/menu-holdings/:id',
+    path: '/dashboard/submenu/:id/holdings',
     component: () => import('layouts/MyLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/dashboard/holdings/index.vue') }
+      { path: '', component: () => import('pages/dashboard/submenu/holdings/index.vue') }
     ], 
     meta: { requiresAuth: true}
   },
   {
-    path: '/dashboard/menu-holdings/:id/submenu-description/:id',
+    path: '/dashboard/submenu/:submenu/holdings/:holding/branches',
     component: () => import('layouts/MyLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/dashboard/holdings/index.vue') }
+      { path: '', component: () => import('pages/dashboard/submenu/holdings/index.vue') }
     ], 
     meta: { requiresAuth: true}
   },

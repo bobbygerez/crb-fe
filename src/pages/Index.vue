@@ -88,14 +88,14 @@ export default {
         password: this.form.password
       })
       .then(function(res){
-        data.$store.dispatch('token', res.data.token);
+        data.$store.dispatch('token', res.data.success.token);
         data.$store.dispatch('user', res.data.user);
         data.$store.dispatch('userLogin', res.data.userLogin);
         data.$router.push('/dashboard')
       })
       .catch(function(error){
         data.visible = true
-        data.message = error.response.data
+        data.message = error.response.data.error
 
       })
 

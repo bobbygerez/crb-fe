@@ -121,7 +121,6 @@ export default {
         // we also set (or update) rowsNumber
         this.serverPagination.page = data.holdings.current_page
         this.serverPagination.pagesNumber = data.holdings.last_page
-         this.serverPagination.rowsNumber = 22
 
         // then we update the rows with the fetched ones
         this.serverData = _.values(data.holdings.data)

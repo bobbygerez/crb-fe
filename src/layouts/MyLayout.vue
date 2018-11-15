@@ -64,8 +64,8 @@
         <q-list-header>{{ user.firstname }} {{ user.lastname }}</q-list-header>
 
         <q-collapsible :label="menu.name" v-for="(menu, i) in user.menus " :key="i" >
-          <q-collapsible :label="subMenu.name" v-for="(subMenu, x) in menu.sub_menus" :key="x" :to="slug(`/dashboard/menu-${subMenu.name}/${subMenu.id}`)">
-            <q-item link v-for="(subMenuChild,y) in subMenu.sub_menus_child" :key="y" :to="slug(`/dashboard/menu-${subMenu.name}/${subMenu.id}/submenu-${subMenuChild.description}/${subMenuChild.id}`)">
+          <q-collapsible :label="subMenu.name" v-for="(subMenu, x) in menu.sub_menus" :key="x" :to="slug(`/dashboard/submenu/${subMenu.id}/${subMenu.name}`)">
+            <q-item link v-for="(subMenuChild,y) in subMenu.sub_menus_child" :key="y" :to="slug(`/dashboard/submenu/${subMenu.id}/${subMenu.name}/${subMenu.id}/${subMenuChild.description}`)">
               <q-item-main :label="subMenuChild.description" />
             </q-item>
           </q-collapsible>
