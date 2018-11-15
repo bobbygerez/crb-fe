@@ -256,6 +256,13 @@
       }
     },
     methods: {
+      index(){
+        this.$axios.get(process.env.API + `/holdings`)
+              .then(function(res){
+                data.$store.dispatch('holdings', res.data.holdings);
+              })
+              .catch()
+      },
       deleteRow (id) {
         let data = this
        this.$axios.get(process.env.API + `/holdings/${id}/edit`)
@@ -277,7 +284,7 @@
                             icon: 'check',
                             message: `${data.holding.name} deleted successfully`
                           })
-                           data.$store.dispatch('GET_HOLDINGS')
+                           data.index()
                         })
                        
                       }
@@ -289,10 +296,9 @@
         
       },
       edit(id){
+        
         let data = this
-        this.$axios.defaults.headers.common['Authorization'] = `Bearer ${this.$store.getters.token}`
-
-        this.$axios.get(process.env.API + `/holdings/${id}/edit`)
+        this.$axios.get(process.env.API + `/holdings/${id}/edit?id=${id}`)
               .then(function(res){
                 data.$store.dispatch('holding', res.data.holding);
                 data.minimizedModal = true
@@ -301,8 +307,8 @@
       },
       update(id){
         var data  = this
-        this.$axios.defaults.headers.common['Authorization'] = `Bearer ${this.$store.getters.token}`
         this.$axios.put(process.env.API + `/holdings/${this.holding.id}`,{
+          id: this.holding.id,
           name: this.holding.name,
           desc: this.holding.desc,
           country_id: this.holding.address.country_id,
@@ -320,7 +326,7 @@
             icon: 'check',
             message: `${data.holding.name} update successfully`
           })
-          data.$store.dispatch('GET_HOLDINGS')
+          data.index()
         })
         .catch()
         

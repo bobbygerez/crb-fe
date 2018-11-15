@@ -121,9 +121,6 @@ export default function (/* { ssrContext } */) {
 				}
 			},
 			actions:{
-				GET_HOLDINGS({commit, state}){
-					
-				},
 				
 				GET_COUNTRIES({commit, state}){
 					axios.get(process.env.API + '/countries')
