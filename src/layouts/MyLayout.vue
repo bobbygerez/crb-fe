@@ -1,18 +1,8 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-layout-header>
-      <q-toolbar
-        color="primary"
-        :glossy="$q.theme === 'mat'"
-        :inverted="$q.theme === 'ios'"
-      >
-        <q-btn
-          flat
-          dense
-          round
-          @click="leftDrawerOpen = !leftDrawerOpen"
-          aria-label="Menu"
-        >
+      <q-toolbar color="primary" :glossy="$q.theme === 'mat'" :inverted="$q.theme === 'ios'">
+        <q-btn flat dense round @click="leftDrawerOpen = !leftDrawerOpen" aria-label="Menu">
           <q-icon name="menu" />
         </q-btn>
 
@@ -21,12 +11,7 @@
           <div slot="subtitle">Trading Inc.</div>
         </q-toolbar-title>
 
-        <q-btn-dropdown
-        flat
-        round
-        icon="shopping_cart"
-        split
-        >
+        <q-btn-dropdown flat round icon="shopping_cart" split>
           <q-list link>
             <q-item v-for="n in 2" :key="`1.${n}`" v-close-overlay @click.native="handlerFunction">
               <q-item-side icon="folder" inverted color="primary" />
@@ -52,18 +37,11 @@
       </q-toolbar>
     </q-layout-header>
 
-    <q-layout-drawer
-      v-model="leftDrawerOpen"
-      :content-class="$q.theme === 'mat' ? 'bg-grey-2' : null"
-    >
-      <q-list
-        no-border
-        link
-        inset-delimiter
-      >
+    <q-layout-drawer v-model="leftDrawerOpen" :content-class="$q.theme === 'mat' ? 'bg-grey-2' : null">
+      <q-list no-border link inset-delimiter>
         <q-list-header>{{ user.firstname }} {{ user.lastname }}</q-list-header>
 
-        <q-collapsible :label="menu.name" v-for="(menu, i) in user.menus " :key="i" >
+        <q-collapsible :label="menu.name" v-for="(menu, i) in user.menus " :key="i">
           <q-collapsible :label="subMenu.name" v-for="(subMenu, x) in menu.sub_menus" :key="x" :to="slug(`/dashboard/submenu/${subMenu.id}/${subMenu.name}`)">
             <q-item link v-for="(subMenuChild,y) in subMenu.sub_menus_child" :key="y" :to="slug(`/dashboard/submenu/${subMenu.id}/${subMenu.name}/${subMenu.id}/${subMenuChild.description}`)">
               <q-item-main :label="subMenuChild.description" />
@@ -84,7 +62,7 @@ import { openURL } from 'quasar'
 import slug from 'components/mixins/slug'
 
 export default {
-  mixins:[slug],
+  mixins: [slug],
   name: 'MyLayout',
   data () {
     return {
@@ -94,13 +72,13 @@ export default {
     }
   },
   computed: {
-    user(){
+    user () {
       return this.$store.getters.user
     }
   },
   methods: {
-    openURL,
-    
+    openURL
+
   }
 }
 </script>

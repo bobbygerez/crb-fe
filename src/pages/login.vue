@@ -11,9 +11,9 @@
 export default {
   name: 'Login',
   computed: {
-	provinces(){
-		return this.$store.getters.provinces
-	}
-}
+    provinces () {
+      return this.$store.getters.provinces
+    }
+  }
 }
 </script>

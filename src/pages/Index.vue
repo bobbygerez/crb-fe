@@ -3,35 +3,18 @@
     <div style="width: 800px; max-width: 90vw;">
       <div class="flex-col-docs">
         <h4>User Login</h4>
-        <q-alert
-          v-if="visible"
-          color="negative"
-          icon="warning"
-          appear
-          :actions="[{ label: 'Dismiss', handler: () => { visible = false } }]"
-          class="q-mb-sm"
-        >
-        {{ message }}
+        <q-alert v-if="visible" color="negative" icon="warning" appear :actions="[{ label: 'Dismiss', handler: () => { visible = false } }]" class="q-mb-sm">
+          {{ message }}
         </q-alert>
         <div class="doc-container">
           <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
           <div class="column" style="height: 250px">
             <div class="col-4 col-md-4">
-              <q-input
-                  v-model="form.email"
-                  @blur="$v.form.email.$touch"
-                  :error="$v.form.email.$error"
-                  stack-label="Email"
-                />
-                
+              <q-input v-model="form.email" @blur="$v.form.email.$touch" :error="$v.form.email.$error" stack-label="Email" />
+
             </div>
             <div class="col-4 col-md-4">
-              <q-input
-                  clear-value
-                  v-model="form.password"
-                  stack-label="Password"
-                  type="password"
-                />
+              <q-input clear-value v-model="form.password" stack-label="Password" type="password" />
               <br />
               <q-btn color="primary" @click="submit">Login</q-btn>
             </div>
@@ -44,8 +27,6 @@
 </template>
 
 <style lang="stylus">
-
-  
 </style>
 
 <script>
@@ -68,7 +49,7 @@ export default {
       email: { required, email }
     }
   },
-  created(){
+  created () {
     if (this.$store.getters.userLogin) {
       this.$router.push('/dashboard')
     }
@@ -83,23 +64,20 @@ export default {
         return
       }
 
-      axios.post(process.env.API + '/login',{
+      axios.post(process.env.API + '/login', {
         email: this.form.email,
         password: this.form.password
       })
-      .then(function(res){
-        data.$store.dispatch('token', res.data.success.token);
-        data.$store.dispatch('user', res.data.user);
-        data.$store.dispatch('userLogin', res.data.userLogin);
-        data.$router.push('/dashboard')
-      })
-      .catch(function(error){
-        data.visible = true
-        data.message = error.response.data.error
-
-      })
-
-      
+        .then(function (res) {
+          data.$store.dispatch('token', res.data.success.token)
+          data.$store.dispatch('user', res.data.user)
+          data.$store.dispatch('userLogin', res.data.userLogin)
+          data.$router.push('/dashboard')
+        })
+        .catch(function (error) {
+          data.visible = true
+          data.message = error.response.data.error
+        })
     }
   }
 }

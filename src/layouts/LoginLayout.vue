@@ -1,11 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-layout-header>
-      <q-toolbar
-        color="primary"
-        :glossy="$q.theme === 'mat'"
-        :inverted="$q.theme === 'ios'"
-      >
+      <q-toolbar color="primary" :glossy="$q.theme === 'mat'" :inverted="$q.theme === 'ios'">
 
         <q-toolbar-title>
           Pattys Bakeshop
@@ -16,7 +12,7 @@
 
     <q-page-container>
       <router-view />
-     
+
     </q-page-container>
   </q-layout>
 </template>
@@ -26,7 +22,7 @@ import { openURL } from 'quasar'
 import slug from 'components/mixins/slug'
 
 export default {
-  mixins:[slug],
+  mixins: [slug],
   name: 'LoginLayout',
   data () {
     return {
@@ -36,13 +32,13 @@ export default {
     }
   },
   computed: {
-    categories(){
+    categories () {
       return this.$store.getters.categories
     }
   },
   methods: {
-    openURL,
-    
+    openURL
+
   }
 }
 </script>

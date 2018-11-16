@@ -1,5 +1,5 @@
 <template>
-	<div>
-		categories
-	</div>
+  <div>
+    categories
+  </div>
 </template>
