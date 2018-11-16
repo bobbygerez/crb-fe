@@ -1,6 +1,6 @@
 <template>
 	<div class="q-pa-sm">
-		<p class="q-headline">All Holdings</p>
+    <q-btn  color="positive" label=" New Holding" class="q-mb-md" @click="showNewHoldingModal()"/>
 	<holdings></holdings>
 	</div>
 </template>
@@ -18,14 +18,20 @@
 		},
 		created(){
 			let data = this
-			this.$axios.get(process.env.API + '/holdings?page='+this.page+'&perPage='+this.perPage, {
-          		headers: { Authorization: `Bearer ${this.$store.getters.token}`, "Content-Type": 'application/x-www-form-urlencoded', Accept: 'application/json'}
-        	})
+			this.$axios.get(process.env.API + '/holdings?page='+this.page+'&perPage='+this.perPage)
 					.then(function(res){
 				       data.$store.dispatch('holdings', res.data.holdings);
 				    })
 			this.$store.dispatch('GET_COUNTRIES')
+			this.$store.dispatch('GET_BUSINESS_TYPES')
+			this.$store.dispatch('GET_VAT_TYPES')
+			
 		},
+		methods: {
+			showNewHoldingModal(){
+         	this.$store.dispatch('newHoldingModal', true)
+      		}
+      	},
 		components: {
 			holdings
 		}

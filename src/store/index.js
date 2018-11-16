@@ -15,6 +15,8 @@ export default function (/* { ssrContext } */) {
     modules: {
 		pattys:{
 			state:{
+				vatTypes:[],
+				businessTypes:[],
 				brgys:[],
 				cities:[],
 				provinces:[],
@@ -23,6 +25,7 @@ export default function (/* { ssrContext } */) {
 				page: 1,
 				perpage: 30,
 				holdingName: '',
+				newHoldingModal: false,
 				holding: {
 					address:{
 						country_id: null,
@@ -31,6 +34,15 @@ export default function (/* { ssrContext } */) {
 						city_id: null,
 						brgy_id: null,
 						street_lot_blk: null,
+					},
+					business_info: {
+						business_type_id:null,
+						vat_type_id: null,
+						telephone: null,
+						email: null,
+						tin: null,
+						website: null
+
 					},
 					name: null,
 					desc: null
@@ -47,6 +59,15 @@ export default function (/* { ssrContext } */) {
 				perPage: 28
 			  },
 			mutations:{
+				newHoldingModal(state, payload){
+					state.newHoldingModal = payload
+				},
+				vatTypes(state, payload){
+					state.vatTypes = payload
+				},
+				businessTypes(state, payload){
+					state.businessTypes = payload
+				},
 				brgys(state, payload){
 					state.brgys = payload
 				},
@@ -67,6 +88,24 @@ export default function (/* { ssrContext } */) {
 				},
 				perPage(state, payload){
 					state.perPage = payload
+				},
+				holdingWebsite(state, payload){
+					state.holding.business_info.website = payload
+				},
+				holdingTin(state, payload){
+					state.holding.business_info.tin = payload
+				},
+				holdingEmail(state, payload){
+					state.holding.business_info.email  = payload
+				},
+				holdingTelephone(state, payload){
+					state.holding.business_info.telephone = payload
+				},
+				holdingVatType(state, payload){
+					state.holding.business_info.vat_type_id = payload
+				},
+				holdingBusinessType(state, payload){
+					state.holding.business_info.business_type_id = payload
 				},
 				holdingStreetLotBlk(state, payload){
 					state.holding.address.street_lot_blk = payload
@@ -121,7 +160,18 @@ export default function (/* { ssrContext } */) {
 				}
 			},
 			actions:{
-				
+				GET_VAT_TYPES({commit, state}){
+					axios.get(process.env.API + '/vat_types')
+						.then(function(res){
+							commit('vatTypes', res.data.vatTypes);
+					    })
+				},
+				GET_BUSINESS_TYPES({commit, state}){
+					axios.get(process.env.API + '/business_types')
+						.then(function(res){
+							commit('businessTypes', res.data.businessTypes);
+					    })
+				},
 				GET_COUNTRIES({commit, state}){
 					axios.get(process.env.API + '/countries')
 						.then(function(res){
@@ -152,6 +202,9 @@ export default function (/* { ssrContext } */) {
 							commit('brgys', res.data.brgys)
 					    })
 				},
+				newHoldingModal(state, payload){
+					state.commit('newHoldingModal', payload)
+				},
 				page(state, payload){
 					state.commit('page', payload)
 				},
@@ -163,6 +216,24 @@ export default function (/* { ssrContext } */) {
 				},
 				holdings(state, payload){
 					state.commit('holdings', payload)
+				},
+				holdingWebsite(state, payload){
+					state.commit('holdingWebsite', payload)
+				},
+				holdingTin(state, payload){
+					state.commit('holdingTin', payload)
+				},
+				holdingEmail(state, payload){
+					state.commit('holdingEmail', payload)
+				},
+				holdingTelephone(state, payload){
+					state.commit('holdingTelephone', payload)
+				},
+				holdingVatType(state, payload){
+					state.commit('holdingVatType', payload)
+				},
+				holdingBusinessType(state, payload){
+					state.commit('holdingBusinessType', payload)
 				},
 				holdingStreetLotBlk(state, payload){
 					state.commit('holdingStreetLotBlk', payload)
@@ -214,6 +285,15 @@ export default function (/* { ssrContext } */) {
 				}
 			},
 			getters:{
+				newHoldingModal(state){
+					return state.newHoldingModal
+				},
+				vatTypes(state){
+					return state.vatTypes
+				},
+				businessTypes(state){
+					return state.businessTypes
+				},
 				brgys(state){
 					return state.brgys
 				},
