@@ -427,6 +427,7 @@
         .catch()
       },
       create(){
+         let data = this
          this.$axios.post(process.env.API + `/holdings`,{
           id: this.holding.id,
           name: this.holding.name,
@@ -444,6 +445,10 @@
           email: this.holding.business_info.email,
           website: this.holding.business_info.website
 
+        }).then(function(res){
+
+          data.index()
+          data.hideModal()
         })
       },
       deleteRow (id) {
