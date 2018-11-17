@@ -1,11 +1,7 @@
-
 export function provinces (state) {
-
-	return state.provinces
+  return state.provinces
 }
 
 export function categories (state) {
-
-	return state.categories
+  return state.categories
 }
-

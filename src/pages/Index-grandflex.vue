@@ -1,15 +1,11 @@
 <template>
   <div>
-  <q-search inverted-light color="white" v-model="terms">
-        <q-autocomplete
-          @search="search"
-          :max-results="2"
-          @selected="selected"
-        />
-  </q-search>
-  <q-page class="flex flex-center">
-    <item-card v-for="(item, i) in items.data" :key="i" v-bind:item="item"></item-card>
-  </q-page>
+    <q-search inverted-light color="white" v-model="terms">
+      <q-autocomplete @search="search" :max-results="2" @selected="selected" />
+    </q-search>
+    <q-page class="flex flex-center">
+      <item-card v-for="(item, i) in items.data" :key="i" v-bind:item="item"></item-card>
+    </q-page>
   </div>
 </template>
 <style>
@@ -17,9 +13,9 @@
 
 <script>
 
-import auth from 'components/mixins/auth'
+// import auth from 'components/mixins/auth'
 import itemCard from 'components/card/item'
-import axios from 'axios'
+// import axios from 'axios'
 import countries from 'assets/autocomplete.json'
 import { uid, filter } from 'quasar'
 
@@ -55,19 +51,19 @@ export default {
   data: () => ({
     dropdown: false,
     terms: '',
-      terms2: '',
-      terms3: '',
-      countries: parseCountries(),
-      chips1: ['Romania', 'Algeria'],
-      chips2: ['Bahamas', 'Costa Rica']
+    terms2: '',
+    terms3: '',
+    countries: parseCountries(),
+    chips1: ['Romania', 'Algeria'],
+    chips2: ['Bahamas', 'Costa Rica']
   }),
   components: {
     itemCard
   },
   computed: {
-  	items(){
-  		return this.$store.getters.items
-  	}
+    items () {
+      return this.$store.getters.items
+    }
   },
   methods: {
     splitClick () {
@@ -81,7 +77,7 @@ export default {
     },
     search (terms, done) {
       setTimeout(() => {
-        done(filter(terms, {field: 'value', list: parseCountries()}))
+        done(filter(terms, { field: 'value', list: parseCountries() }))
       }, 1000)
     },
     selected (item) {

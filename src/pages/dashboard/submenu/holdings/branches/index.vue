@@ -1,10 +1,9 @@
 <template>
-	<span>Branches</span>
+  <span>Branches</span>
 </template>
 
 <script type="text/javascript">
-	export default {
+export default {
 
-		
-	}
+}
 </script>
