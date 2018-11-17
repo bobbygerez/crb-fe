@@ -34,10 +34,10 @@ const routes = [
     meta: { requiresAuth: true}
   },
   {
-    path: '/dashboard/submenu/:submenu/holdings/:holding/branches',
+    path: '/dashboard/submenu/:submenu/companies',
     component: () => import('layouts/MyLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/dashboard/submenu/holdings/index.vue') }
+      { path: '', component: () => import('pages/dashboard/submenu/companies/index.vue') }
     ], 
     meta: { requiresAuth: true}
   },
