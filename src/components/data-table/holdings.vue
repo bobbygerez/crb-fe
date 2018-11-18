@@ -230,14 +230,14 @@ export default {
   computed: {
     newHoldingModal: {
       get () {
-        return this.$store.getters.newHoldingModal
+        return this.$store.getters['pattys/newHoldingModal']
       },
       set (val) {
 
       }
     },
     vatTypes () {
-      return this.$store.getters.vatTypes.map(e => {
+      return this.$store.getters['pattys/vatTypes'].map(e => {
         return {
           label: e.name,
           value: e.id
@@ -245,7 +245,7 @@ export default {
       })
     },
     businessTypes () {
-      return this.$store.getters.businessTypes.map(e => {
+      return this.$store.getters['pattys/businessTypes'].map(e => {
         return {
           label: e.name,
           value: e.id
@@ -253,7 +253,7 @@ export default {
       })
     },
     regions () {
-      return this.$store.getters.regions.map(e => {
+      return this.$store.getters['pattys/regions'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -261,7 +261,7 @@ export default {
       })
     },
     countries () {
-      return this.$store.getters.countries.map(e => {
+      return this.$store.getters['pattys/countries'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -269,7 +269,7 @@ export default {
       })
     },
     provinces () {
-      return this.$store.getters.provinces.map(e => {
+      return this.$store.getters['pattys/provinces'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -277,7 +277,7 @@ export default {
       })
     },
     cities () {
-      return this.$store.getters.cities.map(e => {
+      return this.$store.getters['pattys/cities'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -285,7 +285,7 @@ export default {
       })
     },
     brgys () {
-      return this.$store.getters.brgys.map(e => {
+      return this.$store.getters['pattys/brgys'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -293,13 +293,13 @@ export default {
       })
     },
     holding () {
-      return this.$store.getters.holding
+      return this.$store.getters['pattys/holding']
     },
     holdings () {
-      return _.values(this.$store.getters.holdings)
+      return _.values(this.$store.getters['pattys/holdings'])
     },
     perPage () {
-      return this.$store.getters.perPage
+      return this.$store.getters['pattys/holdings']
     },
     tableClass () {
       if (this.dark) {
@@ -315,7 +315,7 @@ export default {
       let data = this
       this.$axios.get(process.env.API + `/holdings`)
         .then(function (res) {
-          data.$store.dispatch('holdings', res.data.holdings)
+          data.$store.dispatch('pattys/holdings', res.data.holdings)
         })
         .catch()
     },
@@ -347,7 +347,7 @@ export default {
       let data = this
       this.$axios.get(process.env.API + `/holdings/${id}?id=${id}`)
         .then(function (res) {
-          data.$store.dispatch('holding', res.data.holding)
+          data.$store.dispatch('pattys/holding', res.data.holding)
           data.$q.notify({
             color: 'negative',
             icon: 'delete',
@@ -377,7 +377,7 @@ export default {
       let data = this
       this.$axios.get(process.env.API + `/holdings/${id}/edit?id=${id}`)
         .then(function (res) {
-          data.$store.dispatch('holding', res.data.holding)
+          data.$store.dispatch('pattys/holding', res.data.holding)
           data.minimizedModal = true
         })
         .catch()
@@ -430,54 +430,50 @@ export default {
       })
     },
     'holding.name' (val) {
-      this.$store.dispatch('holdingName', val)
+      this.$store.dispatch('pattys/holdingName', val)
     },
     'holding.address.country_id' (val) {
       if (val === null || val === undefined) return
-      this.$store.dispatch('GET_REGIONS', val)
+      this.$store.dispatch('pattys/GET_REGIONS', val)
     },
     'holding.address.region_id' (val) {
-      if (val === null || val === undefined) return
-      this.$store.dispatch('GET_PROVINCES', val)
-      this.$store.dispatch('holdingRegion', val)
+      this.$store.dispatch('pattys/GET_PROVINCES', val)
+      this.$store.dispatch('pattys/holdingRegion', val)
     },
     'holding.address.province_id' (val) {
-      if (val === null || val === undefined) return
-      this.$store.dispatch('holdingProvince', val)
-      this.$store.dispatch('GET_CITIES', val)
+      this.$store.dispatch('pattys/holdingProvince', val)
+      this.$store.dispatch('pattys/GET_CITIES', val)
     },
     'holding.address.city_id' (val) {
-      if (val === null || val === undefined) return
-      this.$store.dispatch('holdingCity', val)
-      this.$store.dispatch('GET_BRGYS', val)
+      this.$store.dispatch('pattys/holdingCity', val)
+      this.$store.dispatch('pattys/GET_BRGYS', val)
     },
     'holding.address.brgy_id' (val) {
-      if (val === null || val === undefined) return
-      this.$store.dispatch('holdingBrgy', val)
+      this.$store.dispatch('pattys/holdingBrgy', val)
     },
     'holding.desc' (val) {
-      this.$store.dispatch('holdingDesc', val)
+      this.$store.dispatch('pattys/holdingDesc', val)
     },
     'holding.address.street_lot_blk' (val) {
-      this.$store.dispatch('holdingStreetLotBlk', val)
+      this.$store.dispatch('pattys/holdingStreetLotBlk', val)
     },
     'holding.business_info.business_type_id' (val) {
-      this.$store.dispatch('holdingBusinessType', val)
+      this.$store.dispatch('pattys/holdingBusinessType', val)
     },
     'holding.business_info.vat_type_id' (val) {
-      this.$store.dispatch('holdingVatType', val)
+      this.$store.dispatch('pattys/holdingVatType', val)
     },
     'holding.business_info.telephone' (val) {
-      this.$store.dispatch('holdingTelephone', val)
+      this.$store.dispatch('pattys/holdingTelephone', val)
     },
     'holding.business_info.email' (val) {
-      this.$store.dispatch('holdingEmail', val)
+      this.$store.dispatch('pattys/holdingEmail', val)
     },
     'holding.business_info.tin' (val) {
-      this.$store.dispatch('holdingTin', val)
+      this.$store.dispatch('pattys/holdingTin', val)
     },
     'holding.business_info.website' (val) {
-      this.$store.dispatch('holdingWebsite', val)
+      this.$store.dispatch('pattys/holdingWebsite', val)
     }
   }
 }

@@ -1,3 +1,8 @@
+
+export const businessTypes = (state, payload) => { state.businessTypes = payload }
+
+export const vatTypes = (state, payload) => { state.vatTypes = payload }
+
 export const brgys = (state, payload) => { state.brgys = payload }
 
 export const cities = (state, payload) => { state.cities = payload }
@@ -11,6 +16,10 @@ export const countries = (state, payload) => { state.countries = payload }
 export const page = (state, payload) => { state.page = payload }
 
 export const perPage = (state, payload) => { state.perPage = payload }
+
+export const holdingVatType = (state, payload) => { state.holding.business_info.vat_type_id = payload }
+
+export const holdingBusinessType = (state, payload) => { state.holding.business_info.business_type_id = payload }
 
 export const holdingStreetLotBlk = (state, payload) => { state.holding.address.street_lot_blk = payload }
 

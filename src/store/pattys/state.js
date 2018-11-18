@@ -1,4 +1,5 @@
 export default {
+  businessTypes:[],
   brgys: [],
   cities: [],
   provinces: [],
@@ -16,6 +17,9 @@ export default {
       brgy_id: null,
       street_lot_blk: null
     },
+    business_info: {
+      business_type_id: null
+    },
     name: null,
     desc: null
   },
@@ -25,6 +29,5 @@ export default {
   userLogin: false,
   stores: [],
   categories: [],
-  items: [],
-  perPage: 28
+  items: []
 }

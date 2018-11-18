@@ -18,13 +18,14 @@ export default {
   },
   created () {
     let data = this
+    this.$axios.defaults.headers.common['Authorization'] = `Bearer ${this.$store.getters['pattys/token']}`
     this.$axios.get(process.env.API + '/holdings?page=' + this.page + '&perPage=' + this.perPage)
       .then(function (res) {
-        data.$store.dispatch('holdings', res.data.holdings)
+        data.$store.dispatch('pattys/holdings', res.data.holdings)
       })
-    this.$store.dispatch('GET_COUNTRIES')
-    this.$store.dispatch('GET_BUSINESS_TYPES')
-    this.$store.dispatch('GET_VAT_TYPES')
+    this.$store.dispatch('pattys/GET_COUNTRIES')
+    this.$store.dispatch('pattys/GET_BUSINESS_TYPES')
+    this.$store.dispatch('pattys/GET_VAT_TYPES')
   },
   methods: {
     showNewHoldingModal () {

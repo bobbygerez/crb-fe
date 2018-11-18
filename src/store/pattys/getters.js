@@ -1,4 +1,8 @@
 // export default
+export const businessTypes = (state) => state.businessTypes
+
+export const vatTypes = (state) => state.vatTypes
+
 export const brgys = (state) => state.brgys
 
 export const cities = (state) => state.cities

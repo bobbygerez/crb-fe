@@ -69,9 +69,9 @@ export default {
         password: this.form.password
       })
         .then(function (res) {
-          data.$store.dispatch('token', res.data.success.token)
-          data.$store.dispatch('user', res.data.user)
-          data.$store.dispatch('userLogin', res.data.userLogin)
+          data.$store.dispatch('pattys/token', res.data.success.token)
+          data.$store.dispatch('pattys/user', res.data.user)
+          data.$store.dispatch('pattys/userLogin', res.data.userLogin)
           data.$router.push('/dashboard')
         })
         .catch(function (error) {

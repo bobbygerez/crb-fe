@@ -21,47 +21,34 @@ const routes = [{
   children: [{
     path: '',
     component: () => import('pages/dashboard/index.vue')
-  },
-  {
-<<<<<<< HEAD
-    path: '/dashboard',
-    component: () => import('layouts/MyLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/dashboard/index.vue') },
-      { path: '/'}
-    ], 
-    meta: { requiresAuth: true}
-  },
-  {
-    path: '/dashboard/submenu/:id/holdings',
-    component: () => import('layouts/MyLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/dashboard/submenu/holdings/index.vue') }
-    ], 
-    meta: { requiresAuth: true}
-  },
-  {
-    path: '/dashboard/submenu/:submenu/companies',
-    component: () => import('layouts/MyLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/dashboard/submenu/companies/index.vue') }
-    ], 
-    meta: { requiresAuth: true}
-  },
-  {
-    path: '/category/:name/:id',
-    component: () => import('layouts/MyLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/category/index.vue') }
-    ]
-=======
-    path: '/'
-  }
-  ],
-  meta: {
-    requiresAuth: true
-  }
+  }]
 },
+{
+  path: '/dashboard',
+  component: () => import('layouts/MyLayout.vue'),
+  children: [
+    { path: '', component: () => import('pages/dashboard/index.vue') },
+    { path: '/' }
+  ],
+  meta: { requiresAuth: true }
+},
+{
+  path: '/dashboard/submenu/:id/holdings',
+  component: () => import('layouts/MyLayout.vue'),
+  children: [
+    { path: '', component: () => import('pages/dashboard/submenu/holdings/index.vue') }
+  ],
+  meta: { requiresAuth: true }
+},
+{
+  path: '/dashboard/submenu/:submenu/companies',
+  component: () => import('layouts/MyLayout.vue'),
+  children: [
+    { path: '', component: () => import('pages/dashboard/submenu/companies/index.vue') }
+  ],
+  meta: { requiresAuth: true }
+},
+
 {
   path: '/dashboard/submenu/:id/holdings',
   component: () => import('layouts/MyLayout.vue'),
@@ -71,7 +58,6 @@ const routes = [{
   }],
   meta: {
     requiresAuth: true
->>>>>>> origin/develop-ren
   }
 },
 {
@@ -84,14 +70,6 @@ const routes = [{
   meta: {
     requiresAuth: true
   }
-},
-{
-  path: '/category/:name/:id',
-  component: () => import('layouts/MyLayout.vue'),
-  children: [{
-    path: '',
-    component: () => import('pages/category/index.vue')
-  }]
 }
 ]
 

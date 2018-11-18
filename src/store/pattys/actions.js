@@ -1,5 +1,23 @@
 import axios from 'axios'
 
+export const GET_BUSINESS_TYPES = ({
+  commit, state
+}) => {
+  axios.get(process.env.API + '/business_types')
+    .then(function (res) {
+      commit('businessTypes', res.data.businessTypes)
+    })
+}
+
+export const GET_VAT_TYPES = ({
+  commit, state
+}) => {
+  axios.get(process.env.API + '/vat_types')
+    .then(function (res) {
+      commit('vatTypes', res.data.vatTypes)
+    })
+}
+
 export const GET_COUNTRIES = ({
   commit,
   state
@@ -51,12 +69,23 @@ export const page = (state, payload) => {
 export const perPage = (state, payload) => {
   state.commit('perPage', payload)
 }
-export const holding = (state, payload) => {
-  state.commit('holding', payload)
-}
+
 export const holdings = (state, payload) => {
   state.commit('holdings', payload)
 }
+
+export const holding = (state, payload) => {
+  state.commit('holding', payload)
+}
+
+export const holdingBusinessType = (state, payload) => {
+  state.commit('holdingBusinessType', payload)
+}
+
+export const holdingVatType = (state, payload) => {
+  state.commit('holdingVatType', payload)
+}
+
 export const holdingStreetLotBlk = (state, payload) => {
   state.commit('holdingStreetLotBlk', payload)
 }
