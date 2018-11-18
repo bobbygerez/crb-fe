@@ -19,6 +19,14 @@ export const perPage = (state, payload) => { state.perPage = payload }
 
 export const holdingVatType = (state, payload) => { state.holding.business_info.vat_type_id = payload }
 
+export const holdingTelephone = (state, payload) => { state.holding.business_info.telephone = payload }
+
+export const holdingEmail = (state, payload) => { state.holding.business_info.email = payload }
+
+export const holdingTin = (state, payload) => { state.holding.business_info.tin = payload }
+
+export const holdingWebsite = (state, payload) => { state.holding.business_info.website = payload }
+
 export const holdingBusinessType = (state, payload) => { state.holding.business_info.business_type_id = payload }
 
 export const holdingStreetLotBlk = (state, payload) => { state.holding.address.street_lot_blk = payload }

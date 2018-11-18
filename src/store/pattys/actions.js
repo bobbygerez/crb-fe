@@ -78,6 +78,22 @@ export const holding = (state, payload) => {
   state.commit('holding', payload)
 }
 
+export const holdingTelephone = (state, payload) => {
+  state.commit('holdingTelephone', payload)
+}
+
+export const holdingEmail = (state, payload) => {
+  state.commit('holdingEmail', payload)
+}
+
+export const holdingWebsite = (state, payload) => {
+  state.commit('holdingWebsite', payload)
+}
+
+export const holdingTin = (state, payload) => {
+  state.commit('holdingTin', payload)
+}
+
 export const holdingBusinessType = (state, payload) => {
   state.commit('holdingBusinessType', payload)
 }
