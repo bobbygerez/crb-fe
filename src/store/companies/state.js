@@ -1,4 +1,6 @@
 export default {
   company: {},
-  companies: []
+  companies: [],
+  page: 1,
+  perPage: 20
 }

@@ -1,4 +1,5 @@
 export default {
+  newHoldingModal: false,
   businessTypes: [],
   brgys: [],
   cities: [],

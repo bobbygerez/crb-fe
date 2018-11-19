@@ -18,6 +18,10 @@ export const GET_VAT_TYPES = ({
     })
 }
 
+export const newHoldingModal = (state, payload) => {
+  state.commit('newHoldingModal', payload)
+}
+
 export const page = (state, payload) => {
   state.commit('page', payload)
 }

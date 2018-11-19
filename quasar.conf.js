@@ -1,11 +1,10 @@
 // Configuration for your app
 
 module.exports = function (ctx) {
-  
   return {
-   preFetch: true,
-   htmlVariables: { title: 'test name' },
-     
+    preFetch: true,
+    htmlVariables: { title: 'test name' },
+
     // app plugins (/src/plugins)
     plugins: [
       'axios', 'vuex-persistedstate', 'vue2-filters', 'vuelidate', 'vue-google-maps'
@@ -23,12 +22,12 @@ module.exports = function (ctx) {
     supportIE: true,
     build: {
       env: ctx.dev
-      ? { // so on dev we'll have
-        API: JSON.stringify('http://localhost/pattys-be/public/api')
-      }
-      : { // and on build (production):
-        API: JSON.stringify('http://localhost/pattys-be/public/api')
-      },
+        ? { // so on dev we'll have
+          API: JSON.stringify('http://localhost/pattys-be/public/api')
+        }
+        : { // and on build (production):
+          API: JSON.stringify('http://localhost/pattys-be/public/api')
+        },
       scopeHoisting: true,
       // vueRouterMode: 'history',
       // vueCompiler: true,
@@ -42,7 +41,7 @@ module.exports = function (ctx) {
           loader: 'eslint-loader',
           exclude: /(node_modules|quasar)/,
           options: {
-            fix: true,
+            fix: true
           }
         })
       }
@@ -97,7 +96,7 @@ module.exports = function (ctx) {
         'QRating'
       ],
       directives: [
-        'Ripple', 'CloseOverlay', 
+        'Ripple', 'CloseOverlay'
       ],
       // Quasar plugins
       plugins: [

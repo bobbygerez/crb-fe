@@ -10,7 +10,7 @@
             {{props.row.name}}
           </q-td>
           <q-td key="address" :props="props">
-            <!-- {{props.row.address.street_lot_blk}}, -->
+            {{props.row.address.street_lot_blk}},
             {{props.row.address.brgy.description}}
             <br />
             {{props.row.address.city.description }},
@@ -311,7 +311,7 @@ export default {
   },
   methods: {
     hideModal () {
-      this.$store.dispatch('newHoldingModal', false)
+      this.$store.dispatch('pattys/newHoldingModal', false)
     },
     index () {
       let data = this

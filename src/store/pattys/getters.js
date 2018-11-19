@@ -1,4 +1,6 @@
 // export default
+export const newHoldingModal = (state) => state.newHoldingModal
+
 export const businessTypes = (state) => state.businessTypes
 
 export const vatTypes = (state) => state.vatTypes

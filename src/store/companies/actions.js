@@ -1,10 +1,12 @@
-import axios from 'axios'
 
-export const GET_COMPANIES = ({
-  commit, state
-}) => {
-  axios.get(process.env.API + `/companies?page=${state.page}&perPage=${state.perPage}`)
-    .then(function (res) {
-      commit('companies', res.data.companies)
-    })
+export const companies = (state, payload) => {
+  state.commit('companies', payload)
+}
+
+export const page = (state, payload) => {
+  state.commit('page', payload)
+}
+
+export const perPage = (state, payload) => {
+  state.commit('perPage', payload)
 }

@@ -50,27 +50,59 @@ export default {
       loading: false
     }
   },
+  computed: {
+			page(){
+				return this.$store.getters['companies/page']
+			},
+			perPage(){
+				return this.$store.getters['companies/perPage']
+			}
+		},
   methods: {
     request (props) {
       this.loading = true
-      setTimeout(() => {
-        this.serverPagination = props.pagination
-        let
-          table = this.$refs.table,
-          rows = tableData.slice(),
+      let data = this
+      this.$axios.get(process.env.API + `/companies?page=${this.page}&perPage=${this.perPage}`)
+				.then(function (res) {
+          // data.$store.dispatch('companies', res.data.companies)
+          console.log(res.data.companies.data)
+          data.serverPagination =  props.pagination
+          let
+          table = data.$refs.table,
+          // rows = tableData.slice(),
+          rows = res.data.companies.data,
           { page, rowsPerPage, sortBy, descending } = props.pagination
-        if (props.filter) {
-          rows = table.filterMethod(rows, props.filter)
-        }
-        if (sortBy) {
-          rows = table.sortMethod(rows, sortBy, descending)
-        }
-        this.serverPagination.rowsNumber = rows.length
-        if (rowsPerPage) {
-          rows = rows.slice((page - 1) * rowsPerPage, page * rowsPerPage)
-        }
-        this.serverData = rows
-        this.loading = false
+
+          data.serverPagination.rowsNumber = res.data.companies.data.length
+          if (rowsPerPage) {
+            rows = rows.slice((page - 1) * rowsPerPage, page * rowsPerPage)
+          }
+          data.serverData = rows
+          data.loading = false
+          console.log(data.serverData)
+        })
+        
+      setTimeout(() => {
+        // this.serverPagination = props.pagination
+        // let
+        //   table = this.$refs.table,
+        //   rows = tableData.slice(),
+        //   { page, rowsPerPage, sortBy, descending } = props.pagination
+        
+        // console.log(rows)
+        // if (props.filter) {
+        //   rows = table.filterMethod(rows, props.filter)
+        // }
+        // if (sortBy) {
+        //   rows = table.sortMethod(rows, sortBy, descending)
+        // }
+
+        // this.serverPagination.rowsNumber = rows.length
+        // if (rowsPerPage) {
+        //   rows = rows.slice((page - 1) * rowsPerPage, page * rowsPerPage)
+        // }
+        // this.serverData = rows
+        // this.loading = false
       }, 1500)
 
     }

@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     showNewHoldingModal () {
-      this.$store.dispatch('newHoldingModal', true)
+      this.$store.dispatch('pattys/newHoldingModal', true)
     }
   },
   components: {
