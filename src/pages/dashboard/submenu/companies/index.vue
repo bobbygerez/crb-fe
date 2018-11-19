@@ -17,11 +17,7 @@
 			}
 		},
 		created(){
-			let data = this
-			this.$axios.get(process.env.API + '/holdings?page='+this.page+'&perPage='+this.perPage)
-					.then(function(res){
-				       data.$store.dispatch('holdings', res.data.holdings);
-				    })
+			this.$store.dispatch('companies/GET_COMPANIES')
 			this.$store.dispatch('GET_COUNTRIES')
 			this.$store.dispatch('GET_BUSINESS_TYPES')
 			this.$store.dispatch('GET_VAT_TYPES')

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import pattys from './pattys'
-
+import globals from './globals'
 import companies from './companies'
 
 Vue.use(Vuex)
@@ -16,6 +16,7 @@ export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
       pattys,
+      globals,
       companies
     }
   })

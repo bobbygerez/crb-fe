@@ -10,7 +10,7 @@
             {{props.row.name}}
           </q-td>
           <q-td key="address" :props="props">
-            {{props.row.address.street_lot_blk}},
+            <!-- {{props.row.address.street_lot_blk}}, -->
             {{props.row.address.brgy.description}}
             <br />
             {{props.row.address.city.description }},
@@ -245,6 +245,7 @@ export default {
       })
     },
     businessTypes () {
+
       return this.$store.getters['pattys/businessTypes'].map(e => {
         return {
           label: e.name,
@@ -253,7 +254,8 @@ export default {
       })
     },
     regions () {
-      return this.$store.getters['pattys/regions'].map(e => {
+      if (this.$store.getters['globals/regions']== undefined) return []
+      return this.$store.getters['globals/regions'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -261,7 +263,7 @@ export default {
       })
     },
     countries () {
-      return this.$store.getters['pattys/countries'].map(e => {
+      return this.$store.getters['globals/countries'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -269,7 +271,7 @@ export default {
       })
     },
     provinces () {
-      return this.$store.getters['pattys/provinces'].map(e => {
+      return this.$store.getters['globals/provinces'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -277,7 +279,7 @@ export default {
       })
     },
     cities () {
-      return this.$store.getters['pattys/cities'].map(e => {
+      return this.$store.getters['globals/cities'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -285,7 +287,7 @@ export default {
       })
     },
     brgys () {
-      return this.$store.getters['pattys/brgys'].map(e => {
+      return this.$store.getters['globals/brgys'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -366,6 +368,13 @@ export default {
                       })
                       data.index()
                     })
+                    .catch(function(err){
+                       data.$q.notify({
+                        color: 'negative',
+                        icon: 'delete',
+                        message: `${err.response}`,
+                       })
+                    })
                 }
               }
             ]
@@ -434,19 +443,19 @@ export default {
     },
     'holding.address.country_id' (val) {
       if (val === null || val === undefined) return
-      this.$store.dispatch('pattys/GET_REGIONS', val)
+      this.$store.dispatch('globals/GET_REGIONS', val)
     },
     'holding.address.region_id' (val) {
-      this.$store.dispatch('pattys/GET_PROVINCES', val)
+      this.$store.dispatch('globals/GET_PROVINCES', val)
       this.$store.dispatch('pattys/holdingRegion', val)
     },
     'holding.address.province_id' (val) {
       this.$store.dispatch('pattys/holdingProvince', val)
-      this.$store.dispatch('pattys/GET_CITIES', val)
+      this.$store.dispatch('globals/GET_CITIES', val)
     },
     'holding.address.city_id' (val) {
       this.$store.dispatch('pattys/holdingCity', val)
-      this.$store.dispatch('pattys/GET_BRGYS', val)
+      this.$store.dispatch('globals/GET_BRGYS', val)
     },
     'holding.address.brgy_id' (val) {
       this.$store.dispatch('pattys/holdingBrgy', val)

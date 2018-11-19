@@ -72,6 +72,7 @@ export default {
         this.serverData = rows
         this.loading = false
       }, 1500)
+
     }
   },
     mounted () {

@@ -1,5 +1,5 @@
 export default {
-  businessTypes:[],
+  businessTypes: [],
   brgys: [],
   cities: [],
   provinces: [],

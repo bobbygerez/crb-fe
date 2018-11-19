@@ -23,7 +23,7 @@ export default {
       .then(function (res) {
         data.$store.dispatch('pattys/holdings', res.data.holdings)
       })
-    this.$store.dispatch('pattys/GET_COUNTRIES')
+    this.$store.dispatch('globals/GET_COUNTRIES')
     this.$store.dispatch('pattys/GET_BUSINESS_TYPES')
     this.$store.dispatch('pattys/GET_VAT_TYPES')
   },
