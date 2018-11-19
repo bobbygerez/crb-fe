@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import tableData from 'assets/table-data'
+// import tableData from 'assets/table-data'
 import _ from 'lodash'
 import axios from 'axios'
 export default {
@@ -67,18 +67,21 @@ export default {
           field: 'name',
           sortable: true
         },
-        { name: 'address',
+        {
+          name: 'address',
           label: 'Address',
           align: 'left'
 
         },
-        { name: 'created_at',
+        {
+          name: 'created_at',
           label: 'Created At',
           align: 'left',
           sortable: true
 
         },
-        { name: 'actions',
+        {
+          name: 'actions',
           label: 'Actions',
           align: 'left'
 
@@ -110,7 +113,7 @@ export default {
           // finally we tell QTable to exit the "loading" state
           this.loading = false
         })
-        .catch(error => {
+        .catch(() => {
           // there's an error... do SOMETHING
 
           // we tell QTable to exit the "loading" state

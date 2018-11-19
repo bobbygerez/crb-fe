@@ -30,8 +30,9 @@
 </style>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 import { required, email } from 'vuelidate/lib/validators'
+import { setAuthHeader } from 'plugins/axios'
 
 export default {
   data () {
@@ -50,13 +51,13 @@ export default {
     }
   },
   created () {
+    console.log('url', process.env.API)
     if (this.$store.getters.userLogin) {
       this.$router.push('/dashboard')
     }
   },
   methods: {
     submit () {
-      var data = this
       this.$v.form.$touch()
 
       if (this.$v.form.$error) {
@@ -64,19 +65,25 @@ export default {
         return
       }
 
-      axios.post(process.env.API + '/login', {
-        email: this.form.email,
-        password: this.form.password
+      this.$axios.request({
+        url: '/login',
+        method: 'post',
+        data: {
+          email: this.form.email,
+          password: this.form.password
+        }
       })
-        .then(function (res) {
-          data.$store.dispatch('pattys/token', res.data.success.token)
-          data.$store.dispatch('pattys/user', res.data.user)
-          data.$store.dispatch('pattys/userLogin', res.data.userLogin)
-          data.$router.push('/dashboard')
+        .then(res => {
+          this.$store.dispatch('pattys/token', res.data.success.token)
+          this.$store.dispatch('pattys/user', res.data.user)
+          this.$store.dispatch('pattys/userLogin', res.data.userLogin)
+          this.$router.push('/dashboard')
+          this.$q.localStorage.set('token', res.data.success.token)
+          setAuthHeader(this.$store.getters['pattys/token'])
         })
-        .catch(function (error) {
-          data.visible = true
-          data.message = error.response.data.error
+        .catch(error => {
+          this.visible = true
+          this.message = error.response.data.error
         })
     }
   }

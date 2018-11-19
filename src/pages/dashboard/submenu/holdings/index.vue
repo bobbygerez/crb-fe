@@ -7,29 +7,40 @@
 
 <script type="text/javascript">
 import holdings from 'components/data-table/holdings.vue'
+import { mapActions, mapState } from 'vuex'
+import { axios } from 'plugins/axios'
+import Hold from 'assets/services/holdings/api'
 export default {
   computed: {
-    page () {
-      return this.$store.getters.page
-    },
-    perPage () {
-      return this.$store.getters.perPage
-    }
+    ...mapState('globals', ['perPage', 'page'])
   },
   created () {
-    let data = this
-    this.$axios.defaults.headers.common['Authorization'] = `Bearer ${this.$store.getters['pattys/token']}`
-    this.$axios.get(process.env.API + '/holdings?page=' + this.page + '&perPage=' + this.perPage)
-      .then(function (res) {
-        data.$store.dispatch('pattys/holdings', res.data.holdings)
-      })
-    this.$store.dispatch('globals/GET_COUNTRIES')
-    this.$store.dispatch('pattys/GET_BUSINESS_TYPES')
-    this.$store.dispatch('pattys/GET_VAT_TYPES')
+    // console.log('')
+    // let data = this
+    // this.$axios.defaults.headers.common['Authorization'] = `Bearer ${this.$store.getters['pattys/token']}`
+    // axios.get('/holdings?page=' + this.page + '&perPage=' + this.perPage)
+    //   .then(res => {
+    //     this.holdings(res.data.holdings)
+    //   })
+    // this.getStart()
+    Hold.getHolds(this.page, this.perPage).then(res => {
+      this.holdings(res.data.holdings)
+    })
+    this.GET_COUNTRIES()
+    this.GET_BUSINESS_TYPES()
+    this.GET_VAT_TYPES()
   },
   methods: {
+    ...mapActions('pattys', ['holdings', 'GET_BUSINESS_TYPES', 'GET_VAT_TYPES']),
+    ...mapActions('globals', ['GET_COUNTRIES']),
     showNewHoldingModal () {
       this.$store.dispatch('newHoldingModal', true)
+    },
+    getStart () {
+      axios.get('/holdings?page=' + this.page + '&perPage=' + this.perPage)
+        .then(res => {
+          this.holdings(res.data.holdings)
+        })
     }
   },
   components: {

@@ -1,6 +1,6 @@
 export default {
 
-  created() {
+  created () {
     let data = this
     this.$axios.get(process.env.API + '/countries')
       .then(function (res) {

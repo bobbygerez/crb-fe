@@ -2,7 +2,7 @@ export default {
 
   methods: {
 
-    slug(text) {
+    slug (text) {
       var slug = text.replace(/e|é|è|ẽ|ẻ|ẹ|ê|ế|ề|ễ|ể|ệ/gi, 'e')
       // Letter "a"
       slug = text.replace(/a|á|à|ã|ả|ạ|ă|ắ|ằ|ẵ|ẳ|ặ|â|ấ|ầ|ẫ|ẩ|ậ/gi, 'a')

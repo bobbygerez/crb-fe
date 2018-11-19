@@ -1,17 +1,6 @@
 <template>
   <div>
-    <q-table
-      ref="table"
-      color="primary"
-      title="Server-side Pagination"
-      :data="serverData"
-      :columns="columns"
-      :filter="filter"
-      row-key="name"
-      :pagination.sync="serverPagination"
-      @request="request"
-      :loading="loading"
-    >
+    <q-table ref="table" color="primary" title="Server-side Pagination" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" @request="request" :loading="loading">
       <template slot="top-right" slot-scope="props">
         <q-search hide-underline v-model="filter" />
       </template>
@@ -72,10 +61,9 @@ export default {
         this.serverData = rows
         this.loading = false
       }, 1500)
-
     }
   },
-    mounted () {
+  mounted () {
     this.request({
       pagination: this.serverPagination,
       filter: this.filter

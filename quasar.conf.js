@@ -1,36 +1,28 @@
 // Configuration for your app
 
 module.exports = function (ctx) {
-  
   return {
-   preFetch: true,
-   htmlVariables: { title: 'test name' },
-     
     // app plugins (/src/plugins)
     plugins: [
-      'axios', 'vuex-persistedstate', 'vue2-filters', 'vuelidate', 'vue-google-maps'
+      // 'i18n',
+      'axios',
+      'vuelidate'
+      // 'vue-signature-pad'
     ],
     css: [
       'app.styl'
     ],
     extras: [
       ctx.theme.mat ? 'roboto-font' : null,
-      'material-icons' // optional, you are not bound to it
+      'material-icons', // optional, you are not bound to it
       // 'ionicons',
-      // 'mdi',
-      // 'fontawesome'
+      'mdi',
+      'fontawesome'
     ],
     supportIE: true,
     build: {
-      env: ctx.dev
-      ? { // so on dev we'll have
-        API: JSON.stringify('http://localhost/pattys-be/public/api')
-      }
-      : { // and on build (production):
-        API: JSON.stringify('http://localhost/pattys-be/public/api')
-      },
       scopeHoisting: true,
-      // vueRouterMode: 'history',
+      vueRouterMode: 'history',
       // vueCompiler: true,
       // gzip: true,
       // analyze: true,
@@ -42,72 +34,48 @@ module.exports = function (ctx) {
           loader: 'eslint-loader',
           exclude: /(node_modules|quasar)/,
           options: {
-            fix: true,
+            fix: true
           }
         })
       }
     },
     devServer: {
       // https: true,
-      // port: 8080,
+      port: ctx.mode.spa ? 8081 : (ctx.mode.cordova ? 8080 : 8082),
       open: true // opens browser window automatically
     },
     // framework: 'all' --- includes everything; for dev only!
-    framework: {
-      components: [
-        'QModal',
-        'QPopupEdit',
-        'QTh',
-        'QCheckbox',
-        'QTd',
-        'QTr',
-        'QTable',
-        'QTableColumns',
-        'QSelect',
-        'QAlert',
-        'QAutocomplete',
-        'QSearch',
-        'QCard',
-        'QCardTitle',
-        'QCardMain',
-        'QCardMedia',
-        'QCardSeparator',
-        'QCardActions',
-        'QInput',
-        'QDialog',
-        'QField',
-        'QBtnDropdown',
-        'QLayout',
-        'QLayoutHeader',
-        'QLayoutDrawer',
-        'QPageContainer',
-        'QPage',
-        'QToolbar',
-        'QToolbarTitle',
-        'QBtn',
-        'QIcon',
-        'QItemTile',
-        'QList',
-        'QListHeader',
-        'QCollapsible',
-        'QItem',
-        'QItemMain',
-        'QItemSide',
-        'QItemSeparator',
-        'QRating'
-      ],
-      directives: [
-        'Ripple', 'CloseOverlay', 
-      ],
-      // Quasar plugins
-      plugins: [
-        'Notify'
-      ]
-      // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
-      // i18n: 'de' // Quasar language
-    },
+    framework: 'all',
+    // {
+    //   components: [
+    //     'QLayout',
+    //     'QLayoutHeader',
+    //     'QLayoutDrawer',
+    //     'QPageContainer',
+    //     'QPage',
+    //     'QToolbar',
+    //     'QToolbarTitle',
+    //     'QBtn',
+    //     'QIcon',
+    //     'QList',
+    //     'QListHeader',
+    //     'QItem',
+    //     'QItemMain',
+    //     'QItemSide'
+    //   ],
+    //   directives: [
+    //     'Ripple'
+    //   ],
+    //   // Quasar plugins
+    //   plugins: [
+    //     'Notify'
+    //   ]
+    //   // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
+    //   // i18n: 'de' // Quasar language
+    // },
     // animations: 'all' --- includes all animations
-    animations: [],
+    animations: 'all',
+    // [],
     ssr: {
       pwa: false
     },
@@ -122,32 +90,31 @@ module.exports = function (ctx) {
         orientation: 'portrait',
         background_color: '#ffffff',
         theme_color: '#027be3',
-        icons: [
-          {
-            'src': 'statics/icons/icon-128x128.png',
-            'sizes': '128x128',
-            'type': 'image/png'
-          },
-          {
-            'src': 'statics/icons/icon-192x192.png',
-            'sizes': '192x192',
-            'type': 'image/png'
-          },
-          {
-            'src': 'statics/icons/icon-256x256.png',
-            'sizes': '256x256',
-            'type': 'image/png'
-          },
-          {
-            'src': 'statics/icons/icon-384x384.png',
-            'sizes': '384x384',
-            'type': 'image/png'
-          },
-          {
-            'src': 'statics/icons/icon-512x512.png',
-            'sizes': '512x512',
-            'type': 'image/png'
-          }
+        icons: [{
+          'src': 'statics/icons/icon-128x128.png',
+          'sizes': '128x128',
+          'type': 'image/png'
+        },
+        {
+          'src': 'statics/icons/icon-192x192.png',
+          'sizes': '192x192',
+          'type': 'image/png'
+        },
+        {
+          'src': 'statics/icons/icon-256x256.png',
+          'sizes': '256x256',
+          'type': 'image/png'
+        },
+        {
+          'src': 'statics/icons/icon-384x384.png',
+          'sizes': '384x384',
+          'type': 'image/png'
+        },
+        {
+          'src': 'statics/icons/icon-512x512.png',
+          'sizes': '512x512',
+          'type': 'image/png'
+        }
         ]
       }
     },
