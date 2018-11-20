@@ -30,12 +30,13 @@
 </template>
 
 <script>
-import tableData from 'assets/table-data'
+// import tableData from 'assets/table-data'
 import _ from 'lodash'
+import { mapActions, mapState } from 'vuex'
 export default {
   data () {
     return {
-      options: [0],
+      options: [5, 10, 15, 20],
       lastPage: '',
       serverData: [],
       serverPagination: {
@@ -60,12 +61,7 @@ export default {
     }
   },
   computed: {
-			page(){
-				return this.$store.getters['companies/page']
-			},
-			perPage(){
-				return this.$store.getters['companies/perPage']
-			}
+    ...mapState('globals', ['perPage', 'page'])
 		},
   methods: {
     paginationLast(currentPage){
@@ -76,17 +72,14 @@ export default {
     },
     request (props) {
       this.loading = true
-      let data = this
-      this.$axios
-            .get(process.env.API + `/companies?page=${props.pagination.page}&perPage=10`)
-            .then(function(res){
-              //I cannot disable the props.isLastPage
-              data.serverPagination = props.pagination
-              console.log(data.serverPagination)
-              data.serverData = _.values(res.data.companies.data)
-               data.serverPagination.rowsNumber = res.data.companies.total
-               data.lastPage = res.data.companies.last_page
-               data.loading = false
+      console.log(props)
+      this.$axios.get(process.env.API + `/companies?page=${props.pagination.page}&perPage=${props.pagination.rowsPerPage}`)
+            .then(res => {
+              this.serverPagination = props.pagination
+              this.serverData = _.values(res.data.companies.data)
+              this.serverPagination.rowsNumber = res.data.companies.total
+              this.lastPage = res.data.companies.last_page
+              this.loading = false
               
             })
             
