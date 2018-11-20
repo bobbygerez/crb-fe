@@ -2,6 +2,12 @@
 
 module.exports = function (ctx) {
   return {
+<<<<<<< HEAD
+=======
+    preFetch: true,
+    htmlVariables: { title: 'test name' },
+
+>>>>>>> acc75bf72b369327b9848ad1f926bb9b54dbeeb9
     // app plugins (/src/plugins)
     plugins: [
       // 'i18n',
@@ -21,6 +27,16 @@ module.exports = function (ctx) {
     ],
     supportIE: true,
     build: {
+<<<<<<< HEAD
+=======
+      env: ctx.dev
+        ? { // so on dev we'll have
+          API: JSON.stringify('http://localhost/pattys-be/public/api')
+        }
+        : { // and on build (production):
+          API: JSON.stringify('http://localhost/pattys-be/public/api')
+        },
+>>>>>>> acc75bf72b369327b9848ad1f926bb9b54dbeeb9
       scopeHoisting: true,
       vueRouterMode: 'history',
       // vueCompiler: true,
@@ -45,6 +61,7 @@ module.exports = function (ctx) {
       open: true // opens browser window automatically
     },
     // framework: 'all' --- includes everything; for dev only!
+<<<<<<< HEAD
     framework: 'all',
     // {
     //   components: [
@@ -73,6 +90,61 @@ module.exports = function (ctx) {
     //   // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
     //   // i18n: 'de' // Quasar language
     // },
+=======
+    framework: {
+      components: [
+        'QModal',
+        'QPopupEdit',
+        'QTh',
+        'QCheckbox',
+        'QTd',
+        'QTr',
+        'QTable',
+        'QTableColumns',
+        'QSelect',
+        'QAlert',
+        'QAutocomplete',
+        'QSearch',
+        'QCard',
+        'QCardTitle',
+        'QCardMain',
+        'QCardMedia',
+        'QCardSeparator',
+        'QCardActions',
+        'QInput',
+        'QDialog',
+        'QField',
+        'QBtnDropdown',
+        'QLayout',
+        'QLayoutHeader',
+        'QLayoutDrawer',
+        'QPageContainer',
+        'QPage',
+        'QToolbar',
+        'QToolbarTitle',
+        'QBtn',
+        'QIcon',
+        'QItemTile',
+        'QList',
+        'QListHeader',
+        'QCollapsible',
+        'QItem',
+        'QItemMain',
+        'QItemSide',
+        'QItemSeparator',
+        'QRating'
+      ],
+      directives: [
+        'Ripple', 'CloseOverlay'
+      ],
+      // Quasar plugins
+      plugins: [
+        'Notify'
+      ]
+      // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
+      // i18n: 'de' // Quasar language
+    },
+>>>>>>> acc75bf72b369327b9848ad1f926bb9b54dbeeb9
     // animations: 'all' --- includes all animations
     animations: 'all',
     // [],

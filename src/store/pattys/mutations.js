@@ -3,6 +3,8 @@ export const businessTypes = (state, payload) => { state.businessTypes = payload
 
 export const vatTypes = (state, payload) => { state.vatTypes = payload }
 
+export const newHoldingModal = (state, payload) => { state.newHoldingModal = payload }
+
 export const page = (state, payload) => { state.page = payload }
 
 export const perPage = (state, payload) => { state.perPage = payload }

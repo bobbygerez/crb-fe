@@ -8,21 +8,18 @@
 <script type="text/javascript">
 import companies from 'components/data-table/companies.vue'
 export default {
-  computed: {
-    page () {
-      return this.$store.getters.page
-    },
-    perPage () {
-      return this.$store.getters.perPage
-    }
-  },
+
   created () {
-    this.$store.dispatch('companies/GET_COMPANIES')
-    this.$store.dispatch('GET_COUNTRIES')
-    this.$store.dispatch('GET_BUSINESS_TYPES')
-    this.$store.dispatch('GET_VAT_TYPES')
+    this.$axios.defaults.headers.common['Authorization'] = `Bearer ${this.$store.getters['pattys/token']}`
+    this.$store.dispatch('globals/GET_COUNTRIES')
+    this.getCompanies()
+    // this.$store.dispatch('GET_BUSINESS_TYPES')
+    // this.$store.dispatch('GET_VAT_TYPES')
   },
   methods: {
+    getCompanies () {
+      // let data = this
+    },
     showNewHoldingModal () {
       this.$store.dispatch('newHoldingModal', true)
     }
