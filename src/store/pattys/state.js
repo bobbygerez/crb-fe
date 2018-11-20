@@ -30,5 +30,6 @@ export default {
   userLogin: false,
   stores: [],
   categories: [],
-  items: []
+  items: [],
+  vatTypes: []
 }

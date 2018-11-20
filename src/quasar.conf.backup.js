@@ -2,34 +2,34 @@
 
 module.exports = function (ctx) {
   return {
+    preFetch: true,
+    htmlVariables: { title: 'test name' },
+
     // app plugins (/src/plugins)
     plugins: [
-      // 'i18n',
-      'axios',
-      'vuelidate'
-      // 'vue-signature-pad'
+      'axios', 'vuex-persistedstate', 'vue2-filters', 'vuelidate', 'vue-google-maps'
     ],
     css: [
       'app.styl'
     ],
     extras: [
       ctx.theme.mat ? 'roboto-font' : null,
-      'material-icons', // optional, you are not bound to it
+      'material-icons' // optional, you are not bound to it
       // 'ionicons',
-      'mdi',
-      'fontawesome'
+      // 'mdi',
+      // 'fontawesome'
     ],
     supportIE: true,
     build: {
       env: ctx.dev
         ? { // so on dev we'll have
-          API: JSON.stringify('http://localhost/pattys-be/public/api')
+          API: JSON.stringify('http://localhost:8099/api')
         }
         : { // and on build (production):
-          API: JSON.stringify('http://localhost/pattys-be/public/api')
+          API: JSON.stringify('http://localhost:8099/api')
         },
       scopeHoisting: true,
-      vueRouterMode: 'history',
+      // vueRouterMode: 'history',
       // vueCompiler: true,
       // gzip: true,
       // analyze: true,
@@ -48,7 +48,7 @@ module.exports = function (ctx) {
     },
     devServer: {
       // https: true,
-      port: ctx.mode.spa ? 8080 : (ctx.mode.cordova ? 8080 : 8082),
+      // port: 8080,
       open: true // opens browser window automatically
     },
     // framework: 'all' --- includes everything; for dev only!
@@ -100,14 +100,16 @@ module.exports = function (ctx) {
       ],
       // Quasar plugins
       plugins: [
-        'Notify'
+        'Notify',
+        'LocalStorage',
+        'SessionStorage',
+        'Platform'
       ]
       // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
       // i18n: 'de' // Quasar language
     },
     // animations: 'all' --- includes all animations
-    animations: 'all',
-    // [],
+    animations: [],
     ssr: {
       pwa: false
     },
@@ -122,31 +124,32 @@ module.exports = function (ctx) {
         orientation: 'portrait',
         background_color: '#ffffff',
         theme_color: '#027be3',
-        icons: [{
-          'src': 'statics/icons/icon-128x128.png',
-          'sizes': '128x128',
-          'type': 'image/png'
-        },
-        {
-          'src': 'statics/icons/icon-192x192.png',
-          'sizes': '192x192',
-          'type': 'image/png'
-        },
-        {
-          'src': 'statics/icons/icon-256x256.png',
-          'sizes': '256x256',
-          'type': 'image/png'
-        },
-        {
-          'src': 'statics/icons/icon-384x384.png',
-          'sizes': '384x384',
-          'type': 'image/png'
-        },
-        {
-          'src': 'statics/icons/icon-512x512.png',
-          'sizes': '512x512',
-          'type': 'image/png'
-        }
+        icons: [
+          {
+            'src': 'statics/icons/icon-128x128.png',
+            'sizes': '128x128',
+            'type': 'image/png'
+          },
+          {
+            'src': 'statics/icons/icon-192x192.png',
+            'sizes': '192x192',
+            'type': 'image/png'
+          },
+          {
+            'src': 'statics/icons/icon-256x256.png',
+            'sizes': '256x256',
+            'type': 'image/png'
+          },
+          {
+            'src': 'statics/icons/icon-384x384.png',
+            'sizes': '384x384',
+            'type': 'image/png'
+          },
+          {
+            'src': 'statics/icons/icon-512x512.png',
+            'sizes': '512x512',
+            'type': 'image/png'
+          }
         ]
       }
     },

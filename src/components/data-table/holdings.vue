@@ -100,7 +100,7 @@
       </div>
     </q-modal>
 
-    <q-modal v-model="minimizedModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    <q-modal v-model="minimizedModal" no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
       <div style="padding: 30px">
         <div class="q-display-1 q-mb-md">Edit {{ holding.name }}</div>
 
@@ -245,7 +245,6 @@ export default {
       })
     },
     businessTypes () {
-
       return this.$store.getters['pattys/businessTypes'].map(e => {
         return {
           label: e.name,
@@ -254,7 +253,7 @@ export default {
       })
     },
     regions () {
-      if (this.$store.getters['globals/regions']== undefined) return []
+      if (this.$store.getters['globals/regions'] === undefined) return []
       return this.$store.getters['globals/regions'].map(e => {
         return {
           label: e.description,
@@ -368,12 +367,12 @@ export default {
                       })
                       data.index()
                     })
-                    .catch(function(err){
-                       data.$q.notify({
+                    .catch(function (err) {
+                      data.$q.notify({
                         color: 'negative',
                         icon: 'delete',
-                        message: `${err.response}`,
-                       })
+                        message: `${err.response}`
+                      })
                     })
                 }
               }

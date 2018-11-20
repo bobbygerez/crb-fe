@@ -1,6 +1,7 @@
+import axios from 'axios'
 export default {
 
-  preFetch({
+  preFetch ({
     store
   }) {
     axios.get('http://localhost/estoreapi/public/api/get-provinces')

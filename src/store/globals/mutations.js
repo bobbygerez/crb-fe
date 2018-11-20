@@ -7,3 +7,7 @@ export const provinces = (state, payload) => { state.provinces = payload }
 export const regions = (state, payload) => { state.regions = payload }
 
 export const countries = (state, payload) => { state.countries = payload }
+
+export const businessTypes = (state, payload) => { state.businessTypes = payload }
+
+export const vatTypes = (state, payload) => { state.vatTypes = payload }

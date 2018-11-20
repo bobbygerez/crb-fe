@@ -1,9 +1,9 @@
-import axios from 'axios'
+import { axios } from 'plugins/axios'
 
 export const GET_BUSINESS_TYPES = ({
   commit, state
 }) => {
-  axios.get(process.env.API + '/business_types')
+  axios.get('/business_types')
     .then(function (res) {
       commit('businessTypes', res.data.businessTypes)
     })
@@ -12,7 +12,7 @@ export const GET_BUSINESS_TYPES = ({
 export const GET_VAT_TYPES = ({
   commit, state
 }) => {
-  axios.get(process.env.API + '/vat_types')
+  axios.get('/vat_types')
     .then(function (res) {
       commit('vatTypes', res.data.vatTypes)
     })
