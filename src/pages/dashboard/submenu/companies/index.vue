@@ -6,7 +6,6 @@
 </template>
 
 <script type="text/javascript">
-<<<<<<< HEAD
 import companies from "components/data-table/companies.vue";
 import { mapActions, mapStates } from "vuex";
 export default {
@@ -35,33 +34,10 @@ export default {
     ]),
     showNewHoldingModal() {
       this.$store.dispatch("newHoldingModal", true);
-=======
-import companies from 'components/data-table/companies.vue'
-export default {
-
-  created () {
-    this.$axios.defaults.headers.common['Authorization'] = `Bearer ${this.$store.getters['pattys/token']}`
-    this.$store.dispatch('globals/GET_COUNTRIES')
-    this.getCompanies()
-    // this.$store.dispatch('GET_BUSINESS_TYPES')
-    // this.$store.dispatch('GET_VAT_TYPES')
-  },
-  methods: {
-    getCompanies () {
-      // let data = this
-    },
-    showNewHoldingModal () {
-      this.$store.dispatch('newHoldingModal', true)
->>>>>>> 959f634c645e080bfdb707d9d3ccbc327b7fb181
     }
   },
   components: {
     companies
   }
-<<<<<<< HEAD
 };
-=======
-}
-
->>>>>>> 959f634c645e080bfdb707d9d3ccbc327b7fb181
 </script>

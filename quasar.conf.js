@@ -2,15 +2,9 @@
 
 module.exports = function (ctx) {
   return {
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
     preFetch: true,
     htmlVariables: { title: 'test name' },
 
->>>>>>> acc75bf72b369327b9848ad1f926bb9b54dbeeb9
->>>>>>> 959f634c645e080bfdb707d9d3ccbc327b7fb181
     // app plugins (/src/plugins)
     plugins: [
       // 'i18n',
@@ -30,11 +24,6 @@ module.exports = function (ctx) {
     ],
     supportIE: true,
     build: {
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> 959f634c645e080bfdb707d9d3ccbc327b7fb181
       env: ctx.dev
         ? { // so on dev we'll have
           API: JSON.stringify('http://localhost/pattys-be/public/api')
@@ -42,10 +31,6 @@ module.exports = function (ctx) {
         : { // and on build (production):
           API: JSON.stringify('http://localhost/pattys-be/public/api')
         },
-<<<<<<< HEAD
-=======
->>>>>>> acc75bf72b369327b9848ad1f926bb9b54dbeeb9
->>>>>>> 959f634c645e080bfdb707d9d3ccbc327b7fb181
       scopeHoisting: true,
       vueRouterMode: 'history',
       // vueCompiler: true,
@@ -70,9 +55,7 @@ module.exports = function (ctx) {
       open: true // opens browser window automatically
     },
     // framework: 'all' --- includes everything; for dev only!
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
+
     framework: 'all',
     // {
     //   components: [
@@ -101,8 +84,7 @@ module.exports = function (ctx) {
     //   // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
     //   // i18n: 'de' // Quasar language
     // },
-=======
->>>>>>> 959f634c645e080bfdb707d9d3ccbc327b7fb181
+
     framework: {
       components: [
         'QModal',
@@ -156,10 +138,7 @@ module.exports = function (ctx) {
       // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
       // i18n: 'de' // Quasar language
     },
-<<<<<<< HEAD
-=======
->>>>>>> acc75bf72b369327b9848ad1f926bb9b54dbeeb9
->>>>>>> 959f634c645e080bfdb707d9d3ccbc327b7fb181
+
     // animations: 'all' --- includes all animations
     animations: 'all',
     // [],
