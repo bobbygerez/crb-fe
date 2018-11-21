@@ -1,5 +1,6 @@
-import { Platform, LocalStorage } from 'quasar'
+import { Platform } from 'quasar'
 import axios from 'axios'
+// import store from '../store/index'
 
 /**
  * Axios plugin declaration
@@ -55,19 +56,25 @@ const appMode = (type) => ({
 /**
  * Default exported object
  */
-export default ({ Vue }) => {
+export default ({ Vue, store }) => {
   // set base url appMode params: 'live', 'test', 'local', 'mobile'
   axios.defaults.baseURL = appMode('bobtest')
   axios.defaults.headers.post['Content-Type'] = 'application/json'
   // set to false if not debugging the api requests
   intercept(true)
   // prevent removing token on server refresh
+<<<<<<< HEAD
   // const vuex = LocalStorage.get.item('token')
   const vuex = localStorage.getItem('token')
   if (vuex) {
     console.log('vuex', vuex)
 
     setAuthHeader(vuex)
+=======
+  const token = store.getters['pattys/token']
+  if (token) {
+    setAuthHeader(token)
+>>>>>>> 959f634c645e080bfdb707d9d3ccbc327b7fb181
   }
   // prototype that you can use in your vue files
   // this.$axios in js or $axios in template part of your .vue file
