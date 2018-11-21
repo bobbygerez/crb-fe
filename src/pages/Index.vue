@@ -10,7 +10,7 @@
           <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
           <div class="column" style="height: 250px">
             <div class="col-4 col-md-4">
-              <q-input v-model="form.email" @blur="$v.form.email.$touch" :error="$v.form.email.$error" stack-label="Email" />
+              <q-input v-model="form.email" stack-label="Username/Email" />
 
             </div>
             <div class="col-4 col-md-4">
@@ -58,12 +58,12 @@ export default {
   },
   methods: {
     submit () {
-      this.$v.form.$touch()
+      // this.$v.form.$touch()
 
-      if (this.$v.form.$error) {
-        this.$q.notify('Please review fields again.')
-        return
-      }
+      // if (this.$v.form.$error) {
+      //   this.$q.notify('Please review fields again.')
+      //   return
+      // }
 
       this.$axios.request({
         url: '/login',
@@ -77,9 +77,10 @@ export default {
           this.$store.dispatch('pattys/token', res.data.success.token)
           this.$store.dispatch('pattys/user', res.data.user)
           this.$store.dispatch('pattys/userLogin', res.data.userLogin)
+          this.$store.dispatch('globals/menus', res.data.menus)
+          // this.$q.localStorage.set('token', res.data.success.token)
           this.$router.push('/dashboard')
-          this.$q.localStorage.set('token', res.data.success.token)
-          setAuthHeader(this.$store.getters['pattys/token'])
+          // setAuthHeader(this.$store.getters['pattys/token'])
         })
         .catch(error => {
           this.visible = true

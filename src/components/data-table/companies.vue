@@ -115,7 +115,8 @@
         </div>
         <br />
         <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
-        <q-btn color="primary" @click="create()" label="Submit" class="q-ml-sm" />
+        <q-btn color="primary" @click="update()" label="Submit" class="q-ml-sm" />
+        
       </div>
     </q-modal>
   </div>
@@ -215,6 +216,37 @@ export default {
     }
   },
   methods: {
+    update(){
+      
+      this.$axios.put(`/companies/${this.company.id}`, {
+        id: this.company.id,
+        name: this.company.name,
+        desc: this.company.desc,
+        country_id: this.company.address.country_id,
+        region_id: this.company.address.region_id,
+        province_id: this.company.address.province_id,
+        city_id: this.company.address.city_id,
+        brgy_id: this.company.address.brgy_id,
+        street_lot_blk: this.company.address.street_lot_blk,
+        business_type_id: this.company.business_info.business_type_id,
+        vat_type_id: this.company.business_info.vat_type_id,
+        telephone: this.company.business_info.telephone,
+        tin: this.company.business_info.tin,
+        email: this.company.business_info.email,
+        website: this.company.business_info.website
+      })
+        // .then(function (res) {
+        //   data.minimizedModal = false
+        //   data.$q.notify({
+        //     color: 'positive',
+        //     icon: 'check',
+        //     message: `${data.holding.name} update successfully`
+        //   })
+        //   data.index()
+        // })
+        // .catch()
+
+    },
     hideModal(){
       this.editCompanyModal = false
     },
@@ -263,25 +295,44 @@ export default {
     });
   },
   watch: {
+    'company.name' (val){
+      this.$store.dispatch('companies/companyName', val)
+    },
+    'company.desc' (val){
+       this.$store.dispatch('companies/companyDesc', val)
+    },
     'company.address.country_id' (val) {
       if (val === null || val === undefined) return
       this.$store.dispatch('globals/GET_REGIONS', val)
+      this.$store.dispatch('companies/country', val)
     },
     'company.address.region_id' (val) {
       this.$store.dispatch('globals/GET_PROVINCES', val)
-      this.$store.dispatch('pattys/holdingRegion', val)
+      this.$store.dispatch('companies/region', val)
     },
     'company.address.province_id' (val) {
-      this.$store.dispatch('pattys/holdingProvince', val)
+      this.$store.dispatch('companies/province', val)
       this.$store.dispatch('globals/GET_CITIES', val)
     },
     'company.address.city_id' (val) {
-      this.$store.dispatch('pattys/holdingCity', val)
+      this.$store.dispatch('companies/city', val)
       this.$store.dispatch('globals/GET_BRGYS', val)
     },
     'company.address.brgy_id' (val) {
-      this.$store.dispatch('pattys/holdingBrgy', val)
+      this.$store.dispatch('companies/brgy', val)
     },
+    'company.business_info.business_type_id' (val){
+      this.$store.dispatch('companies/businessType', val)
+    },
+    'company.business_info.vat_type_id'(val){
+      this.$store.dispatch('companies/vatType', val)
+    },
+    'company.address.street_lot_blk' (val){
+      this.$store.dispatch('companies/streetLotBlk', val)
+    },
+    'company.business_info.telephone' (val){
+      this.$store.dispatch('companies/telephone', val)
+    }
   }
   
 };

@@ -1,5 +1,6 @@
 
 export default {
+  menus:[],
   vatTypes: [],
   businessTypes: [],
   brgys: [],

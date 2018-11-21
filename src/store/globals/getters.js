@@ -12,3 +12,5 @@ export const countries = (state) => state.countries
 export const businessTypes = (state) => state.businessTypes
 
 export const vatTypes = (state) => state.vatTypes
+
+export const menus = (state) => state.menus

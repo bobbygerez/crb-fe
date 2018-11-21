@@ -65,3 +65,7 @@ export const GET_BRGYS = ({
       commit('brgys', res.data.brgys)
     })
 }
+
+export const menus = (state, payload) => {
+  state.commit('menus', payload)
+}

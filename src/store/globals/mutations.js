@@ -11,3 +11,5 @@ export const countries = (state, payload) => { state.countries = payload }
 export const businessTypes = (state, payload) => { state.businessTypes = payload }
 
 export const vatTypes = (state, payload) => { state.vatTypes = payload }
+
+export const menus = (state, payload) => { state.menus = payload }
