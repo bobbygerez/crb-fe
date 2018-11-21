@@ -47,9 +47,9 @@ const intercept = (isIntercept) => {
  */
 const appMode = (type) => ({
   'live': 'http://18.221.83.197:40/api',
-  'test': 'http://127.0.0.1:8099/api',
+  'test': 'http://localhost:8099/api',
   'local': 'http://192.168.254.2:90/api',
-  get mobile () { return Platform.is.cordova ? this.local : this.test }
+  get mobile() { return Platform.is.cordova ? this.local : this.test }
 })[type]
 
 /**
@@ -59,25 +59,53 @@ export default ({ Vue, store }) => {
   // set base url appMode params: 'live', 'test', 'local', 'mobile'
   axios.defaults.baseURL = appMode('test')
   axios.defaults.headers.post['Content-Type'] = 'application/json'
-  let token = localStorage.getItem('vuex')
+  // set to false if not debugging the api requests
+  intercept(true)
+  // prevent removing token on server refresh
+  const vuex = LocalStorage.get.item('token')
+  if (vuex) {
+    console.log('vuex', vuex)
 
-  token = JSON.parse(token)
-  if (token != null) {
-    token = token.pattys.token
-    setAuthHeader(token)
+    setAuthHeader(vuex)
+
+    const token = store.getters['pattys/token']
+    if (token) {
+      setAuthHeader(token)
+
+    }
+    // prototype that you can use in your vue files
+    // this.$axios in js or $axios in template part of your .vue file
+    Vue.prototype.$axios = axios
   }
 
-  Vue.prototype.$axios = axios
-}
-export const setAuthHeader = (token) => {
-  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-}
+  /**
+   * Call this to add the auth header at later time
+   * or after a successful login
+   * to use in your component:
+   * import { setAuthHeader } from 'plugins/axios'
+   * then call setAuthHeader('yourtoken')
+   * @param {*} token String token from your API
+   * that will be added to axios header for authorized requests
+   * appends Bearer + your token
+   */
 
-/**
+ 
+  export const setAuthHeader = (token) => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  }
+
+  /**
    * unset the header part of your axios instance
    * in loggint out or token expiry etc..
    */
-export const unSetAuthHeader = () => {
-  axios.defaults.headers.common['Authorization'] = null
-}
-export { axios }
+  export const unSetAuthHeader = () => {
+    axios.defaults.headers.common['Authorization'] = null
+  }
+
+  /**
+   * import this instance for your axios requests on other .js files
+   * to get the same instance that is declared in this file
+   * ie. service-example.js file import axios from 'plugins/axios'
+   * otherwise in .vue files use the prototype $axios
+   */
+  export { axios }
