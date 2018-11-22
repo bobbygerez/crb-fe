@@ -61,7 +61,10 @@
         <div class="q-display-1 q-mb-md">Edit {{ company.name }}</div>
 
         <div class="row">
-          <div class="col-xs-12 col-sm-6">
+          <div class="col-xs-12 col-sm-3">
+             <q-select v-model="company.holding_id" :options="holdings" float-label="Holdings" clearable />
+          </div>
+          <div class="col-xs-12 col-sm-3">
             <q-input v-model="company.name" float-label="Company name" clearable />
           </div>
           <div class="col-xs-12 col-sm-3">
@@ -156,6 +159,9 @@ export default {
   },
   computed: {
     ...mapState('companies', ['company']),
+    holdings(){
+      return this.$store.getters['pattys/holdings']
+    },
     countries () {
       return this.$store.getters['globals/countries'].map(e => {
         return {
@@ -281,7 +287,7 @@ export default {
       
     },
     edit(companyId){
-      this.$axios.get(`companies/${companyId}/edit`)
+      this.$axios.get(`companies/${companyId}/edit?id=${companyId}`)
       .then(res =>{
         this.editCompanyModal = true
         this.$store.dispatch('companies/company', res.data.company)

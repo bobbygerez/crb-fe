@@ -11,16 +11,17 @@ import { mapActions, mapStates } from "vuex";
 export default {
   computed: {
     page() {
-      return this.$store.getters.page;
+      return this.$store.getters['pattys/page'];
     },
     perPage() {
-      return this.$store.getters.perPage;
+      return this.$store.getters['pattys/perPage'];
     }
   },
   created() {
     this.GET_COUNTRIES();
     this.GET_BUSINESS_TYPES();
     this.GET_VAT_TYPES();
+    this.getHoldings();
   },
   methods: {
     ...mapActions("globals", [
@@ -34,6 +35,12 @@ export default {
     ]),
     showNewHoldingModal() {
       this.$store.dispatch("newHoldingModal", true);
+    },
+    getHoldings(){
+      this.$axios.get('/holdings?page=' + this.page + '&perPage=' + this.perPage)
+        .then(res => {
+          this.$store.dispatch('pattys/holdings', res.data.holdings)
+        })
     }
   },
   components: {

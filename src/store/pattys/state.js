@@ -7,7 +7,7 @@ export default {
   regions: [],
   countries: [],
   page: 1,
-  perpage: 30,
+  perPage: 30,
   holdingName: '',
   holding: {
     address: {
