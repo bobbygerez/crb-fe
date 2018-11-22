@@ -75,7 +75,7 @@ export default {
     user () {
       return this.$store.getters['pattys/user']
     },
-    menus(){
+    menus () {
       return this.$store.getters['globals/menus']
     }
   },

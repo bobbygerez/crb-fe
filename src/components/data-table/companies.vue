@@ -1,18 +1,6 @@
 <template>
   <div>
-    <q-table
-      ref="table"
-      color="primary"
-      title="All Companies"
-      :data="serverData"
-      :columns="columns"
-      :filter="filter"
-      row-key="name"
-      :pagination.sync="serverPagination"
-      :rows-per-page-options="options"
-      @request="request"
-      :loading="loading"
-    >
+    <q-table ref="table" color="primary" title="All Companies" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
       <template slot="top-right" slot-scope="props">
         <q-search hide-underline v-model="filter" />
       </template>
@@ -22,7 +10,7 @@
           <q-td key="company">
             {{props.row.name}}
           </q-td>
-         <q-td key="holding">
+          <q-td key="holding">
             {{props.row.holding.name}}
           </q-td>
           <q-td key="address" :props="props">
@@ -45,7 +33,7 @@
         </q-tr>
 
       </template>
-      
+
       <div slot="pagination" slot-scope="props" class="row flex-center q-py-sm">
         <q-btn round dense size="sm" icon="undo" color="secondary" class="q-mr-sm" :disable="props.isFirstPage" @click="props.prevPage" />
         <div class="q-mr-sm" style="font-size: small">
@@ -62,7 +50,11 @@
 
         <div class="row">
           <div class="col-xs-12 col-sm-3">
+<<<<<<< HEAD
              <q-select v-model="company.holding_id" :options="holdings" float-label="Holdings"  />
+=======
+            <q-select v-model="company.holding_id" :options="holdings" float-label="Holdings" clearable />
+>>>>>>> 07fc0b55f2cafc831ec870e80b9ce7a8541ea0d9
           </div>
           <div class="col-xs-12 col-sm-3">
             <q-input v-model="company.name" float-label="Company name" clearable />
@@ -119,7 +111,7 @@
         <br />
         <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
         <q-btn color="primary" @click="update()" label="Submit" class="q-ml-sm" />
-        
+
       </div>
     </q-modal>
   </div>
@@ -127,14 +119,14 @@
 
 <script>
 // import tableData from 'assets/table-data'
-import _ from "lodash";
-import { mapActions, mapState } from "vuex";
+import _ from 'lodash'
+import { mapActions, mapState } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
       editCompanyModal: false,
       options: [5, 10, 15, 20],
-      lastPage: "",
+      lastPage: '',
       serverData: [],
       serverPagination: {
         page: 1,
@@ -142,24 +134,25 @@ export default {
         rowsPerPage: 10 // specifying this determines pagination is server-side
       },
       columns: [
-        { name: "Company", label: "Company", field: "company", align: "left" },
+        { name: 'Company', label: 'Company', field: 'company', align: 'left' },
         {
-          name: "Holding",
+          name: 'Holding',
           required: true,
-          label: "Holding",
-          align: "left",
-          field: "holding"
+          label: 'Holding',
+          align: 'left',
+          field: 'holding'
         },
-        { name: "address", label: "Address", field: "address", align: "left" },
-        { name: "created", label: "Created", field: "created", align: "left" },
-        { name: "actions", label: "Actions", field: "actions", align: "left" }
+        { name: 'address', label: 'Address', field: 'address', align: 'left' },
+        { name: 'created', label: 'Created', field: 'created', align: 'left' },
+        { name: 'actions', label: 'Actions', field: 'actions', align: 'left' }
       ],
-      filter: "",
+      filter: '',
       loading: false
-    };
+    }
   },
   computed: {
     ...mapState('companies', ['company']),
+<<<<<<< HEAD
     holdings(){
       return this.$store.getters['companies/holdings'].map(e => {
         return {
@@ -266,6 +259,15 @@ export default {
     },
     update(){
       
+=======
+    ...mapState('pattys', ['holdings']),
+    ...mapState('globals', ['countries', 'regions', 'provinces', 'cities', 'brgys', 'vatTypes', 'businessTypes'])
+  },
+  methods: {
+    ...mapActions('companies', ['company']),
+    // ...mapActions('companies', ['company']),
+    update () {
+>>>>>>> 07fc0b55f2cafc831ec870e80b9ce7a8541ea0d9
       this.$axios.put(`/companies/${this.company.id}`, {
         id: this.company.id,
         name: this.company.name,
@@ -283,6 +285,7 @@ export default {
         email: this.company.business_info.email,
         website: this.company.business_info.website
       })
+<<<<<<< HEAD
         .then((res) => {
           this.editCompanyModal = false
           this.$q.notify({
@@ -297,18 +300,30 @@ export default {
         })
         .catch()
 
+=======
+      // .then(function (res) {
+      //   data.minimizedModal = false
+      //   data.$q.notify({
+      //     color: 'positive',
+      //     icon: 'check',
+      //     message: `${data.holding.name} update successfully`
+      //   })
+      //   data.index()
+      // })
+      // .catch()
+>>>>>>> 07fc0b55f2cafc831ec870e80b9ce7a8541ea0d9
     },
-    hideModal(){
+    hideModal () {
       this.editCompanyModal = false
     },
-    paginationLast(currentPage) {
+    paginationLast (currentPage) {
       if (this.lastPage > currentPage) {
-        return false;
+        return false
       }
-      return true;
+      return true
     },
-    request(props) {
-      this.loading = true;
+    request (props) {
+      this.loading = true
       this.$axios
         .get(
           `/companies?filter=${this.filter}&page=${props.pagination.page}&perPage=${
@@ -316,48 +331,55 @@ export default {
           }`
         )
         .then(res => {
-          this.serverPagination = props.pagination;
-          this.serverData = _.values(res.data.companies.data);
-          this.serverPagination.rowsNumber = res.data.companies.total;
-          this.lastPage = res.data.companies.last_page;
-          this.loading = false;
-
+          this.serverPagination = props.pagination
+          this.serverData = _.values(res.data.companies.data)
+          this.serverPagination.rowsNumber = res.data.companies.total
+          this.lastPage = res.data.companies.last_page
+          this.loading = false
         })
         .catch(error => {
           // there's an error... do SOMETHING
-          console.log(error);
+          console.log(error)
           // we tell QTable to exit the "loading" state
-          this.loading = false;
-        });
-      
+          this.loading = false
+        })
     },
+<<<<<<< HEAD
     edit(companyId){
       this.$axios.get(`/company-holdings?id=${companyId}`)
         .then(res => {
           this.$store.dispatch('companies/holdings', [res.data.holdings])
         })
+=======
+    edit (companyId) {
+>>>>>>> 07fc0b55f2cafc831ec870e80b9ce7a8541ea0d9
       this.$axios.get(`companies/${companyId}/edit?id=${companyId}`)
-      .then(res =>{
-        this.editCompanyModal = true
-        this.$store.dispatch('companies/company', res.data.company)
-      })
+        .then(res => {
+          this.editCompanyModal = true
+          this.company(res.data.company)
+        })
     }
   },
-  mounted() {
+  mounted () {
     this.request({
       pagination: this.serverPagination,
       filter: this.filter
-    });
+    })
   },
   watch: {
-    'company.name' (val){
+    'company.name' (val) {
       this.$store.dispatch('companies/companyName', val)
     },
+<<<<<<< HEAD
     'company.holding_id' (val){
       this.$store.dispatch('companies/companyHolding', val)
     },
     'company.desc' (val){
        this.$store.dispatch('companies/companyDesc', val)
+=======
+    'company.desc' (val) {
+      this.$store.dispatch('companies/companyDesc', val)
+>>>>>>> 07fc0b55f2cafc831ec870e80b9ce7a8541ea0d9
     },
     'company.address.country_id' (val) {
       if (val === null || val === undefined) return
@@ -379,16 +401,16 @@ export default {
     'company.address.brgy_id' (val) {
       this.$store.dispatch('companies/brgy', val)
     },
-    'company.business_info.business_type_id' (val){
+    'company.business_info.business_type_id' (val) {
       this.$store.dispatch('companies/businessType', val)
     },
-    'company.business_info.vat_type_id'(val){
+    'company.business_info.vat_type_id' (val) {
       this.$store.dispatch('companies/vatType', val)
     },
-    'company.address.street_lot_blk' (val){
+    'company.address.street_lot_blk' (val) {
       this.$store.dispatch('companies/streetLotBlk', val)
     },
-    'company.business_info.telephone' (val){
+    'company.business_info.telephone' (val) {
       this.$store.dispatch('companies/telephone', val)
     },
     'company.business_info.email' (val){
@@ -401,6 +423,6 @@ export default {
       this.$store.dispatch('companies/website', val)
     }
   }
-  
-};
+
+}
 </script>

@@ -26,27 +26,39 @@ const routes = [{
 {
   path: '/dashboard',
   component: () => import('layouts/MyLayout.vue'),
-  children: [
-    { path: '', component: () => import('pages/dashboard/index.vue') },
-    { path: '/' }
+  children: [{
+    path: '',
+    component: () => import('pages/dashboard/index.vue')
+  },
+  {
+    path: '/'
+  }
   ],
-  meta: { requiresAuth: true }
+  meta: {
+    requiresAuth: true
+  }
 },
 {
   path: '/dashboard/submenu/:id/holdings',
   component: () => import('layouts/MyLayout.vue'),
-  children: [
-    { path: '', component: () => import('pages/dashboard/submenu/holdings/index.vue') }
-  ],
-  meta: { requiresAuth: true }
+  children: [{
+    path: '',
+    component: () => import('pages/dashboard/submenu/holdings/index.vue')
+  }],
+  meta: {
+    requiresAuth: true
+  }
 },
 {
   path: '/dashboard/submenu/:submenu/companies',
   component: () => import('layouts/MyLayout.vue'),
-  children: [
-    { path: '', component: () => import('pages/dashboard/submenu/companies/index.vue') }
-  ],
-  meta: { requiresAuth: true }
+  children: [{
+    path: '',
+    component: () => import('pages/dashboard/submenu/companies/index.vue')
+  }],
+  meta: {
+    requiresAuth: true
+  }
 },
 {
   path: '/dashboard/submenu/:submenu/users',

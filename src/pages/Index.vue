@@ -78,9 +78,8 @@ export default {
           this.$store.dispatch('pattys/user', res.data.user)
           this.$store.dispatch('pattys/userLogin', res.data.userLogin)
           this.$store.dispatch('globals/menus', res.data.menus)
-          // this.$q.localStorage.set('token', res.data.success.token)
           this.$router.push('/dashboard')
-          // setAuthHeader(this.$store.getters['pattys/token'])
+          setAuthHeader(this.$store.getters['pattys/token'])
         })
         .catch(error => {
           this.visible = true

@@ -1,6 +1,7 @@
-import { Platform } from 'quasar'
+import {
+  Platform
+} from 'quasar'
 import axios from 'axios'
-// import store from '../store/index'
 
 /**
  * Axios plugin declaration
@@ -49,21 +50,25 @@ const appMode = (type) => ({
   'live': 'http://18.221.83.197:40/api',
   'test': 'http://127.0.0.1:8099/api',
   'local': 'http://192.168.254.2:90/api',
-  get mobile () { return Platform.is.cordova ? this.local : this.test }
+  get mobile () {
+    return Platform.is.cordova ? this.local : this.test
+  }
 })[type]
 
 /**
  * Default exported object
  */
-export default ({ Vue, store }) => {
+export default ({
+  Vue,
+  store
+}) => {
   // set base url appMode params: 'live', 'test', 'local', 'mobile'
   axios.defaults.baseURL = appMode('test')
   axios.defaults.headers.post['Content-Type'] = 'application/json'
-  let token = localStorage.getItem('vuex')
 
-  token = JSON.parse(token)
-  if (token != null) {
-    token = token.pattys.token
+  intercept(true)
+  const token = store.getters['pattys/token']
+  if (token) {
     setAuthHeader(token)
   }
 
@@ -74,10 +79,12 @@ export const setAuthHeader = (token) => {
 }
 
 /**
-   * unset the header part of your axios instance
-   * in loggint out or token expiry etc..
-   */
+ * unset the header part of your axios instance
+ * in logging out or token expiry etc..
+ */
 export const unSetAuthHeader = () => {
   axios.defaults.headers.common['Authorization'] = null
 }
-export { axios }
+export {
+  axios
+}
