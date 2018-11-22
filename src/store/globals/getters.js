@@ -1,4 +1,3 @@
-
 export const brgys = (state) => state.brgys
 
 export const cities = (state) => state.cities

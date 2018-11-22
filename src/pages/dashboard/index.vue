@@ -7,7 +7,7 @@
 export default {
 
   created () {
-    
+
   }
 }
 </script>

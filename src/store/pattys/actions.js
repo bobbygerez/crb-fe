@@ -1,7 +1,10 @@
-import { axios } from 'plugins/axios'
+import {
+  axios
+} from 'plugins/axios'
 
 export const GET_BUSINESS_TYPES = ({
-  commit, state
+  commit,
+  state
 }) => {
   axios.get('/business_types')
     .then(function (res) {
@@ -10,7 +13,8 @@ export const GET_BUSINESS_TYPES = ({
 }
 
 export const GET_VAT_TYPES = ({
-  commit, state
+  commit,
+  state
 }) => {
   axios.get('/vat_types')
     .then(function (res) {
