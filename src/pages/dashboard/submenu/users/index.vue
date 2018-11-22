@@ -1,12 +1,12 @@
 <template>
   <div class="q-pa-sm">
-    <q-btn color="positive" label="New Company" class="q-mb-md" @click="showNewHoldingModal()" />
-    <companies></companies>
+    <q-btn color="positive" label="New User" class="q-mb-md" @click="showNewHoldingModal()" />
+    <users></users>
   </div>
 </template>
 
 <script type="text/javascript">
-import companies from "components/data-table/companies.vue";
+import users from "components/data-table/users.vue";
 import { mapActions, mapStates } from "vuex";
 export default {
   computed: {
@@ -37,7 +37,7 @@ export default {
     }
   },
   components: {
-    companies
+    users
   }
 };
 </script>

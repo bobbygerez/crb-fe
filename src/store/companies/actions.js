@@ -11,6 +11,13 @@ export const companyName = (state, payload) => {
   state.commit('companyName', payload)
 }
 
+export const companyHolding = (state, payload) => {
+  state.commit('companyHolding', payload)
+}
+export const holdings = (state, payload) => {
+  state.commit('holdings', payload)
+}
+
 export const companyDesc = (state, payload) => {
   state.commit('companyDesc', payload)
 }
@@ -44,6 +51,22 @@ export const businessType = (state, payload) => {
 
 export const vatType = (state, payload) => {
   state.commit('vatType', payload)
+}
+
+export const telephone = (state, payload) => {
+  state.commit('telephone', payload)
+}
+
+export const email = (state, payload) => {
+  state.commit('email', payload)
+}
+
+export const website = (state, payload) => {
+  state.commit('website', payload)
+}
+
+export const tin = (state, payload) => {
+  state.commit('tin', payload)
 }
 
 export const page = (state, payload) => {

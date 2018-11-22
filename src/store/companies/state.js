@@ -1,4 +1,5 @@
 export default {
+  holdings: [],
   company: {
     address: {
       country_id: null,

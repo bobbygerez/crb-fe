@@ -1,9 +1,9 @@
 <template>
   <div>
-    <q-table
+    <!-- <q-table
       ref="table"
       color="primary"
-      title="All Companies"
+      title="All Users"
       :data="serverData"
       :columns="columns"
       :filter="filter"
@@ -54,9 +54,9 @@
         <q-btn round dense size="sm" icon="redo" color="secondary" :disable="paginationLast(props.pagination.page)" @click="props.nextPage" />
       </div>
 
-    </q-table>
+    </q-table> -->
 
-    <q-modal v-model="editCompanyModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    <!-- <q-modal v-model="editCompanyModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
       <div style="padding: 30px">
         <div class="q-display-1 q-mb-md">Edit {{ company.name }}</div>
 
@@ -121,7 +121,7 @@
         <q-btn color="primary" @click="update()" label="Submit" class="q-ml-sm" />
         
       </div>
-    </q-modal>
+    </q-modal> -->
   </div>
 </template>
 
@@ -311,16 +311,17 @@ export default {
       this.loading = true;
       this.$axios
         .get(
-          `/companies?filter=${this.filter}&page=${props.pagination.page}&perPage=${
+          `/users?filter=${this.filter}&page=${props.pagination.page}&perPage=${
             props.pagination.rowsPerPage
           }`
         )
         .then(res => {
-          this.serverPagination = props.pagination;
-          this.serverData = _.values(res.data.companies.data);
-          this.serverPagination.rowsNumber = res.data.companies.total;
-          this.lastPage = res.data.companies.last_page;
-          this.loading = false;
+
+          // this.serverPagination = props.pagination;
+          // this.serverData = _.values(res.data.companies.data);
+          // this.serverPagination.rowsNumber = res.data.companies.total;
+          // this.lastPage = res.data.companies.last_page;
+          // this.loading = false;
 
         })
         .catch(error => {

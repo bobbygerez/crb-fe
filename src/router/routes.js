@@ -48,6 +48,14 @@ const routes = [{
   ],
   meta: { requiresAuth: true }
 },
+{
+  path: '/dashboard/submenu/:submenu/users',
+  component: () => import('layouts/MyLayout.vue'),
+  children: [
+    { path: '', component: () => import('pages/dashboard/submenu/users/index.vue') }
+  ],
+  meta: { requiresAuth: true }
+},
 
 {
   path: '/dashboard/submenu/:id/holdings',

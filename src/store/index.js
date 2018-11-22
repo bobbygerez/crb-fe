@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import pattys from './pattys'
 import globals from './globals'
 import companies from './companies'
+import users from './users'
 import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
@@ -18,7 +19,8 @@ export default function (/* { ssrContext } */) {
     modules: {
       pattys,
       globals,
-      companies
+      companies,
+      users
     },
     plugins: [createPersistedState()]
   })
