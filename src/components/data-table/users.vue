@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <q-table
+    <q-table
       ref="table"
       color="primary"
       title="All Users"
@@ -19,13 +19,18 @@
 
       <template slot="body" slot-scope="props">
         <q-tr :props="props">
-          <q-td key="company">
-            {{props.row.name}}
+          <q-td key="name">
+            {{props.row.firstname}} {{props.row.middlename}} {{props.row.lastname}}
+
+            {{ userStatus }}
           </q-td>
-         <q-td key="holding">
-            {{props.row.holding.name}}
+         <q-td key="roles">
+            <q-chip color="orange" small v-for="(role, i) in props.row.roles" :key="i">{{ role.name }}</q-chip>
           </q-td>
-          <q-td key="address" :props="props">
+          <q-td key="created">
+            {{ props.row.created_at }}
+          </q-td>
+          <!-- <q-td key="address" :props="props">
             {{props.row.address.street_lot_blk}}
             <br />
             {{props.row.address.brgy.description}}
@@ -37,7 +42,7 @@
           </q-td>
           <q-td key="created" :props="props">
             {{props.row.created_at}}
-          </q-td>
+          </q-td> -->
           <q-td key="actions" :props="props">
             <q-btn round outline color="positive" icon="edit" class="q-ma-sm" @click="edit(props.row.id)" />
             <q-btn round outline color="negative" icon="delete" class="q-ma-sm" @click="deleteRow(props.row.id)" />
@@ -54,28 +59,78 @@
         <q-btn round dense size="sm" icon="redo" color="secondary" :disable="paginationLast(props.pagination.page)" @click="props.nextPage" />
       </div>
 
-    </q-table> -->
+    </q-table>
 
-    <!-- <q-modal v-model="editCompanyModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    <q-modal v-model="editUserModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
       <div style="padding: 30px">
-        <div class="q-display-1 q-mb-md">Edit {{ company.name }}</div>
-
+        <div class="row">
+          <div class="col-xs-12 col-sm-6">
+             <div class="q-display-1 q-mb-md">Edit {{ user.firstname }} {{ user.middlename }} {{ user.lastname }}</div>
+          </div>
+          <div class="col-xs-12 col-sm-3">
+             <q-checkbox v-model="userStatus" label="Enable/Disable" />
+          </div>
+         
+        </div>
         <div class="row">
           <div class="col-xs-12 col-sm-3">
-             <q-select v-model="company.holding_id" :options="holdings" float-label="Holdings"  />
+             <q-input v-model="user.username" float-label="Username" clearable />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-input v-model="company.name" float-label="Company name" clearable />
+             <q-input v-model="user.email" float-label="Email" clearable />
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <q-select multiple v-model="userRoles" :options="roles" float-label="Roles" clearable chips/>
+          </div>
+         
+        </div>
+        <div class="row">
+          <div class="col-xs-12 col-sm-3">
+             <q-input v-model="user.firstname" float-label="Firstname" clearable />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-select v-model="company.business_info.business_type_id" :options="businessTypes" float-label="Business Type" clearable />
+            <q-input v-model="user.middlename" float-label="Middlename" clearable />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-select v-model="company.business_info.vat_type_id" :options="vatTypes" float-label="Vat Type" clearable />
+            <q-input v-model="user.lastname" float-label="Lastname" clearable />
+          </div>
+          <div class="col-xs-12 col-sm-3">
+              <q-datetime
+                type="date"
+                v-model="user.information.birthdate"
+                color="amber"
+                float-label="Birthdate"
+                clearable
+              />
+          </div>
+        </div>
+         <div class="row">
+          <div class="col-xs-12 col-sm-3">
+             <q-input v-model="user.information.employee_id" float-label="Employee ID" clearable />
+          </div>
+          <div class="col-xs-12 col-sm-3">
+            <q-input v-model="user.information.mobile" float-label="Mobile" clearable />
+          </div>
+          <div class="col-xs-12 col-sm-3">
+            <q-input v-model="user.information.nationality" float-label="Nationality" clearable />
+          </div>
+          <div class="col-xs-12 col-sm-3">
+              <q-select  v-model="user.information.civil_status_id" :options="civilStatus" float-label="Civil Status" clearable chips/>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 col-sm-3">
+              <q-select  v-model="user.information.gender_id" :options="genders" float-label="Gender" clearable chips/>
+          </div>
+          <div class="col-xs-12 col-sm-3">
+              <q-select  v-model="user.address.country_id" :options="countries" float-label="Country" clearable chips/>
+          </div>
+          <div class="col-xs-12 col-sm-3">
+              <q-select  v-model="user.address.country_id" :options="countries" float-label="Country" clearable chips/>
           </div>
         </div>
 
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-xs-12 col-sm-3">
             <q-input v-model="company.business_info.telephone" float-label="Telephone" clearable />
           </div>
@@ -115,24 +170,26 @@
           <div class="col-xs-12 col-sm-12">
             <q-input v-model="company.address.street_lot_blk" type="textarea" float-label="Block, Lot &amp; Street" :max-height="100" rows="2" />
           </div>
-        </div>
+        </div> -->
         <br />
         <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
         <q-btn color="primary" @click="update()" label="Submit" class="q-ml-sm" />
         
       </div>
-    </q-modal> -->
+    </q-modal>
   </div>
 </template>
 
 <script>
 // import tableData from 'assets/table-data'
 import _ from "lodash";
-import { mapActions, mapState } from "vuex";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
-      editCompanyModal: false,
+      model: '2016-10-24T10:40:14.674Z',
+      selectedRoles: [],
+      editUserModal: false,
       options: [5, 10, 15, 20],
       lastPage: "",
       serverData: [],
@@ -142,34 +199,58 @@ export default {
         rowsPerPage: 10 // specifying this determines pagination is server-side
       },
       columns: [
-        { name: "Company", label: "Company", field: "company", align: "left" },
-        {
-          name: "Holding",
-          required: true,
-          label: "Holding",
-          align: "left",
-          field: "holding"
-        },
-        { name: "address", label: "Address", field: "address", align: "left" },
-        { name: "created", label: "Created", field: "created", align: "left" },
-        { name: "actions", label: "Actions", field: "actions", align: "left" }
+        { name: "name", label: "Name", field: "name", align: "left" },
+        { name: "roles", label: "Roles", align: "left", field: "roles" },
+        { name: "created", label: "Created", align: "left", field: "created" },
+        { name: "actions", label: "Actions", align: "left", field: "actions" },
+        // { name: "address", label: "Address", field: "address", align: "left" },
+        // { name: "created", label: "Created", field: "created", align: "left" },
+        // { name: "actions", label: "Actions", field: "actions", align: "left" }
       ],
       filter: "",
       loading: false
     };
   },
   computed: {
-    ...mapState('companies', ['company']),
-    holdings(){
-      return this.$store.getters['companies/holdings'].map(e => {
+    ...mapState('users', ['user']),
+    userStatus: {
+      get(){
+        if(this.$store.getters['users/user'].status === 1)
+          return true
+        else
+          return false
+      },
+      set(val){
+        if(val === false)
+          this.$store.dispatch('users/userStatus',  0)
+        else
+          this.$store.dispatch('users/userStatus', 1)
+      }
+      
+    },
+    roles(){
+      return this.$store.getters['users/roles'].map(e => {
         return {
           label: e.name,
           value: e.id
         }
       })
     },
+    userRoles: {
+      get(){
+        return this.$store.getters['users/user'].roles.map(e => {
+          return e.id
+        })
+      },
+      set(val){
+        this.selectedRoles = val
+      }
+      
+    },
     countries () {
-      return this.$store.getters['globals/countries'].map(e => {
+      let regions = this.$store.getters['globals/countries']
+      if (regions === null) return []
+      return regions.map(e => {
         return {
           label: e.description,
           value: e.id
@@ -210,16 +291,16 @@ export default {
         }
       })
     },
-    vatTypes () {
-      return this.$store.getters['globals/vatTypes'].map(e => {
+    civilStatus () {
+      return this.$store.getters['users/civilStatus'].map(e => {
         return {
           label: e.name,
           value: e.id
         }
       })
     },
-    businessTypes () {
-      return this.$store.getters['globals/businessTypes'].map(e => {
+    genders () {
+      return this.$store.getters['users/genders'].map(e => {
         return {
           label: e.name,
           value: e.id
@@ -237,7 +318,6 @@ export default {
             icon: 'delete',
             message: `Delete ${res.data.company.name}?`,
             actions: [
-
               {
                 label: 'OK',
                 handler: () => {
@@ -266,40 +346,40 @@ export default {
     },
     update(){
       
-      this.$axios.put(`/companies/${this.company.id}`, {
-        id: this.company.id,
-        name: this.company.name,
-        desc: this.company.desc,
-        country_id: this.company.address.country_id,
-        region_id: this.company.address.region_id,
-        province_id: this.company.address.province_id,
-        city_id: this.company.address.city_id,
-        brgy_id: this.company.address.brgy_id,
-        street_lot_blk: this.company.address.street_lot_blk,
-        business_type_id: this.company.business_info.business_type_id,
-        vat_type_id: this.company.business_info.vat_type_id,
-        telephone: this.company.business_info.telephone,
-        tin: this.company.business_info.tin,
-        email: this.company.business_info.email,
-        website: this.company.business_info.website
-      })
-        .then((res) => {
-          this.editCompanyModal = false
-          this.$q.notify({
-            color: 'positive',
-            icon: 'check',
-            message: `${res.data.company.name} update successfully`
-          })
-          this.request({
-            pagination: this.serverPagination,
-            filter: this.filter
-          });
-        })
-        .catch()
+      // this.$axios.put(`/companies/${this.company.id}`, {
+      //   id: this.company.id,
+      //   name: this.company.name,
+      //   desc: this.company.desc,
+      //   country_id: this.company.address.country_id,
+      //   region_id: this.company.address.region_id,
+      //   province_id: this.company.address.province_id,
+      //   city_id: this.company.address.city_id,
+      //   brgy_id: this.company.address.brgy_id,
+      //   street_lot_blk: this.company.address.street_lot_blk,
+      //   business_type_id: this.company.business_info.business_type_id,
+      //   vat_type_id: this.company.business_info.vat_type_id,
+      //   telephone: this.company.business_info.telephone,
+      //   tin: this.company.business_info.tin,
+      //   email: this.company.business_info.email,
+      //   website: this.company.business_info.website
+      // })
+      //   .then((res) => {
+      //     this.editCompanyModal = false
+      //     this.$q.notify({
+      //       color: 'positive',
+      //       icon: 'check',
+      //       message: `${res.data.company.name} update successfully`
+      //     })
+      //     this.request({
+      //       pagination: this.serverPagination,
+      //       filter: this.filter
+      //     });
+      //   })
+      //   .catch()
 
     },
     hideModal(){
-      this.editCompanyModal = false
+      this.editUserModal = false
     },
     paginationLast(currentPage) {
       if (this.lastPage > currentPage) {
@@ -317,11 +397,11 @@ export default {
         )
         .then(res => {
 
-          // this.serverPagination = props.pagination;
-          // this.serverData = _.values(res.data.companies.data);
-          // this.serverPagination.rowsNumber = res.data.companies.total;
-          // this.lastPage = res.data.companies.last_page;
-          // this.loading = false;
+          this.serverPagination = props.pagination;
+          this.serverData = _.values(res.data.users.data);
+          this.serverPagination.rowsNumber = res.data.users.total;
+          this.lastPage = res.data.users.last_page;
+          this.loading = false;
 
         })
         .catch(error => {
@@ -332,15 +412,15 @@ export default {
         });
       
     },
-    edit(companyId){
-      this.$axios.get(`/company-holdings?id=${companyId}`)
+    edit(userId){
+      this.$axios.get(`/user-subordinate-roles`)
         .then(res => {
-          this.$store.dispatch('companies/holdings', [res.data.holdings])
+          this.$store.dispatch('users/roles', res.data.roles)
         })
-      this.$axios.get(`companies/${companyId}/edit?id=${companyId}`)
+      this.$axios.get(`users/${userId}/edit?id=${userId}`)
       .then(res =>{
-        this.editCompanyModal = true
-        this.$store.dispatch('companies/company', res.data.company)
+        this.editUserModal = true
+        this.$store.dispatch('users/user', res.data.user)
       })
     }
   },

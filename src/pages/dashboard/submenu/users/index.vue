@@ -19,22 +19,18 @@ export default {
   },
   created() {
     this.GET_COUNTRIES();
-    this.GET_BUSINESS_TYPES();
-    this.GET_VAT_TYPES();
+    this.civilStatus();
+    this.genders();
   },
   methods: {
     ...mapActions("globals", [
-      "GET_BUSINESS_TYPES",
-      "GET_VAT_TYPES",
       "GET_COUNTRIES",
       "GET_REGIONS",
       "GET_PROVINCES",
       "GET_CITIES",
       "GET_BRGYS"
     ]),
-    showNewHoldingModal() {
-      this.$store.dispatch("newHoldingModal", true);
-    }
+    ...mapActions('users', ['civilStatus', 'genders'])
   },
   components: {
     users

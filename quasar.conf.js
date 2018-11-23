@@ -87,6 +87,12 @@ module.exports = function (ctx) {
 
     framework: {
       components: [
+        'QDatetime',
+        'QDatetimePicker',
+        'QChip',
+        'QToggle',
+        'QTree',
+        'QChipsInput',
         'QModal',
         'QPopupEdit',
         'QTh',
