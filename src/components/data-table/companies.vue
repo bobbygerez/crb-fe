@@ -315,14 +315,11 @@ export default {
         })
     },
     edit (companyId) {
-<<<<<<< HEAD
       this.$axios.get(`company-holdings?id=${companyId}`)
       .then(res => {
         this.$store.dispatch('companies/holdings', [res.data.holdings])
       })
 
-=======
->>>>>>> ccf25cf5dff7c93b6e56b214e9c7d8a8e9e34437
       this.$axios.get(`companies/${companyId}/edit?id=${companyId}`)
         .then(res => {
           this.editCompanyModal = true

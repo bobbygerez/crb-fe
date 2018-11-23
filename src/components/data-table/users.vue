@@ -182,13 +182,8 @@
 
 <script>
 // import tableData from 'assets/table-data'
-<<<<<<< HEAD
 import _ from "lodash";
 import { mapState } from "vuex";
-=======
-// import _ from "lodash";
-import { mapState } from 'vuex'
->>>>>>> ccf25cf5dff7c93b6e56b214e9c7d8a8e9e34437
 export default {
   data () {
     return {
@@ -204,7 +199,6 @@ export default {
         rowsPerPage: 10 // specifying this determines pagination is server-side
       },
       columns: [
-<<<<<<< HEAD
         { name: "name", label: "Name", field: "name", align: "left" },
         { name: "roles", label: "Roles", align: "left", field: "roles" },
         { name: "created", label: "Created", align: "left", field: "created" },
@@ -212,26 +206,12 @@ export default {
         // { name: "address", label: "Address", field: "address", align: "left" },
         // { name: "created", label: "Created", field: "created", align: "left" },
         // { name: "actions", label: "Actions", field: "actions", align: "left" }
-=======
-        { name: 'Company', label: 'Company', field: 'company', align: 'left' },
-        {
-          name: 'Holding',
-          required: true,
-          label: 'Holding',
-          align: 'left',
-          field: 'holding'
-        },
-        { name: 'address', label: 'Address', field: 'address', align: 'left' },
-        { name: 'created', label: 'Created', field: 'created', align: 'left' },
-        { name: 'actions', label: 'Actions', field: 'actions', align: 'left' }
->>>>>>> ccf25cf5dff7c93b6e56b214e9c7d8a8e9e34437
       ],
       filter: '',
       loading: false
     }
   },
   computed: {
-<<<<<<< HEAD
     ...mapState('users', ['user']),
     userStatus: {
       get(){
@@ -250,11 +230,6 @@ export default {
     },
     roles(){
       return this.$store.getters['users/roles'].map(e => {
-=======
-    ...mapState('companies', ['company']),
-    holdings () {
-      return this.$store.getters['companies/holdings'].map(e => {
->>>>>>> ccf25cf5dff7c93b6e56b214e9c7d8a8e9e34437
         return {
           label: e.name,
           value: e.id
@@ -368,7 +343,6 @@ export default {
         })
       // .catch()
     },
-<<<<<<< HEAD
     update(){
       
       // this.$axios.put(`/companies/${this.company.id}`, {
@@ -405,42 +379,6 @@ export default {
     },
     hideModal(){
       this.editUserModal = false
-=======
-    update () {
-      this.$axios.put(`/companies/${this.company.id}`, {
-        id: this.company.id,
-        name: this.company.name,
-        desc: this.company.desc,
-        country_id: this.company.address.country_id,
-        region_id: this.company.address.region_id,
-        province_id: this.company.address.province_id,
-        city_id: this.company.address.city_id,
-        brgy_id: this.company.address.brgy_id,
-        street_lot_blk: this.company.address.street_lot_blk,
-        business_type_id: this.company.business_info.business_type_id,
-        vat_type_id: this.company.business_info.vat_type_id,
-        telephone: this.company.business_info.telephone,
-        tin: this.company.business_info.tin,
-        email: this.company.business_info.email,
-        website: this.company.business_info.website
-      })
-        .then((res) => {
-          this.editCompanyModal = false
-          this.$q.notify({
-            color: 'positive',
-            icon: 'check',
-            message: `${res.data.company.name} update successfully`
-          })
-          this.request({
-            pagination: this.serverPagination,
-            filter: this.filter
-          })
-        })
-        .catch()
-    },
-    hideModal () {
-      this.editCompanyModal = false
->>>>>>> ccf25cf5dff7c93b6e56b214e9c7d8a8e9e34437
     },
     paginationLast (currentPage) {
       if (this.lastPage > currentPage) {
@@ -472,29 +410,16 @@ export default {
           this.loading = false
         })
     },
-<<<<<<< HEAD
     edit(userId){
       this.$axios.get(`/user-subordinate-roles`)
-=======
-    edit (companyId) {
-      this.$axios.get(`/company-holdings?id=${companyId}`)
->>>>>>> ccf25cf5dff7c93b6e56b214e9c7d8a8e9e34437
         .then(res => {
           this.$store.dispatch('users/roles', res.data.roles)
         })
-<<<<<<< HEAD
       this.$axios.get(`users/${userId}/edit?id=${userId}`)
       .then(res =>{
         this.editUserModal = true
         this.$store.dispatch('users/user', res.data.user)
       })
-=======
-      this.$axios.get(`companies/${companyId}/edit?id=${companyId}`)
-        .then(res => {
-          this.editCompanyModal = true
-          this.$store.dispatch('companies/company', res.data.company)
-        })
->>>>>>> ccf25cf5dff7c93b6e56b214e9c7d8a8e9e34437
     }
   },
   mounted () {
