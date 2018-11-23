@@ -50,11 +50,7 @@
 
         <div class="row">
           <div class="col-xs-12 col-sm-3">
-<<<<<<< HEAD
              <q-select v-model="company.holding_id" :options="holdings" float-label="Holdings"  />
-=======
-            <q-select v-model="company.holding_id" :options="holdings" float-label="Holdings" clearable />
->>>>>>> 07fc0b55f2cafc831ec870e80b9ce7a8541ea0d9
           </div>
           <div class="col-xs-12 col-sm-3">
             <q-input v-model="company.name" float-label="Company name" clearable />
@@ -152,7 +148,6 @@ export default {
   },
   computed: {
     ...mapState('companies', ['company']),
-<<<<<<< HEAD
     holdings(){
       return this.$store.getters['companies/holdings'].map(e => {
         return {
@@ -259,15 +254,6 @@ export default {
     },
     update(){
       
-=======
-    ...mapState('pattys', ['holdings']),
-    ...mapState('globals', ['countries', 'regions', 'provinces', 'cities', 'brgys', 'vatTypes', 'businessTypes'])
-  },
-  methods: {
-    ...mapActions('companies', ['company']),
-    // ...mapActions('companies', ['company']),
-    update () {
->>>>>>> 07fc0b55f2cafc831ec870e80b9ce7a8541ea0d9
       this.$axios.put(`/companies/${this.company.id}`, {
         id: this.company.id,
         name: this.company.name,
@@ -285,7 +271,6 @@ export default {
         email: this.company.business_info.email,
         website: this.company.business_info.website
       })
-<<<<<<< HEAD
         .then((res) => {
           this.editCompanyModal = false
           this.$q.notify({
@@ -300,18 +285,6 @@ export default {
         })
         .catch()
 
-=======
-      // .then(function (res) {
-      //   data.minimizedModal = false
-      //   data.$q.notify({
-      //     color: 'positive',
-      //     icon: 'check',
-      //     message: `${data.holding.name} update successfully`
-      //   })
-      //   data.index()
-      // })
-      // .catch()
->>>>>>> 07fc0b55f2cafc831ec870e80b9ce7a8541ea0d9
     },
     hideModal () {
       this.editCompanyModal = false
@@ -344,19 +317,12 @@ export default {
           this.loading = false
         })
     },
-<<<<<<< HEAD
-    edit(companyId){
-      this.$axios.get(`/company-holdings?id=${companyId}`)
-        .then(res => {
-          this.$store.dispatch('companies/holdings', [res.data.holdings])
-        })
-=======
     edit (companyId) {
->>>>>>> 07fc0b55f2cafc831ec870e80b9ce7a8541ea0d9
+      
       this.$axios.get(`companies/${companyId}/edit?id=${companyId}`)
         .then(res => {
           this.editCompanyModal = true
-          this.company(res.data.company)
+          this.$store.dispatch('companies/company', res.data.company)
         })
     }
   },
@@ -370,16 +336,11 @@ export default {
     'company.name' (val) {
       this.$store.dispatch('companies/companyName', val)
     },
-<<<<<<< HEAD
     'company.holding_id' (val){
       this.$store.dispatch('companies/companyHolding', val)
     },
     'company.desc' (val){
        this.$store.dispatch('companies/companyDesc', val)
-=======
-    'company.desc' (val) {
-      this.$store.dispatch('companies/companyDesc', val)
->>>>>>> 07fc0b55f2cafc831ec870e80b9ce7a8541ea0d9
     },
     'company.address.country_id' (val) {
       if (val === null || val === undefined) return
