@@ -1,103 +1,103 @@
-export const businessTypes = (state, payload) => {
+export const SET_BUSINESS_TYPES = (state, payload) => {
   state.businessTypes = payload
 }
 
-export const vatTypes = (state, payload) => {
+export const SET_VAT_TYPES = (state, payload) => {
   state.vatTypes = payload
 }
 
-export const newHoldingModal = (state, payload) => {
+export const SET_NEW_HOLDING_MODAL = (state, payload) => {
   state.newHoldingModal = payload
 }
 
-export const page = (state, payload) => {
+export const SET_PAGE = (state, payload) => {
   state.page = payload
 }
 
-export const perPage = (state, payload) => {
+export const SET_PER_PAGE = (state, payload) => {
   state.perPage = payload
 }
 
-export const holdingVatType = (state, payload) => {
+export const SET_HOLDING_VAT_TYPE = (state, payload) => {
   state.holding.business_info.vat_type_id = payload
 }
 
-export const holdingTelephone = (state, payload) => {
+export const SET_HOLDING_TELEPHONE = (state, payload) => {
   state.holding.business_info.telephone = payload
 }
 
-export const holdingEmail = (state, payload) => {
+export const SET_HOLDING_EMAIL = (state, payload) => {
   state.holding.business_info.email = payload
 }
 
-export const holdingTin = (state, payload) => {
+export const SET_HOLDING_TIN = (state, payload) => {
   state.holding.business_info.tin = payload
 }
 
-export const holdingWebsite = (state, payload) => {
+export const SET_HOLDING_WEBSITE = (state, payload) => {
   state.holding.business_info.website = payload
 }
 
-export const holdingBusinessType = (state, payload) => {
+export const SET_HOLDING_BUSINESS_TYPE = (state, payload) => {
   state.holding.business_info.business_type_id = payload
 }
 
-export const holdingStreetLotBlk = (state, payload) => {
+export const SET_HOLDING_ADDRESS = (state, payload) => {
   state.holding.address.street_lot_blk = payload
 }
 
-export const holdingBrgy = (state, payload) => {
+export const SET_HOLDING_BRGY = (state, payload) => {
   state.holding.address.brgy_id = payload
 }
 
-export const holdingCity = (state, payload) => {
+export const SET_HOLDING_CITY = (state, payload) => {
   state.holding.address.city_id = payload
 }
 
-export const holdingProvince = (state, payload) => {
+export const SET_HOLDING_PROVINCE = (state, payload) => {
   state.holding.address.province_id = payload
 }
 
-export const holdingRegion = (state, payload) => {
+export const SET_HOLDING_REGION = (state, payload) => {
   state.holding.address.region_id = payload
 }
 
-export const holdingDesc = (state, payload) => {
+export const SET_HOLDING_DESC = (state, payload) => {
   state.holding.desc = payload
 }
 
-export const holdingName = (state, payload) => {
+export const SET_HOLDING_NAME = (state, payload) => {
   state.holdingName = payload
 }
 
-export const holding = (state, payload) => {
+export const SET_HOLDING = (state, payload) => {
   state.holding = payload
 }
 
-export const holdings = (state, payload) => {
+export const SET_HOLDINGS = (state, payload) => {
   state.holdings = payload
 }
 
-export const token = (state, payload) => {
+export const SET_TOKEN = (state, payload) => {
   state.token = payload
 }
 
-export const user = (state, payload) => {
+export const SET_USER = (state, payload) => {
   state.user = payload
 }
 
-export const userLogin = (state, payload) => {
+export const SET_USER_LOGIN = (state, payload) => {
   state.userLogin = payload
 }
 
-export const stores = (state, payload) => {
+export const SET_STORES = (state, payload) => {
   state.stores = payload
 }
 
-export const items = (state, payload) => {
+export const SET_ITEMS = (state, payload) => {
   state.items = payload
 }
 
-export const categories = (state, payload) => {
+export const SET_CATEGORIES = (state, payload) => {
   state.categories = payload
 }

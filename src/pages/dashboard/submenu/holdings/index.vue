@@ -15,31 +15,23 @@ export default {
     ...mapState('globals', ['perPage', 'page'])
   },
   created () {
-    // console.log('')
-    // let data = this
-    // this.$axios.defaults.headers.common['Authorization'] = `Bearer ${this.$store.getters['pattys/token']}`
-    // axios.get('/holdings?page=' + this.page + '&perPage=' + this.perPage)
-    //   .then(res => {
-    //     this.holdings(res.data.holdings)
-    //   })
-    // this.getStart()
     Hold.getHolds(this.page, this.perPage).then(res => {
-      this.holdings(res.data.holdings)
+      this.setHoldings(res.data.holdings)
     })
-    this.GET_COUNTRIES()
-    this.GET_BUSINESS_TYPES()
-    this.GET_VAT_TYPES()
+    this.getCountries()
+    this.getBusinessTypes()
+    this.getVatTypes()
   },
   methods: {
-    ...mapActions('pattys', ['holdings', 'GET_BUSINESS_TYPES', 'GET_VAT_TYPES']),
-    ...mapActions('globals', ['GET_COUNTRIES']),
+    ...mapActions('pattys', ['setHoldings', 'getBusinessTypes', 'getVatTypes', 'setNewHoldingModal']),
+    ...mapActions('globals', ['getCountries']),
     showNewHoldingModal () {
-      this.$store.dispatch('newHoldingModal', true)
+      this.setNewHoldingModal(true)
     },
     getStart () {
       axios.get('/holdings?page=' + this.page + '&perPage=' + this.perPage)
         .then(res => {
-          this.holdings(res.data.holdings)
+          this.setHoldings(res.data.holdings)
         })
     }
   },

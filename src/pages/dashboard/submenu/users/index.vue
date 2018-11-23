@@ -6,17 +6,13 @@
 </template>
 
 <script type="text/javascript">
-import users from "components/data-table/users.vue";
-import { mapActions, mapStates } from "vuex";
+import users from 'components/data-table/users.vue'
+import { mapActions, mapState } from 'vuex'
 export default {
   computed: {
-    page() {
-      return this.$store.getters['pattys/page'];
-    },
-    perPage() {
-      return this.$store.getters['pattys/perPage'];
-    }
+    ...mapState('pattys', ['page', 'perPage'])
   },
+<<<<<<< HEAD
   created() {
     this.GET_COUNTRIES();
     this.civilStatus();
@@ -31,9 +27,30 @@ export default {
       "GET_BRGYS"
     ]),
     ...mapActions('users', ['civilStatus', 'genders'])
+=======
+  created () {
+    this.getCountries()
+    this.getBusinessTypes()
+    this.getVatTypes()
+  },
+  methods: {
+    ...mapActions('globals', [
+      'getBusinessTypes',
+      'getVatTypes',
+      'getCountries',
+      'getRegions',
+      'getProvinces',
+      'getCities',
+      'getBrgys'
+    ]),
+    ...mapActions('pattys', 'setNewHoldingModal'),
+    showNewHoldingModal () {
+      this.setNewHoldingModal(true)
+    }
+>>>>>>> ccf25cf5dff7c93b6e56b214e9c7d8a8e9e34437
   },
   components: {
     users
   }
-};
+}
 </script>

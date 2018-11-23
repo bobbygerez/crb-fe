@@ -2,7 +2,7 @@ import {
   axios
 } from 'plugins/axios'
 
-export const GET_BUSINESS_TYPES = ({
+export const getBusinessTypes = ({
   commit,
   state
 }) => {
@@ -11,11 +11,11 @@ export const GET_BUSINESS_TYPES = ({
   }
   axios.get('/business_types')
     .then(function (res) {
-      commit('businessTypes', res.data.businessTypes)
+      commit('SET_BUSINESS_TYPES', res.data.businessTypes)
     })
 }
 
-export const GET_VAT_TYPES = ({
+export const getVatTypes = ({
   commit,
   state
 }) => {
@@ -24,11 +24,11 @@ export const GET_VAT_TYPES = ({
   }
   axios.get('/vat_types')
     .then(function (res) {
-      commit('vatTypes', res.data.vatTypes)
+      commit('SET_VAT_TYPES', res.data.vatTypes)
     })
 }
 
-export const GET_COUNTRIES = ({
+export const getCountries = ({
   commit,
   state
 }) => {
@@ -37,11 +37,11 @@ export const GET_COUNTRIES = ({
   }
   axios.get('/countries')
     .then(function (res) {
-      commit('countries', res.data.countries)
+      commit('SET_COUNTRIES', res.data.countries)
     })
 }
 
-export const GET_REGIONS = ({
+export const getRegions = ({
   commit,
   state
 }, countryId) => {
@@ -50,10 +50,10 @@ export const GET_REGIONS = ({
   }
   axios.get(`/regions/${countryId}`)
     .then(function (res) {
-      commit('regions', res.data.regions)
+      commit('SET_REGIONS', res.data.regions)
     })
 }
-export const GET_PROVINCES = ({
+export const getProvinces = ({
   commit,
   state
 }, regionId) => {
@@ -62,10 +62,10 @@ export const GET_PROVINCES = ({
   }
   axios.get(`/provinces/${regionId}`)
     .then(function (res) {
-      commit('provinces', res.data.provinces)
+      commit('SET_PROVINCES', res.data.provinces)
     })
 }
-export const GET_CITIES = ({
+export const getCities = ({
   commit,
   state
 }, provinceId) => {
@@ -74,11 +74,11 @@ export const GET_CITIES = ({
   }
   axios.get(`/cities/${provinceId}`)
     .then(function (res) {
-      commit('cities', res.data.cities)
+      commit('SET_CITIES', res.data.cities)
     })
 }
 
-export const GET_BRGYS = ({
+export const getBrgys = ({
   commit,
   state
 }, cityId) => {
@@ -87,10 +87,10 @@ export const GET_BRGYS = ({
   }
   axios.get(`/brgys/${cityId}`)
     .then(function (res) {
-      commit('brgys', res.data.brgys)
+      commit('SET_BRGYS', res.data.brgys)
     })
 }
 
-export const menus = (state, payload) => {
-  state.commit('menus', payload)
+export const setMenus = ({commit}, payload) => {
+  commit('SET_MENUS', payload)
 }
