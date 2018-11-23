@@ -1,9 +1,9 @@
-export const companies = (state) => state.companies
+export const getCompanies = (state) => state.companies
 
-export const company = (state) => state.company
+export const getCompany = (state) => state.company
 
-export const holdings = (state) => state.holdings
+export const getHoldings = (state) => state.holdings
 
-export const page = (state) => state.page
+export const getPage = (state) => state.page
 
-export const perPage = (state) => state.perPage
+export const getPerPage = (state) => state.perPage

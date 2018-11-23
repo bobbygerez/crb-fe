@@ -28,7 +28,7 @@ export default function ({
 
   Router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
-      if (!store.getters['pattys/token']) {
+      if (!store.getters['pattys/getToken']) {
         next({
           path: '/',
           query: {

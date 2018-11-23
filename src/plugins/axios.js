@@ -1,6 +1,4 @@
-import {
-  Platform
-} from 'quasar'
+import { Platform } from 'quasar'
 import axios from 'axios'
 
 /**
@@ -67,7 +65,7 @@ export default ({
   axios.defaults.headers.post['Content-Type'] = 'application/json'
 
   intercept(true)
-  const token = store.getters['pattys/token']
+  const token = store.getters['pattys/getToken']
   if (token) {
     setAuthHeader(token)
   }

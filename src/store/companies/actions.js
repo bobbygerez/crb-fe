@@ -1,77 +1,77 @@
-export const companies = (state, payload) => {
-  state.commit('companies', payload)
+export const setCompanies = ({commit}, payload) => {
+  commit('SET_COMPANIES', payload)
 }
 
-export const company = (state, payload) => {
-  state.commit('company', payload)
+export const setCompany = ({commit}, payload) => {
+  commit('SET_COMPANY', payload)
 }
 
-export const companyName = (state, payload) => {
-  state.commit('companyName', payload)
+export const setCompanyName = ({commit}, payload) => {
+  commit('SET_COMPANY_NAME', payload)
 }
 
-export const companyHolding = (state, payload) => {
-  state.commit('companyHolding', payload)
+export const setCompanyHolding = ({commit}, payload) => {
+  commit('SET_COMPANY_HOLDING', payload)
 }
-export const holdings = (state, payload) => {
-  state.commit('holdings', payload)
-}
-
-export const companyDesc = (state, payload) => {
-  state.commit('companyDesc', payload)
+export const setHoldings = ({commit}, payload) => {
+  commit('SET_HOLDINGS', payload)
 }
 
-export const country = (state, payload) => {
-  state.commit('country', payload)
+export const setCompanyDesc = ({commit}, payload) => {
+  commit('SET_COMPANY_DESC', payload)
 }
 
-export const region = (state, payload) => {
-  state.commit('region', payload)
+export const setCompanyCountry = ({commit}, payload) => {
+  commit('SET_COMPANY_COUNTRY', payload)
 }
 
-export const province = (state, payload) => {
-  state.commit('province', payload)
+export const setCompanyRegion = ({commit}, payload) => {
+  commit('SET_COMPANY_REGION', payload)
 }
 
-export const city = (state, payload) => {
-  state.commit('city', payload)
+export const setCompanyProvince = ({commit}, payload) => {
+  commit('SET_COMPANY_PROVINCE', payload)
 }
 
-export const brgy = (state, payload) => {
-  state.commit('brgy', payload)
+export const setCompanyCity = ({commit}, payload) => {
+  commit('SET_COMPANY_CITIES', payload)
 }
 
-export const streetLotBlk = (state, payload) => {
-  state.commit('streetLotBlk', payload)
-}
-export const businessType = (state, payload) => {
-  state.commit('businessType', payload)
+export const setCompanyBrgy = ({commit}, payload) => {
+  commit('SET_COMPANY_BRGY', payload)
 }
 
-export const vatType = (state, payload) => {
-  state.commit('vatType', payload)
+export const setCompanyAddress = ({commit}, payload) => {
+  commit('SET_COMPANY_ADDRESS', payload)
+}
+export const setCompanyBusinessType = ({commit}, payload) => {
+  commit('SET_COMPANY_BUSINESS_TYPE', payload)
 }
 
-export const telephone = (state, payload) => {
-  state.commit('telephone', payload)
+export const setCompanyVatType = ({commit}, payload) => {
+  commit('SET_COMPANY_VAT_TYPE', payload)
 }
 
-export const email = (state, payload) => {
-  state.commit('email', payload)
+export const setCompanyTelephone = ({commit}, payload) => {
+  commit('SET_COMPANY_TELEPHONE', payload)
 }
 
-export const website = (state, payload) => {
-  state.commit('website', payload)
+export const setCompanyEmail = ({commit}, payload) => {
+  commit('SET_COMPANY_EMAIL', payload)
 }
 
-export const tin = (state, payload) => {
-  state.commit('tin', payload)
+export const setCompanyWebsite = ({commit}, payload) => {
+  commit('SET_COMPANY_WEBSITE', payload)
 }
 
-export const page = (state, payload) => {
-  state.commit('page', payload)
+export const setCompanyTin = ({commit}, payload) => {
+  commit('SET_COMPANY_TIN', payload)
 }
 
-export const perPage = (state, payload) => {
-  state.commit('perPage', payload)
+export const setPage = ({commit}, payload) => {
+  commit('SET_PAGE', payload)
+}
+
+export const setPerPage = ({commit}, payload) => {
+  commit('SET_PER_PAGE', payload)
 }

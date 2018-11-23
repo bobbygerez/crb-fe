@@ -1,15 +1,15 @@
-export const brgys = (state) => state.brgys
+export const getBrgys = (state) => state.brgys
 
-export const cities = (state) => state.cities
+export const getCities = (state) => state.cities
 
-export const provinces = (state) => state.provinces
+export const getProvinces = (state) => state.provinces
 
-export const regions = (state) => state.regions
+export const getRegions = (state) => state.regions
 
-export const countries = (state) => state.countries
+export const getCountries = (state) => state.countries
 
-export const businessTypes = (state) => state.businessTypes
+export const getBusinessTypes = (state) => state.businessTypes
 
-export const vatTypes = (state) => state.vatTypes
+export const getVatTypes = (state) => state.vatTypes
 
-export const menus = (state) => state.menus
+export const getMenus = (state) => state.menus

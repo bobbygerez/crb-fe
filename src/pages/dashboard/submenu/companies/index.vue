@@ -12,23 +12,23 @@ export default {
   computed: {
     ...mapState('pattys', ['page', 'perPage'])
   },
-  created() {
-    this.GET_COUNTRIES();
-    this.GET_BUSINESS_TYPES();
-    this.GET_VAT_TYPES();
+  created () {
+    this.getCountries()
+    this.getBusinessTypes()
+    this.getVatTypes()
   },
   methods: {
     ...mapActions('globals', [
-      'GET_BUSINESS_TYPES',
-      'GET_VAT_TYPES',
-      'GET_COUNTRIES',
-      'GET_REGIONS',
-      'GET_PROVINCES',
-      'GET_CITIES',
-      'GET_BRGYS'
+      'getBusinessTypes',
+      'getVatTypes',
+      'getCountries',
+      'getRegions',
+      'getProvinces',
+      'getCities',
+      'getBrgys'
     ]),
-    showNewHoldingModal() {
-      this.$store.dispatch("newHoldingModal", true);
+    showNewHoldingModal () {
+      this.$store.dispatch('setNewHoldingModal', true)
     }
   },
   components: {
