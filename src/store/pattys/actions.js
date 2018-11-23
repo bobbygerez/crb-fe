@@ -2,108 +2,114 @@ import {
   axios
 } from 'plugins/axios'
 
-export const GET_BUSINESS_TYPES = ({
+export const getBusinessTypes = ({
   commit,
   state
 }) => {
+  if (state.businessTypes) {
+    return
+  }
   axios.get('/business_types')
     .then(function (res) {
-      commit('businessTypes', res.data.businessTypes)
+      commit('SET_BUSINESS_TYPES', res.data.businessTypes)
     })
 }
 
-export const GET_VAT_TYPES = ({
+export const getVatTypes = ({
   commit,
   state
 }) => {
+  if (state.vatTypes) {
+    return
+  }
   axios.get('/vat_types')
     .then(function (res) {
-      commit('vatTypes', res.data.vatTypes)
+      commit('SET_VAT_TYPES', res.data.vatTypes)
     })
 }
 
-export const newHoldingModal = (state, payload) => {
-  state.commit('newHoldingModal', payload)
+export const setNewHoldingModal = ({commit}, payload) => {
+  commit('SET_NEW_HOLDING_MODAL', payload)
 }
 
-export const page = (state, payload) => {
-  state.commit('page', payload)
+export const setPage = ({commit}, payload) => {
+  commit('SET_PAGE', payload)
 }
-export const perPage = (state, payload) => {
-  state.commit('perPage', payload)
-}
-
-export const holdings = (state, payload) => {
-  state.commit('holdings', payload)
+export const setPerPage = ({commit}, payload) => {
+  commit('SET_PER_PAGE', payload)
 }
 
-export const holding = (state, payload) => {
-  state.commit('holding', payload)
+export const setHoldings = ({commit}, payload) => {
+  commit('SET_HOLDINGS', payload)
 }
 
-export const holdingTelephone = (state, payload) => {
-  state.commit('holdingTelephone', payload)
+export const setHolding = ({commit}, payload) => {
+  commit('SET_HOLDING', payload)
 }
 
-export const holdingEmail = (state, payload) => {
-  state.commit('holdingEmail', payload)
+export const setHoldingTelephone = ({commit}, payload) => {
+  commit('SET_HOLDING_TELEPHONE', payload)
 }
 
-export const holdingWebsite = (state, payload) => {
-  state.commit('holdingWebsite', payload)
+export const setHoldingEmail = ({commit}, payload) => {
+  commit('SET_HOLDING_EMAIL', payload)
 }
 
-export const holdingTin = (state, payload) => {
-  state.commit('holdingTin', payload)
+export const setHoldingWebsite = ({commit}, payload) => {
+  commit('SET_HOLDING_WEBSITE', payload)
 }
 
-export const holdingBusinessType = (state, payload) => {
-  state.commit('holdingBusinessType', payload)
+export const setHoldingTin = ({commit}, payload) => {
+  commit('SET_HOLDING_TIN', payload)
 }
 
-export const holdingVatType = (state, payload) => {
-  state.commit('holdingVatType', payload)
+export const setHoldingBusinessType = ({commit}, payload) => {
+  commit('SET_HOLDING_BUSINESS_TYPE', payload)
 }
 
-export const holdingStreetLotBlk = (state, payload) => {
-  state.commit('holdingStreetLotBlk', payload)
+export const setHoldingVatType = ({commit}, payload) => {
+  commit('SET_HOLDING_VAT_TYPE', payload)
 }
-export const holdingName = (state, payload) => {
-  state.commit('holdingName', payload)
+
+export const setHoldingStreetLotBlk = ({commit}, payload) => {
+  commit('SET_HOLDING_ADDRESS', payload)
 }
-export const holdingDesc = (state, payload) => {
-  state.commit('holdingDesc', payload)
+export const setHoldingName = ({commit}, payload) => {
+  commit('SET_HOLDING_NAME', payload)
 }
-export const holdingBrgy = (state, payload) => {
-  state.commit('holdingBrgy', payload)
+export const setHoldingDesc = ({commit}, payload) => {
+  commit('SET_HOLDING_DESC', payload)
 }
-export const holdingCity = (state, payload) => {
-  state.commit('holdingCity', payload)
+export const setHoldingBrgy = ({commit}, payload) => {
+  commit('SET_HOLDING_BRGY', payload)
 }
-export const holdingProvince = (state, payload) => {
-  state.commit('holdingProvince', payload)
+export const setHoldingCity = ({commit}, payload) => {
+  commit('SET_HOLDING_CITY', payload)
 }
-export const holdingRegion = (state, payload) => {
-  state.commit('holdingRegion', payload)
+export const setHoldingProvince = ({commit}, payload) => {
+  commit('SET_HOLDING_PROVINCE', payload)
 }
-export const token = (state, payload) => {
-  state.commit('token', payload)
+export const setGoldingRegion = ({commit}, payload) => {
+  commit('SET_HOLDING_REGION', payload)
 }
-export const userLogin = (state, payload) => {
-  state.commit('userLogin', payload)
+export const setToken = ({commit}, payload) => {
+  commit('SET_TOKEN', payload)
 }
-export const user = (state, payload) => {
-  state.commit('user', payload)
+export const setUserLogin = ({commit}, payload) => {
+  commit('SET_USER_LOGIN', payload)
 }
-export const stores = (state, payload) => {
-  state.commit('stores', payload)
+export const setUser = ({commit}, payload) => {
+  commit('SET_USER', payload)
 }
-export const items = (state, payload) => {
-  state.commit('items', payload)
+export const setStores = ({commit}, payload) => {
+  commit('SET_STORES', payload)
 }
-export const provinces = (state, payload) => {
-  state.commit('provinces', payload)
+export const setItems = ({commit}, payload) => {
+  commit('SET_ITEMS', payload)
 }
-export const categories = (state, payload) => {
-  state.commit('categories', payload)
+export const setProvinces = ({commit}, payload) => {
+  commit('SET_PROVINCES', payload)
+}
+export const setCategories = ({commit}, payload) => {
+  commit('SET_CATEGORIES', payload)
 }

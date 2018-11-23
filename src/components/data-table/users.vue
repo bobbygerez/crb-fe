@@ -45,7 +45,7 @@
         </q-tr>
 
       </template>
-      
+
       <div slot="pagination" slot-scope="props" class="row flex-center q-py-sm">
         <q-btn round dense size="sm" icon="undo" color="secondary" class="q-mr-sm" :disable="props.isFirstPage" @click="props.prevPage" />
         <div class="q-mr-sm" style="font-size: small">
@@ -119,7 +119,7 @@
         <br />
         <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
         <q-btn color="primary" @click="update()" label="Submit" class="q-ml-sm" />
-        
+
       </div>
     </q-modal> -->
   </div>
@@ -127,14 +127,14 @@
 
 <script>
 // import tableData from 'assets/table-data'
-import _ from "lodash";
-import { mapActions, mapState } from "vuex";
+// import _ from "lodash";
+import { mapState } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
       editCompanyModal: false,
       options: [5, 10, 15, 20],
-      lastPage: "",
+      lastPage: '',
       serverData: [],
       serverPagination: {
         page: 1,
@@ -142,25 +142,25 @@ export default {
         rowsPerPage: 10 // specifying this determines pagination is server-side
       },
       columns: [
-        { name: "Company", label: "Company", field: "company", align: "left" },
+        { name: 'Company', label: 'Company', field: 'company', align: 'left' },
         {
-          name: "Holding",
+          name: 'Holding',
           required: true,
-          label: "Holding",
-          align: "left",
-          field: "holding"
+          label: 'Holding',
+          align: 'left',
+          field: 'holding'
         },
-        { name: "address", label: "Address", field: "address", align: "left" },
-        { name: "created", label: "Created", field: "created", align: "left" },
-        { name: "actions", label: "Actions", field: "actions", align: "left" }
+        { name: 'address', label: 'Address', field: 'address', align: 'left' },
+        { name: 'created', label: 'Created', field: 'created', align: 'left' },
+        { name: 'actions', label: 'Actions', field: 'actions', align: 'left' }
       ],
-      filter: "",
+      filter: '',
       loading: false
-    };
+    }
   },
   computed: {
     ...mapState('companies', ['company']),
-    holdings(){
+    holdings () {
       return this.$store.getters['companies/holdings'].map(e => {
         return {
           label: e.name,
@@ -248,7 +248,6 @@ export default {
                         icon: 'check',
                         message: `${res.data.company.name} deleted successfully`
                       })
-
                     })
                     .catch((err) => {
                       this.$q.notify({
@@ -262,10 +261,9 @@ export default {
             ]
           })
         })
-        // .catch()
+      // .catch()
     },
-    update(){
-      
+    update () {
       this.$axios.put(`/companies/${this.company.id}`, {
         id: this.company.id,
         name: this.company.name,
@@ -293,22 +291,21 @@ export default {
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
-          });
+          })
         })
         .catch()
-
     },
-    hideModal(){
+    hideModal () {
       this.editCompanyModal = false
     },
-    paginationLast(currentPage) {
+    paginationLast (currentPage) {
       if (this.lastPage > currentPage) {
-        return false;
+        return false
       }
-      return true;
+      return true
     },
-    request(props) {
-      this.loading = true;
+    request (props) {
+      this.loading = true
       this.$axios
         .get(
           `/users?filter=${this.filter}&page=${props.pagination.page}&perPage=${
@@ -326,39 +323,38 @@ export default {
         })
         .catch(error => {
           // there's an error... do SOMETHING
-          console.log(error);
+          console.log(error)
           // we tell QTable to exit the "loading" state
-          this.loading = false;
-        });
-      
+          this.loading = false
+        })
     },
-    edit(companyId){
+    edit (companyId) {
       this.$axios.get(`/company-holdings?id=${companyId}`)
         .then(res => {
           this.$store.dispatch('companies/holdings', [res.data.holdings])
         })
       this.$axios.get(`companies/${companyId}/edit?id=${companyId}`)
-      .then(res =>{
-        this.editCompanyModal = true
-        this.$store.dispatch('companies/company', res.data.company)
-      })
+        .then(res => {
+          this.editCompanyModal = true
+          this.$store.dispatch('companies/company', res.data.company)
+        })
     }
   },
-  mounted() {
+  mounted () {
     this.request({
       pagination: this.serverPagination,
       filter: this.filter
-    });
+    })
   },
   watch: {
-    'company.name' (val){
+    'company.name' (val) {
       this.$store.dispatch('companies/companyName', val)
     },
-    'company.holding_id' (val){
+    'company.holding_id' (val) {
       this.$store.dispatch('companies/companyHolding', val)
     },
-    'company.desc' (val){
-       this.$store.dispatch('companies/companyDesc', val)
+    'company.desc' (val) {
+      this.$store.dispatch('companies/companyDesc', val)
     },
     'company.address.country_id' (val) {
       if (val === null || val === undefined) return
@@ -380,28 +376,28 @@ export default {
     'company.address.brgy_id' (val) {
       this.$store.dispatch('companies/brgy', val)
     },
-    'company.business_info.business_type_id' (val){
+    'company.business_info.business_type_id' (val) {
       this.$store.dispatch('companies/businessType', val)
     },
-    'company.business_info.vat_type_id'(val){
+    'company.business_info.vat_type_id' (val) {
       this.$store.dispatch('companies/vatType', val)
     },
-    'company.address.street_lot_blk' (val){
+    'company.address.street_lot_blk' (val) {
       this.$store.dispatch('companies/streetLotBlk', val)
     },
-    'company.business_info.telephone' (val){
+    'company.business_info.telephone' (val) {
       this.$store.dispatch('companies/telephone', val)
     },
-    'company.business_info.email' (val){
+    'company.business_info.email' (val) {
       this.$store.dispatch('companies/email', val)
     },
-    'company.business_info.tin'(val){
+    'company.business_info.tin' (val) {
       this.$store.dispatch('companies/tin', val)
     },
-    'company.business_info.website'(val){
+    'company.business_info.website' (val) {
       this.$store.dispatch('companies/website', val)
     }
   }
-  
-};
+
+}
 </script>

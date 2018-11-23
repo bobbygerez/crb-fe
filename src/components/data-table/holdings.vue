@@ -167,6 +167,7 @@
 
 <script>
 // import tableData from 'assets/table-data'
+import { mapState } from 'vuex'
 import _ from 'lodash'
 export default {
   data () {
@@ -228,24 +229,17 @@ export default {
     }
   },
   computed: {
-    newHoldingModal: {
-      get () {
-        return this.$store.getters['pattys/newHoldingModal']
-      },
-      set (val) {
-
-      }
-    },
     vatTypes () {
-      return this.$store.getters['pattys/vatTypes'].map(e => {
+      return this.$store.getters['pattys/getVatTypes'].map(e => {
         return {
           label: e.name,
           value: e.id
         }
       })
+      // return this.getVatTypes()
     },
     businessTypes () {
-      return this.$store.getters['pattys/businessTypes'].map(e => {
+      return this.$store.getters['pattys/getBusinessTypes'].map(e => {
         return {
           label: e.name,
           value: e.id
@@ -253,8 +247,8 @@ export default {
       })
     },
     regions () {
-      if (this.$store.getters['globals/regions'] === undefined) return []
-      return this.$store.getters['globals/regions'].map(e => {
+      if (this.$store.getters['globals/getRegions'] === undefined) return []
+      return this.$store.getters['globals/getRegions'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -262,7 +256,7 @@ export default {
       })
     },
     countries () {
-      return this.$store.getters['globals/countries'].map(e => {
+      return this.$store.getters['globals/getCountries'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -270,7 +264,7 @@ export default {
       })
     },
     provinces () {
-      return this.$store.getters['globals/provinces'].map(e => {
+      return this.$store.getters['globals/getProvinces'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -278,7 +272,7 @@ export default {
       })
     },
     cities () {
-      return this.$store.getters['globals/cities'].map(e => {
+      return this.$store.getters['globals/getCities'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -286,22 +280,20 @@ export default {
       })
     },
     brgys () {
-      return this.$store.getters['globals/brgys'].map(e => {
+      return this.$store.getters['globals/getBrgys'].map(e => {
         return {
           label: e.description,
           value: e.id
         }
       })
     },
-    holding () {
-      return this.$store.getters['pattys/holding']
-    },
+    ...mapState('pattys', ['holding', 'newHoldingModal']),
     holdings () {
-      return _.values(this.$store.getters['pattys/holdings'])
+      return _.values(this.$store.getters['pattys/getHoldings'])
     },
-    perPage () {
-      return this.$store.getters['pattys/holdings']
-    },
+    // perPage () {
+    //   return this.$store.getters['pattys/holdings']
+    // },
     tableClass () {
       if (this.dark) {
         return 'bg-black'
@@ -310,13 +302,13 @@ export default {
   },
   methods: {
     hideModal () {
-      this.$store.dispatch('pattys/newHoldingModal', false)
+      this.$store.dispatch('pattys/setNewHoldingModal', false)
     },
     index () {
       let data = this
       this.$axios.get(process.env.API + `/holdings`)
         .then(function (res) {
-          data.$store.dispatch('pattys/holdings', res.data.holdings)
+          data.$store.dispatch('pattys/setHoldings', res.data.holdings)
         })
         .catch()
     },
@@ -348,7 +340,7 @@ export default {
       let data = this
       this.$axios.get(process.env.API + `/holdings/${id}?id=${id}`)
         .then(function (res) {
-          data.$store.dispatch('pattys/holding', res.data.holding)
+          data.$store.dispatch('pattys/setHolding', res.data.holding)
           data.$q.notify({
             color: 'negative',
             icon: 'delete',
@@ -385,7 +377,7 @@ export default {
       let data = this
       this.$axios.get(process.env.API + `/holdings/${id}/edit?id=${id}`)
         .then(function (res) {
-          data.$store.dispatch('pattys/holding', res.data.holding)
+          data.$store.dispatch('pattys/setHolding', res.data.holding)
           data.minimizedModal = true
         })
         .catch()
@@ -438,50 +430,50 @@ export default {
       })
     },
     'holding.name' (val) {
-      this.$store.dispatch('pattys/holdingName', val)
+      this.$store.dispatch('pattys/setHoldingName', val)
     },
     'holding.address.country_id' (val) {
       if (val === null || val === undefined) return
-      this.$store.dispatch('globals/GET_REGIONS', val)
+      this.$store.dispatch('globals/getRegions', val)
     },
     'holding.address.region_id' (val) {
-      this.$store.dispatch('globals/GET_PROVINCES', val)
-      this.$store.dispatch('pattys/holdingRegion', val)
+      this.$store.dispatch('globals/getProvinces', val)
+      this.$store.dispatch('pattys/setHoldingRegion', val)
     },
     'holding.address.province_id' (val) {
-      this.$store.dispatch('pattys/holdingProvince', val)
+      this.$store.dispatch('pattys/setHoldingProvince', val)
       this.$store.dispatch('globals/GET_CITIES', val)
     },
     'holding.address.city_id' (val) {
-      this.$store.dispatch('pattys/holdingCity', val)
-      this.$store.dispatch('globals/GET_BRGYS', val)
+      this.$store.dispatch('pattys/setHoldingCity', val)
+      this.$store.dispatch('globals/getBrgys', val)
     },
     'holding.address.brgy_id' (val) {
-      this.$store.dispatch('pattys/holdingBrgy', val)
+      this.$store.dispatch('pattys/setHoldingBrgy', val)
     },
     'holding.desc' (val) {
-      this.$store.dispatch('pattys/holdingDesc', val)
+      this.$store.dispatch('pattys/setHoldingDesc', val)
     },
     'holding.address.street_lot_blk' (val) {
-      this.$store.dispatch('pattys/holdingStreetLotBlk', val)
+      this.$store.dispatch('pattys/setHoldingAddress', val)
     },
     'holding.business_info.business_type_id' (val) {
-      this.$store.dispatch('pattys/holdingBusinessType', val)
+      this.$store.dispatch('pattys/setHoldingBusinessType', val)
     },
     'holding.business_info.vat_type_id' (val) {
-      this.$store.dispatch('pattys/holdingVatType', val)
+      this.$store.dispatch('pattys/setHoldingVatType', val)
     },
     'holding.business_info.telephone' (val) {
-      this.$store.dispatch('pattys/holdingTelephone', val)
+      this.$store.dispatch('pattys/setHoldingTelephone', val)
     },
     'holding.business_info.email' (val) {
-      this.$store.dispatch('pattys/holdingEmail', val)
+      this.$store.dispatch('pattys/setHoldingEmail', val)
     },
     'holding.business_info.tin' (val) {
-      this.$store.dispatch('pattys/holdingTin', val)
+      this.$store.dispatch('pattys/setHoldingTin', val)
     },
     'holding.business_info.website' (val) {
-      this.$store.dispatch('pattys/holdingWebsite', val)
+      this.$store.dispatch('pattys/setHoldingWebsite', val)
     }
   }
 }

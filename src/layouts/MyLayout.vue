@@ -60,6 +60,7 @@
 <script>
 import { openURL } from 'quasar'
 import slug from 'components/mixins/slug'
+import { mapState } from 'vuex'
 
 export default {
   mixins: [slug],
@@ -72,12 +73,8 @@ export default {
     }
   },
   computed: {
-    user () {
-      return this.$store.getters['pattys/user']
-    },
-    menus () {
-      return this.$store.getters['globals/menus']
-    }
+    ...mapState('pattys', ['user']),
+    ...mapState('globals', ['menus'])
   },
   methods: {
     openURL

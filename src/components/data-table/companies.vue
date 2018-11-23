@@ -50,7 +50,7 @@
 
         <div class="row">
           <div class="col-xs-12 col-sm-3">
-             <q-select v-model="company.holding_id" :options="holdings" float-label="Holdings"  />
+            <q-select v-model="company.holding_id" :options="holdings" float-label="Holdings" />
           </div>
           <div class="col-xs-12 col-sm-3">
             <q-input v-model="company.name" float-label="Company name" clearable />
@@ -116,7 +116,7 @@
 <script>
 // import tableData from 'assets/table-data'
 import _ from 'lodash'
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -148,8 +148,8 @@ export default {
   },
   computed: {
     ...mapState('companies', ['company']),
-    holdings(){
-      return this.$store.getters['companies/holdings'].map(e => {
+    holdings () {
+      return this.$store.getters['companies/getHoldings'].map(e => {
         return {
           label: e.name,
           value: e.id
@@ -157,7 +157,7 @@ export default {
       })
     },
     countries () {
-      return this.$store.getters['globals/countries'].map(e => {
+      return this.$store.getters['globals/getCountries'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -165,7 +165,7 @@ export default {
       })
     },
     regions () {
-      let regions = this.$store.getters['globals/regions']
+      let regions = this.$store.getters['globals/getRegions']
       if (regions === null) return []
       return regions.map(e => {
         return {
@@ -175,7 +175,7 @@ export default {
       })
     },
     provinces () {
-      return this.$store.getters['globals/provinces'].map(e => {
+      return this.$store.getters['globals/getProvinces'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -183,7 +183,7 @@ export default {
       })
     },
     cities () {
-      return this.$store.getters['globals/cities'].map(e => {
+      return this.$store.getters['globals/getCities'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -191,7 +191,7 @@ export default {
       })
     },
     brgys () {
-      return this.$store.getters['globals/brgys'].map(e => {
+      return this.$store.getters['globals/getBrgys'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -199,7 +199,7 @@ export default {
       })
     },
     vatTypes () {
-      return this.$store.getters['globals/vatTypes'].map(e => {
+      return this.$store.getters['globals/getVatTypes'].map(e => {
         return {
           label: e.name,
           value: e.id
@@ -207,7 +207,7 @@ export default {
       })
     },
     businessTypes () {
-      return this.$store.getters['globals/businessTypes'].map(e => {
+      return this.$store.getters['globals/getBusinessTypes'].map(e => {
         return {
           label: e.name,
           value: e.id
@@ -236,7 +236,6 @@ export default {
                         icon: 'check',
                         message: `${res.data.company.name} deleted successfully`
                       })
-
                     })
                     .catch((err) => {
                       this.$q.notify({
@@ -250,10 +249,9 @@ export default {
             ]
           })
         })
-        // .catch()
+      // .catch()
     },
-    update(){
-      
+    update () {
       this.$axios.put(`/companies/${this.company.id}`, {
         id: this.company.id,
         name: this.company.name,
@@ -281,10 +279,9 @@ export default {
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
-          });
+          })
         })
         .catch()
-
     },
     hideModal () {
       this.editCompanyModal = false
@@ -318,7 +315,6 @@ export default {
         })
     },
     edit (companyId) {
-      
       this.$axios.get(`companies/${companyId}/edit?id=${companyId}`)
         .then(res => {
           this.editCompanyModal = true
@@ -336,11 +332,11 @@ export default {
     'company.name' (val) {
       this.$store.dispatch('companies/companyName', val)
     },
-    'company.holding_id' (val){
+    'company.holding_id' (val) {
       this.$store.dispatch('companies/companyHolding', val)
     },
-    'company.desc' (val){
-       this.$store.dispatch('companies/companyDesc', val)
+    'company.desc' (val) {
+      this.$store.dispatch('companies/companyDesc', val)
     },
     'company.address.country_id' (val) {
       if (val === null || val === undefined) return
@@ -374,13 +370,13 @@ export default {
     'company.business_info.telephone' (val) {
       this.$store.dispatch('companies/telephone', val)
     },
-    'company.business_info.email' (val){
+    'company.business_info.email' (val) {
       this.$store.dispatch('companies/email', val)
     },
-    'company.business_info.tin'(val){
+    'company.business_info.tin' (val) {
       this.$store.dispatch('companies/tin', val)
     },
-    'company.business_info.website'(val){
+    'company.business_info.website' (val) {
       this.$store.dispatch('companies/website', val)
     }
   }
