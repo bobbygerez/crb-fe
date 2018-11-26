@@ -442,7 +442,7 @@ export default {
     },
     'holding.address.province_id' (val) {
       this.$store.dispatch('pattys/setHoldingProvince', val)
-      this.$store.dispatch('globals/GET_CITIES', val)
+      this.$store.dispatch('globals/getCities', val)
     },
     'holding.address.city_id' (val) {
       this.$store.dispatch('pattys/setHoldingCity', val)

@@ -3,7 +3,9 @@
 module.exports = function (ctx) {
   return {
     preFetch: true,
-    htmlVariables: { title: 'test name' },
+    htmlVariables: {
+      title: 'test name'
+    },
 
     // app plugins (/src/plugins)
     plugins: [
@@ -26,10 +28,10 @@ module.exports = function (ctx) {
     build: {
       env: ctx.dev
         ? { // so on dev we'll have
-          API: JSON.stringify('http://localhost/pattys-be/public/api')
+          API: JSON.stringify('http://localhost:8099/api')
         }
         : { // and on build (production):
-          API: JSON.stringify('http://localhost/pattys-be/public/api')
+          API: JSON.stringify('http://localhost:8099/api')
         },
       scopeHoisting: true,
       vueRouterMode: 'history',

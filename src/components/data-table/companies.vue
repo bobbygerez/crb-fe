@@ -219,7 +219,7 @@ export default {
     deleteRow (companyId) {
       this.$axios.get(`/companies/${companyId}?id=${companyId}`)
         .then((res) => {
-          this.$store.dispatch('companies/company', res.data.company)
+          this.$store.dispatch('companies/setCompany', res.data.company)
           this.$q.notify({
             color: 'negative',
             icon: 'delete',
@@ -316,14 +316,14 @@ export default {
     },
     edit (companyId) {
       this.$axios.get(`company-holdings?id=${companyId}`)
-      .then(res => {
-        this.$store.dispatch('companies/holdings', [res.data.holdings])
-      })
+        .then(res => {
+          this.$store.dispatch('companies/setHoldings', [res.data.holdings])
+        })
 
       this.$axios.get(`companies/${companyId}/edit?id=${companyId}`)
         .then(res => {
           this.editCompanyModal = true
-          this.$store.dispatch('companies/company', res.data.company)
+          this.$store.dispatch('companies/setCompany', res.data.company)
         })
     }
   },
@@ -335,54 +335,54 @@ export default {
   },
   watch: {
     'company.name' (val) {
-      this.$store.dispatch('companies/companyName', val)
+      this.$store.dispatch('companies/setCompanyName', val)
     },
     'company.holding_id' (val) {
-      this.$store.dispatch('companies/companyHolding', val)
+      this.$store.dispatch('companies/setCompanyHolding', val)
     },
     'company.desc' (val) {
-      this.$store.dispatch('companies/companyDesc', val)
+      this.$store.dispatch('companies/setCompanyDesc', val)
     },
     'company.address.country_id' (val) {
       if (val === null || val === undefined) return
-      this.$store.dispatch('globals/GET_REGIONS', val)
-      this.$store.dispatch('companies/country', val)
+      this.$store.dispatch('globals/getRegions', val)
+      this.$store.dispatch('companies/setCompanyCountry', val)
     },
     'company.address.region_id' (val) {
-      this.$store.dispatch('globals/GET_PROVINCES', val)
-      this.$store.dispatch('companies/region', val)
+      this.$store.dispatch('globals/getProvinces', val)
+      this.$store.dispatch('companies/setCompanyRegion', val)
     },
     'company.address.province_id' (val) {
-      this.$store.dispatch('companies/province', val)
-      this.$store.dispatch('globals/GET_CITIES', val)
+      this.$store.dispatch('companies/setCompanyProvince', val)
+      this.$store.dispatch('globals/getCities', val)
     },
     'company.address.city_id' (val) {
-      this.$store.dispatch('companies/city', val)
-      this.$store.dispatch('globals/GET_BRGYS', val)
+      this.$store.dispatch('companies/setCompanyCity', val)
+      this.$store.dispatch('globals/getBrgys', val)
     },
     'company.address.brgy_id' (val) {
-      this.$store.dispatch('companies/brgy', val)
+      this.$store.dispatch('companies/setCompanyBrgy', val)
     },
     'company.business_info.business_type_id' (val) {
-      this.$store.dispatch('companies/businessType', val)
+      this.$store.dispatch('companies/setCompanyBusinessType', val)
     },
     'company.business_info.vat_type_id' (val) {
-      this.$store.dispatch('companies/vatType', val)
+      this.$store.dispatch('companies/setCompanyVatType', val)
     },
     'company.address.street_lot_blk' (val) {
-      this.$store.dispatch('companies/streetLotBlk', val)
+      this.$store.dispatch('companies/setCompanyAddress', val)
     },
     'company.business_info.telephone' (val) {
-      this.$store.dispatch('companies/telephone', val)
+      this.$store.dispatch('companies/setCompanyTelephone', val)
     },
     'company.business_info.email' (val) {
-      this.$store.dispatch('companies/email', val)
+      this.$store.dispatch('companies/setCompanyEmail', val)
     },
     'company.business_info.tin' (val) {
-      this.$store.dispatch('companies/tin', val)
+      this.$store.dispatch('companies/setCompanyTin', val)
     },
     'company.business_info.website' (val) {
-      this.$store.dispatch('companies/website', val)
+      this.$store.dispatch('companies/setCompanyWebsite', val)
     }
   }
 
