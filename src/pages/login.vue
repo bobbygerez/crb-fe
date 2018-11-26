@@ -61,7 +61,7 @@
                 <q-btn flat color="primary" @click="$refs.minimizedModal.hide()">Cancel</q-btn>
               </q-modal>
             </div>
-            <f-v-error-summary :valObj="$v" class="q-my-sm"/>
+            <f-v-error-summary :valObj="$v" class="q-my-sm" />
           </form>
         </div>
       </q-page>
@@ -132,6 +132,7 @@ export default {
           setAuthHeader(this.token)
         })
         .catch(error => {
+          this.loading = false
           this.$q.notify({ type: 'negative', message: error.message })
         })
     }

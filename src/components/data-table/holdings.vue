@@ -306,7 +306,7 @@ export default {
     },
     index () {
       let data = this
-      this.$axios.get(process.env.API + `/holdings`)
+      this.$axios.get(`/holdings`)
         .then(function (res) {
           data.$store.dispatch('pattys/setHoldings', res.data.holdings)
         })
@@ -314,7 +314,7 @@ export default {
     },
     create () {
       let data = this
-      this.$axios.post(process.env.API + `/holdings`, {
+      this.$axios.post(`/holdings`, {
         id: this.holding.id,
         name: this.holding.name,
         desc: this.holding.desc,
@@ -338,7 +338,7 @@ export default {
     },
     deleteRow (id) {
       let data = this
-      this.$axios.get(process.env.API + `/holdings/${id}?id=${id}`)
+      this.$axios.get(`/holdings/${id}?id=${id}`)
         .then(function (res) {
           data.$store.dispatch('pattys/setHolding', res.data.holding)
           data.$q.notify({
@@ -350,7 +350,7 @@ export default {
               {
                 label: 'OK',
                 handler: () => {
-                  data.$axios.delete(process.env.API + `/holdings/${data.holding.id}?id=${data.holding.id}`)
+                  data.$axios.delete(`/holdings/${data.holding.id}?id=${data.holding.id}`)
                     .then(function (res) {
                       data.$q.notify({
                         color: 'positive',
@@ -375,7 +375,7 @@ export default {
     },
     edit (id) {
       let data = this
-      this.$axios.get(process.env.API + `/holdings/${id}/edit?id=${id}`)
+      this.$axios.get(`/holdings/${id}/edit?id=${id}`)
         .then(function (res) {
           data.$store.dispatch('pattys/setHolding', res.data.holding)
           data.minimizedModal = true
@@ -384,7 +384,7 @@ export default {
     },
     update (id) {
       var data = this
-      this.$axios.put(process.env.API + `/holdings/${this.holding.id}`, {
+      this.$axios.put(`/holdings/${this.holding.id}`, {
         id: this.holding.id,
         name: this.holding.name,
         desc: this.holding.desc,
@@ -442,7 +442,7 @@ export default {
     },
     'holding.address.province_id' (val) {
       this.$store.dispatch('pattys/setHoldingProvince', val)
-      this.$store.dispatch('globals/GET_CITIES', val)
+      this.$store.dispatch('globals/getCities', val)
     },
     'holding.address.city_id' (val) {
       this.$store.dispatch('pattys/setHoldingCity', val)

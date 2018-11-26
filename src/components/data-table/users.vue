@@ -1,18 +1,6 @@
 <template>
   <div>
-    <q-table
-      ref="table"
-      color="primary"
-      title="All Users"
-      :data="serverData"
-      :columns="columns"
-      :filter="filter"
-      row-key="name"
-      :pagination.sync="serverPagination"
-      :rows-per-page-options="options"
-      @request="request"
-      :loading="loading"
-    >
+    <q-table ref="table" color="primary" title="All Users" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
       <template slot="top-right" slot-scope="props">
         <q-search hide-underline v-model="filter" />
       </template>
@@ -22,7 +10,7 @@
           <q-td key="name">
             {{props.row.firstname}} {{props.row.middlename}} {{props.row.lastname}}
           </q-td>
-         <q-td key="roles">
+          <q-td key="roles">
             <q-chip color="orange" small v-for="(role, i) in props.row.roles" :key="i">{{ role.name }}</q-chip>
           </q-td>
           <q-td key="created">
@@ -50,28 +38,28 @@
       <div style="padding: 30px">
         <div class="row">
           <div class="col-xs-12 col-sm-6">
-             <div class="q-display-1 q-mb-md">Edit {{ user.firstname }} {{ user.middlename }} {{ user.lastname }}</div>
+            <div class="q-display-1 q-mb-md">Edit {{ user.firstname }} {{ user.middlename }} {{ user.lastname }}</div>
           </div>
           <div class="col-xs-12 col-sm-3">
-             <q-checkbox v-model="userStatus" label="Enable/Disable" />
+            <q-checkbox v-model="userStatus" label="Enable/Disable" />
           </div>
-         
+
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-3">
-             <q-input v-model="user.username" float-label="Username" clearable />
+            <q-input v-model="user.username" float-label="Username" clearable />
           </div>
           <div class="col-xs-12 col-sm-3">
-             <q-input v-model="user.email" float-label="Email" clearable />
+            <q-input v-model="user.email" float-label="Email" clearable />
           </div>
           <div class="col-xs-12 col-sm-6">
-            <q-select multiple v-model="userRoles" :options="roles" float-label="Roles" clearable chips/>
+            <q-select multiple v-model="userRoles" :options="roles" float-label="Roles" clearable chips />
           </div>
-         
+
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-3">
-             <q-input v-model="user.firstname" float-label="Firstname" clearable />
+            <q-input v-model="user.firstname" float-label="Firstname" clearable />
           </div>
           <div class="col-xs-12 col-sm-3">
             <q-input v-model="user.middlename" float-label="Middlename" clearable />
@@ -80,18 +68,12 @@
             <q-input v-model="user.lastname" float-label="Lastname" clearable />
           </div>
           <div class="col-xs-12 col-sm-3">
-              <q-datetime
-                type="date"
-                v-model="user.information.birthdate"
-                color="amber"
-                float-label="Birthdate"
-                clearable
-              />
+            <q-datetime type="date" v-model="user.information.birthdate" color="amber" float-label="Birthdate" clearable />
           </div>
         </div>
-         <div class="row">
+        <div class="row">
           <div class="col-xs-12 col-sm-3">
-             <q-input v-model="user.information.employee_id" float-label="Employee ID" clearable />
+            <q-input v-model="user.information.employee_id" float-label="Employee ID" clearable />
           </div>
           <div class="col-xs-12 col-sm-3">
             <q-input v-model="user.information.mobile" float-label="Mobile" clearable />
@@ -100,10 +82,11 @@
             <q-input v-model="user.information.nationality" float-label="Nationality" clearable />
           </div>
           <div class="col-xs-12 col-sm-3">
-              <q-select  v-model="user.information.civil_status_id" :options="civilStatus" float-label="Civil Status" clearable chips/>
+            <q-select v-model="user.information.civil_status_id" :options="civilStatus" float-label="Civil Status" clearable chips />
           </div>
         </div>
         <div class="row">
+<<<<<<< HEAD
           <div class="col-xs-12 col-sm-4">
               <q-select  v-model="user.information.gender_id" :options="genders" float-label="Gender" clearable chips/>
           </div>
@@ -112,6 +95,16 @@
           </div>
           <div class="col-xs-12 col-sm-4">
               <q-select  v-model="user.address.region_id" :options="regions" float-label="Region" clearable chips/>
+=======
+          <div class="col-xs-12 col-sm-3">
+            <q-select v-model="user.information.gender_id" :options="genders" float-label="Gender" clearable chips />
+          </div>
+          <div class="col-xs-12 col-sm-3">
+            <q-select v-model="user.address.country_id" :options="countries" float-label="Country" clearable chips />
+          </div>
+          <div class="col-xs-12 col-sm-3">
+            <q-select v-model="user.address.country_id" :options="countries" float-label="Country" clearable chips />
+>>>>>>> 3bc7542e255adf61732e030e14d1d4641c3fc1cf
           </div>
           
         </div>
@@ -244,8 +237,8 @@
 
 <script>
 // import tableData from 'assets/table-data'
-import _ from "lodash";
-import { mapState } from "vuex";
+import _ from 'lodash'
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -261,10 +254,10 @@ export default {
         rowsPerPage: 10 // specifying this determines pagination is server-side
       },
       columns: [
-        { name: "name", label: "Name", field: "name", align: "left" },
-        { name: "roles", label: "Roles", align: "left", field: "roles" },
-        { name: "created", label: "Created", align: "left", field: "created" },
-        { name: "actions", label: "Actions", align: "left", field: "actions" },
+        { name: 'name', label: 'Name', field: 'name', align: 'left' },
+        { name: 'roles', label: 'Roles', align: 'left', field: 'roles' },
+        { name: 'created', label: 'Created', align: 'left', field: 'created' },
+        { name: 'actions', label: 'Actions', align: 'left', field: 'actions' }
         // { name: "address", label: "Address", field: "address", align: "left" },
         // { name: "created", label: "Created", field: "created", align: "left" },
         // { name: "actions", label: "Actions", field: "actions", align: "left" }
@@ -284,21 +277,15 @@ export default {
       }
     },
     userStatus: {
-      get(){
-        if(this.$store.getters['users/user'].status === 1)
-          return true
-        else
-          return false
+      get () {
+        if (this.$store.getters['users/user'].status === 1) { return true } else { return false }
       },
-      set(val){
-        if(val === false)
-          this.$store.dispatch('users/userStatus',  0)
-        else
-          this.$store.dispatch('users/userStatus', 1)
+      set (val) {
+        if (val === false) { this.$store.dispatch('users/userStatus', 0) } else { this.$store.dispatch('users/userStatus', 1) }
       }
-      
+
     },
-    roles(){
+    roles () {
       return this.$store.getters['users/roles'].map(e => {
         return {
           label: e.name,
@@ -307,18 +294,23 @@ export default {
       })
     },
     userRoles: {
+<<<<<<< HEAD
       get(){
         return []
         let roles = this.$store.getters['users/user'].roles.map(e => {
+=======
+      get () {
+        return this.$store.getters['users/user'].roles.map(e => {
+>>>>>>> 3bc7542e255adf61732e030e14d1d4641c3fc1cf
           return e.id
         })
         this.selectedRoles = roles
         return roles
       },
-      set(val){
+      set (val) {
         this.selectedRoles = val
       }
-      
+
     },
     countries () {
       let countries = this.$store.getters['globals/getCountries']
@@ -429,6 +421,7 @@ export default {
         })
       // .catch()
     },
+<<<<<<< HEAD
     update(){
       
       this.$axios.put(`/users/${this.user.id}`, {
@@ -461,6 +454,43 @@ export default {
     },
     hideModal(){
       this.$store.dispatch('users/newUserModal', false)
+=======
+    update () {
+
+      // this.$axios.put(`/companies/${this.company.id}`, {
+      //   id: this.company.id,
+      //   name: this.company.name,
+      //   desc: this.company.desc,
+      //   country_id: this.company.address.country_id,
+      //   region_id: this.company.address.region_id,
+      //   province_id: this.company.address.province_id,
+      //   city_id: this.company.address.city_id,
+      //   brgy_id: this.company.address.brgy_id,
+      //   street_lot_blk: this.company.address.street_lot_blk,
+      //   business_type_id: this.company.business_info.business_type_id,
+      //   vat_type_id: this.company.business_info.vat_type_id,
+      //   telephone: this.company.business_info.telephone,
+      //   tin: this.company.business_info.tin,
+      //   email: this.company.business_info.email,
+      //   website: this.company.business_info.website
+      // })
+      //   .then((res) => {
+      //     this.editCompanyModal = false
+      //     this.$q.notify({
+      //       color: 'positive',
+      //       icon: 'check',
+      //       message: `${res.data.company.name} update successfully`
+      //     })
+      //     this.request({
+      //       pagination: this.serverPagination,
+      //       filter: this.filter
+      //     });
+      //   })
+      //   .catch()
+
+    },
+    hideModal () {
+>>>>>>> 3bc7542e255adf61732e030e14d1d4641c3fc1cf
       this.editUserModal = false
     },
     paginationLast (currentPage) {
@@ -478,13 +508,11 @@ export default {
           }`
         )
         .then(res => {
-
-          this.serverPagination = props.pagination;
-          this.serverData = _.values(res.data.users.data);
-          this.serverPagination.rowsNumber = res.data.users.total;
-          this.lastPage = res.data.users.last_page;
-          this.loading = false;
-
+          this.serverPagination = props.pagination
+          this.serverData = _.values(res.data.users.data)
+          this.serverPagination.rowsNumber = res.data.users.total
+          this.lastPage = res.data.users.last_page
+          this.loading = false
         })
         .catch(error => {
           // there's an error... do SOMETHING
@@ -493,6 +521,7 @@ export default {
           this.loading = false
         })
     },
+<<<<<<< HEAD
     edit(userId){
       this.$axios.get(`users/${userId}/edit?id=${userId}`)
       .then(res =>{
@@ -504,6 +533,17 @@ export default {
       this.$axios.get(`/user-subordinate-roles`)
         .then(res => {
           this.$store.dispatch('users/roles', res.data.roles)
+=======
+    edit (userId) {
+      this.$axios.get(`/user-subordinate-roles`)
+        .then(res => {
+          this.$store.dispatch('users/roles', res.data.roles)
+        })
+      this.$axios.get(`users/${userId}/edit?id=${userId}`)
+        .then(res => {
+          this.editUserModal = true
+          this.$store.dispatch('users/user', res.data.user)
+>>>>>>> 3bc7542e255adf61732e030e14d1d4641c3fc1cf
         })
     }
   },
@@ -551,6 +591,7 @@ export default {
     'user.information.nationality'(val){
       this.$store.dispatch('users/nationality', val)
     },
+<<<<<<< HEAD
     'user.address.country_id' (val) {
       this.$store.dispatch('globals/getRegions', val)
       this.$store.dispatch('users/countryId', val)
@@ -566,6 +607,24 @@ export default {
     'user.address.city_id' (val) {
       this.$store.dispatch('globals/getBrgys', val)
       this.$store.dispatch('users/cityId', val)
+=======
+    'company.address.country_id' (val) {
+      if (val === null || val === undefined) return
+      this.$store.dispatch('globals/getRegions', val)
+      this.$store.dispatch('companies/country', val)
+    },
+    'company.address.region_id' (val) {
+      this.$store.dispatch('globals/getProvinces', val)
+      this.$store.dispatch('companies/region', val)
+    },
+    'company.address.province_id' (val) {
+      this.$store.dispatch('companies/province', val)
+      this.$store.dispatch('globals/getCities', val)
+    },
+    'company.address.city_id' (val) {
+      this.$store.dispatch('companies/city', val)
+      this.$store.dispatch('globals/getBrgysS', val)
+>>>>>>> 3bc7542e255adf61732e030e14d1d4641c3fc1cf
     },
     'user.address.brgy_id' (val) {
       this.$store.dispatch('users/brgyId', val)

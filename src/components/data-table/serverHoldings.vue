@@ -98,7 +98,7 @@ export default {
       // (using Axios here, but can be anything; parameters vary based on backend implementation)
 
       axios
-        .get(process.env.API + `/holdings?page=${pagination.page}&perPage=${pagination.rowsNumber}&sortBy=${pagination.sortBy}&descending=${pagination.descending}&filter=${filter}`)
+        .get(`/holdings?page=${pagination.page}&perPage=${pagination.rowsNumber}&sortBy=${pagination.sortBy}&descending=${pagination.descending}&filter=${filter}`)
         .then(({ data }) => {
           // updating pagination to reflect in the UI
           this.serverPagination = pagination
