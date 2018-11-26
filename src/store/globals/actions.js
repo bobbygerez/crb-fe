@@ -57,9 +57,6 @@ export const getProvinces = ({
   commit,
   state
 }, regionId) => {
-  if (state.provinces.length) {
-    return
-  }
   axios.get(`/provinces/${regionId}`)
     .then(function (res) {
       commit('SET_PROVINCES', res.data.provinces)
@@ -69,9 +66,6 @@ export const getCities = ({
   commit,
   state
 }, provinceId) => {
-  if (state.cities.length) {
-    return
-  }
   axios.get(`/cities/${provinceId}`)
     .then(function (res) {
       commit('SET_CITIES', res.data.cities)
@@ -82,9 +76,6 @@ export const getBrgys = ({
   commit,
   state
 }, cityId) => {
-  if (state.brgys.length) {
-    return
-  }
   axios.get(`/brgys/${cityId}`)
     .then(function (res) {
       commit('SET_BRGYS', res.data.brgys)

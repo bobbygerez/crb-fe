@@ -7,3 +7,5 @@ export const roles = (state) => state.roles
 export const civilStatus = (state) => state.civilStatus
 
 export const genders = (state) => state.genders
+
+export const newUserModal = (state) => state.newUserModal

@@ -1,3 +1,4 @@
+/* eslint-disable no-dupe-keys */
 // Configuration for your app
 
 module.exports = function (ctx) {
@@ -87,6 +88,8 @@ module.exports = function (ctx) {
 
     framework: {
       components: [
+        'QPopover',
+        'QPageSticky',
         'QDatetime',
         'QDatetimePicker',
         'QChip',
