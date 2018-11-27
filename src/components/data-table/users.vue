@@ -199,7 +199,7 @@
             <q-select v-model="user.address.city_id" :options="cities" float-label="City" clearable chips />
           </div>
           <div class="col-xs-12 col-sm-4">
-            <q-select v-model="user.address.brgy_id" :options="brgys" float-label="City" clearable chips />
+            <q-select  v-model="user.address.brgy_id" :options="brgys" float-label="Brgy" clearable chips/>
           </div>
         </div>
 
@@ -211,7 +211,7 @@
 
         <br />
         <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
-        <q-btn color="primary" @click="create()" label="Submit" class="q-ml-sm" />
+        <q-btn color="primary" @click="store()" label="Submit" class="q-ml-sm" />
 
       </div>
     </q-modal>
@@ -288,7 +288,9 @@ export default {
       })
     },
     provinces () {
-      return this.$store.getters['globals/getProvinces'].map(e => {
+      let provinces = this.$store.getters['globals/getProvinces']
+      if (provinces === undefined) return []
+      return provinces.map(e => {
         return {
           label: e.description,
           value: e.id
@@ -296,7 +298,9 @@ export default {
       })
     },
     cities () {
-      return this.$store.getters['globals/getCities'].map(e => {
+      let cities = this.$store.getters['globals/getCities']
+      if (cities === undefined) return []
+      return cities.map(e => {
         return {
           label: e.description,
           value: e.id
@@ -304,7 +308,9 @@ export default {
       })
     },
     brgys () {
-      return this.$store.getters['globals/getBrgys'].map(e => {
+      let brgys = this.$store.getters['globals/getBrgys']
+      if (brgys === undefined) return []
+      return brgys.map(e => {
         return {
           label: e.description,
           value: e.id
@@ -329,7 +335,7 @@ export default {
     }
   },
   methods: {
-    create () {
+    store () {
       this.$axios.post(`/users`, {
         id: this.user.id,
         username: this.user.username,
@@ -343,25 +349,32 @@ export default {
         address: this.user.address,
         informations: this.user.information
       })
-    },
-    deleteRow (companyId) {
-      this.$axios.get(`/companies/${companyId}?id=${companyId}`)
         .then((res) => {
-          this.$store.dispatch('companies/company', res.data.company)
+          this.hideModal()
+          this.request({
+            pagination: this.serverPagination,
+            filter: this.filter
+          })
+        })
+    },
+    deleteRow (userId) {
+      this.$axios.get(`/users/${userId}?id=${userId}`)
+        .then((res) => {
+          this.$store.dispatch('users/user', res.data.user)
           this.$q.notify({
             color: 'negative',
             icon: 'delete',
-            message: `Delete ${res.data.company.name}?`,
+            message: `Delete ${res.data.user.firstname}  ${res.data.user.lastname}?`,
             actions: [
               {
                 label: 'OK',
                 handler: () => {
-                  this.$axios.delete(`/companies/${this.company.id}?id=${this.company.id}`)
+                  this.$axios.delete(`/users/${this.user.id}?id=${this.user.id}`)
                     .then((res) => {
                       this.$q.notify({
                         color: 'positive',
                         icon: 'check',
-                        message: `${res.data.company.name} deleted successfully`
+                        message: `${this.user.firstname} ${this.user.lastname}deleted successfully`
                       })
                     })
                     .catch((err) => {

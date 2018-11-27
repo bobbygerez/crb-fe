@@ -36,8 +36,31 @@ export const setUser = (state, payload) => {
   state.commit('SET_USER', payload)
 }
 
+<<<<<<< HEAD
 export const setRoles = (state, payload) => {
   state.commit('SET_ROLES', payload)
+=======
+export const newUser = (state, payload) => {
+  state.commit('newUser', {
+    roles: [],
+    address: {
+      country_id: '',
+      region_id: '',
+      province_id: '',
+      city_id: '',
+      brgy_id: '',
+      street_lot_blk: ''
+    },
+    information: {
+      birthdate: '',
+      employee_id: ''
+    }
+  })
+}
+
+export const roles = (state, payload) => {
+  state.commit('roles', payload)
+>>>>>>> b2cc2d66c673f4b4d157b073757f5c4d8256927b
 }
 
 export const setUserStatus = (state, payload) => {
