@@ -1,6 +1,7 @@
 export default {
   newUserModal: false,
   user: {
+    roles: [],
     address: {
       country_id: '',
       region_id: '',

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-table ref="table" color="primary" title="All Users" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
+    <q-table ref="table" color="primary" title="All Roles" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
       <template slot="top-right" slot-scope="props">
         <q-search hide-underline v-model="filter" />
       </template>
@@ -8,10 +8,12 @@
       <template slot="body" slot-scope="props">
         <q-tr :props="props">
           <q-td key="name">
-            {{props.row.firstname}} {{props.row.middlename}} {{props.row.lastname}}
+            {{props.row.name }} 
           </q-td>
-          <q-td key="roles">
-            <q-chip color="orange" small v-for="(role, i) in props.row.roles" :key="i">{{ role.name }}</q-chip>
+          <q-td key="subordinates">
+            <span v-for="(subordinate, i) in props.row.children" :key="i">
+              {{ subordinate.name }}
+            </span> 
           </q-td>
           <q-td key="created">
             {{ props.row.created_at }}
@@ -34,95 +36,29 @@
 
     </q-table>
 
-    <q-modal v-model="editUserModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    <q-modal v-model="editRoleModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
       <div style="padding: 30px">
         <div class="row">
           <div class="col-xs-12 col-sm-6">
-            <div class="q-display-1 q-mb-md">Edit {{ user.firstname }} {{ user.middlename }} {{ user.lastname }}</div>
+            <div class="q-display-1 q-mb-md">Edit {{ role.name }}</div>
           </div>
-          <div class="col-xs-12 col-sm-3">
-            <q-checkbox v-model="userStatus" label="Enable/Disable" />
-          </div>
-
         </div>
         <div class="row">
-          <div class="col-xs-12 col-sm-3">
-            <q-input v-model="user.username" float-label="Username" clearable />
-          </div>
-          <div class="col-xs-12 col-sm-3">
-            <q-input v-model="user.email" float-label="Email" clearable />
+          <div class="col-xs-12 col-sm-6">
+            <q-input v-model="role.name" float-label="Name" clearable />
           </div>
           <div class="col-xs-12 col-sm-6">
-            <q-select multiple v-model="userRoles" :options="roles" float-label="Roles" clearable chips />
-          </div>
-
-        </div>
-        <div class="row">
-          <div class="col-xs-12 col-sm-3">
-            <q-input v-model="user.firstname" float-label="Firstname" clearable />
-          </div>
-          <div class="col-xs-12 col-sm-3">
-            <q-input v-model="user.middlename" float-label="Middlename" clearable />
-          </div>
-          <div class="col-xs-12 col-sm-3">
-            <q-input v-model="user.lastname" float-label="Lastname" clearable />
-          </div>
-          <div class="col-xs-12 col-sm-3">
-            <q-datetime type="date" v-model="user.information.birthdate" color="amber" float-label="Birthdate" clearable />
+             <q-select multiple v-model="subordinatesIds" :options="availRoles" float-label="Subordinates" clearable chips/>
           </div>
         </div>
-        <div class="row">
-          <div class="col-xs-12 col-sm-3">
-            <q-input v-model="user.information.employee_id" float-label="Employee ID" clearable />
-          </div>
-          <div class="col-xs-12 col-sm-3">
-            <q-input v-model="user.information.mobile" float-label="Mobile" clearable />
-          </div>
-          <div class="col-xs-12 col-sm-3">
-            <q-input v-model="user.information.nationality" float-label="Nationality" clearable />
-          </div>
-          <div class="col-xs-12 col-sm-3">
-            <q-select v-model="user.information.civil_status_id" :options="civilStatus" float-label="Civil Status" clearable chips />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-12 col-sm-4">
-              <q-select  v-model="user.information.gender_id" :options="genders" float-label="Gender" clearable chips/>
-          </div>
-          <div class="col-xs-12 col-sm-4">
-              <q-select  v-model="user.address.country_id" :options="countries" float-label="Country" clearable chips/>
-          </div>
-          <div class="col-xs-12 col-sm-4">
-              <q-select  v-model="user.address.region_id" :options="regions" float-label="Region" clearable chips/>
-          </div>
-          
-        </div>
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-4">
-              <q-select  v-model="user.address.province_id" :options="provinces" float-label="Province" clearable chips/>
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-select  v-model="user.address.city_id" :options="cities" float-label="City" clearable chips/>
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-select  v-model="user.address.brgy_id" :options="brgys" float-label="City" clearable chips/>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-12">
-            <q-input v-model="user.address.street_lot_blk" type="textarea" float-label="Block, Lot &amp; Street" :max-height="100" rows="2" />
-          </div>
-        </div>
-
+        
         <br />
         <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
         <q-btn color="primary" @click="update()" label="Submit" class="q-ml-sm" />
 
       </div>
     </q-modal>
-    <q-modal v-model="newUserModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    <!-- <q-modal v-model="newUserModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
       <div style="padding: 30px">
         <div class="row">
           <div class="col-xs-12 col-sm-6">
@@ -220,7 +156,7 @@
         <q-btn color="primary" @click="store()" label="Submit" class="q-ml-sm" />
 
       </div>
-    </q-modal>
+    </q-modal> -->
   </div>
 </template>
 
@@ -233,7 +169,7 @@ export default {
     return {
       model: '2016-10-24T10:40:14.674Z',
       selectedRoles: [],
-      editUserModal: false,
+      editRoleModal: false,
       options: [5, 10, 15, 20],
       lastPage: '',
       serverData: [],
@@ -244,7 +180,7 @@ export default {
       },
       columns: [
         { name: 'name', label: 'Name', field: 'name', align: 'left' },
-        { name: 'roles', label: 'Roles', align: 'left', field: 'roles' },
+        { name: 'subordinates', label: 'Subordinates', align: 'left', field: 'subordinates' },
         { name: 'created', label: 'Created', align: 'left', field: 'created' },
         { name: 'actions', label: 'Actions', align: 'left', field: 'actions' }
         // { name: "address", label: "Address", field: "address", align: "left" },
@@ -256,113 +192,28 @@ export default {
     }
   },
   computed: {
-    ...mapState('users', ['user']),
-    newUserModal:{
-      get(){
-        return this.$store.getters['users/newUserModal']
-      },
-      set(val){
-
-      }
-    },
-    userStatus: {
-      get () {
-        if (this.$store.getters['users/user'].status === 1) { return true } else { return false }
-      },
-      set (val) {
-        if (val === false) { this.$store.dispatch('users/userStatus', 0) } else { this.$store.dispatch('users/userStatus', 1) }
-      }
-
-    },
-    roles () {
-      return this.$store.getters['users/roles'].map(e => {
+    ...mapState('roles', ['roles', 'role']),
+    availRoles () {
+      return this.$store.getters['roles/getAvailRoles'].map(e => {
         return {
           label: e.name,
           value: e.id
         }
       })
     },
-    userRoles: {
-      get () {
-        let user = this.$store.getters['users/user'];
-        if(Object.keys(user.roles).length === 0) return []
-        return user.roles.map(e => {
+    subordinatesIds: {
+
+      get(){
+        return this.$store.getters['roles/getAvailRoles'].map(e => {
           return e.id
         })
-        this.selectedRoles = roles
-        return roles
       },
-      set (val) {
+      set(val){
         this.selectedRoles = val
       }
-
-    },
-    countries () {
-      let countries = this.$store.getters['globals/getCountries']
-      if(countries === undefined) return []
-      return countries.map(e => {
-        return {
-          label: e.description,
-          value: e.id
-        }
-      })
-    },
-    regions () {
-      let regions = this.$store.getters['globals/getRegions']
-      if(regions === undefined) return []
-      return regions.map(e => {
-        return {
-          label: e.description,
-          value: e.id
-        }
-      })
-    },
-    provinces () {
-      let provinces = this.$store.getters['globals/getProvinces']
-      if(provinces === undefined) return []
-      return provinces.map(e => {
-        return {
-          label: e.description,
-          value: e.id
-        }
-      })
-    },
-    cities () {
-      let cities = this.$store.getters['globals/getCities']
-      if(cities === undefined) return []
-      return cities.map(e => {
-        return {
-          label: e.description,
-          value: e.id
-        }
-      })
-    },
-    brgys () {
-      let brgys = this.$store.getters['globals/getBrgys']
-      if(brgys === undefined ) return []
-      return brgys.map(e => {
-        return {
-          label: e.description,
-          value: e.id
-        }
-      })
-    },
-    civilStatus () {
-      return this.$store.getters['users/civilStatus'].map(e => {
-        return {
-          label: e.name,
-          value: e.id
-        }
-      })
-    },
-    genders () {
-      return this.$store.getters['users/genders'].map(e => {
-        return {
-          label: e.name,
-          value: e.id
-        }
-      })
+      
     }
+   
   },
   methods: {
     store(){
@@ -453,9 +304,10 @@ export default {
 
     },
     hideModal(){
-      this.$store.dispatch('users/newUser')
-      this.$store.dispatch('users/newUserModal', false)
-      this.editUserModal = false
+      this.editRoleModal = false
+    },
+    showModal(){
+      this.editRoleModal = true
     },
     paginationLast (currentPage) {
       if (this.lastPage > currentPage) {
@@ -467,15 +319,15 @@ export default {
       this.loading = true
       this.$axios
         .get(
-          `/users?filter=${this.filter}&page=${props.pagination.page}&perPage=${
+          `/roles?filter=${this.filter}&page=${props.pagination.page}&perPage=${
             props.pagination.rowsPerPage
           }`
         )
         .then(res => {
           this.serverPagination = props.pagination
-          this.serverData = _.values(res.data.users.data)
-          this.serverPagination.rowsNumber = res.data.users.total
-          this.lastPage = res.data.users.last_page
+          this.serverData = _.values(res.data.roles.data)
+          this.serverPagination.rowsNumber = res.data.roles.total
+          this.lastPage = res.data.roles.last_page
           this.loading = false
         })
         .catch(error => {
@@ -485,11 +337,12 @@ export default {
           this.loading = false
         })
     },
-    edit(userId){
-      this.$axios.get(`users/${userId}/edit?id=${userId}`)
+    edit(roleId){
+      this.$axios.get(`roles/${roleId}/edit?id=${roleId}`)
       .then(res =>{
-        this.editUserModal = true
-        this.$store.dispatch('users/user', res.data.user)
+        this.editRoleModal = true
+        this.$store.dispatch('roles/setRole', res.data.role)
+        this.$store.dispatch('roles/setAvailRoles', res.data.availRoles)
       })
     },
     subordinateRoles(){
@@ -507,81 +360,8 @@ export default {
     this.subordinateRoles()
   },
   watch: {
-    'user.username' (val) {
-      this.$store.dispatch('users/userName', val)
-    },
-    'user.email' (val) {
-      this.$store.dispatch('users/email', val)
-    },
-    'user.passowrd' (val) {
-      this.$store.dispatch('users/password', val)
-    },
-     'user.firstname' (val) {
-      this.$store.dispatch('users/firstname', val)
-    },
-     'user.middlename' (val) {
-      this.$store.dispatch('users/middlename', val)
-    },
-     'user.lastname' (val) {
-      this.$store.dispatch('users/lastname', val)
-    },
-    'user.information.birthdate' (val){
-      this.$store.dispatch('users/birthdate', val)
-    },
-     'user.information.employee_id' (val){
-      this.$store.dispatch('users/employeeId', val)
-    },
-    'user.information.mobile'(val){
-      this.$store.dispatch('users/mobile', val)
-    },
-    'user.information.civil_status_id'(val){
-      this.$store.dispatch('users/civilStatusId', val)
-    },
-    'user.information.gender_id'(val){
-      this.$store.dispatch('users/genderId', val)
-    },
-    'user.information.nationality'(val){
-      this.$store.dispatch('users/nationality', val)
-    },
-    'user.address.country_id' (val) {
-      this.$store.dispatch('globals/getRegions', val)
-      this.$store.dispatch('users/countryId', val)
-    },
-    'user.address.region_id' (val) {
-      this.$store.dispatch('globals/getProvinces', val)
-      this.$store.dispatch('users/regionId', val)
-    },
-    'user.address.province_id' (val) {
-      this.$store.dispatch('globals/getCities', val)
-      this.$store.dispatch('users/provinceId', val)
-    },
-    'user.address.city_id' (val) {
-      this.$store.dispatch('globals/getBrgys', val)
-      this.$store.dispatch('users/cityId', val)
-    },
-    'user.address.brgy_id' (val) {
-      this.$store.dispatch('users/brgyId', val)
-    },
-    'company.business_info.business_type_id' (val) {
-      this.$store.dispatch('companies/businessType', val)
-    },
-    'company.business_info.vat_type_id' (val) {
-      this.$store.dispatch('companies/vatType', val)
-    },
-    'company.address.street_lot_blk' (val) {
-      this.$store.dispatch('companies/streetLotBlk', val)
-    },
-    'company.business_info.telephone' (val) {
-      this.$store.dispatch('companies/telephone', val)
-    },
-    'company.business_info.email' (val) {
-      this.$store.dispatch('companies/email', val)
-    },
-    'company.business_info.tin' (val) {
-      this.$store.dispatch('companies/tin', val)
-    },
-    'company.business_info.website' (val) {
-      this.$store.dispatch('companies/website', val)
+    'role.name' (val) {
+      this.$store.dispatch('roles/name', val)
     }
   }
 

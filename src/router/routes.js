@@ -57,6 +57,17 @@ const routes = [
     }
   },
   {
+    path: '/dashboard/submenu/:submenu/roles',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [{
+      path: '',
+      component: () => import('pages/dashboard/submenu/roles/index.vue')
+    }],
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/dashboard/submenu/:submenu/users',
     component: () => import('layouts/MyLayout.vue'),
     children: [{

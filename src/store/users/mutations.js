@@ -2,6 +2,10 @@ export const users = (state, payload) => {
   state.users = payload
 }
 
+export const newUser = (state, payload) => {
+  state.user = payload
+}
+
 export const user = (state, payload) => {
   state.user = payload
 }
