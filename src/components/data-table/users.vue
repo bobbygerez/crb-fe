@@ -86,7 +86,6 @@
           </div>
         </div>
         <div class="row">
-<<<<<<< HEAD
           <div class="col-xs-12 col-sm-4">
               <q-select  v-model="user.information.gender_id" :options="genders" float-label="Gender" clearable chips/>
           </div>
@@ -95,16 +94,6 @@
           </div>
           <div class="col-xs-12 col-sm-4">
               <q-select  v-model="user.address.region_id" :options="regions" float-label="Region" clearable chips/>
-=======
-          <div class="col-xs-12 col-sm-3">
-            <q-select v-model="user.information.gender_id" :options="genders" float-label="Gender" clearable chips />
-          </div>
-          <div class="col-xs-12 col-sm-3">
-            <q-select v-model="user.address.country_id" :options="countries" float-label="Country" clearable chips />
-          </div>
-          <div class="col-xs-12 col-sm-3">
-            <q-select v-model="user.address.country_id" :options="countries" float-label="Country" clearable chips />
->>>>>>> 3bc7542e255adf61732e030e14d1d4641c3fc1cf
           </div>
           
         </div>
@@ -294,14 +283,8 @@ export default {
       })
     },
     userRoles: {
-<<<<<<< HEAD
-      get(){
-        return []
-        let roles = this.$store.getters['users/user'].roles.map(e => {
-=======
       get () {
         return this.$store.getters['users/user'].roles.map(e => {
->>>>>>> 3bc7542e255adf61732e030e14d1d4641c3fc1cf
           return e.id
         })
         this.selectedRoles = roles
@@ -421,7 +404,6 @@ export default {
         })
       // .catch()
     },
-<<<<<<< HEAD
     update(){
       
       this.$axios.put(`/users/${this.user.id}`, {
@@ -454,43 +436,6 @@ export default {
     },
     hideModal(){
       this.$store.dispatch('users/newUserModal', false)
-=======
-    update () {
-
-      // this.$axios.put(`/companies/${this.company.id}`, {
-      //   id: this.company.id,
-      //   name: this.company.name,
-      //   desc: this.company.desc,
-      //   country_id: this.company.address.country_id,
-      //   region_id: this.company.address.region_id,
-      //   province_id: this.company.address.province_id,
-      //   city_id: this.company.address.city_id,
-      //   brgy_id: this.company.address.brgy_id,
-      //   street_lot_blk: this.company.address.street_lot_blk,
-      //   business_type_id: this.company.business_info.business_type_id,
-      //   vat_type_id: this.company.business_info.vat_type_id,
-      //   telephone: this.company.business_info.telephone,
-      //   tin: this.company.business_info.tin,
-      //   email: this.company.business_info.email,
-      //   website: this.company.business_info.website
-      // })
-      //   .then((res) => {
-      //     this.editCompanyModal = false
-      //     this.$q.notify({
-      //       color: 'positive',
-      //       icon: 'check',
-      //       message: `${res.data.company.name} update successfully`
-      //     })
-      //     this.request({
-      //       pagination: this.serverPagination,
-      //       filter: this.filter
-      //     });
-      //   })
-      //   .catch()
-
-    },
-    hideModal () {
->>>>>>> 3bc7542e255adf61732e030e14d1d4641c3fc1cf
       this.editUserModal = false
     },
     paginationLast (currentPage) {
@@ -521,7 +466,6 @@ export default {
           this.loading = false
         })
     },
-<<<<<<< HEAD
     edit(userId){
       this.$axios.get(`users/${userId}/edit?id=${userId}`)
       .then(res =>{
@@ -533,17 +477,6 @@ export default {
       this.$axios.get(`/user-subordinate-roles`)
         .then(res => {
           this.$store.dispatch('users/roles', res.data.roles)
-=======
-    edit (userId) {
-      this.$axios.get(`/user-subordinate-roles`)
-        .then(res => {
-          this.$store.dispatch('users/roles', res.data.roles)
-        })
-      this.$axios.get(`users/${userId}/edit?id=${userId}`)
-        .then(res => {
-          this.editUserModal = true
-          this.$store.dispatch('users/user', res.data.user)
->>>>>>> 3bc7542e255adf61732e030e14d1d4641c3fc1cf
         })
     }
   },
@@ -591,7 +524,6 @@ export default {
     'user.information.nationality'(val){
       this.$store.dispatch('users/nationality', val)
     },
-<<<<<<< HEAD
     'user.address.country_id' (val) {
       this.$store.dispatch('globals/getRegions', val)
       this.$store.dispatch('users/countryId', val)
@@ -607,24 +539,6 @@ export default {
     'user.address.city_id' (val) {
       this.$store.dispatch('globals/getBrgys', val)
       this.$store.dispatch('users/cityId', val)
-=======
-    'company.address.country_id' (val) {
-      if (val === null || val === undefined) return
-      this.$store.dispatch('globals/getRegions', val)
-      this.$store.dispatch('companies/country', val)
-    },
-    'company.address.region_id' (val) {
-      this.$store.dispatch('globals/getProvinces', val)
-      this.$store.dispatch('companies/region', val)
-    },
-    'company.address.province_id' (val) {
-      this.$store.dispatch('companies/province', val)
-      this.$store.dispatch('globals/getCities', val)
-    },
-    'company.address.city_id' (val) {
-      this.$store.dispatch('companies/city', val)
-      this.$store.dispatch('globals/getBrgysS', val)
->>>>>>> 3bc7542e255adf61732e030e14d1d4641c3fc1cf
     },
     'user.address.brgy_id' (val) {
       this.$store.dispatch('users/brgyId', val)
