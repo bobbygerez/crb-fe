@@ -41,7 +41,7 @@
             <div class="q-display-1 q-mb-md">Edit {{ user.firstname }} {{ user.middlename }} {{ user.lastname }}</div>
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-checkbox v-model="userStatus" label="Enable/Disable" />
+            <q-checkbox v-model="user.status" label="Enable/Disable" />
           </div>
 
         </div>
@@ -53,7 +53,7 @@
             <q-input v-model="user.email" float-label="Email" clearable />
           </div>
           <div class="col-xs-12 col-sm-6">
-            <q-select multiple v-model="userRoles" :options="roles" float-label="Roles" clearable chips />
+            <q-select multiple v-model="userRoles" :options="roleOptions" float-label="Roles" clearable chips />
           </div>
 
         </div>
@@ -82,31 +82,31 @@
             <q-input v-model="user.information.nationality" float-label="Nationality" clearable />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-select v-model="user.information.civil_status_id" :options="civilStatus" float-label="Civil Status" clearable chips />
+            <q-select v-model="user.information.civil_status_id" :options="civilStatusOptions" float-label="Civil Status" clearable chips />
           </div>
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-4">
-              <q-select  v-model="user.information.gender_id" :options="genders" float-label="Gender" clearable chips/>
+            <q-select v-model="user.information.gender_id" :options="genderOptions" float-label="Gender" clearable chips />
           </div>
           <div class="col-xs-12 col-sm-4">
-              <q-select  v-model="user.address.country_id" :options="countries" float-label="Country" clearable chips/>
+            <q-select v-model="user.address.country_id" :options="countries" float-label="Country" clearable chips />
           </div>
           <div class="col-xs-12 col-sm-4">
-              <q-select  v-model="user.address.region_id" :options="regions" float-label="Region" clearable chips/>
+            <q-select v-model="user.address.region_id" :options="regions" float-label="Region" clearable chips />
           </div>
-          
+
         </div>
 
         <div class="row">
           <div class="col-xs-12 col-sm-4">
-              <q-select  v-model="user.address.province_id" :options="provinces" float-label="Province" clearable chips/>
+            <q-select v-model="user.address.province_id" :options="provinces" float-label="Province" clearable chips />
           </div>
           <div class="col-xs-12 col-sm-4">
-            <q-select  v-model="user.address.city_id" :options="cities" float-label="City" clearable chips/>
+            <q-select v-model="user.address.city_id" :options="cities" float-label="City" clearable chips />
           </div>
           <div class="col-xs-12 col-sm-4">
-            <q-select  v-model="user.address.brgy_id" :options="brgys" float-label="City" clearable chips/>
+            <q-select v-model="user.address.brgy_id" :options="brgys" float-label="City" clearable chips />
           </div>
         </div>
 
@@ -126,33 +126,33 @@
       <div style="padding: 30px">
         <div class="row">
           <div class="col-xs-12 col-sm-6">
-             <div class="q-display-1 q-mb-md">Edit {{ user.firstname }} {{ user.middlename }} {{ user.lastname }}</div>
+            <div class="q-display-1 q-mb-md">Edit {{ user.firstname }} {{ user.middlename }} {{ user.lastname }}</div>
           </div>
           <div class="col-xs-12 col-sm-3">
-             <q-checkbox v-model="userStatus" label="Enable/Disable" />
+            <q-checkbox v-model="user.status" label="Enable/Disable" />
           </div>
-         
+
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-3">
-             <q-input v-model="user.username" float-label="Username" clearable />
+            <q-input v-model="user.username" float-label="Username" clearable />
           </div>
           <div class="col-xs-12 col-sm-3">
-             <q-input v-model="user.email" float-label="Email" clearable />
+            <q-input v-model="user.email" float-label="Email" clearable />
           </div>
           <div class="col-xs-12 col-sm-6">
-             <q-input type="password" v-model="user.password" float-label="Password"  />
+            <q-input type="password" v-model="user.password" float-label="Password" />
           </div>
-         
+
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-12">
-            <q-select multiple v-model="userRoles" :options="roles" float-label="Roles" clearable chips/>
+            <q-select multiple v-model="userRoles" :options="roleOptions" float-label="Roles" clearable chips />
           </div>
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-3">
-             <q-input v-model="user.firstname" float-label="Firstname" clearable />
+            <q-input v-model="user.firstname" float-label="Firstname" clearable />
           </div>
           <div class="col-xs-12 col-sm-3">
             <q-input v-model="user.middlename" float-label="Middlename" clearable />
@@ -161,18 +161,12 @@
             <q-input v-model="user.lastname" float-label="Lastname" clearable />
           </div>
           <div class="col-xs-12 col-sm-3">
-              <q-datetime
-                type="date"
-                v-model="user.information.birthdate"
-                color="amber"
-                float-label="Birthdate"
-                clearable
-              />
+            <q-datetime type="date" v-model="user.information.birthdate" color="amber" float-label="Birthdate" clearable />
           </div>
         </div>
-         <div class="row">
+        <div class="row">
           <div class="col-xs-12 col-sm-3">
-             <q-input v-model="user.information.employee_id" float-label="Employee ID" clearable />
+            <q-input v-model="user.information.employee_id" float-label="Employee ID" clearable />
           </div>
           <div class="col-xs-12 col-sm-3">
             <q-input v-model="user.information.mobile" float-label="Mobile" clearable />
@@ -181,31 +175,31 @@
             <q-input v-model="user.information.nationality" float-label="Nationality" clearable />
           </div>
           <div class="col-xs-12 col-sm-3">
-              <q-select  v-model="user.information.civil_status_id" :options="civilStatus" float-label="Civil Status" clearable chips/>
+            <q-select v-model="user.information.civil_status_id" :options="civilStatusOptions" float-label="Civil Status" clearable chips />
           </div>
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-4">
-              <q-select  v-model="user.information.gender_id" :options="genders" float-label="Gender" clearable chips/>
+            <q-select v-model="user.information.gender_id" :options="genderOptions" float-label="Gender" clearable chips />
           </div>
           <div class="col-xs-12 col-sm-4">
-              <q-select  v-model="user.address.country_id" :options="countries" float-label="Country" clearable chips/>
+            <q-select v-model="user.address.country_id" :options="countries" float-label="Country" clearable chips />
           </div>
           <div class="col-xs-12 col-sm-4">
-              <q-select  v-model="user.address.region_id" :options="regions" float-label="Region" clearable chips/>
+            <q-select v-model="user.address.region_id" :options="regions" float-label="Region" clearable chips />
           </div>
-          
+
         </div>
 
         <div class="row">
           <div class="col-xs-12 col-sm-4">
-              <q-select  v-model="user.address.province_id" :options="provinces" float-label="Province" clearable chips/>
+            <q-select v-model="user.address.province_id" :options="provinces" float-label="Province" clearable chips />
           </div>
           <div class="col-xs-12 col-sm-4">
-            <q-select  v-model="user.address.city_id" :options="cities" float-label="City" clearable chips/>
+            <q-select v-model="user.address.city_id" :options="cities" float-label="City" clearable chips />
           </div>
           <div class="col-xs-12 col-sm-4">
-            <q-select  v-model="user.address.brgy_id" :options="brgys" float-label="City" clearable chips/>
+            <q-select v-model="user.address.brgy_id" :options="brgys" float-label="City" clearable chips />
           </div>
         </div>
 
@@ -225,9 +219,9 @@
 </template>
 
 <script>
-// import tableData from 'assets/table-data'
-import _ from 'lodash'
-import { mapState } from 'vuex'
+import { values } from 'lodash'
+import { mapUserFields } from '../../store/users'
+
 export default {
   data () {
     return {
@@ -256,26 +250,9 @@ export default {
     }
   },
   computed: {
-    ...mapState('users', ['user']),
-    newUserModal:{
-      get(){
-        return this.$store.getters['users/newUserModal']
-      },
-      set(val){
-
-      }
-    },
-    userStatus: {
-      get () {
-        if (this.$store.getters['users/user'].status === 1) { return true } else { return false }
-      },
-      set (val) {
-        if (val === false) { this.$store.dispatch('users/userStatus', 0) } else { this.$store.dispatch('users/userStatus', 1) }
-      }
-
-    },
-    roles () {
-      return this.$store.getters['users/roles'].map(e => {
+    ...mapUserFields(['user', 'roles', 'civilStatuses', 'newUserModal', 'genders']),
+    roleOptions () {
+      return this.roles.map(e => {
         return {
           label: e.name,
           value: e.id
@@ -284,20 +261,18 @@ export default {
     },
     userRoles: {
       get () {
-        return this.$store.getters['users/user'].roles.map(e => {
+        return this.user.roles.map(e => {
           return e.id
         })
-        this.selectedRoles = roles
-        return roles
+        // this.selectedRoles = roles
+        // return roles
       },
       set (val) {
         this.selectedRoles = val
       }
-
     },
     countries () {
-      let countries = this.$store.getters['globals/getCountries']
-      return countries.map(e => {
+      return this.$store.getters['globals/getCountries'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -305,8 +280,7 @@ export default {
       })
     },
     regions () {
-      let regions = this.$store.getters['globals/getRegions']
-      return regions.map(e => {
+      return this.$store.getters['globals/getRegions'].map(e => {
         return {
           label: e.description,
           value: e.id
@@ -337,16 +311,16 @@ export default {
         }
       })
     },
-    civilStatus () {
-      return this.$store.getters['users/civilStatus'].map(e => {
+    civilStatusOptions () {
+      return this.civilStatuses.map(e => {
         return {
           label: e.name,
           value: e.id
         }
       })
     },
-    genders () {
-      return this.$store.getters['users/genders'].map(e => {
+    genderOptions () {
+      return this.genders.map(e => {
         return {
           label: e.name,
           value: e.id
@@ -355,8 +329,8 @@ export default {
     }
   },
   methods: {
-    create(){
-       this.$axios.post(`/users`, {
+    create () {
+      this.$axios.post(`/users`, {
         id: this.user.id,
         username: this.user.username,
         email: this.user.email,
@@ -404,8 +378,7 @@ export default {
         })
       // .catch()
     },
-    update(){
-      
+    update () {
       this.$axios.put(`/users/${this.user.id}`, {
         id: this.user.id,
         username: this.user.username,
@@ -428,14 +401,13 @@ export default {
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
-          });
+          })
           this.hideModal()
         })
         .catch()
-
     },
-    hideModal(){
-      this.$store.dispatch('users/newUserModal', false)
+    hideModal () {
+      this.$store.dispatch('users/setNewUserModal', false)
       this.editUserModal = false
     },
     paginationLast (currentPage) {
@@ -454,7 +426,7 @@ export default {
         )
         .then(res => {
           this.serverPagination = props.pagination
-          this.serverData = _.values(res.data.users.data)
+          this.serverData = values(res.data.users.data)
           this.serverPagination.rowsNumber = res.data.users.total
           this.lastPage = res.data.users.last_page
           this.loading = false
@@ -466,17 +438,17 @@ export default {
           this.loading = false
         })
     },
-    edit(userId){
+    edit (userId) {
       this.$axios.get(`users/${userId}/edit?id=${userId}`)
-      .then(res =>{
-        this.editUserModal = true
-        this.$store.dispatch('users/user', res.data.user)
-      })
+        .then(res => {
+          this.editUserModal = true
+          this.$store.dispatch('users/setUser', res.data.user)
+        })
     },
-    subordinateRoles(){
+    subordinateRoles () {
       this.$axios.get(`/user-subordinate-roles`)
         .then(res => {
-          this.$store.dispatch('users/roles', res.data.roles)
+          this.$store.dispatch('users/setRoles', res.data.roles)
         })
     }
   },
@@ -486,85 +458,6 @@ export default {
       filter: this.filter
     })
     this.subordinateRoles()
-  },
-  watch: {
-    'user.username' (val) {
-      this.$store.dispatch('users/userName', val)
-    },
-    'user.email' (val) {
-      this.$store.dispatch('users/email', val)
-    },
-    'user.passowrd' (val) {
-      this.$store.dispatch('users/password', val)
-    },
-     'user.firstname' (val) {
-      this.$store.dispatch('users/firstname', val)
-    },
-     'user.middlename' (val) {
-      this.$store.dispatch('users/middlename', val)
-    },
-     'user.lastname' (val) {
-      this.$store.dispatch('users/lastname', val)
-    },
-    'user.information.birthdate' (val){
-      this.$store.dispatch('users/birthdate', val)
-    },
-     'user.information.employee_id' (val){
-      this.$store.dispatch('users/employeeId', val)
-    },
-    'user.information.mobile'(val){
-      this.$store.dispatch('users/mobile', val)
-    },
-    'user.information.civil_status_id'(val){
-      this.$store.dispatch('users/civilStatusId', val)
-    },
-    'user.information.gender_id'(val){
-      this.$store.dispatch('users/genderId', val)
-    },
-    'user.information.nationality'(val){
-      this.$store.dispatch('users/nationality', val)
-    },
-    'user.address.country_id' (val) {
-      this.$store.dispatch('globals/getRegions', val)
-      this.$store.dispatch('users/countryId', val)
-    },
-    'user.address.region_id' (val) {
-      this.$store.dispatch('globals/getProvinces', val)
-      this.$store.dispatch('users/regionId', val)
-    },
-    'user.address.province_id' (val) {
-      this.$store.dispatch('globals/getCities', val)
-      this.$store.dispatch('users/provinceId', val)
-    },
-    'user.address.city_id' (val) {
-      this.$store.dispatch('globals/getBrgys', val)
-      this.$store.dispatch('users/cityId', val)
-    },
-    'user.address.brgy_id' (val) {
-      this.$store.dispatch('users/brgyId', val)
-    },
-    'company.business_info.business_type_id' (val) {
-      this.$store.dispatch('companies/businessType', val)
-    },
-    'company.business_info.vat_type_id' (val) {
-      this.$store.dispatch('companies/vatType', val)
-    },
-    'company.address.street_lot_blk' (val) {
-      this.$store.dispatch('companies/streetLotBlk', val)
-    },
-    'company.business_info.telephone' (val) {
-      this.$store.dispatch('companies/telephone', val)
-    },
-    'company.business_info.email' (val) {
-      this.$store.dispatch('companies/email', val)
-    },
-    'company.business_info.tin' (val) {
-      this.$store.dispatch('companies/tin', val)
-    },
-    'company.business_info.website' (val) {
-      this.$store.dispatch('companies/website', val)
-    }
   }
-
 }
 </script>

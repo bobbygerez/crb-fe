@@ -1,28 +1,4 @@
 <template>
-  <!-- <q-page padding class="row justify-center">
-    <div style="width: 800px; max-width: 90vw;">
-      <div class="flex-col-docs">
-        <h4>User Login</h4>
-        <q-alert v-if="visible" color="negative" icon="warning" appear :actions="[{ label: 'Dismiss', handler: () => { visible = false } }]" class="q-mb-sm">
-          {{ message }}
-        </q-alert>
-        <div class="doc-container">
-          <div class="column" style="height: 250px">
-            <div class="col-4 col-md-4">
-              <q-input v-model="form.email" stack-label="Username/Email" />
-
-            </div>
-            <div class="col-4 col-md-4">
-              <q-input clear-value v-model="form.password" stack-label="Password" type="password" />
-              <br />
-              <q-btn color="primary" @click="submit">Login</q-btn>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </q-page> -->
   <q-layout>
     <q-page-container>
       <q-page class="docs-input row main">

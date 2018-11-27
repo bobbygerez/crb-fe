@@ -11,13 +11,17 @@ export default {
     },
     information: {
       birthdate: '',
-      employee_id: ''
-    }
+      employee_id: '',
+      civil_status_id: '',
+      gender_id: ''
+    },
+    roles: [],
+    status: 0
   },
   users: [],
   roles: [],
   page: 1,
   perPage: 20,
-  civilStatus: [],
+  civilStatuses: [],
   genders: []
 }

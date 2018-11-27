@@ -3,7 +3,7 @@ export const getNewHoldingModal = (state) => state.newHoldingModal
 
 export const getBusinessTypes = (state) => state.businessTypes
 
-export const getVatTypes = (state) => state.vatTypes
+export const getVatTypes = (state) => state.vatTypes.map(e => { return { label: e.name, value: e.id } })
 
 export const getPage = (state) => state.page
 

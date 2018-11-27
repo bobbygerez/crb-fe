@@ -1,11 +1,14 @@
-export const users = (state) => state.users
+export { getField } from 'vuex-map-fields'
+// export const getField = (state) => getField(state)
 
-export const user = (state) => state.user
+// export const getUsers = (state) => state.users
 
-export const roles = (state) => state.roles
+// export const getUser = (state) => state.user
 
-export const civilStatus = (state) => state.civilStatus
+// export const getRoles = (state) => state.roles
 
-export const genders = (state) => state.genders
+// export const getCivilStatuses = (state) => state.civilStatus
 
-export const newUserModal = (state) => state.newUserModal
+// export const getGenders = (state) => state.genders
+
+// export const getNewUserModal = (state) => state.newUserModal

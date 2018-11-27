@@ -11,40 +11,40 @@
 </template>
 
 <script type="text/javascript">
-import users from "components/data-table/users.vue";
-import { mapActions, mapState } from "vuex";
+import users from 'components/data-table/users.vue'
+import { mapActions, mapState } from 'vuex'
 export default {
   computed: {
-    ...mapState("pattys", ["page", "perPage"])
+    ...mapState('pattys', ['page', 'perPage'])
   },
-  created() {
-    this.getCountries();
-    this.getBusinessTypes();
-    this.getVatTypes();
-    this.civilStatus();
-    this.genders();
+  created () {
+    this.getCountries()
+    this.getBusinessTypes()
+    this.getVatTypes()
+    this.getCivilStatuses()
+    this.getGenders()
   },
   methods: {
-    ...mapActions("globals", [
-      "getBusinessTypes",
-      "getVatTypes",
+    ...mapActions('globals', [
+      'getBusinessTypes',
+      'getVatTypes',
       'getCountries',
-      "getRegions",
-      "getProvinces",
-      "getCities",
-      "getBrgys"
+      'getRegions',
+      'getProvinces',
+      'getCities',
+      'getBrgys'
     ]),
-    ...mapActions("users", ["civilStatus", "genders"]),
-    ...mapActions("pattys", "setNewHoldingModal"),
-    showNewHoldingModal() {
-      this.setNewHoldingModal(true);
+    ...mapActions('users', ['getCivilStatuses', 'getGenders']),
+    ...mapActions('pattys', 'setNewHoldingModal'),
+    showNewHoldingModal () {
+      this.setNewHoldingModal(true)
     },
-     showNewUser(){
-      this.$store.dispatch('users/newUserModal', true)
+    showNewUser () {
+      this.$store.dispatch('users/setNewUserModal', true)
     }
   },
   components: {
     users
   }
-};
+}
 </script>
