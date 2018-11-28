@@ -11,13 +11,13 @@ export class Role {
 }
 
 export function createRole (data) {
-  const address = createAddress(data.address)
-  const contacts = data.contacts.map(x => createContact(x))
-  const name = createName(data.name)
+  // const address = createAddress(data.address)
+  // const contacts = data.contacts.map(x => createContact(x))
+  // const name = createName(data.name)
 
-  return Object.freeze(new User({
-    address,
-    contacts,
-    name
-  }))
+  // return Object.freeze(new User({
+  //   address,
+  //   contacts,
+  //   name
+  // }))
 }
