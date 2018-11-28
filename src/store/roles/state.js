@@ -6,5 +6,6 @@ export default {
     parent_id: ''
   },
   subordinateRoles: [],
+  superiorRoles: [],
   newRoleModal: false
 }

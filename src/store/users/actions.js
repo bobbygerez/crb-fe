@@ -54,8 +54,8 @@ export const newUser = (state, payload) => {
   })
 }
 
-export const roles = (state, payload) => {
-  state.commit('roles', payload)
+export const setRoles = (state, payload) => {
+  state.commit('SET_ROLES', payload)
 }
 
 export const setUserStatus = (state, payload) => {

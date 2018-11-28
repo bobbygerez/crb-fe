@@ -12,6 +12,10 @@ export const SET_ROLES = (state, payload) => {
   state.roles = payload
 }
 
+export const SET_USER_ROLES = (state, payload) => {
+  state.user.roles = payload
+}
+
 export const SET_USER_STATUS = (state, payload) => {
   state.user.status = payload
 }
