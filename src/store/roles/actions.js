@@ -1,15 +1,27 @@
-export const setRoles = ({commit}, payload) => {
-  commit('SET_ROLES', payload)
+export const roles = ({commit}, payload) => {
+  commit('roles', payload)
 }
 
-export const setRole = ({commit}, payload) => {
-  commit('SET_ROLE', payload)
+export const role = ({commit}, payload) => {
+  commit('role', payload)
 }
 
-export const setAvailRoles = ({commit}, payload) => {
-  commit('SET_AVAIL_ROLES', payload)
+export const roleName = ({commit}, payload) => {
+  commit('roleName', payload)
 }
 
-export const setNewRoleModal = ({commit}, payload) => {
-  commit('SET_NEW_ROLE_MODAL', payload)
+export const roleDescription = ({commit}, payload) => {
+  commit('roleDescription', payload)
+}
+
+export const subordinateRoles = ({commit}, payload) => {
+  commit('subordinateRoles', payload)
+}
+
+export const superiorRoles = ({commit}, payload) => {
+  commit('superiorRoles', payload)
+}
+
+export const newRoleModal = ({commit}, payload) => {
+  commit('newRoleModal', payload)
 }
