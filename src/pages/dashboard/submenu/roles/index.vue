@@ -11,20 +11,20 @@
 </template>
 
 <script type="text/javascript">
-import roles from "components/data-table/roles.vue";
+import roles from 'components/data-table/roles.vue'
 export default {
   methods: {
-     showNewRole(){
-       this.$store.dispatch("roles/role", {
-          name: '',
-          parent_id: '',
-          description: ''
-      });
+    showNewRole () {
+      this.$store.dispatch('roles/role', {
+        name: '',
+        parent_id: '',
+        description: ''
+      })
       this.$store.dispatch('roles/newRoleModal', true)
     }
   },
   components: {
     roles
   }
-};
+}
 </script>

@@ -6,5 +6,10 @@ export default {
   cities: [],
   provinces: [],
   regions: [],
-  countries: []
+  countries: [],
+  tableViewSettings: {
+    mode: 'list',
+    icon: 'mdi-view-grid'
+  },
+  pageMeta: {}
 }

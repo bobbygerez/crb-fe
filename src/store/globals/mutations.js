@@ -29,3 +29,5 @@ export const SET_VAT_TYPES = (state, payload) => {
 export const SET_MENUS = (state, payload) => {
   state.menus = payload
 }
+
+export const SET_PAGE_META = (state, payload) => { state.pageMeta = payload }

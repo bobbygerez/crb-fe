@@ -176,17 +176,17 @@
 
 <script>
 // import tableData from 'assets/table-data'
-import _ from "lodash";
-import { mapState } from "vuex";
+import _ from 'lodash'
+import { mapState } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
-      model: "2016-10-24T10:40:14.674Z",
-      superior: "",
+      model: '2016-10-24T10:40:14.674Z',
+      superior: '',
       selectedRoles: [],
       editRoleModal: false,
       options: [5, 10, 15, 20],
-      lastPage: "",
+      lastPage: '',
       serverData: [],
       serverPagination: {
         page: 1,
@@ -194,76 +194,81 @@ export default {
         rowsPerPage: 10 // specifying this determines pagination is server-side
       },
       columns: [
-        { name: "name", label: "Name", field: "name", align: "left" },
+        { name: 'name', label: 'Name', field: 'name', align: 'left' },
         {
-          name: "superior",
-          label: "Superior",
-          align: "left",
-          field: "superior"
+          name: 'superior',
+          label: 'Superior',
+          align: 'left',
+          field: 'superior'
         },
         {
-          name: "subordinates",
-          label: "Subordinates",
-          align: "left",
-          field: "subordinates"
+          name: 'subordinates',
+          label: 'Subordinates',
+          align: 'left',
+          field: 'subordinates'
         },
-        { name: "created", label: "Created", align: "left", field: "created" },
-        { name: "actions", label: "Actions", align: "left", field: "actions" }
+        { name: 'created', label: 'Created', align: 'left', field: 'created' },
+        { name: 'actions', label: 'Actions', align: 'left', field: 'actions' }
         // { name: "address", label: "Address", field: "address", align: "left" },
         // { name: "created", label: "Created", field: "created", align: "left" },
         // { name: "actions", label: "Actions", field: "actions", align: "left" }
       ],
-      filter: "",
+      filter: '',
       loading: false
-    };
+    }
   },
   computed: {
-    ...mapState("roles", ["roles", "role", "newRoleModal"]),
+    ...mapState('roles', ['roles', 'role', 'newRoleModal']),
     superiorRoles: {
+<<<<<<< HEAD
       get() {
         let superiorRoles = this.$store.getters["roles/superiorRoles"];
         if (superiorRoles === undefined){ return [] }
         return this.$store.getters["roles/superiorRoles"].map(e => {
+=======
+      get () {
+        return this.$store.getters['roles/superiorRoles'].map(e => {
+>>>>>>> d59f2e0f57a6738246381aef5830c0f62e51d04f
           return {
             label: e.name,
             value: e.id
-          };
-        });
+          }
+        })
       },
-      set(val) {}
+      set (val) {}
     },
     subordinateRoles: {
-      get() {
-        return this.$store.getters["roles/subordinateRoles"].map(e => {
+      get () {
+        return this.$store.getters['roles/subordinateRoles'].map(e => {
           return {
             label: e.name,
             value: e.id
-          };
-        });
+          }
+        })
       },
-      set(val) {}
+      set (val) {}
     },
     subordinatesIds: {
-      get() {
-        return this.$store.getters["roles/subordinateRoles"].map(e => {
-          return e.id;
-        });
+      get () {
+        return this.$store.getters['roles/subordinateRoles'].map(e => {
+          return e.id
+        })
       },
-      set(val) {
-        this.selectedRoles = val;
+      set (val) {
+        this.selectedRoles = val
       }
     },
     newRoleModal: {
-      get() {
-        return this.$store.getters["roles/newRoleModal"];
+      get () {
+        return this.$store.getters['roles/newRoleModal']
       },
-      set(val) {
-        return this.$store.dispatch("roles/newRoleModal", val);
+      set (val) {
+        return this.$store.dispatch('roles/newRoleModal', val)
       }
     }
   },
   methods: {
-    store() {
+    store () {
       this.$axios
         .post(`/roles`, {
           id: this.role.id,
@@ -272,58 +277,57 @@ export default {
           parent_id: this.role.parent_id
         })
         .then(res => {
-          this.hideModal();
+          this.hideModal()
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
-          });
+          })
           this.$q.notify({
-            color: "positive",
-            icon: "check",
+            color: 'positive',
+            icon: 'check',
             message: `${this.role.name}created successfully`
-          });
-        });
+          })
+        })
     },
-    deleteRow(roleId) {
+    deleteRow (roleId) {
       this.$axios.get(`/roles/${roleId}?id=${roleId}`).then(res => {
-        this.$store.dispatch("roles/role", res.data.role);
+        this.$store.dispatch('roles/role', res.data.role)
         this.$q.notify({
-          color: "negative",
-          icon: "delete",
+          color: 'negative',
+          icon: 'delete',
           message: `Delete ${res.data.role.name} ?`,
           actions: [
             {
-              label: "OK",
+              label: 'OK',
               handler: () => {
                 this.$axios
                   .delete(`/roles/${this.role.id}?id=${this.role.id}`)
                   .then(res => {
                     this.$q.notify({
-                      color: "positive",
-                      icon: "check",
+                      color: 'positive',
+                      icon: 'check',
                       message: `${this.role.name} deleted successfully`
-                    });
-                     this.request({
+                    })
+                    this.request({
                       pagination: this.serverPagination,
                       filter: this.filter
-                    });
+                    })
                   })
                   .catch(err => {
                     this.$q.notify({
-                      color: "negative",
-                      icon: "warning",
+                      color: 'negative',
+                      icon: 'warning',
                       message: `${err.response.data.message}`
-                    });
-                  });
+                    })
+                  })
               }
             }
           ]
-        });
-       
-      });
+        })
+      })
       // .catch()
     },
-    update() {
+    update () {
       this.$axios
         .put(`/roles/${this.role.id}`, {
           id: this.role.id,
@@ -332,36 +336,35 @@ export default {
           parent_id: this.role.parent_id
         })
         .then(res => {
-          this.editRoleModal = false;
+          this.editRoleModal = false
           this.$q.notify({
-            color: "positive",
-            icon: "check",
+            color: 'positive',
+            icon: 'check',
             message: `${this.role.name} updated successfully`
-          });
+          })
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
-          });
-          this.hideModal();
+          })
+          this.hideModal()
         })
-        .catch();
+        .catch()
     },
-    hideModal() {
-      this.newRoleModal = false;
-      this.editRoleModal = false;
+    hideModal () {
+      this.newRoleModal = false
+      this.editRoleModal = false
     },
-    showModal() {
-      
-      this.editRoleModal = true;
+    showModal () {
+      this.editRoleModal = true
     },
-    paginationLast(currentPage) {
+    paginationLast (currentPage) {
       if (this.lastPage > currentPage) {
-        return false;
+        return false
       }
-      return true;
+      return true
     },
-    request(props) {
-      this.loading = true;
+    request (props) {
+      this.loading = true
       this.$axios
         .get(
           `/roles?filter=${this.filter}&page=${props.pagination.page}&perPage=${
@@ -369,52 +372,52 @@ export default {
           }`
         )
         .then(res => {
-          this.serverPagination = props.pagination;
-          this.serverData = _.values(res.data.roles.data);
-          this.serverPagination.rowsNumber = res.data.roles.total;
-          this.lastPage = res.data.roles.last_page;
-          this.loading = false;
+          this.serverPagination = props.pagination
+          this.serverData = _.values(res.data.roles.data)
+          this.serverPagination.rowsNumber = res.data.roles.total
+          this.lastPage = res.data.roles.last_page
+          this.loading = false
         })
         .catch(error => {
           // there's an error... do SOMETHING
-          console.log(error);
+          console.log(error)
           // we tell QTable to exit the "loading" state
-          this.loading = false;
-        });
+          this.loading = false
+        })
     },
-    edit(roleId) {
+    edit (roleId) {
       this.$axios.get(`roles/${roleId}/edit?id=${roleId}`).then(res => {
-        this.editRoleModal = true;
-        this.$store.dispatch("roles/role", res.data.role);
+        this.editRoleModal = true
+        this.$store.dispatch('roles/role', res.data.role)
         this.$store.dispatch(
-          "roles/subordinateRoles",
+          'roles/subordinateRoles',
           res.data.subordinateRoles
-        );
-        this.$store.dispatch("roles/superiorRoles", res.data.superiorRoles);
-      });
+        )
+        this.$store.dispatch('roles/superiorRoles', res.data.superiorRoles)
+      })
     },
-    subordinateRoles() {
+    subordinateRoles () {
       this.$axios.get(`/user-subordinate-roles`).then(res => {
         this.$store.dispatch(
-          "roles/subordinateRoles",
+          'roles/subordinateRoles',
           res.data.subordinateRoles
-        );
-      });
+        )
+      })
     }
   },
-  mounted() {
+  mounted () {
     this.request({
       pagination: this.serverPagination,
       filter: this.filter
-    });
+    })
   },
   watch: {
-    "role.name"(val) {
-      this.$store.dispatch("roles/roleName", val);
+    'role.name' (val) {
+      this.$store.dispatch('roles/roleName', val)
     },
-    "role.description"(val) {
-      this.$store.dispatch("roles/roleDescription", val);
+    'role.description' (val) {
+      this.$store.dispatch('roles/roleDescription', val)
     }
   }
-};
+}
 </script>

@@ -1,15 +1,10 @@
+import { Address } from 'assets/models/Address'
+
 export default {
   newUserModal: false,
   user: {
     roles: [],
-    address: {
-      country_id: '',
-      region_id: '',
-      province_id: '',
-      city_id: '',
-      brgy_id: '',
-      street_lot_blk: ''
-    },
+    address: new Address(),
     information: {
       birthdate: '',
       employee_id: '',

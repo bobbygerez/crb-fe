@@ -27,7 +27,7 @@ export default function ({
   })
 
   Router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (to.matched.some(record => record.meta.needAuth)) {
       if (!store.getters['pattys/getToken']) {
         next({
           path: '/',
@@ -36,6 +36,7 @@ export default function ({
           }
         })
       } else {
+        store.dispatch('globals/setPageMeta', to.meta)
         next()
       }
     } else {
