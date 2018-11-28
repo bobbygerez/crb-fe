@@ -109,6 +109,10 @@ export default {
         })
         .catch(error => {
           this.loading = false
+          if (error.response.status === 401) {
+            this.$q.notify({ type: 'negative', message: error.response.data.error })
+            return
+          }
           this.$q.notify({ type: 'negative', message: error.message })
         })
     }

@@ -85,3 +85,7 @@ export const getBrgys = ({
 export const setMenus = ({commit}, payload) => {
   commit('SET_MENUS', payload)
 }
+
+export const setPageMeta = ({commit}, payload) => {
+  commit('SET_PAGE_META', payload)
+}

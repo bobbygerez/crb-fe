@@ -33,7 +33,7 @@ const intercept = (isIntercept) => {
     return response
   }, error => {
     // Do something with response error
-    console.log('%c[RESPONSE] error ->' + error.config.url, 'color: red; font-weight: bold;', error)
+    console.log('%c[RESPONSE] error ->' + error.config.url, 'color: red; font-weight: bold;', error.response)
     return Promise.reject(error)
   })
 }

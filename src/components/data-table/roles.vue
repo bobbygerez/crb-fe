@@ -8,12 +8,12 @@
       <template slot="body" slot-scope="props">
         <q-tr :props="props">
           <q-td key="name">
-            {{props.row.name }} 
+            {{props.row.name }}
           </q-td>
           <q-td key="subordinates">
             <span v-for="(subordinate, i) in props.row.children" :key="i">
               {{ subordinate.name }}
-            </span> 
+            </span>
           </q-td>
           <q-td key="created">
             {{ props.row.created_at }}
@@ -51,7 +51,7 @@
              <q-select multiple v-model="subordinatesIds" :options="availRoles" float-label="Subordinates" clearable chips/>
           </div>
         </div>
-        
+
         <br />
         <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
         <q-btn color="primary" @click="update()" label="Submit" class="q-ml-sm" />
@@ -67,7 +67,7 @@
           <div class="col-xs-12 col-sm-3">
              <q-checkbox v-model="userStatus" label="Enable/Disable" />
           </div>
-         
+
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-3">
@@ -79,7 +79,7 @@
           <div class="col-xs-12 col-sm-6">
              <q-input type="password" v-model="user.password" float-label="Password"  />
           </div>
-         
+
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-12">
@@ -130,7 +130,7 @@
           <div class="col-xs-12 col-sm-4">
               <q-select  v-model="user.address.region_id" :options="regions" float-label="Region" clearable chips/>
           </div>
-          
+
         </div>
 
         <div class="row">
@@ -203,21 +203,21 @@ export default {
     },
     subordinatesIds: {
 
-      get(){
+      get () {
         return this.$store.getters['roles/getAvailRoles'].map(e => {
           return e.id
         })
       },
-      set(val){
+      set (val) {
         this.selectedRoles = val
       }
-      
+
     }
-   
+
   },
   methods: {
-    store(){
-       this.$axios.post(`/users`, {
+    store () {
+      this.$axios.post(`/users`, {
         id: this.user.id,
         username: this.user.username,
         email: this.user.email,
@@ -230,13 +230,13 @@ export default {
         address: this.user.address,
         informations: this.user.information
       })
-      .then((res)=>{
-        this.hideModal()
-         this.request({
-          pagination: this.serverPagination,
-          filter: this.filter
+        .then((res) => {
+          this.hideModal()
+          this.request({
+            pagination: this.serverPagination,
+            filter: this.filter
+          })
         })
-      })
     },
     deleteRow (userId) {
       this.$axios.get(`/users/${userId}?id=${userId}`)
@@ -272,8 +272,7 @@ export default {
         })
       // .catch()
     },
-    update(){
-      
+    update () {
       this.$axios.put(`/users/${this.user.id}`, {
         id: this.user.id,
         username: this.user.username,
@@ -284,8 +283,7 @@ export default {
         status: this.user.status,
         roles: this.selectedRoles,
         address: this.user.address,
-        informations: this.user.information,
-        roles: this.selectedRoles
+        informations: this.user.information
       })
         .then((res) => {
           this.editCompanyModal = false
@@ -297,16 +295,15 @@ export default {
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
-          });
+          })
           this.hideModal()
         })
         .catch()
-
     },
-    hideModal(){
+    hideModal () {
       this.editRoleModal = false
     },
-    showModal(){
+    showModal () {
       this.editRoleModal = true
     },
     paginationLast (currentPage) {
@@ -337,18 +334,18 @@ export default {
           this.loading = false
         })
     },
-    edit(roleId){
+    edit (roleId) {
       this.$axios.get(`roles/${roleId}/edit?id=${roleId}`)
-      .then(res =>{
-        this.editRoleModal = true
-        this.$store.dispatch('roles/setRole', res.data.role)
-        this.$store.dispatch('roles/setAvailRoles', res.data.availRoles)
-      })
+        .then(res => {
+          this.editRoleModal = true
+          this.$store.dispatch('roles/setRole', res.data.role)
+          this.$store.dispatch('roles/setAvailRoles', res.data.availRoles)
+        })
     },
-    subordinateRoles(){
+    subordinateRoles () {
       this.$axios.get(`/user-subordinate-roles`)
         .then(res => {
-          this.$store.dispatch('users/roles', res.data.roles)
+          this.$store.dispatch('users/setRoles', res.data.roles)
         })
     }
   },

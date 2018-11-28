@@ -3,40 +3,21 @@ const routes = [
     path: '/',
     component: () => import('pages/Login.vue')
   },
-  // {
-  //   path: '/login',
-  //   component: () => import('layouts/MyLayout.vue'),
-  //   children: [{
-  //     path: '',
-  //     component: () => import('pages/login.vue')
-  //   }]
-  // },
   {
     path: '/dashboard',
-    component: () => import('layouts/MyLayout.vue'),
+    component: () => import('layouts/MainLayout.vue'),
     children: [{
       path: '',
-      component: () => import('pages/dashboard/index.vue')
+      component: () => import('pages/dashboard/index.vue'),
+      meta: {
+        title: 'Home',
+        needAuth: true
+      }
     }]
   },
   {
-    path: '/dashboard',
-    component: () => import('layouts/MyLayout.vue'),
-    children: [{
-      path: '',
-      component: () => import('pages/dashboard/index.vue')
-    },
-    {
-      path: '/'
-    }
-    ],
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
     path: '/dashboard/submenu/:id/holdings',
-    component: () => import('layouts/MyLayout.vue'),
+    component: () => import('layouts/MainLayout.vue'),
     children: [{
       path: '',
       component: () => import('pages/dashboard/submenu/holdings/index.vue')
@@ -47,7 +28,7 @@ const routes = [
   },
   {
     path: '/dashboard/submenu/:submenu/companies',
-    component: () => import('layouts/MyLayout.vue'),
+    component: () => import('layouts/MainLayout.vue'),
     children: [{
       path: '',
       component: () => import('pages/dashboard/submenu/companies/index.vue')
@@ -58,7 +39,7 @@ const routes = [
   },
   {
     path: '/dashboard/submenu/:submenu/roles',
-    component: () => import('layouts/MyLayout.vue'),
+    component: () => import('layouts/MainLayout.vue'),
     children: [{
       path: '',
       component: () => import('pages/dashboard/submenu/roles/index.vue')
@@ -69,7 +50,7 @@ const routes = [
   },
   {
     path: '/dashboard/submenu/:submenu/users',
-    component: () => import('layouts/MyLayout.vue'),
+    component: () => import('layouts/MainLayout.vue'),
     children: [{
       path: '',
       component: () => import('pages/dashboard/submenu/users/index.vue')
@@ -81,7 +62,7 @@ const routes = [
 
   {
     path: '/dashboard/submenu/:id/holdings',
-    component: () => import('layouts/MyLayout.vue'),
+    component: () => import('layouts/MainLayout.vue'),
     children: [{
       path: '',
       component: () => import('pages/dashboard/submenu/holdings/index.vue')
@@ -92,7 +73,7 @@ const routes = [
   },
   {
     path: '/dashboard/submenu/:submenu/holdings/:holding/branches',
-    component: () => import('layouts/MyLayout.vue'),
+    component: () => import('layouts/MainLayout.vue'),
     children: [{
       path: '',
       component: () => import('pages/dashboard/submenu/holdings/index.vue')
