@@ -1,36 +1,36 @@
 <template>
   <div class="q-pa-sm">
-    <roles></roles>
+    <menus></menus>
     <q-page-sticky
       position="bottom-left"
       :offset="[16, 16]"
     >
       <q-btn
         color="primary"
-        @click="showNewRole()"
+        @click="showNewmenu()"
       >
         <q-icon name="add"></q-icon>
-        new role
+        new menu
       </q-btn>
     </q-page-sticky>
   </div>
 </template>
 
 <script type="text/javascript">
-import roles from 'components/data-table/roles.vue'
+import menus from 'components/data-table/menus.vue'
 export default {
   methods: {
-    showNewRole () {
-      this.$store.dispatch('roles/role', {
+    showNewmenu () {
+      this.$store.dispatch('menus/menu', {
         name: '',
         parent_id: '',
         description: ''
       })
-      this.$store.dispatch('roles/newRoleModal', true)
+      this.$store.dispatch('menus/newMenuModal', true)
     }
   },
   components: {
-    roles
+    menus
   }
 }
 </script>

@@ -49,6 +49,17 @@ const routes = [
     }
   },
   {
+    path: '/dashboard/submenu/:submenu/menus',
+    component: () => import('layouts/MyLayout.vue'),
+    children: [{
+      path: '',
+      component: () => import('pages/dashboard/submenu/menus/index.vue')
+    }],
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/dashboard/submenu/:submenu/users',
     component: () => import('layouts/MainLayout.vue'),
     children: [{

@@ -1,12 +1,33 @@
 <template>
-  <q-table ref="table" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :loading="loading" @request="request">
-    <template slot="top-right" slot-scope="props">
-      <q-search hide-underline v-model="filter" />
+  <q-table
+    ref="table"
+    :data="serverData"
+    :columns="columns"
+    :filter="filter"
+    row-key="name"
+    :pagination.sync="serverPagination"
+    :loading="loading"
+    @request="request"
+  >
+    <template
+      slot="top-right"
+      slot-scope="props"
+    >
+      <q-search
+        hide-underline
+        v-model="filter"
+      />
     </template>
 
-    <template slot="body" slot-scope="props">
+    <template
+      slot="body"
+      slot-scope="props"
+    >
       <q-tr :props="props">
-        <q-td key="name" :props="props">
+        <q-td
+          key="name"
+          :props="props"
+        >
           {{props.row.name}}
           <q-popup-edit v-model="props.row.name">
             <q-field count>
@@ -14,7 +35,10 @@
             </q-field>
           </q-popup-edit>
         </q-td>
-        <q-td key="address" :props="props">
+        <q-td
+          key="address"
+          :props="props"
+        >
           {{props.row.address.street_lot_blk}},
           {{props.row.address.brgy.description}}
           <br />
@@ -22,21 +46,63 @@
           {{props.row.address.region.description }}
 
         </q-td>
-        <q-td key="created_at" :props="props">{{props.row.created_at}}</q-td>
-        <q-td key="actions" :props="props">
-          <q-btn round color="positive" icon="edit" class="q-ma-sm" @click="edit(props.row.id)" />
-          <q-btn round color="negative" icon="delete" class="q-ma-sm" @click="deleteRow(props.row.id)" />
+        <q-td
+          key="created_at"
+          :props="props"
+        >{{props.row.created_at}}</q-td>
+        <q-td
+          key="actions"
+          :props="props"
+        >
+          <q-btn
+            round
+            color="positive"
+            icon="edit"
+            class="q-ma-sm"
+            @click="edit(props.row.id)"
+          />
+          <q-btn
+            round
+            color="negative"
+            icon="delete"
+            class="q-ma-sm"
+            @click="deleteRow(props.row.id)"
+          />
         </q-td>
       </q-tr>
 
     </template>
 
-    <div slot="pagination" slot-scope="props" class="row flex-center q-py-sm">
-      <q-btn round dense size="sm" icon="undo" color="secondary" class="q-mr-sm" :disable="props.isFirstPage" @click="props.prevPage" />
-      <div class="q-mr-sm" style="font-size: small">
+    <div
+      slot="pagination"
+      slot-scope="props"
+      class="row flex-center q-py-sm"
+    >
+      <q-btn
+        round
+        dense
+        size="sm"
+        icon="undo"
+        color="secondary"
+        class="q-mr-sm"
+        :disable="props.isFirstPage"
+        @click="props.prevPage"
+      />
+      <div
+        class="q-mr-sm"
+        style="font-size: small"
+      >
         Page {{ props.pagination.page }} / {{ props.pagination.pagesNumber }}
       </div>
-      <q-btn round dense size="sm" icon="redo" color="secondary" :disable="props.isLastPage" @click="props.nextPage" />
+      <q-btn
+        round
+        dense
+        size="sm"
+        icon="redo"
+        color="secondary"
+        :disable="props.isLastPage"
+        @click="props.nextPage"
+      />
     </div>
 
   </q-table>

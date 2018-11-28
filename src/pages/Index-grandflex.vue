@@ -1,10 +1,22 @@
 <template>
   <div>
-    <q-search inverted-light color="white" v-model="terms">
-      <q-autocomplete @search="search" :max-results="2" @selected="selected" />
+    <q-search
+      inverted-light
+      color="white"
+      v-model="terms"
+    >
+      <q-autocomplete
+        @search="search"
+        :max-results="2"
+        @selected="selected"
+      />
     </q-search>
     <q-page class="flex flex-center">
-      <item-card v-for="(item, i) in items.data" :key="i" v-bind:item="item"></item-card>
+      <item-card
+        v-for="(item, i) in items.data"
+        :key="i"
+        v-bind:item="item"
+      ></item-card>
     </q-page>
   </div>
 </template>

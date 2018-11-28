@@ -3,7 +3,7 @@
     <q-table
       ref="table"
       color="primary"
-      title="All Roles"
+      title="All Menus"
       :data="serverData"
       :columns="columns"
       :filter="filter"
@@ -30,21 +30,10 @@
         <q-tr :props="props">
           <q-td key="name">{{props.row.name }}</q-td>
           <q-td key="superior">
-            <span
-              v-for="(superior, i) in props.row.parents"
+            <div
+              v-for="(child, i) in props.row.all_children"
               :key="i"
-            >{{ superior.name }}</span>
-          </q-td>
-          <q-td key="subordinates">
-            <span
-              v-for="(subordinate, i) in props.row.children"
-              :key="i"
-            >
-              <q-chip
-                small
-                color="teal"
-              >{{ subordinate.name }}</q-chip>
-            </span>
+            >{{ child.name }}</div>
           </q-td>
           <q-td key="created">{{ props.row.created_at }}</q-td>
           <q-td
@@ -71,11 +60,7 @@
         </q-tr>
       </template>
 
-      <div
-        slot="pagination"
-        slot-scope="props"
-        class="row flex-center q-py-sm"
-      >
+      <!-- <div slot="pagination" slot-scope="props" class="row flex-center q-py-sm">
         <q-btn
           round
           dense
@@ -99,11 +84,11 @@
           :disable="paginationLast(props.pagination.page)"
           @click="props.nextPage"
         />
-      </div>
+      </div>-->
     </q-table>
 
     <q-modal
-      v-model="editRoleModal"
+      v-model="editMenuModal"
       minimized
       no-esc-dismiss
       no-backdrop-dismiss
@@ -112,22 +97,22 @@
       <div style="padding: 30px">
         <div class="row">
           <div class="col-xs-12 col-sm-6">
-            <div class="q-display-1 q-mb-md">Edit {{ role.name }}</div>
+            <div class="q-display-1 q-mb-md">Edit {{ menu.name }}</div>
           </div>
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-6">
             <q-input
-              v-model="role.name"
+              v-model="menu.name"
               float-label="Name"
               clearable
             />
           </div>
           <div class="col-xs-12 col-sm-6">
             <q-select
-              v-model="role.parent_id"
-              :options="superiorRoleOptions"
-              float-label="Superior"
+              v-model="menu.parent_id"
+              :options="superiorMenus"
+              float-label="Parent"
               clearable
               chips
             />
@@ -135,9 +120,9 @@
           <div class="col-xs-12 col-sm-12">
             <q-select
               multiple
-              v-model="subordinatesIds"
-              :options="subordinateRoleOptions"
-              float-label="Subordinates"
+              v-model="submenuIds"
+              :options="submenus"
+              float-label="Submenu"
               chips
               readonly
               hide-underline
@@ -145,7 +130,7 @@
           </div>
           <div class="col-xs-12 col-sm-12">
             <q-input
-              v-model="role.description"
+              v-model="menu.description"
               type="textarea"
               float-label="Description"
               :max-height="100"
@@ -170,7 +155,7 @@
       </div>
     </q-modal>
     <q-modal
-      v-model="newRoleModal"
+      v-model="newMenuModal"
       minimized
       no-esc-dismiss
       no-backdrop-dismiss
@@ -179,35 +164,21 @@
       <div style="padding: 30px">
         <div class="row">
           <div class="col-xs-12 col-sm-6">
-            <div class="q-display-1 q-mb-md">New {{ role.name }}</div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-12 col-sm-6">
             <q-input
-              v-model="role.name"
+              v-model="menu.name"
               float-label="Name"
               clearable
             />
           </div>
           <div class="col-xs-12 col-sm-6">
             <q-select
-              v-model="role.parent_id"
-              :options="superiorRolesOptions"
-              float-label="Superior"
+              v-model="menu.parent_id"
+              :options="superiorMenus"
+              float-label="Parent"
               clearable
               chips
             />
           </div>
-        </div>
-        <div class="col-xs-12 col-sm-12">
-          <q-input
-            v-model="role.description"
-            type="textarea"
-            float-label="Description"
-            :max-height="100"
-            rows="2"
-          />
         </div>
         <br>
         <q-btn
@@ -229,17 +200,15 @@
 
 <script>
 // import tableData from 'assets/table-data'
-import { values } from 'lodash'
-// import { mapState } from 'vuex'
-import { mapRoleFields } from '../../store/roles'
-
+import _ from 'lodash'
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
       model: '2016-10-24T10:40:14.674Z',
       superior: '',
       selectedRoles: [],
-      editRoleModal: false,
+      editMenuModal: false,
       options: [5, 10, 15, 20],
       lastPage: '',
       serverData: [],
@@ -251,49 +220,59 @@ export default {
       columns: [
         { name: 'name', label: 'Name', field: 'name', align: 'left' },
         {
-          name: 'superior',
-          label: 'Superior',
+          name: 'submenu',
+          label: 'Sub-menu',
           align: 'left',
-          field: 'superior'
-        },
-        {
-          name: 'subordinates',
-          label: 'Subordinates',
-          align: 'left',
-          field: 'subordinates'
+          field: 'submenu'
         },
         { name: 'created', label: 'Created', align: 'left', field: 'created' },
         { name: 'actions', label: 'Actions', align: 'left', field: 'actions' }
-        // { name: "address", label: "Address", field: "address", align: "left" },
-        // { name: "created", label: "Created", field: "created", align: "left" },
-        // { name: "actions", label: "Actions", field: "actions", align: "left" }
       ],
       filter: '',
       loading: false
     }
   },
   computed: {
-    ...mapRoleFields(['roles', 'role', 'newRoleModal', 'superiorRoles', 'subordinateRoles']),
-    superiorRoleOptions () {
-      return this.superiorRoles.map(e => {
-        return {
-          label: e.name,
-          value: e.id
-        }
-      })
+    ...mapState('menus', ['menus', 'menu']),
+    superiorMenus: {
+      get () {
+        return this.$store.getters['menus/superiorMenus'].map(e => {
+          return {
+            label: e.name,
+            value: e.id
+          }
+        })
+      },
+      set (val) { }
     },
-    subordinateRoleOptions () {
-      return this.subordinateRoles.map(e => {
-        return {
-          label: e.name,
-          value: e.id
-        }
-      })
+    submenus: {
+      get () {
+        return this.$store.getters['menus/submenus'].map(e => {
+          return {
+            label: e.name,
+            value: e.id
+          }
+        })
+      },
+      set (val) { }
     },
-    subordinatesIds () {
-      return this.subordinateRoles.map(e => {
-        return e.id
-      })
+    submenuIds: {
+      get () {
+        return this.$store.getters['menus/submenus'].map(e => {
+          return e.id
+        })
+      },
+      set (val) {
+        this.selectedRoles = val
+      }
+    },
+    newMenuModal: {
+      get () {
+        return this.$store.getters['menus/newMenuModal']
+      },
+      set (val) {
+        return this.$store.dispatch('menus/newMenuModal', val)
+      }
     }
   },
   methods: {
@@ -358,18 +337,18 @@ export default {
     },
     update () {
       this.$axios
-        .put(`/roles/${this.role.id}`, {
-          id: this.role.id,
-          name: this.role.name,
-          description: this.role.description,
-          parent_id: this.role.parent_id
+        .put(`/menus/${this.menu.id}`, {
+          id: this.menu.id,
+          name: this.menu.name,
+          description: this.menu.description,
+          parent_id: this.menu.parent_id
         })
         .then(res => {
           this.editRoleModal = false
           this.$q.notify({
             color: 'positive',
             icon: 'check',
-            message: `${this.role.name} updated successfully`
+            message: `${this.menu.name} updated successfully`
           })
           this.request({
             pagination: this.serverPagination,
@@ -396,15 +375,15 @@ export default {
       this.loading = true
       this.$axios
         .get(
-          `/roles?filter=${this.filter}&page=${props.pagination.page}&perPage=${
+          `/menus?filter=${this.filter}&page=${props.pagination.page}&perPage=${
             props.pagination.rowsPerPage
           }`
         )
         .then(res => {
           this.serverPagination = props.pagination
-          this.serverData = values(res.data.roles.data)
-          this.serverPagination.rowsNumber = res.data.roles.total
-          this.lastPage = res.data.roles.last_page
+          this.serverData = _.values(res.data.menus.data)
+          this.serverPagination.rowsNumber = res.data.menus.total
+          this.lastPage = res.data.menus.last_page
           this.loading = false
         })
         .catch(error => {
@@ -414,15 +393,12 @@ export default {
           this.loading = false
         })
     },
-    edit (roleId) {
-      this.$axios.get(`roles/${roleId}/edit?id=${roleId}`).then(res => {
-        this.editRoleModal = true
-        this.$store.dispatch('roles/role', res.data.role)
-        this.$store.dispatch(
-          'roles/subordinateRoles',
-          res.data.subordinateRoles
-        )
-        this.$store.dispatch('roles/superiorRoles', res.data.superiorRoles)
+    edit (menuId) {
+      this.$axios.get(`menus/${menuId}/edit?id=${menuId}`).then(res => {
+        this.editMenuModal = true
+        this.$store.dispatch('menus/menu', res.data.menu)
+        this.$store.dispatch('menus/superiorMenus', res.data.superiorMenus)
+        this.$store.dispatch('menus/submenus', res.data.submenus)
       })
     },
     subordinateRoles () {
@@ -441,12 +417,15 @@ export default {
     })
   },
   watch: {
-    // 'role.name' (val) {
-    //   this.$store.dispatch('roles/roleName', val)
-    // },
-    // 'role.description' (val) {
-    //   this.$store.dispatch('roles/roleDescription', val)
-    // }
+    'menu.name' (val) {
+      this.$store.dispatch('menus/menuName', val)
+    },
+    'menu.description' (val) {
+      this.$store.dispatch('menus/menuDescription', val)
+    },
+    'menu.parent_id' (val) {
+      this.$store.dispatch('menus/menuParentId', val)
+    }
   }
 }
 </script>
