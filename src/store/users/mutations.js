@@ -4,15 +4,7 @@ export const SET_USERS = (state, payload) => {
   state.users = payload
 }
 
-<<<<<<< HEAD
 export const SET_USER = (state, payload) => {
-=======
-export const newUser = (state, payload) => {
-  state.user = payload
-}
-
-export const user = (state, payload) => {
->>>>>>> b2cc2d66c673f4b4d157b073757f5c4d8256927b
   state.user = payload
 }
 

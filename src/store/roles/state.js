@@ -1,5 +1,10 @@
 export default {
   roles: [],
-  role: {},
-  availRoles: []
+  role: {
+    name: '',
+    desc: '',
+    parent_id: ''
+  },
+  subordinateRoles: [],
+  newRoleModal: false
 }

@@ -1,7 +1,9 @@
-export const getRoles = (state) => state.roles
+export const roles = (state) => state.roles
 
-export const getRole = (state) => state.role
+export const role = (state) => state.role
 
-export const getAvailRoles = (state) => state.availRoles
+export const subordinateRoles = (state) => state.subordinateRoles
 
-export const getNewRoleModal = (state) => state.newRoleModal
+export const superiorRoles = (state) => state.superiorRoles
+
+export const newRoleModal = (state) => state.newRoleModal

@@ -1,15 +1,27 @@
-export const SET_ROLES = (state, payload) => {
+export const roles = (state, payload) => {
   state.roles = payload
 }
 
-export const SET_ROLE = (state, payload) => {
+export const role = (state, payload) => {
   state.role = payload
 }
 
-export const SET_NEW_ROLE_MODAL = (state, payload) => {
+export const roleName = (state, payload) => {
+  state.role.name = payload
+}
+
+export const roleDescription = (state, payload) => {
+  state.role.description = payload
+}
+
+export const newRoleModal = (state, payload) => {
   state.newRoleModal = payload
 }
 
-export const SET_AVAIL_ROLES = (state, payload) => {
-  state.availRoles = payload
+export const subordinateRoles = (state, payload) => {
+  state.subordinateRoles = payload
+}
+
+export const superiorRoles = (state, payload) => {
+  state.superiorRoles = payload
 }
