@@ -1,6 +1,6 @@
 <template>
   <q-layout view="Lhh lpr lFf">
-    <q-layout-header>
+    <q-layout-header :reveal="pageMeta.hasTabs ? false : true">
       <q-toolbar color="primary" :inverted="$q.theme === 'ios'">
         <q-btn flat dense round @click="leftDrawerOpen = !leftDrawerOpen" aria-label="Menu">
           <q-icon name="menu" />

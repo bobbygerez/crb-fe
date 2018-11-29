@@ -7,9 +7,15 @@ export default {
   provinces: [],
   regions: [],
   countries: [],
+  pageMeta: {},
   tableViewSettings: {
     mode: 'list',
-    icon: 'mdi-view-grid'
+    icon: 'mdi-view-grid',
+    innerLoading: false
   },
-  pageMeta: {}
+  locationData: {
+    barangayView: false,
+    cityView: false,
+    location: null
+  } // for getting addresses
 }

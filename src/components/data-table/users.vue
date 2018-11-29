@@ -260,15 +260,36 @@
               float-label="City"
               clearable
               chips
+              :after="[
+                  {
+                    icon: 'mdi-magnify',
+                    handler () {
+                      addressType = 'present'
+                      $refs.cityTable.show()
+                      // do something
+                    }
+                  }
+                ]"
             />
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-select
               v-model="user.address.brgy_id"
               :options="brgys"
-              float-label="City"
+              float-label="Brgy"
               clearable
               chips
+              :after="[
+                  {
+                    icon: 'mdi-magnify',
+                    handler () {
+                      addressType = 'present'
+                      $refs.barangayTable.show()
+                      // openTableBarangay('present')
+                      // do something
+                    }
+                  }
+                ]"
             />
           </div>
         </div>
@@ -510,6 +531,8 @@
 
       </div>
     </q-modal>
+    <barangay-table ref="barangayTable" :params="addressType" @barangay-location-selected="locationSelected"/>
+    <city-table ref="cityTable" :params="addressType" @city-location-selected="locationSelected"/>
   </div>
 </template>
 
@@ -517,9 +540,17 @@
 import { values } from 'lodash'
 import { mapUserFields } from '../../store/users'
 
+import BarangayTable from 'components/location-provider/barangay-view'
+import CityTable from 'components/location-provider/city-view'
+
 export default {
+  components: {
+    BarangayTable,
+    CityTable
+  },
   data () {
     return {
+      addressType: 'home',
       model: '2016-10-24T10:40:14.674Z',
       selectedRoles: [],
       editUserModal: false,
@@ -758,6 +789,21 @@ export default {
         .then(res => {
           this.$store.dispatch('users/setRoles', res.data.roles)
         })
+    },
+    locationSelected (loc, where) {
+      console.log('locationSelected =>', loc)
+      console.log('locationSelected where =>', where)
+      // if (location) {
+      //   let address = {
+      //     brgy: loc.description,
+      //     city: loc.city.description,
+      //     province: loc.province.description,
+      //     region: loc.region.description,
+      //     country: loc.region.country.description
+      //   }
+      //   // set the address fields based on type
+      //   this.setAddressFields(where, address)
+      // }
     }
   },
   mounted () {
