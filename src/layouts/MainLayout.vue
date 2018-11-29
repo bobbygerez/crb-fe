@@ -82,6 +82,7 @@ export default {
   },
   methods: {
     logout () {
+      this.$axios.post('logout');
       this.$q.dialog({
         title: 'Logout',
         message: 'Are you sure you want to logout?',

@@ -15,23 +15,13 @@ const routes = [
       }
     }]
   },
+
   {
-    path: '/dashboard/submenu/:id/holdings',
+    path: '/dashboard/submenu/:submenu/users',
     component: () => import('layouts/MainLayout.vue'),
     children: [{
       path: '',
-      component: () => import('pages/dashboard/submenu/holdings/index.vue')
-    }],
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/dashboard/submenu/:submenu/companies',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{
-      path: '',
-      component: () => import('pages/dashboard/submenu/companies/index.vue')
+      component: () => import('pages/dashboard/submenu/users/index.vue')
     }],
     meta: {
       requiresAuth: true
@@ -60,11 +50,11 @@ const routes = [
     }
   },
   {
-    path: '/dashboard/submenu/:submenu/users',
+    path: '/dashboard/submenu/:submenu/access-right',
     component: () => import('layouts/MainLayout.vue'),
     children: [{
       path: '',
-      component: () => import('pages/dashboard/submenu/users/index.vue')
+      component: () => import('pages/dashboard/submenu/access-right/index.vue')
     }],
     meta: {
       requiresAuth: true
@@ -83,11 +73,22 @@ const routes = [
     }
   },
   {
-    path: '/dashboard/submenu/:submenu/holdings/:holding/branches',
+    path: '/dashboard/submenu/:submenu/companies',
     component: () => import('layouts/MainLayout.vue'),
     children: [{
       path: '',
-      component: () => import('pages/dashboard/submenu/holdings/index.vue')
+      component: () => import('pages/dashboard/submenu/companies/index.vue')
+    }],
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/dashboard/submenu/:submenu/branches',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{
+      path: '',
+      component: () => import('pages/dashboard/submenu/branches/index.vue')
     }],
     meta: {
       requiresAuth: true

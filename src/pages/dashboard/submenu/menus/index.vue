@@ -20,12 +20,14 @@
 import menus from 'components/data-table/menus.vue'
 export default {
   methods: {
-    showNewmenu () {
-      this.$store.dispatch('menus/menu', {
-        name: '',
-        parent_id: '',
-        description: ''
-      })
+     showNewmenu(){
+       this.$store.dispatch("menus/menu", {
+          name: '',
+          parent_id: 0,
+          description: ''
+      });
+
+
       this.$store.dispatch('menus/newMenuModal', true)
     }
   },

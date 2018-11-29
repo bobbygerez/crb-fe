@@ -164,22 +164,41 @@
       <div style="padding: 30px">
         <div class="row">
           <div class="col-xs-12 col-sm-6">
+<<<<<<< HEAD
+            <div class="q-display-1 q-mb-md">New Menu</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 col-sm-6">
+            <q-input v-model="menu.name" float-label="Name" clearable/>
+=======
             <q-input
               v-model="menu.name"
               float-label="Name"
               clearable
             />
+>>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
           </div>
           <div class="col-xs-12 col-sm-6">
             <q-select
               v-model="menu.parent_id"
-              :options="superiorMenus"
+              :options="userMenus"
               float-label="Parent"
               clearable
               chips
             />
           </div>
+          <div class="col-xs-12 col-sm-12">
+            <q-input
+              v-model="menu.description"
+              type="textarea"
+              float-label="Description"
+              :max-height="100"
+              rows="2"
+            />
+          </div>
         </div>
+        
         <br>
         <q-btn
           color="red"
@@ -233,7 +252,18 @@ export default {
     }
   },
   computed: {
-    ...mapState('menus', ['menus', 'menu']),
+    ...mapState("menus", ["menus", "menu"]),
+    userMenus: {
+      get() {
+        return this.$store.getters["menus/userMenus"].map(e => {
+          return {
+            label: e.name,
+            value: e.id
+          };
+        });
+      },
+      set(val) {}
+    },
     superiorMenus: {
       get () {
         return this.$store.getters['menus/superiorMenus'].map(e => {
@@ -278,11 +308,10 @@ export default {
   methods: {
     store () {
       this.$axios
-        .post(`/roles`, {
-          id: this.role.id,
-          name: this.role.name,
-          description: this.role.description,
-          parent_id: this.role.parent_id
+        .post(`/menus`, {
+          name: this.menu.name,
+          description: this.menu.description,
+          parent_id: this.menu.parent_id
         })
         .then(res => {
           this.hideModal()
@@ -291,35 +320,40 @@ export default {
             filter: this.filter
           })
           this.$q.notify({
-            color: 'positive',
-            icon: 'check',
-            message: `${this.role.name}created successfully`
-          })
-        })
+            color: "positive",
+            icon: "check",
+            message: `${this.menu.name}created successfully`
+          });
+          this.request({
+            pagination: this.serverPagination,
+            filter: this.filter
+          });
+        });
     },
-    deleteRow (roleId) {
-      this.$axios.get(`/roles/${roleId}?id=${roleId}`).then(res => {
-        this.$store.dispatch('roles/role', res.data.role)
+    deleteRow(menuId) {
+      this.$axios.get(`/menus/${menuId}?id=${menuId}`).then(res => {
+        this.$store.dispatch("menus/menu", res.data.menu);
         this.$q.notify({
-          color: 'negative',
-          icon: 'delete',
-          message: `Delete ${res.data.role.name} ?`,
+          color: "negative",
+          icon: "delete",
+          message: `Delete ${res.data.menu.name} ?`,
           actions: [
             {
               label: 'OK',
               handler: () => {
                 this.$axios
-                  .delete(`/roles/${this.role.id}?id=${this.role.id}`)
+                  .delete(`/menus/${this.menu.id}?id=${this.menu.id}`)
                   .then(res => {
                     this.$q.notify({
-                      color: 'positive',
-                      icon: 'check',
-                      message: `${this.role.name} deleted successfully`
-                    })
+                      color: "positive",
+                      icon: "check",
+                      message: `${this.menu.name} deleted successfully`
+                    });
                     this.request({
                       pagination: this.serverPagination,
                       filter: this.filter
-                    })
+                    });
+                     this.hideModal();
                   })
                   .catch(err => {
                     this.$q.notify({
@@ -358,9 +392,9 @@ export default {
         })
         .catch()
     },
-    hideModal () {
-      this.newRoleModal = false
-      this.editRoleModal = false
+    hideModal() {
+      this.$store.dispatch('menus/newMenuModal', false);
+      this.editRoleModal = false;
     },
     showModal () {
       this.editRoleModal = true
@@ -401,20 +435,21 @@ export default {
         this.$store.dispatch('menus/submenus', res.data.submenus)
       })
     },
-    subordinateRoles () {
-      this.$axios.get(`/user-subordinate-roles`).then(res => {
+    userSubMenus() {
+      this.$axios.get(`/user-sub-menus`).then(res => {
         this.$store.dispatch(
-          'roles/subordinateRoles',
-          res.data.subordinateRoles
-        )
-      })
+          "menus/userMenus",
+          res.data.menus
+        );
+      });
     }
   },
   mounted () {
     this.request({
       pagination: this.serverPagination,
       filter: this.filter
-    })
+    });
+    this.userSubMenus()
   },
   watch: {
     'menu.name' (val) {

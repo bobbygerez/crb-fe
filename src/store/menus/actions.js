@@ -29,3 +29,7 @@ export const submenus = ({commit}, payload) => {
 export const newMenuModal = ({commit}, payload) => {
   commit('newMenuModal', payload)
 }
+
+export const userMenus = ({commit}, payload) => {
+  commit('userMenus', payload)
+}
