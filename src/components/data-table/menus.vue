@@ -252,7 +252,6 @@ export default {
     }
   },
   computed: {
-<<<<<<< HEAD
     ...mapState("menus", ["menus", "menu"]),
     userMenus: {
       get() {
@@ -265,9 +264,6 @@ export default {
       },
       set(val) {}
     },
-=======
-    ...mapState('menus', ['menus', 'menu']),
->>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
     superiorMenus: {
       get () {
         return this.$store.getters['menus/superiorMenus'].map(e => {
@@ -324,7 +320,6 @@ export default {
             filter: this.filter
           })
           this.$q.notify({
-<<<<<<< HEAD
             color: "positive",
             icon: "check",
             message: `${this.menu.name}created successfully`
@@ -342,21 +337,6 @@ export default {
           color: "negative",
           icon: "delete",
           message: `Delete ${res.data.menu.name} ?`,
-=======
-            color: 'positive',
-            icon: 'check',
-            message: `${this.role.name}created successfully`
-          })
-        })
-    },
-    deleteRow (roleId) {
-      this.$axios.get(`/roles/${roleId}?id=${roleId}`).then(res => {
-        this.$store.dispatch('roles/role', res.data.role)
-        this.$q.notify({
-          color: 'negative',
-          icon: 'delete',
-          message: `Delete ${res.data.role.name} ?`,
->>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
           actions: [
             {
               label: 'OK',
@@ -365,7 +345,6 @@ export default {
                   .delete(`/menus/${this.menu.id}?id=${this.menu.id}`)
                   .then(res => {
                     this.$q.notify({
-<<<<<<< HEAD
                       color: "positive",
                       icon: "check",
                       message: `${this.menu.name} deleted successfully`
@@ -375,16 +354,6 @@ export default {
                       filter: this.filter
                     });
                      this.hideModal();
-=======
-                      color: 'positive',
-                      icon: 'check',
-                      message: `${this.role.name} deleted successfully`
-                    })
-                    this.request({
-                      pagination: this.serverPagination,
-                      filter: this.filter
-                    })
->>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
                   })
                   .catch(err => {
                     this.$q.notify({
@@ -423,15 +392,9 @@ export default {
         })
         .catch()
     },
-<<<<<<< HEAD
     hideModal() {
       this.$store.dispatch('menus/newMenuModal', false);
       this.editRoleModal = false;
-=======
-    hideModal () {
-      this.newRoleModal = false
-      this.editRoleModal = false
->>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
     },
     showModal () {
       this.editRoleModal = true
@@ -472,7 +435,6 @@ export default {
         this.$store.dispatch('menus/submenus', res.data.submenus)
       })
     },
-<<<<<<< HEAD
     userSubMenus() {
       this.$axios.get(`/user-sub-menus`).then(res => {
         this.$store.dispatch(
@@ -480,27 +442,14 @@ export default {
           res.data.menus
         );
       });
-=======
-    subordinateRoles () {
-      this.$axios.get(`/user-subordinate-roles`).then(res => {
-        this.$store.dispatch(
-          'roles/subordinateRoles',
-          res.data.subordinateRoles
-        )
-      })
->>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
     }
   },
   mounted () {
     this.request({
       pagination: this.serverPagination,
       filter: this.filter
-<<<<<<< HEAD
     });
     this.userSubMenus()
-=======
-    })
->>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
   },
   watch: {
     'menu.name' (val) {

@@ -87,8 +87,6 @@ module.exports = function (ctx) {
     //   // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
     //   // i18n: 'de' // Quasar language
     // },
-
-<<<<<<< HEAD
     framework: {
       components: [
         'QTooltip',
@@ -151,69 +149,6 @@ module.exports = function (ctx) {
       // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
       // i18n: 'de' // Quasar language
     },
-=======
-    // framework: {
-    //   components: [
-    //     'QPopover',
-    //     'QPageSticky',
-    //     'QDatetime',
-    //     'QDatetimePicker',
-    //     'QChip',
-    //     'QToggle',
-    //     'QTree',
-    //     'QChipsInput',
-    //     'QModal',
-    //     'QPopupEdit',
-    //     'QTh',
-    //     'QCheckbox',
-    //     'QTd',
-    //     'QTr',
-    //     'QTable',
-    //     'QTableColumns',
-    //     'QSelect',
-    //     'QAlert',
-    //     'QAutocomplete',
-    //     'QSearch',
-    //     'QCard',
-    //     'QCardTitle',
-    //     'QCardMain',
-    //     'QCardMedia',
-    //     'QCardSeparator',
-    //     'QCardActions',
-    //     'QInput',
-    //     'QDialog',
-    //     'QField',
-    //     'QBtnDropdown',
-    //     'QLayout',
-    //     'QLayoutHeader',
-    //     'QLayoutDrawer',
-    //     'QPageContainer',
-    //     'QPage',
-    //     'QToolbar',
-    //     'QToolbarTitle',
-    //     'QBtn',
-    //     'QIcon',
-    //     'QItemTile',
-    //     'QList',
-    //     'QListHeader',
-    //     'QCollapsible',
-    //     'QItem',
-    //     'QItemMain',
-    //     'QItemSide',
-    //     'QItemSeparator',
-    //     'QRating'
-    //   ],
-    //   directives: [
-    //     'Ripple', 'CloseOverlay'
-    //   ],
-    //   // Quasar plugins
-    //   plugins: [
-    //     'Notify'
-    //   ]
-    //   // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
-    //   // i18n: 'de' // Quasar language
-    // },
->>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
 
     // animations: 'all' --- includes all animations
     animations: 'all',

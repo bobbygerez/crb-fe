@@ -50,11 +50,7 @@ const routes = [
     }
   },
   {
-<<<<<<< HEAD
     path: '/dashboard/submenu/:submenu/access-right',
-=======
-    path: '/dashboard/submenu/:submenu/menus',
->>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
     component: () => import('layouts/MainLayout.vue'),
     children: [{
       path: '',

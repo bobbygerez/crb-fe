@@ -20,7 +20,6 @@
 import menus from 'components/data-table/menus.vue'
 export default {
   methods: {
-<<<<<<< HEAD
      showNewmenu(){
        this.$store.dispatch("menus/menu", {
           name: '',
@@ -29,14 +28,6 @@ export default {
       });
 
 
-=======
-    showNewmenu () {
-      this.$store.dispatch('menus/menu', {
-        name: '',
-        parent_id: '',
-        description: ''
-      })
->>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
       this.$store.dispatch('menus/newMenuModal', true)
     }
   },

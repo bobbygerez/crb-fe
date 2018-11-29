@@ -273,32 +273,6 @@ export default {
     }
   },
   computed: {
-<<<<<<< HEAD
-    ...mapState('roles', ['roles', 'role', 'newRoleModal']),
-    superiorRoles: {
-      get() {
-        let superiorRoles = this.$store.getters["roles/superiorRoles"];
-        if (superiorRoles === undefined){ return [] }
-        return this.$store.getters["roles/superiorRoles"].map(e => {
-          return {
-            label: e.name,
-            value: e.id
-          }
-        })
-      },
-      set (val) {}
-    },
-    subordinateRoles: {
-      get () {
-        return this.$store.getters['roles/subordinateRoles'].map(e => {
-          return {
-            label: e.name,
-            value: e.id
-          }
-        })
-      },
-      set (val) {}
-=======
     ...mapRoleFields(['roles', 'role', 'newRoleModal', 'superiorRoles', 'subordinateRoles']),
     superiorRoleOptions () {
       return this.superiorRoles.map(e => {
@@ -307,7 +281,6 @@ export default {
           value: e.id
         }
       })
->>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
     },
     subordinateRoleOptions () {
       return this.subordinateRoles.map(e => {
