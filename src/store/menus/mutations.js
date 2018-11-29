@@ -29,3 +29,7 @@ export const submenus = (state, payload) => {
 export const newMenuModal = (state, payload) => {
   state.newMenuModal = payload
 }
+
+export const userMenus = (state, payload) => {
+  state.userMenus = payload
+}

@@ -7,5 +7,6 @@ export default {
   },
   superiorMenus: [],
   submenus: [],
-  newMenuModal: false
+  newMenuModal: false,
+  userMenus: []
 }

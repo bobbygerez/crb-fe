@@ -90,6 +90,7 @@ module.exports = function (ctx) {
 
     framework: {
       components: [
+        'QTooltip',
         'QPopover',
         'QPageSticky',
         'QDatetime',

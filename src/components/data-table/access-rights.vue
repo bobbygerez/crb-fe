@@ -3,7 +3,7 @@
     <q-table
       ref="table"
       color="primary"
-      title="All Menus"
+      title="All Access-Rights"
       :data="serverData"
       :columns="columns"
       :filter="filter"
@@ -73,7 +73,7 @@
     </q-table>
 
     <q-modal
-      v-model="editMenuModal"
+      v-model="editAccessRightModal"
       minimized
       no-esc-dismiss
       no-backdrop-dismiss
@@ -81,52 +81,22 @@
     >
       <div style="padding: 30px">
         <div class="row">
-          <div class="col-xs-12 col-sm-6">
-            <div class="q-display-1 q-mb-md">Edit {{ menu.name }}</div>
+          <div class="col-xs-12 ">
+            <div class="q-display-1 q-mb-md">Edit {{ accessRight.name }}</div>
           </div>
         </div>
         <div class="row">
-          <div class="col-xs-12 col-sm-6">
-            <q-input v-model="menu.name" float-label="Name" clearable/>
-          </div>
-          <div class="col-xs-12 col-sm-6">
-            <q-select
-              v-model="menu.parent_id"
-              :options="superiorMenus"
-              float-label="Parent"
-              clearable
-              chips
-            />
-          </div>
-          <div class="col-xs-12 col-sm-12">
-            <q-select
-              multiple
-              v-model="submenuIds"
-              :options="submenus"
-              float-label="Submenu"
-              chips
-              readonly
-              hide-underline
-            />
-          </div>
-          <div class="col-xs-12 col-sm-12">
-            <q-input
-              v-model="menu.description"
-              type="textarea"
-              float-label="Description"
-              :max-height="100"
-              rows="2"
-            />
+          <div class="col-xs-12 ">
+            <q-input v-model="accessRight.name" float-label="Name" clearable/>
           </div>
         </div>
-
         <br>
         <q-btn color="red" v-close-overlay label="Close" @click="hideModal()"/>
         <q-btn color="primary" @click="update()" label="Submit" class="q-ml-sm"/>
       </div>
     </q-modal>
     <q-modal
-      v-model="newMenuModal"
+      v-model="newAccessRightModal"
       minimized
       no-esc-dismiss
       no-backdrop-dismiss
@@ -134,34 +104,15 @@
     >
       <div style="padding: 30px">
         <div class="row">
-          <div class="col-xs-12 col-sm-6">
-            <div class="q-display-1 q-mb-md">New Menu</div>
+          <div class="col-xs-12 ">
+            <div class="q-display-1 q-mb-md">New Access Right</div>
           </div>
         </div>
         <div class="row">
-          <div class="col-xs-12 col-sm-6">
-            <q-input v-model="menu.name" float-label="Name" clearable/>
-          </div>
-          <div class="col-xs-12 col-sm-6">
-            <q-select
-              v-model="menu.parent_id"
-              :options="userMenus"
-              float-label="Parent"
-              clearable
-              chips
-            />
-          </div>
-          <div class="col-xs-12 col-sm-12">
-            <q-input
-              v-model="menu.description"
-              type="textarea"
-              float-label="Description"
-              :max-height="100"
-              rows="2"
-            />
+          <div class="col-xs-12 ">
+            <q-input v-model="accessRight.name" float-label="Name" clearable/>
           </div>
         </div>
-        
         <br>
         <q-btn color="red" v-close-overlay label="Close" @click="hideModal()"/>
         <q-btn color="primary" @click="store()" label="Submit" class="q-ml-sm"/>
@@ -180,7 +131,7 @@ export default {
       model: "2016-10-24T10:40:14.674Z",
       superior: "",
       selectedRoles: [],
-      editMenuModal: false,
+      editAccessRightModal: false,
       options: [5, 10, 15, 20],
       lastPage: "",
       serverData: [],
@@ -193,7 +144,6 @@ export default {
         { name: "name", label: "Name", field: "name", align: "left" },
         {
           name: "submenu",
-          label: "Sub-menu",
           align: "left",
           field: "submenu"
         },
@@ -205,66 +155,21 @@ export default {
     };
   },
   computed: {
-    ...mapState("menus", ["menus", "menu"]),
-    userMenus: {
-      get() {
-        return this.$store.getters["menus/userMenus"].map(e => {
-          return {
-            label: e.name,
-            value: e.id
-          };
-        });
+    ...mapState("accessRights", ["accessRight"]),
+    newAccessRightModal:{
+      get(){
+        return this.$store.getters['accessRights/newAccessRightModal']
       },
-      set(val) {}
-    },
-    superiorMenus: {
-      get() {
-        return this.$store.getters["menus/superiorMenus"].map(e => {
-          return {
-            label: e.name,
-            value: e.id
-          };
-        });
-      },
-      set(val) {}
-    },
-    submenus: {
-      get() {
-        return this.$store.getters["menus/submenus"].map(e => {
-          return {
-            label: e.name,
-            value: e.id
-          };
-        });
-      },
-      set(val) {}
-    },
-    submenuIds: {
-      get() {
-        return this.$store.getters["menus/submenus"].map(e => {
-          return e.id;
-        });
-      },
-      set(val) {
-        this.selectedRoles = val;
-      }
-    },
-    newMenuModal: {
-      get() {
-        return this.$store.getters["menus/newMenuModal"];
-      },
-      set(val) {
-        return this.$store.dispatch("menus/newMenuModal", val);
+      set(){
+
       }
     }
   },
   methods: {
     store() {
       this.$axios
-        .post(`/menus`, {
-          name: this.menu.name,
-          description: this.menu.description,
-          parent_id: this.menu.parent_id
+        .post(`/access_rights`, {
+          name: this.accessRight.name,
         })
         .then(res => {
           this.hideModal();
@@ -275,7 +180,7 @@ export default {
           this.$q.notify({
             color: "positive",
             icon: "check",
-            message: `${this.menu.name}created successfully`
+            message: `${this.accessRight.name}created successfully`
           });
           this.request({
             pagination: this.serverPagination,
@@ -283,24 +188,24 @@ export default {
           });
         });
     },
-    deleteRow(menuId) {
-      this.$axios.get(`/menus/${menuId}?id=${menuId}`).then(res => {
-        this.$store.dispatch("menus/menu", res.data.menu);
+    deleteRow(accessRightId) {
+      this.$axios.get(`/access_rights/${accessRightId}?id=${accessRightId}`).then(res => {
+        this.$store.dispatch("accessRights/accessRight", res.data.accessRight);
         this.$q.notify({
           color: "negative",
           icon: "delete",
-          message: `Delete ${res.data.menu.name} ?`,
+          message: `Delete ${res.data.accessRight.name} ?`,
           actions: [
             {
               label: "OK",
               handler: () => {
                 this.$axios
-                  .delete(`/menus/${this.menu.id}?id=${this.menu.id}`)
+                  .delete(`/access_rights/${this.accessRight.id}?id=${this.accessRight.id}`)
                   .then(res => {
                     this.$q.notify({
                       color: "positive",
                       icon: "check",
-                      message: `${this.menu.name} deleted successfully`
+                      message: `${this.accessRight.name} deleted successfully`
                     });
                     this.request({
                       pagination: this.serverPagination,
@@ -324,18 +229,16 @@ export default {
     },
     update() {
       this.$axios
-        .put(`/menus/${this.menu.id}`, {
-          id: this.menu.id,
-          name: this.menu.name,
-          description: this.menu.description,
-          parent_id: this.menu.parent_id
+        .put(`/access_rights/${this.accessRight.id}`, {
+          id: this.accessRight.id,
+          name: this.accessRight.name
         })
         .then(res => {
           this.editRoleModal = false;
           this.$q.notify({
             color: "positive",
             icon: "check",
-            message: `${this.menu.name} updated successfully`
+            message: `${this.accessRight.name} updated successfully`
           });
           this.request({
             pagination: this.serverPagination,
@@ -346,11 +249,11 @@ export default {
         .catch();
     },
     hideModal() {
-      this.$store.dispatch('menus/newMenuModal', false);
-      this.editRoleModal = false;
+      this.$store.dispatch('accessRights/newAccessRightModal', false);
+      this.editAccessRightModal = false;
     },
     showModal() {
-      this.editRoleModal = true;
+      this.editAccessRightModal = true;
     },
     paginationLast(currentPage) {
       if (this.lastPage > currentPage) {
@@ -362,15 +265,15 @@ export default {
       this.loading = true;
       this.$axios
         .get(
-          `/menus?filter=${this.filter}&page=${props.pagination.page}&perPage=${
+          `/access_rights?filter=${this.filter}&page=${props.pagination.page}&perPage=${
             props.pagination.rowsPerPage
           }`
         )
         .then(res => {
           this.serverPagination = props.pagination;
-          this.serverData = _.values(res.data.menus.data);
-          this.serverPagination.rowsNumber = res.data.menus.total;
-          this.lastPage = res.data.menus.last_page;
+          this.serverData = _.values(res.data.accessRights.data);
+          this.serverPagination.rowsNumber = res.data.accessRights.total;
+          this.lastPage = res.data.accessRights.last_page;
           this.loading = false;
         })
         .catch(error => {
@@ -380,20 +283,10 @@ export default {
           this.loading = false;
         });
     },
-    edit(menuId) {
-      this.$axios.get(`menus/${menuId}/edit?id=${menuId}`).then(res => {
-        this.editMenuModal = true;
-        this.$store.dispatch("menus/menu", res.data.menu);
-        this.$store.dispatch("menus/superiorMenus", res.data.superiorMenus);
-        this.$store.dispatch("menus/submenus", res.data.submenus);
-      });
-    },
-    userSubMenus() {
-      this.$axios.get(`/user-sub-menus`).then(res => {
-        this.$store.dispatch(
-          "menus/userMenus",
-          res.data.menus
-        );
+    edit(accessRightId) {
+      this.$axios.get(`access_rights/${accessRightId}/edit?id=${accessRightId}`).then(res => {
+        this.showModal();
+        this.$store.dispatch("accessRights/accessRight", res.data.accessRight);
       });
     }
   },
@@ -402,17 +295,10 @@ export default {
       pagination: this.serverPagination,
       filter: this.filter
     });
-    this.userSubMenus()
   },
   watch: {
-    "menu.name"(val) {
-      this.$store.dispatch("menus/menuName", val);
-    },
-    "menu.description"(val) {
-      this.$store.dispatch("menus/menuDescription", val);
-    },
-    "menu.parent_id"(val) {
-      this.$store.dispatch("menus/menuParentId", val);
+    "accessRight.name"(val) {
+      this.$store.dispatch("accessRights/accessRightName", val);
     }
   }
 };

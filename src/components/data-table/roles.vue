@@ -220,15 +220,10 @@ export default {
   computed: {
     ...mapState('roles', ['roles', 'role', 'newRoleModal']),
     superiorRoles: {
-<<<<<<< HEAD
       get() {
         let superiorRoles = this.$store.getters["roles/superiorRoles"];
         if (superiorRoles === undefined){ return [] }
         return this.$store.getters["roles/superiorRoles"].map(e => {
-=======
-      get () {
-        return this.$store.getters['roles/superiorRoles'].map(e => {
->>>>>>> d59f2e0f57a6738246381aef5830c0f62e51d04f
           return {
             label: e.name,
             value: e.id

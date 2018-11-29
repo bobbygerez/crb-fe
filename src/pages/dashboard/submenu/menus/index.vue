@@ -17,9 +17,11 @@ export default {
      showNewmenu(){
        this.$store.dispatch("menus/menu", {
           name: '',
-          parent_id: '',
+          parent_id: 0,
           description: ''
       });
+
+
       this.$store.dispatch('menus/newMenuModal', true)
     }
   },
