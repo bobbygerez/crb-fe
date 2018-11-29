@@ -6,19 +6,32 @@
           <q-btn flat round dense @click="$refs.modalCity.hide()">
             <q-icon name="keyboard_arrow_left" />
           </q-btn>
+          <!-- <q-toolbar-title> -->
+            <div class="col-6 col-md-4">
+              <q-input :before="[{icon:'mdi-magnify'}]" color="none" hide-underline placeholder="Search Cities" clearable v-model="filter" @input="searchCities" @focus="showMaxResult = true" @blur="checkFilterStatus" />
+            </div>            
+            <div class="col-2 col-md-2" v-if="showMaxResult === true">
+              <q-select placeholder="Results" :prefix="!$q.screen.xs ? 'Result: ' : ''" color="none" v-model="maxResult" @focus="showMaxResult = true" @input="searchCities" :options="[
+                    { label: '5', value: 5 },
+                    { label: '10', value: 10 },
+                    { label: '20', value: 20, selected: true },
+                    { label: '50', value: 50 },
+                    { label: '100', value: 100 }
+                  ]" hide-underline />
+            </div>
+          <!-- </q-toolbar-title> -->
           <q-toolbar-title>
-            Select City
           </q-toolbar-title>
           <table-view-mode-action />
         </q-toolbar>
         <!-- conditional rendering, shows table on list or grid view depending on the selected view mode -->
-        <template v-if="tableViewSettings.mode === 'grid'">
-          <div class="q-mx-sm q-my-sm">
+        <!-- <template v-if="tableViewSettings.mode === 'grid'"> -->
+          <div v-if="tableViewSettings.mode === 'grid'" class="q-mx-sm q-my-sm">
             <q-inner-loading :visible="loading">
               <q-spinner color="secondary" :size="30" />
             </q-inner-loading>
             <q-table grid selection="single" :pagination.sync="pagination" :rows-per-page-options="[5, 10, 20, 50, 100, 0]" hide-header :data="data" :columns="columns" :filter="filter" :selected.sync="selected" :visible-columns="visibleColumns" row-key="__index" color="secondary">
-              <template slot="top-left" slot-scope="props">
+              <!-- <template slot="top-left" slot-scope="props">
                 <q-search hide-underline color="primary" clearable v-model="filter" @input="searchCities" @focus="showMaxResult = true" @blur="checkFilterStatus" />
                 <template v-if="showMaxResult === true">
                   <div class="caption">Results: </div>
@@ -30,7 +43,7 @@
                     { label: '100', value: 100 }
                   ]" hide-underline />
                 </template>
-              </template>
+              </template> -->
               <div slot="item" slot-scope="props" class="q-pa-xs col-xs-12 col-sm-6 col-md-4 transition-generic" :style="props.selected ? 'transform: scale(0.95);' : ''">
                 <q-card class="transition-generic cursor-pointer" :class="props.selected ? 'bg-grey-2' : ''" @click.native="setSelected(props.row.__index, props), props.selected = true">
                   <q-card-title class="relative-position">
@@ -61,9 +74,9 @@
               </q-btn>
             </q-page-sticky>
           </div>
-        </template>
-        <template v-else-if="tableViewSettings.mode === 'list'">
-          <div class="q-mx-sm q-my-sm">
+        <!-- </template> -->
+        <!-- <template > -->
+          <div v-if="tableViewSettings.mode === 'list'" class="q-mx-sm q-my-sm">
             <q-table binary-state-sort :rows-per-page-options="[5, 10, 20, 50, 100, 0]" :pagination.sync="pagination" :selected.sync="selected" :loading="loading" :data="data" :columns="columns" :filter="filter" :visible-columns="visibleColumns" :separator="separator" row-key="__index" color="secondary">
               <template slot="top-left" slot-scope="props">
                 <q-search hide-underline color="primary" clearable v-model="filter" class="col-8" @input="searchCities" @focus="showMaxResult = true" @blur="checkFilterStatus" />
@@ -105,7 +118,7 @@
               </q-btn>
             </q-page-sticky>
           </div>
-        </template>
+        <!-- </template> -->
         <q-page-sticky position="bottom-right" :offset="[18, 60]">
           <q-btn color="primary" fab v-back-to-top.animate="{offset: 500, duration: 200}" class="animate-pop">
             <q-icon name="keyboard_arrow_up" />
@@ -113,7 +126,7 @@
         </q-page-sticky>
       </q-modal-layout>
     </q-modal>
-    <q-modal v-model="opened" ref="cityBrgyModal" minimized>
+    <q-modal v-model="opened" ref="cityBrgyModal" minimized :content-css="{top: '-150px'}">
       <q-inner-loading :visible="visible">
         <q-spinner-gears size="50px" color="primary"></q-spinner-gears>
       </q-inner-loading>
@@ -262,7 +275,8 @@ export default {
         return
       }
       this.loading = true
-      debounce(this.getCities(), 500)
+      // debounce(this.getCities(), 1000)
+      this.debouncedFunction()
     },
     getCities () {
       this.$axios.get(`/cities-by-name/${this.filter}/${this.maxResult}`)
@@ -278,6 +292,7 @@ export default {
   },
   created () {
     console.log('city-view opened')
+    console.log('quasawr =>', this.$q)
     this.loading = true
     this.$axios.get(`/cities-by-name/random-cities/5`)
       .then(res => {
@@ -289,6 +304,10 @@ export default {
         this.loading = false
         console.log(err.data)
       })
+
+    this.debouncedFunction = debounce(() => {
+      this.getCities()
+    }, 500)
   }
 }
 

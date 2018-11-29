@@ -47,7 +47,7 @@
             key="created_at"
             :props="props"
           >{{props.row.created_at}}</q-td>
-          <q-td
+          <!-- <q-td
             key="actions"
             :props="props"
           >
@@ -67,7 +67,23 @@
               class="q-ma-sm"
               @click="deleteRow(props.row.id)"
             />
-          </q-td>
+          </q-td> -->
+          <q-popover touch-position>
+            <q-list link style="min-width: 100px">
+              <!-- <q-item :to="currentRoute + '/' + props.row.id + '/view'">
+                <q-item-main label="View" />
+              </q-item> -->
+              <q-item @click.native="edit(props.row.id)" v-close-overlay>
+                <q-item-main label="Edit" />
+              </q-item>
+              <q-item @click.native="deleteRow(props.row.id)" v-close-overlay>
+                <q-item-main label="Delete" />
+              </q-item>
+            </q-list>
+          </q-popover>
+          <q-tooltip v-if="!$q.platform.is.cordova" :delay="500" anchor="bottom middle" self="bottom middle" :offset="[10, 10]">
+            Click to see options.
+          </q-tooltip>
         </q-tr>
 
       </template>
@@ -104,11 +120,11 @@
     <br />
     <q-modal
       v-model="newHoldingModal"
-      minimized
       no-esc-dismiss
       no-backdrop-dismiss
       :content-css="{minWidth: '80vw', minHeight: '80vh'}"
-    >
+      >
+
       <div style="padding: 30px">
         <div class="q-display-1 q-mb-md">New Holding</div>
 
@@ -397,7 +413,7 @@
 <script>
 // import tableData from 'assets/table-data'
 import { mapState } from 'vuex'
-import _ from 'lodash'
+import { values } from 'lodash'
 export default {
   data () {
     return {
@@ -431,12 +447,13 @@ export default {
           align: 'left',
           sortable: true
 
-        },
-        { name: 'actions',
-          label: 'Actions',
-          align: 'left'
-
         }
+        // ,
+        // { name: 'actions',
+        //   label: 'Actions',
+        //   align: 'left'
+
+        // }
       ],
       filter: '',
       visibleColumns: ['name', 'address', 'created_at', 'actions'],
@@ -518,7 +535,7 @@ export default {
     },
     ...mapState('pattys', ['holding', 'newHoldingModal']),
     holdings () {
-      return _.values(this.$store.getters['pattys/getHoldings'])
+      return values(this.$store.getters['pattys/getHoldings'])
     },
     // perPage () {
     //   return this.$store.getters['pattys/holdings']
