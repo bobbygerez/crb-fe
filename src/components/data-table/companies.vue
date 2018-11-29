@@ -1,11 +1,32 @@
 <template>
   <div>
-    <q-table ref="table" color="primary" title="All Companies" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
-      <template slot="top-right" slot-scope="props">
-        <q-search hide-underline v-model="filter" />
+    <q-table
+      ref="table"
+      color="primary"
+      title="All Companies"
+      :data="serverData"
+      :columns="columns"
+      :filter="filter"
+      row-key="name"
+      :pagination.sync="serverPagination"
+      :rows-per-page-options="options"
+      @request="request"
+      :loading="loading"
+    >
+      <template
+        slot="top-right"
+        slot-scope="props"
+      >
+        <q-search
+          hide-underline
+          v-model="filter"
+        />
       </template>
 
-      <template slot="body" slot-scope="props">
+      <template
+        slot="body"
+        slot-scope="props"
+      >
         <q-tr :props="props">
           <q-td key="company">
             {{props.row.name}}
@@ -13,7 +34,10 @@
           <q-td key="holding">
             {{props.row.holding.name}}
           </q-td>
-          <q-td key="address" :props="props">
+          <q-td
+            key="address"
+            :props="props"
+          >
             {{props.row.address.street_lot_blk}}
             <br />
             {{props.row.address.brgy.description}}
@@ -23,90 +47,221 @@
             {{props.row.address.region.description }}
 
           </q-td>
-          <q-td key="created" :props="props">
+          <q-td
+            key="created"
+            :props="props"
+          >
             {{props.row.created_at}}
           </q-td>
-          <q-td key="actions" :props="props">
-            <q-btn round outline color="positive" icon="edit" class="q-ma-sm" @click="edit(props.row.id)" />
-            <q-btn round outline color="negative" icon="delete" class="q-ma-sm" @click="deleteRow(props.row.id)" />
+          <q-td
+            key="actions"
+            :props="props"
+          >
+            <q-btn
+              round
+              outline
+              color="positive"
+              icon="edit"
+              class="q-ma-sm"
+              @click="edit(props.row.id)"
+            />
+            <q-btn
+              round
+              outline
+              color="negative"
+              icon="delete"
+              class="q-ma-sm"
+              @click="deleteRow(props.row.id)"
+            />
           </q-td>
         </q-tr>
 
       </template>
 
-      <div slot="pagination" slot-scope="props" class="row flex-center q-py-sm">
-        <q-btn round dense size="sm" icon="undo" color="secondary" class="q-mr-sm" :disable="props.isFirstPage" @click="props.prevPage" />
-        <div class="q-mr-sm" style="font-size: small">
+      <div
+        slot="pagination"
+        slot-scope="props"
+        class="row flex-center q-py-sm"
+      >
+        <q-btn
+          round
+          dense
+          size="sm"
+          icon="undo"
+          color="secondary"
+          class="q-mr-sm"
+          :disable="props.isFirstPage"
+          @click="props.prevPage"
+        />
+        <div
+          class="q-mr-sm"
+          style="font-size: small"
+        >
           Page {{ props.pagination.page }} / {{ props.pagination.pagesNumber }}
         </div>
-        <q-btn round dense size="sm" icon="redo" color="secondary" :disable="paginationLast(props.pagination.page)" @click="props.nextPage" />
+        <q-btn
+          round
+          dense
+          size="sm"
+          icon="redo"
+          color="secondary"
+          :disable="paginationLast(props.pagination.page)"
+          @click="props.nextPage"
+        />
       </div>
 
     </q-table>
 
-    <q-modal v-model="editCompanyModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    <q-modal
+      v-model="editCompanyModal"
+      minimized
+      no-esc-dismiss
+      no-backdrop-dismiss
+      :content-css="{minWidth: '80vw', minHeight: '80vh'}"
+    >
       <div style="padding: 30px">
         <div class="q-display-1 q-mb-md">Edit {{ company.name }}</div>
 
         <div class="row">
           <div class="col-xs-12 col-sm-3">
-            <q-select v-model="company.holding_id" :options="holdings" float-label="Holdings" />
+            <q-select
+              v-model="company.holding_id"
+              :options="holdings"
+              float-label="Holdings"
+            />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-input v-model="company.name" float-label="Company name" clearable />
+            <q-input
+              v-model="company.name"
+              float-label="Company name"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-select v-model="company.business_info.business_type_id" :options="businessTypes" float-label="Business Type" clearable />
+            <q-select
+              v-model="company.business_info.business_type_id"
+              :options="businessTypes"
+              float-label="Business Type"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-select v-model="company.business_info.vat_type_id" :options="vatTypes" float-label="Vat Type" clearable />
+            <q-select
+              v-model="company.business_info.vat_type_id"
+              :options="vatTypes"
+              float-label="Vat Type"
+              clearable
+            />
           </div>
         </div>
 
         <div class="row">
           <div class="col-xs-12 col-sm-3">
-            <q-input v-model="company.business_info.telephone" float-label="Telephone" clearable />
+            <q-input
+              v-model="company.business_info.telephone"
+              float-label="Telephone"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-input v-model="company.business_info.email" float-label="Email" clearable />
+            <q-input
+              v-model="company.business_info.email"
+              float-label="Email"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-input v-model="company.business_info.tin" float-label="TIN" clearable />
+            <q-input
+              v-model="company.business_info.tin"
+              float-label="TIN"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-input v-model="company.business_info.website" float-label="Website" clearable />
+            <q-input
+              v-model="company.business_info.website"
+              float-label="Website"
+              clearable
+            />
           </div>
         </div>
 
         <div class="col-xs-12 col-sm-12">
-          <q-input v-model="company.desc" type="textarea" float-label="Description" :max-height="100" rows="2" />
+          <q-input
+            v-model="company.desc"
+            type="textarea"
+            float-label="Description"
+            :max-height="100"
+            rows="2"
+          />
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-6">
-            <q-select v-model="company.address.country_id" :options="countries" float-label="Country" clearable />
+            <q-select
+              v-model="company.address.country_id"
+              :options="countries"
+              float-label="Country"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-6">
-            <q-select v-model="company.address.region_id" :options="regions" float-label="Region" clearable />
+            <q-select
+              v-model="company.address.region_id"
+              :options="regions"
+              float-label="Region"
+              clearable
+            />
           </div>
 
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-4">
-            <q-select v-model="company.address.province_id" :options="provinces" float-label="Province" clearable />
+            <q-select
+              v-model="company.address.province_id"
+              :options="provinces"
+              float-label="Province"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-4">
-            <q-select v-model="company.address.city_id" :options="cities" float-label="City" clearable />
+            <q-select
+              v-model="company.address.city_id"
+              :options="cities"
+              float-label="City"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-4">
-            <q-select v-model="company.address.brgy_id" :options="brgys" float-label="Barangay" clearable />
+            <q-select
+              v-model="company.address.brgy_id"
+              :options="brgys"
+              float-label="Barangay"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-12">
-            <q-input v-model="company.address.street_lot_blk" type="textarea" float-label="Block, Lot &amp; Street" :max-height="100" rows="2" />
+            <q-input
+              v-model="company.address.street_lot_blk"
+              type="textarea"
+              float-label="Block, Lot &amp; Street"
+              :max-height="100"
+              rows="2"
+            />
           </div>
         </div>
         <br />
-        <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
-        <q-btn color="primary" @click="update()" label="Submit" class="q-ml-sm" />
+        <q-btn
+          color="red"
+          v-close-overlay
+          label="Close"
+          @click="hideModal()"
+        />
+        <q-btn
+          color="primary"
+          @click="update()"
+          label="Submit"
+          class="q-ml-sm"
+        />
 
       </div>
     </q-modal>

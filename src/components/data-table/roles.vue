@@ -13,23 +13,44 @@
       @request="request"
       :loading="loading"
     >
-      <template slot="top-right" slot-scope="props">
-        <q-search hide-underline v-model="filter"/>
+      <template
+        slot="top-right"
+        slot-scope="props"
+      >
+        <q-search
+          hide-underline
+          v-model="filter"
+        />
       </template>
 
-      <template slot="body" slot-scope="props">
+      <template
+        slot="body"
+        slot-scope="props"
+      >
         <q-tr :props="props">
           <q-td key="name">{{props.row.name }}</q-td>
           <q-td key="superior">
-            <span v-for="(superior, i) in props.row.parents" :key="i">{{ superior.name }}</span>
+            <span
+              v-for="(superior, i) in props.row.parents"
+              :key="i"
+            >{{ superior.name }}</span>
           </q-td>
           <q-td key="subordinates">
-            <span v-for="(subordinate, i) in props.row.children" :key="i">
-              <q-chip small color="teal">{{ subordinate.name }}</q-chip>
+            <span
+              v-for="(subordinate, i) in props.row.children"
+              :key="i"
+            >
+              <q-chip
+                small
+                color="teal"
+              >{{ subordinate.name }}</q-chip>
             </span>
           </q-td>
           <q-td key="created">{{ props.row.created_at }}</q-td>
-          <q-td key="actions" :props="props">
+          <q-td
+            key="actions"
+            :props="props"
+          >
             <q-btn
               round
               outline
@@ -50,7 +71,11 @@
         </q-tr>
       </template>
 
-      <div slot="pagination" slot-scope="props" class="row flex-center q-py-sm">
+      <div
+        slot="pagination"
+        slot-scope="props"
+        class="row flex-center q-py-sm"
+      >
         <q-btn
           round
           dense
@@ -92,12 +117,16 @@
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-6">
-            <q-input v-model="role.name" float-label="Name" clearable/>
+            <q-input
+              v-model="role.name"
+              float-label="Name"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-6">
             <q-select
               v-model="role.parent_id"
-              :options="superiorRoles"
+              :options="superiorRoleOptions"
               float-label="Superior"
               clearable
               chips
@@ -107,7 +136,7 @@
             <q-select
               multiple
               v-model="subordinatesIds"
-              :options="subordinateRoles"
+              :options="subordinateRoleOptions"
               float-label="Subordinates"
               chips
               readonly
@@ -126,8 +155,18 @@
         </div>
 
         <br>
-        <q-btn color="red" v-close-overlay label="Close" @click="hideModal()"/>
-        <q-btn color="primary" @click="update()" label="Submit" class="q-ml-sm"/>
+        <q-btn
+          color="red"
+          v-close-overlay
+          label="Close"
+          @click="hideModal()"
+        />
+        <q-btn
+          color="primary"
+          @click="update()"
+          label="Submit"
+          class="q-ml-sm"
+        />
       </div>
     </q-modal>
     <q-modal
@@ -145,12 +184,16 @@
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-6">
-            <q-input v-model="role.name" float-label="Name" clearable/>
+            <q-input
+              v-model="role.name"
+              float-label="Name"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-6">
             <q-select
               v-model="role.parent_id"
-              :options="superiorRoles"
+              :options="superiorRolesOptions"
               float-label="Superior"
               clearable
               chips
@@ -167,8 +210,18 @@
           />
         </div>
         <br>
-        <q-btn color="red" v-close-overlay label="Close" @click="hideModal()"/>
-        <q-btn color="primary" @click="store()" label="Submit" class="q-ml-sm"/>
+        <q-btn
+          color="red"
+          v-close-overlay
+          label="Close"
+          @click="hideModal()"
+        />
+        <q-btn
+          color="primary"
+          @click="store()"
+          label="Submit"
+          class="q-ml-sm"
+        />
       </div>
     </q-modal>
   </div>
@@ -176,8 +229,10 @@
 
 <script>
 // import tableData from 'assets/table-data'
-import _ from 'lodash'
-import { mapState } from 'vuex'
+import { values } from 'lodash'
+// import { mapState } from 'vuex'
+import { mapRoleFields } from '../../store/roles'
+
 export default {
   data () {
     return {
@@ -218,6 +273,7 @@ export default {
     }
   },
   computed: {
+<<<<<<< HEAD
     ...mapState('roles', ['roles', 'role', 'newRoleModal']),
     superiorRoles: {
       get() {
@@ -242,24 +298,29 @@ export default {
         })
       },
       set (val) {}
+=======
+    ...mapRoleFields(['roles', 'role', 'newRoleModal', 'superiorRoles', 'subordinateRoles']),
+    superiorRoleOptions () {
+      return this.superiorRoles.map(e => {
+        return {
+          label: e.name,
+          value: e.id
+        }
+      })
+>>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
     },
-    subordinatesIds: {
-      get () {
-        return this.$store.getters['roles/subordinateRoles'].map(e => {
-          return e.id
-        })
-      },
-      set (val) {
-        this.selectedRoles = val
-      }
+    subordinateRoleOptions () {
+      return this.subordinateRoles.map(e => {
+        return {
+          label: e.name,
+          value: e.id
+        }
+      })
     },
-    newRoleModal: {
-      get () {
-        return this.$store.getters['roles/newRoleModal']
-      },
-      set (val) {
-        return this.$store.dispatch('roles/newRoleModal', val)
-      }
+    subordinatesIds () {
+      return this.subordinateRoles.map(e => {
+        return e.id
+      })
     }
   },
   methods: {
@@ -368,7 +429,7 @@ export default {
         )
         .then(res => {
           this.serverPagination = props.pagination
-          this.serverData = _.values(res.data.roles.data)
+          this.serverData = values(res.data.roles.data)
           this.serverPagination.rowsNumber = res.data.roles.total
           this.lastPage = res.data.roles.last_page
           this.loading = false
@@ -407,12 +468,12 @@ export default {
     })
   },
   watch: {
-    'role.name' (val) {
-      this.$store.dispatch('roles/roleName', val)
-    },
-    'role.description' (val) {
-      this.$store.dispatch('roles/roleDescription', val)
-    }
+    // 'role.name' (val) {
+    //   this.$store.dispatch('roles/roleName', val)
+    // },
+    // 'role.description' (val) {
+    //   this.$store.dispatch('roles/roleDescription', val)
+    // }
   }
 }
 </script>

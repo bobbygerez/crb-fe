@@ -1,4 +1,7 @@
-export { updateField } from 'vuex-map-fields'
+export {
+  updateField
+}
+  from 'vuex-map-fields'
 
 // export const roles = (state, payload) => {
 //   state.roles = payload

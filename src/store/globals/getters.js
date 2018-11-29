@@ -1,3 +1,8 @@
+export {
+  getField
+}
+  from 'vuex-map-fields'
+
 export const getBrgys = (state) => state.brgys
 
 export const getCities = (state) => state.cities

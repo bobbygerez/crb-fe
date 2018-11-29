@@ -1,3 +1,8 @@
+export {
+  updateField
+}
+  from 'vuex-map-fields'
+
 export const SET_BRGYS = (state, payload) => {
   state.brgys = payload
 }
@@ -30,4 +35,6 @@ export const SET_MENUS = (state, payload) => {
   state.menus = payload
 }
 
-export const SET_PAGE_META = (state, payload) => { state.pageMeta = payload }
+export const SET_PAGE_META = (state, payload) => {
+  state.pageMeta = payload
+}

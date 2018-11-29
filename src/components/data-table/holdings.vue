@@ -1,15 +1,41 @@
 <template>
   <div>
-    <q-table :data="holdings" :columns="columns" row-key="name" :visible-columns="visibleColumns" :loading="loading" :rows-per-page-options="rowsOptions" :pagination.sync="paginationControl" :separator="separator" :filter="filter">
-      <template slot="top-left" slot-scope="props">
-        <q-search hide-underline color="secondary" v-model="filter" class="col-6" clearable placeholder="Search holding name..." />
+    <q-table
+      :data="holdings"
+      :columns="columns"
+      row-key="name"
+      :visible-columns="visibleColumns"
+      :loading="loading"
+      :rows-per-page-options="rowsOptions"
+      :pagination.sync="paginationControl"
+      :separator="separator"
+      :filter="filter"
+    >
+      <template
+        slot="top-left"
+        slot-scope="props"
+      >
+        <q-search
+          hide-underline
+          color="secondary"
+          v-model="filter"
+          class="col-6"
+          clearable
+          placeholder="Search holding name..."
+        />
       </template>
-      <template slot="body" slot-scope="props">
+      <template
+        slot="body"
+        slot-scope="props"
+      >
         <q-tr :props="props">
           <q-td key="name">
             {{props.row.name}}
           </q-td>
-          <q-td key="address" :props="props">
+          <q-td
+            key="address"
+            :props="props"
+          >
             {{props.row.address.street_lot_blk}},
             {{props.row.address.brgy.description}}
             <br />
@@ -17,149 +43,352 @@
             {{props.row.address.region.description }}
 
           </q-td>
-          <q-td key="created_at" :props="props">{{props.row.created_at}}</q-td>
-          <q-td key="actions" :props="props">
-            <q-btn round outline color="positive" icon="edit" class="q-ma-sm" @click="edit(props.row.id)" />
-            <q-btn round outline color="negative" icon="delete" class="q-ma-sm" @click="deleteRow(props.row.id)" />
+          <q-td
+            key="created_at"
+            :props="props"
+          >{{props.row.created_at}}</q-td>
+          <q-td
+            key="actions"
+            :props="props"
+          >
+            <q-btn
+              round
+              outline
+              color="positive"
+              icon="edit"
+              class="q-ma-sm"
+              @click="edit(props.row.id)"
+            />
+            <q-btn
+              round
+              outline
+              color="negative"
+              icon="delete"
+              class="q-ma-sm"
+              @click="deleteRow(props.row.id)"
+            />
           </q-td>
         </q-tr>
 
       </template>
-      <template slot="top-right" slot-scope="props">
-        <q-table-columns color="secondary" class="q-mr-sm" v-model="visibleColumns" :columns="columns" />
-        <q-select color="secondary" v-model="separator" :options="[
+      <template
+        slot="top-right"
+        slot-scope="props"
+      >
+        <q-table-columns
+          color="secondary"
+          class="q-mr-sm"
+          v-model="visibleColumns"
+          :columns="columns"
+        />
+        <q-select
+          color="secondary"
+          v-model="separator"
+          :options="[
       { label: 'Horizontal', value: 'horizontal' },
       { label: 'Vertical', value: 'vertical' },
       { label: 'Cell', value: 'cell' },
       { label: 'None', value: 'none' }
-      ]" hide-underline />
-        <q-btn flat round dense :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'" @click="props.toggleFullscreen" />
+      ]"
+          hide-underline
+        />
+        <q-btn
+          flat
+          round
+          dense
+          :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+          @click="props.toggleFullscreen"
+        />
       </template>
     </q-table>
     <br />
-    <q-modal v-model="newHoldingModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    <q-modal
+      v-model="newHoldingModal"
+      minimized
+      no-esc-dismiss
+      no-backdrop-dismiss
+      :content-css="{minWidth: '80vw', minHeight: '80vh'}"
+    >
       <div style="padding: 30px">
         <div class="q-display-1 q-mb-md">New Holding</div>
 
         <div class="row">
           <div class="col-xs-12 col-sm-6">
-            <q-input v-model="holding.name" float-label="Holding name" clearable />
+            <q-input
+              v-model="holding.name"
+              float-label="Holding name"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-select v-model="holding.business_info.business_type_id" :options="businessTypes" float-label="Business Type" clearable />
+            <q-select
+              v-model="holding.business_info.business_type_id"
+              :options="businessTypes"
+              float-label="Business Type"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-select v-model="holding.business_info.vat_type_id" :options="vatTypes" float-label="Vat Type" clearable />
+            <q-select
+              v-model="holding.business_info.vat_type_id"
+              :options="vatTypes"
+              float-label="Vat Type"
+              clearable
+            />
           </div>
         </div>
 
         <div class="row">
           <div class="col-xs-12 col-sm-3">
-            <q-input v-model="holding.business_info.telephone" float-label="Telephone" clearable />
+            <q-input
+              v-model="holding.business_info.telephone"
+              float-label="Telephone"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-input v-model="holding.business_info.email" float-label="Email" clearable />
+            <q-input
+              v-model="holding.business_info.email"
+              float-label="Email"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-input v-model="holding.business_info.tin" float-label="TIN" clearable />
+            <q-input
+              v-model="holding.business_info.tin"
+              float-label="TIN"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-input v-model="holding.business_info.website" float-label="Website" clearable />
+            <q-input
+              v-model="holding.business_info.website"
+              float-label="Website"
+              clearable
+            />
           </div>
         </div>
 
         <div class="col-xs-12 col-sm-12">
-          <q-input v-model="holding.desc" type="textarea" float-label="Description" :max-height="100" rows="2" />
+          <q-input
+            v-model="holding.desc"
+            type="textarea"
+            float-label="Description"
+            :max-height="100"
+            rows="2"
+          />
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-6">
-            <q-select v-model="holding.address.country_id" :options="countries" float-label="Country" clearable />
+            <q-select
+              v-model="holding.address.country_id"
+              :options="countries"
+              float-label="Country"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-6">
-            <q-select v-model="holding.address.region_id" :options="regions" float-label="Region" clearable />
+            <q-select
+              v-model="holding.address.region_id"
+              :options="regions"
+              float-label="Region"
+              clearable
+            />
           </div>
 
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-4">
-            <q-select v-model="holding.address.province_id" :options="provinces" float-label="Province" clearable />
+            <q-select
+              v-model="holding.address.province_id"
+              :options="provinces"
+              float-label="Province"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-4">
-            <q-select v-model="holding.address.city_id" :options="cities" float-label="City" clearable />
+            <q-select
+              v-model="holding.address.city_id"
+              :options="cities"
+              float-label="City"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-4">
-            <q-select v-model="holding.address.brgy_id" :options="brgys" float-label="Barangay" clearable />
+            <q-select
+              v-model="holding.address.brgy_id"
+              :options="brgys"
+              float-label="Barangay"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-12">
-            <q-input v-model="holding.address.street_lot_blk" type="textarea" float-label="Block, Lot &amp; Street" :max-height="100" rows="2" />
+            <q-input
+              v-model="holding.address.street_lot_blk"
+              type="textarea"
+              float-label="Block, Lot &amp; Street"
+              :max-height="100"
+              rows="2"
+            />
           </div>
         </div>
         <br />
-        <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
-        <q-btn color="primary" @click="create()" label="Submit" class="q-ml-sm" />
+        <q-btn
+          color="red"
+          v-close-overlay
+          label="Close"
+          @click="hideModal()"
+        />
+        <q-btn
+          color="primary"
+          @click="create()"
+          label="Submit"
+          class="q-ml-sm"
+        />
       </div>
     </q-modal>
 
-    <q-modal v-model="minimizedModal" no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    <q-modal
+      v-model="minimizedModal"
+      no-esc-dismiss
+      no-backdrop-dismiss
+      :content-css="{minWidth: '80vw', minHeight: '80vh'}"
+    >
       <div style="padding: 30px">
         <div class="q-display-1 q-mb-md">Edit {{ holding.name }}</div>
 
         <div class="row">
           <div class="col-xs-12 col-sm-6">
-            <q-input v-model="holding.name" float-label="Holding name" clearable />
+            <q-input
+              v-model="holding.name"
+              float-label="Holding name"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-select v-model="holding.business_info.business_type_id" :options="businessTypes" float-label="Business Type" clearable />
+            <q-select
+              v-model="holding.business_info.business_type_id"
+              :options="businessTypes"
+              float-label="Business Type"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-select v-model="holding.business_info.vat_type_id" :options="vatTypes" float-label="Vat Type" clearable />
+            <q-select
+              v-model="holding.business_info.vat_type_id"
+              :options="vatTypes"
+              float-label="Vat Type"
+              clearable
+            />
           </div>
         </div>
 
         <div class="row">
           <div class="col-xs-12 col-sm-3">
-            <q-input v-model="holding.business_info.telephone" float-label="Telephone" clearable />
+            <q-input
+              v-model="holding.business_info.telephone"
+              float-label="Telephone"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-input v-model="holding.business_info.email" float-label="Email" clearable />
+            <q-input
+              v-model="holding.business_info.email"
+              float-label="Email"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-input v-model="holding.business_info.tin" float-label="TIN" clearable />
+            <q-input
+              v-model="holding.business_info.tin"
+              float-label="TIN"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-3">
-            <q-input v-model="holding.business_info.website" float-label="Website" clearable />
+            <q-input
+              v-model="holding.business_info.website"
+              float-label="Website"
+              clearable
+            />
           </div>
         </div>
 
         <div class="col-xs-12 col-sm-12">
-          <q-input v-model="holding.desc" type="textarea" float-label="Description" :max-height="100" rows="2" />
+          <q-input
+            v-model="holding.desc"
+            type="textarea"
+            float-label="Description"
+            :max-height="100"
+            rows="2"
+          />
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-6">
-            <q-select v-model="holding.address.country_id" :options="countries" float-label="Country" clearable />
+            <q-select
+              v-model="holding.address.country_id"
+              :options="countries"
+              float-label="Country"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-6">
-            <q-select v-model="holding.address.region_id" :options="regions" float-label="Region" clearable />
+            <q-select
+              v-model="holding.address.region_id"
+              :options="regions"
+              float-label="Region"
+              clearable
+            />
           </div>
 
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-4">
-            <q-select v-model="holding.address.province_id" :options="provinces" float-label="Province" clearable />
+            <q-select
+              v-model="holding.address.province_id"
+              :options="provinces"
+              float-label="Province"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-4">
-            <q-select v-model="holding.address.city_id" :options="cities" float-label="City" clearable />
+            <q-select
+              v-model="holding.address.city_id"
+              :options="cities"
+              float-label="City"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-4">
-            <q-select v-model="holding.address.brgy_id" :options="brgys" float-label="Barangay" clearable />
+            <q-select
+              v-model="holding.address.brgy_id"
+              :options="brgys"
+              float-label="Barangay"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-12">
-            <q-input v-model="holding.address.street_lot_blk" type="textarea" float-label="Block, Lot &amp; Street" :max-height="100" rows="2" />
+            <q-input
+              v-model="holding.address.street_lot_blk"
+              type="textarea"
+              float-label="Block, Lot &amp; Street"
+              :max-height="100"
+              rows="2"
+            />
           </div>
         </div>
         <br />
-        <q-btn color="red" v-close-overlay label="Close" />
-        <q-btn color="primary" @click="update(holding.id)" label="Update" class="q-ml-sm" />
+        <q-btn
+          color="red"
+          v-close-overlay
+          label="Close"
+        />
+        <q-btn
+          color="primary"
+          @click="update(holding.id)"
+          label="Update"
+          class="q-ml-sm"
+        />
       </div>
     </q-modal>
   </div>

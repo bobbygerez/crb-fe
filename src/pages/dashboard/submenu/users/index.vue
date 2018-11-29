@@ -1,12 +1,18 @@
 <template>
   <div class="q-pa-sm">
     <users></users>
-     <q-page-sticky position="bottom-left" :offset="[16, 16]">
-        <q-btn color="primary" @click="showNewUser()">
-          <q-icon name="add"></q-icon>
-          new user
-        </q-btn>
-      </q-page-sticky>
+    <q-page-sticky
+      position="bottom-left"
+      :offset="[16, 16]"
+    >
+      <q-btn
+        color="primary"
+        @click="showNewUser()"
+      >
+        <q-icon name="add"></q-icon>
+        new user
+      </q-btn>
+    </q-page-sticky>
   </div>
 </template>
 

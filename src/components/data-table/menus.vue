@@ -13,18 +13,33 @@
       @request="request"
       :loading="loading"
     >
-      <template slot="top-right" slot-scope="props">
-        <q-search hide-underline v-model="filter"/>
+      <template
+        slot="top-right"
+        slot-scope="props"
+      >
+        <q-search
+          hide-underline
+          v-model="filter"
+        />
       </template>
 
-      <template slot="body" slot-scope="props">
+      <template
+        slot="body"
+        slot-scope="props"
+      >
         <q-tr :props="props">
           <q-td key="name">{{props.row.name }}</q-td>
           <q-td key="superior">
-            <div v-for="(child, i) in props.row.all_children" :key="i">{{ child.name }}</div>
+            <div
+              v-for="(child, i) in props.row.all_children"
+              :key="i"
+            >{{ child.name }}</div>
           </q-td>
           <q-td key="created">{{ props.row.created_at }}</q-td>
-          <q-td key="actions" :props="props">
+          <q-td
+            key="actions"
+            :props="props"
+          >
             <q-btn
               round
               outline
@@ -87,7 +102,11 @@
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-6">
-            <q-input v-model="menu.name" float-label="Name" clearable/>
+            <q-input
+              v-model="menu.name"
+              float-label="Name"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-6">
             <q-select
@@ -121,8 +140,18 @@
         </div>
 
         <br>
-        <q-btn color="red" v-close-overlay label="Close" @click="hideModal()"/>
-        <q-btn color="primary" @click="update()" label="Submit" class="q-ml-sm"/>
+        <q-btn
+          color="red"
+          v-close-overlay
+          label="Close"
+          @click="hideModal()"
+        />
+        <q-btn
+          color="primary"
+          @click="update()"
+          label="Submit"
+          class="q-ml-sm"
+        />
       </div>
     </q-modal>
     <q-modal
@@ -135,12 +164,20 @@
       <div style="padding: 30px">
         <div class="row">
           <div class="col-xs-12 col-sm-6">
+<<<<<<< HEAD
             <div class="q-display-1 q-mb-md">New Menu</div>
           </div>
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-6">
             <q-input v-model="menu.name" float-label="Name" clearable/>
+=======
+            <q-input
+              v-model="menu.name"
+              float-label="Name"
+              clearable
+            />
+>>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
           </div>
           <div class="col-xs-12 col-sm-6">
             <q-select
@@ -163,8 +200,18 @@
         </div>
         
         <br>
-        <q-btn color="red" v-close-overlay label="Close" @click="hideModal()"/>
-        <q-btn color="primary" @click="store()" label="Submit" class="q-ml-sm"/>
+        <q-btn
+          color="red"
+          v-close-overlay
+          label="Close"
+          @click="hideModal()"
+        />
+        <q-btn
+          color="primary"
+          @click="store()"
+          label="Submit"
+          class="q-ml-sm"
+        />
       </div>
     </q-modal>
   </div>
@@ -172,17 +219,17 @@
 
 <script>
 // import tableData from 'assets/table-data'
-import _ from "lodash";
-import { mapState } from "vuex";
+import _ from 'lodash'
+import { mapState } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
-      model: "2016-10-24T10:40:14.674Z",
-      superior: "",
+      model: '2016-10-24T10:40:14.674Z',
+      superior: '',
       selectedRoles: [],
       editMenuModal: false,
       options: [5, 10, 15, 20],
-      lastPage: "",
+      lastPage: '',
       serverData: [],
       serverPagination: {
         page: 1,
@@ -190,21 +237,22 @@ export default {
         rowsPerPage: 10 // specifying this determines pagination is server-side
       },
       columns: [
-        { name: "name", label: "Name", field: "name", align: "left" },
+        { name: 'name', label: 'Name', field: 'name', align: 'left' },
         {
-          name: "submenu",
-          label: "Sub-menu",
-          align: "left",
-          field: "submenu"
+          name: 'submenu',
+          label: 'Sub-menu',
+          align: 'left',
+          field: 'submenu'
         },
-        { name: "created", label: "Created", align: "left", field: "created" },
-        { name: "actions", label: "Actions", align: "left", field: "actions" }
+        { name: 'created', label: 'Created', align: 'left', field: 'created' },
+        { name: 'actions', label: 'Actions', align: 'left', field: 'actions' }
       ],
-      filter: "",
+      filter: '',
       loading: false
-    };
+    }
   },
   computed: {
+<<<<<<< HEAD
     ...mapState("menus", ["menus", "menu"]),
     userMenus: {
       get() {
@@ -217,49 +265,52 @@ export default {
       },
       set(val) {}
     },
+=======
+    ...mapState('menus', ['menus', 'menu']),
+>>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
     superiorMenus: {
-      get() {
-        return this.$store.getters["menus/superiorMenus"].map(e => {
+      get () {
+        return this.$store.getters['menus/superiorMenus'].map(e => {
           return {
             label: e.name,
             value: e.id
-          };
-        });
+          }
+        })
       },
-      set(val) {}
+      set (val) { }
     },
     submenus: {
-      get() {
-        return this.$store.getters["menus/submenus"].map(e => {
+      get () {
+        return this.$store.getters['menus/submenus'].map(e => {
           return {
             label: e.name,
             value: e.id
-          };
-        });
+          }
+        })
       },
-      set(val) {}
+      set (val) { }
     },
     submenuIds: {
-      get() {
-        return this.$store.getters["menus/submenus"].map(e => {
-          return e.id;
-        });
+      get () {
+        return this.$store.getters['menus/submenus'].map(e => {
+          return e.id
+        })
       },
-      set(val) {
-        this.selectedRoles = val;
+      set (val) {
+        this.selectedRoles = val
       }
     },
     newMenuModal: {
-      get() {
-        return this.$store.getters["menus/newMenuModal"];
+      get () {
+        return this.$store.getters['menus/newMenuModal']
       },
-      set(val) {
-        return this.$store.dispatch("menus/newMenuModal", val);
+      set (val) {
+        return this.$store.dispatch('menus/newMenuModal', val)
       }
     }
   },
   methods: {
-    store() {
+    store () {
       this.$axios
         .post(`/menus`, {
           name: this.menu.name,
@@ -267,12 +318,13 @@ export default {
           parent_id: this.menu.parent_id
         })
         .then(res => {
-          this.hideModal();
+          this.hideModal()
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
-          });
+          })
           this.$q.notify({
+<<<<<<< HEAD
             color: "positive",
             icon: "check",
             message: `${this.menu.name}created successfully`
@@ -290,14 +342,30 @@ export default {
           color: "negative",
           icon: "delete",
           message: `Delete ${res.data.menu.name} ?`,
+=======
+            color: 'positive',
+            icon: 'check',
+            message: `${this.role.name}created successfully`
+          })
+        })
+    },
+    deleteRow (roleId) {
+      this.$axios.get(`/roles/${roleId}?id=${roleId}`).then(res => {
+        this.$store.dispatch('roles/role', res.data.role)
+        this.$q.notify({
+          color: 'negative',
+          icon: 'delete',
+          message: `Delete ${res.data.role.name} ?`,
+>>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
           actions: [
             {
-              label: "OK",
+              label: 'OK',
               handler: () => {
                 this.$axios
                   .delete(`/menus/${this.menu.id}?id=${this.menu.id}`)
                   .then(res => {
                     this.$q.notify({
+<<<<<<< HEAD
                       color: "positive",
                       icon: "check",
                       message: `${this.menu.name} deleted successfully`
@@ -307,22 +375,32 @@ export default {
                       filter: this.filter
                     });
                      this.hideModal();
+=======
+                      color: 'positive',
+                      icon: 'check',
+                      message: `${this.role.name} deleted successfully`
+                    })
+                    this.request({
+                      pagination: this.serverPagination,
+                      filter: this.filter
+                    })
+>>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
                   })
                   .catch(err => {
                     this.$q.notify({
-                      color: "negative",
-                      icon: "warning",
+                      color: 'negative',
+                      icon: 'warning',
                       message: `${err.response.data.message}`
-                    });
-                  });
+                    })
+                  })
               }
             }
           ]
-        });
-      });
+        })
+      })
       // .catch()
     },
-    update() {
+    update () {
       this.$axios
         .put(`/menus/${this.menu.id}`, {
           id: this.menu.id,
@@ -331,35 +409,41 @@ export default {
           parent_id: this.menu.parent_id
         })
         .then(res => {
-          this.editRoleModal = false;
+          this.editRoleModal = false
           this.$q.notify({
-            color: "positive",
-            icon: "check",
+            color: 'positive',
+            icon: 'check',
             message: `${this.menu.name} updated successfully`
-          });
+          })
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
-          });
-          this.hideModal();
+          })
+          this.hideModal()
         })
-        .catch();
+        .catch()
     },
+<<<<<<< HEAD
     hideModal() {
       this.$store.dispatch('menus/newMenuModal', false);
       this.editRoleModal = false;
+=======
+    hideModal () {
+      this.newRoleModal = false
+      this.editRoleModal = false
+>>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
     },
-    showModal() {
-      this.editRoleModal = true;
+    showModal () {
+      this.editRoleModal = true
     },
-    paginationLast(currentPage) {
+    paginationLast (currentPage) {
       if (this.lastPage > currentPage) {
-        return false;
+        return false
       }
-      return true;
+      return true
     },
-    request(props) {
-      this.loading = true;
+    request (props) {
+      this.loading = true
       this.$axios
         .get(
           `/menus?filter=${this.filter}&page=${props.pagination.page}&perPage=${
@@ -367,27 +451,28 @@ export default {
           }`
         )
         .then(res => {
-          this.serverPagination = props.pagination;
-          this.serverData = _.values(res.data.menus.data);
-          this.serverPagination.rowsNumber = res.data.menus.total;
-          this.lastPage = res.data.menus.last_page;
-          this.loading = false;
+          this.serverPagination = props.pagination
+          this.serverData = _.values(res.data.menus.data)
+          this.serverPagination.rowsNumber = res.data.menus.total
+          this.lastPage = res.data.menus.last_page
+          this.loading = false
         })
         .catch(error => {
           // there's an error... do SOMETHING
-          console.log(error);
+          console.log(error)
           // we tell QTable to exit the "loading" state
-          this.loading = false;
-        });
+          this.loading = false
+        })
     },
-    edit(menuId) {
+    edit (menuId) {
       this.$axios.get(`menus/${menuId}/edit?id=${menuId}`).then(res => {
-        this.editMenuModal = true;
-        this.$store.dispatch("menus/menu", res.data.menu);
-        this.$store.dispatch("menus/superiorMenus", res.data.superiorMenus);
-        this.$store.dispatch("menus/submenus", res.data.submenus);
-      });
+        this.editMenuModal = true
+        this.$store.dispatch('menus/menu', res.data.menu)
+        this.$store.dispatch('menus/superiorMenus', res.data.superiorMenus)
+        this.$store.dispatch('menus/submenus', res.data.submenus)
+      })
     },
+<<<<<<< HEAD
     userSubMenus() {
       this.$axios.get(`/user-sub-menus`).then(res => {
         this.$store.dispatch(
@@ -395,25 +480,38 @@ export default {
           res.data.menus
         );
       });
+=======
+    subordinateRoles () {
+      this.$axios.get(`/user-subordinate-roles`).then(res => {
+        this.$store.dispatch(
+          'roles/subordinateRoles',
+          res.data.subordinateRoles
+        )
+      })
+>>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
     }
   },
-  mounted() {
+  mounted () {
     this.request({
       pagination: this.serverPagination,
       filter: this.filter
+<<<<<<< HEAD
     });
     this.userSubMenus()
+=======
+    })
+>>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
   },
   watch: {
-    "menu.name"(val) {
-      this.$store.dispatch("menus/menuName", val);
+    'menu.name' (val) {
+      this.$store.dispatch('menus/menuName', val)
     },
-    "menu.description"(val) {
-      this.$store.dispatch("menus/menuDescription", val);
+    'menu.description' (val) {
+      this.$store.dispatch('menus/menuDescription', val)
     },
-    "menu.parent_id"(val) {
-      this.$store.dispatch("menus/menuParentId", val);
+    'menu.parent_id' (val) {
+      this.$store.dispatch('menus/menuParentId', val)
     }
   }
-};
+}
 </script>

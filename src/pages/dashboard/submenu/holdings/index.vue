@@ -1,6 +1,11 @@
 <template>
   <div class="q-pa-sm">
-    <q-btn color="positive" label=" New Holding" class="q-mb-md" @click="showNewHoldingModal()" />
+    <q-btn
+      color="positive"
+      label=" New Holding"
+      class="q-mb-md"
+      @click="showNewHoldingModal()"
+    />
     <holdings></holdings>
   </div>
 </template>

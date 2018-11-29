@@ -13,31 +13,80 @@
           keyboard everytime if the other input fields are covered by it-->
           <form>
             <f-v-field-validator :val="$v.form.email">
-              <q-input @blur="$v.form.email.$touch" :error="$v.form.email.$error" v-model="form.email" float-label="Username" value="" color="primary" :dark="dark" @keyup.enter="login" />
+              <q-input
+                @blur="$v.form.email.$touch"
+                :error="$v.form.email.$error"
+                v-model="form.email"
+                float-label="Username"
+                value=""
+                color="primary"
+                :dark="dark"
+                @keyup.enter="login"
+              />
             </f-v-field-validator>
             <br>
             <f-v-field-validator :val="$v.form.password">
-              <q-input @blur="$v.form.password.$touch" :error="$v.form.password.$error" v-model="form.password" float-label="Password" value="" color="primary" :dark="dark" type="password" @keyup.enter="login" />
+              <q-input
+                @blur="$v.form.password.$touch"
+                :error="$v.form.password.$error"
+                v-model="form.password"
+                float-label="Password"
+                value=""
+                color="primary"
+                :dark="dark"
+                type="password"
+                @keyup.enter="login"
+              />
             </f-v-field-validator>
             <br>
             <div>
               <br>
-              <q-btn class="full-width" :loading="loading" @click="login" color="primary">
+              <q-btn
+                class="full-width"
+                :loading="loading"
+                @click="login"
+                color="primary"
+              >
                 Login
               </q-btn>
               <br>
               <br>
-              <q-btn class="pull-right" flat dense label="Forgot password?" @click="$refs.minimizedModal.show()" no-caps />
-              <q-modal ref="minimizedModal" minimized :content-css="{padding: '20px'}">
+              <q-btn
+                class="pull-right"
+                flat
+                dense
+                label="Forgot password?"
+                @click="$refs.minimizedModal.show()"
+                no-caps
+              />
+              <q-modal
+                ref="minimizedModal"
+                minimized
+                :content-css="{padding: '20px'}"
+              >
                 <div class="q-display-1 q-mb-md">Forgot Password</div>
                 <p>Enter your email address associated with your account to reset your password.</p>
-                <q-input type="text" float-label="Email Address" value="" />
+                <q-input
+                  type="text"
+                  float-label="Email Address"
+                  value=""
+                />
                 <br>
-                <q-btn flat color="primary">Reset Password</q-btn>
-                <q-btn flat color="primary" @click="$refs.minimizedModal.hide()">Cancel</q-btn>
+                <q-btn
+                  flat
+                  color="primary"
+                >Reset Password</q-btn>
+                <q-btn
+                  flat
+                  color="primary"
+                  @click="$refs.minimizedModal.hide()"
+                >Cancel</q-btn>
               </q-modal>
             </div>
-            <f-v-error-summary :valObj="$v" class="q-my-sm" />
+            <f-v-error-summary
+              :valObj="$v"
+              class="q-my-sm"
+            />
           </form>
         </div>
       </q-page>

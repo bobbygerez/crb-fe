@@ -1,6 +1,11 @@
 <template>
   <div class="q-pa-sm">
-    <q-btn color="positive" label="New Company" class="q-mb-md" @click="showNewHoldingModal()" />
+    <q-btn
+      color="positive"
+      label="New Company"
+      class="q-mb-md"
+      @click="showNewHoldingModal()"
+    />
     <companies></companies>
   </div>
 </template>
