@@ -21,6 +21,19 @@
         <q-tr :props="props">
           <q-td key="name">{{props.row.name }}</q-td>
           <q-td key="company">{{props.row.company.name }}</q-td>
+          <q-td
+            key="address"
+            :props="props"
+          >
+            {{props.row.address.street_lot_blk}}
+            <br />
+            {{props.row.address.brgy.description}}
+            <br />
+            {{props.row.address.city.description }},
+            <br />
+            {{props.row.address.region.description }}
+
+          </q-td>
           <q-td key="created">{{ props.row.created_at }}</q-td>
           <q-td key="actions" :props="props">
             <q-btn
@@ -116,6 +129,7 @@ export default {
       columns: [
         { name: "name", label: "Name", field: "name", align: "left" },
         { name: "company", label: "Company", align: "left", field: "company"},
+        { name: "address", label: "Address", align: "left", field: "address"},
         { name: "created", label: "Created", align: "left", field: "created" },
         { name: "actions", label: "Actions", align: "left", field: "actions" }
       ],
