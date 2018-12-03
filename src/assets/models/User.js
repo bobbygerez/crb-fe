@@ -1,5 +1,5 @@
 export class User {
-  constructor({
+  constructor ({
     address = null,
     contacts = [],
     name = null
@@ -10,14 +10,14 @@ export class User {
   }
 }
 
-export function createCustomer(data) {
-  const address = createAddress(data.address)
-  const contacts = data.contacts.map(x => createContact(x))
-  const name = createName(data.name)
+export function createCustomer (data) {
+  // const address = createAddress(data.address)
+  // const contacts = data.contacts.map(x => createContact(x))
+  // const name = createName(data.name)
 
   return Object.freeze(new User({
-    address,
-    contacts,
-    name
+    // address,
+    // contacts,
+    // name
   }))
 }

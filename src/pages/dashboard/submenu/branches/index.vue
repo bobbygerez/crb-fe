@@ -17,7 +17,7 @@
 
 <script type="text/javascript">
 import branches from 'components/data-table/branches.vue'
-import { mapActions, mapState } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
   created () {
     this.getRegions()

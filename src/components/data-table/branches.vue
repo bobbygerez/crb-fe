@@ -83,7 +83,7 @@
             <div class="q-display-1 q-mb-md">Edit {{ branch.name }}</div>
           </div>
         </div>
-         <div class="row">
+        <div class="row">
           <div class="col-xs-12 col-sm-3">
             <q-select
               v-model="branch.company_id"
@@ -145,7 +145,7 @@
             />
           </div>
         </div>
-         <div class="row">
+        <div class="row">
           <div class="col-xs-12 col-sm-6">
             <q-select
               v-model="branch.address.country_id"
@@ -221,13 +221,13 @@
       no-backdrop-dismiss
       :content-css="{minWidth: '80vw', minHeight: '80vh'}"
     >
-       <div style="padding: 30px">
+      <div style="padding: 30px">
         <div class="row">
           <div class="col-xs-12 ">
             <div class="q-display-1 q-mb-md">New Branch</div>
           </div>
         </div>
-         <div class="row">
+        <div class="row">
           <div class="col-xs-12 col-sm-3">
             <q-select
               v-model="branch.company_id"
@@ -289,16 +289,16 @@
             />
           </div>
           <div class="col-xs-12 col-sm-12">
-          <q-input
-            v-model="branch.desc"
-            type="textarea"
-            float-label="Description"
-            :max-height="100"
-            rows="2"
-          />
+            <q-input
+              v-model="branch.desc"
+              type="textarea"
+              float-label="Description"
+              :max-height="100"
+              rows="2"
+            />
+          </div>
         </div>
-        </div>
-         <div class="row">
+        <div class="row">
           <div class="col-xs-12 col-sm-6">
             <q-select
               v-model="branch.address.country_id"
@@ -353,9 +353,19 @@
           </div>
         </div>
         <br>
-        <q-btn color="red" v-close-overlay label="Close" @click="hideModal()"/>
-        <q-btn color="primary" @click="store()" label="Submit" class="q-ml-sm"/>
-       </div>
+        <q-btn
+          color="red"
+          v-close-overlay
+          label="Close"
+          @click="hideModal()"
+        />
+        <q-btn
+          color="primary"
+          @click="store()"
+          label="Submit"
+          class="q-ml-sm"
+        />
+      </div>
     </q-modal>
   </div>
 </template>
@@ -391,7 +401,7 @@ export default {
     }
   },
   computed: {
-    ...mapState("branches", ["branch"]),
+    ...mapState('branches', ['branch']),
     companies () {
       return this.$store.getters['branches/companies'].map(e => {
         return {
@@ -400,8 +410,8 @@ export default {
         }
       })
     },
-    newBranchModal:{
-      get(){
+    newBranchModal: {
+      get () {
         return this.$store.getters['branches/newBranchModal']
       },
       set () {
@@ -450,7 +460,7 @@ export default {
         }
       })
     },
-     vatTypes () {
+    vatTypes () {
       return this.$store.getters['globals/getVatTypes'].map(e => {
         return {
           label: e.name,
@@ -476,24 +486,24 @@ export default {
           businessInfo: this.branch.business_info
         })
         .then(res => {
-          this.hideModal();
+          this.hideModal()
           this.$q.notify({
-            color: "positive",
-            icon: "check",
+            color: 'positive',
+            icon: 'check',
             message: `${this.branch.name}created successfully`
-          });
+          })
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
           })
         })
     },
-    deleteRow(branchId) {
+    deleteRow (branchId) {
       this.$axios.get(`/branches/${branchId}?id=${branchId}`).then(res => {
-        this.$store.dispatch("branches/branch", res.data.branch);
+        this.$store.dispatch('branches/branch', res.data.branch)
         this.$q.notify({
-          color: "negative",
-          icon: "delete",
+          color: 'negative',
+          icon: 'delete',
           message: `Delete ${res.data.branch.name} ?`,
           actions: [
             {
@@ -503,10 +513,10 @@ export default {
                   .delete(`/branches/${this.branch.id}?id=${this.branch.id}`)
                   .then(res => {
                     this.$q.notify({
-                      color: "positive",
-                      icon: "check",
+                      color: 'positive',
+                      icon: 'check',
                       message: `${this.branch.name} deleted successfully`
-                    });
+                    })
                     this.request({
                       pagination: this.serverPagination,
                       filter: this.filter
@@ -527,8 +537,8 @@ export default {
       })
       // .catch()
     },
-    update() {
-       this.$axios.put(`/branches/${this.branch.id}`, {
+    update () {
+      this.$axios.put(`/branches/${this.branch.id}`, {
         id: this.branch.id,
         name: this.branch.name,
         desc: this.branch.desc,
@@ -559,12 +569,12 @@ export default {
         })
         .catch()
     },
-    hideModal() {
-      this.$store.dispatch('branches/newBranchModal', false);
-      this.editBranchModal = false;
+    hideModal () {
+      this.$store.dispatch('branches/newBranchModal', false)
+      this.editBranchModal = false
     },
-    showModal() {
-      this.editBranchModal = true;
+    showModal () {
+      this.editBranchModal = true
     },
     paginationLast (currentPage) {
       if (this.lastPage > currentPage) {
@@ -594,12 +604,12 @@ export default {
           this.loading = false
         })
     },
-    edit(branchId) {
+    edit (branchId) {
       this.$axios.get(`branches/${branchId}/edit?id=${branchId}`).then(res => {
-        this.showModal();
-        this.$store.dispatch("branches/branch", res.data.branch);
-        this.$store.dispatch("branches/companies", [res.data.branch.company]);
-      });
+        this.showModal()
+        this.$store.dispatch('branches/branch', res.data.branch)
+        this.$store.dispatch('branches/companies', [res.data.branch.company])
+      })
     }
   },
   mounted () {

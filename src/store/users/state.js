@@ -1,4 +1,6 @@
-import { Address } from 'assets/models/Address'
+import {
+  Address
+} from 'assets/models/Address'
 
 export default {
   newUserModal: false,
