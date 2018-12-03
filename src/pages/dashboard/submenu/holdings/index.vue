@@ -20,7 +20,7 @@
             fab
             color="primary"
             icon="mdi-plus"
-            @click="showNewHoldingModal"
+            @click="newHoldingModal = true"
           />
         </transition>
       </q-page-sticky>
@@ -33,6 +33,7 @@ import holdings from 'components/data-table/holdings.vue'
 import { mapActions, mapState } from 'vuex'
 import { axios } from 'plugins/axios'
 import Hold from 'assets/services/holdings/api'
+import { mapHoldingFields } from '../../../../store/pattys'
 
 export default {
   data () {
@@ -43,6 +44,7 @@ export default {
     }
   },
   computed: {
+    ...mapHoldingFields(['newHoldingModal']),
     ...mapState('globals', ['perPage', 'page'])
   },
   created () {
