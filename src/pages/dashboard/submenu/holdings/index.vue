@@ -54,13 +54,19 @@ export default {
     this.getVatTypes()
   },
   methods: {
-    ...mapActions('pattys', ['setHoldings', 'getBusinessTypes', 'getVatTypes', 'setNewHoldingModal']),
+    ...mapActions('pattys', [
+      'setHoldings',
+      'getBusinessTypes',
+      'getVatTypes',
+      'setNewHoldingModal'
+    ]),
     ...mapActions('globals', ['getCountries']),
     showNewHoldingModal () {
       this.setNewHoldingModal(true)
     },
     getStart () {
-      axios.get('/holdings?page=' + this.page + '&perPage=' + this.perPage)
+      axios
+        .get('/holdings?page=' + this.page + '&perPage=' + this.perPage)
         .then(res => {
           this.setHoldings(res.data.holdings)
         })
@@ -72,7 +78,10 @@ export default {
       //   directionChanged: false, // has direction changed since this handler was called?
       //   inflexionPosition: 56 // last scroll position where user changed scroll direction
       // }
-      let diff = scroll.direction === 'down' ? scroll.inflexionPosition + scroll.position : scroll.inflexionPosition - scroll.position
+      let diff =
+        scroll.direction === 'down'
+          ? scroll.inflexionPosition + scroll.position
+          : scroll.inflexionPosition - scroll.position
       if (diff >= 300 && scroll.direction === 'up') {
         this.showFab = false
       } else {
@@ -84,5 +93,4 @@ export default {
     holdings
   }
 }
-
 </script>

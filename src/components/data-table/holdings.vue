@@ -29,19 +29,16 @@
         slot-scope="props"
       >
         <q-tr :props="props">
-          <q-td key="name">
-            {{props.row.name}}
-          </q-td>
+          <q-td key="name">{{props.row.name}}</q-td>
           <q-td
             key="address"
             :props="props"
           >
             {{props.row.address.street_lot_blk}},
             {{props.row.address.brgy.description}}
-            <br />
+            <br>
             {{props.row.address.city.description }},
             {{props.row.address.region.description }}
-
           </q-td>
           <q-td
             key="created_at"
@@ -67,7 +64,7 @@
               class="q-ma-sm"
               @click="deleteRow(props.row.id)"
             />
-          </q-td> -->
+          </q-td>-->
           <q-popover touch-position>
             <q-list
               link
@@ -75,7 +72,7 @@
             >
               <!-- <q-item :to="currentRoute + '/' + props.row.id + '/view'">
                 <q-item-main label="View" />
-              </q-item> -->
+              </q-item>-->
               <q-item
                 @click.native="edit(props.row.id)"
                 v-close-overlay
@@ -96,11 +93,8 @@
             anchor="bottom middle"
             self="bottom middle"
             :offset="[10, 10]"
-          >
-            Click to see options.
-          </q-tooltip>
+          >Click to see options.</q-tooltip>
         </q-tr>
-
       </template>
       <template
         slot="top-right"
@@ -132,14 +126,13 @@
         />
       </template>
     </q-table>
-    <br />
+    <br>
     <q-modal
       v-model="newHoldingModal"
       no-esc-dismiss
       no-backdrop-dismiss
       :content-css="{minWidth: '80vw', minHeight: '80vh'}"
     >
-
       <div style="padding: 30px">
         <div class="q-display-1 q-mb-md">New Holding</div>
 
@@ -226,7 +219,6 @@
               clearable
             />
           </div>
-
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-4">
@@ -263,7 +255,7 @@
             />
           </div>
         </div>
-        <br />
+        <br>
         <q-btn
           color="red"
           v-close-overlay
@@ -371,7 +363,6 @@
               clearable
             />
           </div>
-
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-4">
@@ -408,7 +399,7 @@
             />
           </div>
         </div>
-        <br />
+        <br>
         <q-btn
           color="red"
           v-close-overlay
@@ -441,9 +432,11 @@ export default {
       rowsOptions: [3, 5, 7, 10, 15, 25, 50, 0],
       loading: false,
       // columns: ['name', 'address'],
-      markers: [{
-        position: { lat: 12.879721, lng: 121.774017 }
-      }],
+      markers: [
+        {
+          position: { lat: 12.879721, lng: 121.774017 }
+        }
+      ],
       markersPosition: { lat: 12.879721, lng: 121.774017 },
       columns: [
         {
@@ -454,16 +447,16 @@ export default {
           field: 'name',
           sortable: true
         },
-        { name: 'address',
+        {
+          name: 'address',
           label: 'Address',
           align: 'left'
-
         },
-        { name: 'created_at',
+        {
+          name: 'created_at',
           label: 'Created At',
           align: 'left',
           sortable: true
-
         }
         // ,
         // { name: 'actions',
@@ -486,9 +479,7 @@ export default {
       paginationControl: { rowsPerPage: 15, page: 1 },
       // loading: false,
       dark: true,
-      selectedSecond: [
-        { name: 'Eclair' }
-      ]
+      selectedSecond: [{ name: 'Eclair' }]
     }
   },
   computed: {
@@ -570,7 +561,8 @@ export default {
     },
     index () {
       let data = this
-      this.$axios.get(`/holdings`)
+      this.$axios
+        .get(`/holdings`)
         .then(function (res) {
           data.$store.dispatch('pattys/setHoldings', res.data.holdings)
         })
@@ -578,31 +570,33 @@ export default {
     },
     create () {
       let data = this
-      this.$axios.post(`/holdings`, {
-        id: this.holding.id,
-        name: this.holding.name,
-        desc: this.holding.desc,
-        country_id: this.holding.address.country_id,
-        region_id: this.holding.address.region_id,
-        province_id: this.holding.address.province_id,
-        city_id: this.holding.address.city_id,
-        brgy_id: this.holding.address.brgy_id,
-        street_lot_blk: this.holding.address.street_lot_blk,
-        business_type_id: this.holding.business_info.business_type_id,
-        vat_type_id: this.holding.business_info.vat_type_id,
-        telephone: this.holding.business_info.telephone,
-        tin: this.holding.business_info.tin,
-        email: this.holding.business_info.email,
-        website: this.holding.business_info.website
-
-      }).then(function (res) {
-        data.index()
-        data.hideModal()
-      })
+      this.$axios
+        .post(`/holdings`, {
+          id: this.holding.id,
+          name: this.holding.name,
+          desc: this.holding.desc,
+          country_id: this.holding.address.country_id,
+          region_id: this.holding.address.region_id,
+          province_id: this.holding.address.province_id,
+          city_id: this.holding.address.city_id,
+          brgy_id: this.holding.address.brgy_id,
+          street_lot_blk: this.holding.address.street_lot_blk,
+          business_type_id: this.holding.business_info.business_type_id,
+          vat_type_id: this.holding.business_info.vat_type_id,
+          telephone: this.holding.business_info.telephone,
+          tin: this.holding.business_info.tin,
+          email: this.holding.business_info.email,
+          website: this.holding.business_info.website
+        })
+        .then(function (res) {
+          data.index()
+          data.hideModal()
+        })
     },
     deleteRow (id) {
       let data = this
-      this.$axios.get(`/holdings/${id}?id=${id}`)
+      this.$axios
+        .get(`/holdings/${id}?id=${id}`)
         .then(function (res) {
           data.$store.dispatch('pattys/setHolding', res.data.holding)
           data.$q.notify({
@@ -610,11 +604,13 @@ export default {
             icon: 'delete',
             message: `Delete ${data.holding.name}?`,
             actions: [
-
               {
                 label: 'OK',
                 handler: () => {
-                  data.$axios.delete(`/holdings/${data.holding.id}?id=${data.holding.id}`)
+                  data.$axios
+                    .delete(
+                      `/holdings/${data.holding.id}?id=${data.holding.id}`
+                    )
                     .then(function (res) {
                       data.$q.notify({
                         color: 'positive',
@@ -639,7 +635,8 @@ export default {
     },
     edit (id) {
       let data = this
-      this.$axios.get(`/holdings/${id}/edit?id=${id}`)
+      this.$axios
+        .get(`/holdings/${id}/edit?id=${id}`)
         .then(function (res) {
           data.$store.dispatch('pattys/setHolding', res.data.holding)
           data.minimizedModal = true
@@ -648,24 +645,24 @@ export default {
     },
     update (id) {
       var data = this
-      this.$axios.put(`/holdings/${this.holding.id}`, {
-        id: this.holding.id,
-        name: this.holding.name,
-        desc: this.holding.desc,
-        country_id: this.holding.address.country_id,
-        region_id: this.holding.address.region_id,
-        province_id: this.holding.address.province_id,
-        city_id: this.holding.address.city_id,
-        brgy_id: this.holding.address.brgy_id,
-        street_lot_blk: this.holding.address.street_lot_blk,
-        business_type_id: this.holding.business_info.business_type_id,
-        vat_type_id: this.holding.business_info.vat_type_id,
-        telephone: this.holding.business_info.telephone,
-        tin: this.holding.business_info.tin,
-        email: this.holding.business_info.email,
-        website: this.holding.business_info.website
-
-      })
+      this.$axios
+        .put(`/holdings/${this.holding.id}`, {
+          id: this.holding.id,
+          name: this.holding.name,
+          desc: this.holding.desc,
+          country_id: this.holding.address.country_id,
+          region_id: this.holding.address.region_id,
+          province_id: this.holding.address.province_id,
+          city_id: this.holding.address.city_id,
+          brgy_id: this.holding.address.brgy_id,
+          street_lot_blk: this.holding.address.street_lot_blk,
+          business_type_id: this.holding.business_info.business_type_id,
+          vat_type_id: this.holding.business_info.vat_type_id,
+          telephone: this.holding.business_info.telephone,
+          tin: this.holding.business_info.tin,
+          email: this.holding.business_info.email,
+          website: this.holding.business_info.website
+        })
         .then(function (res) {
           data.minimizedModal = false
           data.$q.notify({
@@ -683,14 +680,17 @@ export default {
       this.$q.notify({
         color: 'secondary',
         message: `Navigated to page ${page}`,
-        actions: page < 4
-          ? [{
-            label: 'Go to last page',
-            handler: () => {
-              this.paginationControl.page = 4
-            }
-          }]
-          : null
+        actions:
+          page < 4
+            ? [
+              {
+                label: 'Go to last page',
+                handler: () => {
+                  this.paginationControl.page = 4
+                }
+              }
+            ]
+            : null
       })
     },
     'holding.name' (val) {

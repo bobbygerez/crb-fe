@@ -9,8 +9,7 @@
         color="primary"
         @click="showNewRole()"
       >
-        <q-icon name="add"></q-icon>
-        new role
+        <q-icon name="add"></q-icon>new role
       </q-btn>
     </q-page-sticky>
   </div>
@@ -18,6 +17,7 @@
 
 <script type="text/javascript">
 import roles from 'components/data-table/roles.vue'
+
 export default {
   methods: {
     showNewRole () {

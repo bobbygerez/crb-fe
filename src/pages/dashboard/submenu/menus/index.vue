@@ -9,8 +9,7 @@
         color="primary"
         @click="showNewmenu()"
       >
-        <q-icon name="add"></q-icon>
-        new menu
+        <q-icon name="add"></q-icon>new menu
       </q-btn>
     </q-page-sticky>
   </div>
@@ -20,13 +19,12 @@
 import menus from 'components/data-table/menus.vue'
 export default {
   methods: {
-     showNewmenu(){
-       this.$store.dispatch("menus/menu", {
-          name: '',
-          parent_id: 0,
-          description: ''
-      });
-
+    showNewmenu () {
+      this.$store.dispatch('menus/menu', {
+        name: '',
+        parent_id: 0,
+        description: ''
+      })
 
       this.$store.dispatch('menus/newMenuModal', true)
     }
