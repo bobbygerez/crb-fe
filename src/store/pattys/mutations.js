@@ -1,3 +1,7 @@
+export {
+  updateField
+}
+  from 'vuex-map-fields'
 export const SET_BUSINESS_TYPES = (state, payload) => {
   state.businessTypes = payload
 }

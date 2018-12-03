@@ -69,19 +69,34 @@
             />
           </q-td> -->
           <q-popover touch-position>
-            <q-list link style="min-width: 100px">
+            <q-list
+              link
+              style="min-width: 100px"
+            >
               <!-- <q-item :to="currentRoute + '/' + props.row.id + '/view'">
                 <q-item-main label="View" />
               </q-item> -->
-              <q-item @click.native="edit(props.row.id)" v-close-overlay>
+              <q-item
+                @click.native="edit(props.row.id)"
+                v-close-overlay
+              >
                 <q-item-main label="Edit" />
               </q-item>
-              <q-item @click.native="deleteRow(props.row.id)" v-close-overlay>
+              <q-item
+                @click.native="deleteRow(props.row.id)"
+                v-close-overlay
+              >
                 <q-item-main label="Delete" />
               </q-item>
             </q-list>
           </q-popover>
-          <q-tooltip v-if="!$q.platform.is.cordova" :delay="500" anchor="bottom middle" self="bottom middle" :offset="[10, 10]">
+          <q-tooltip
+            v-if="!$q.platform.is.cordova"
+            :delay="500"
+            anchor="bottom middle"
+            self="bottom middle"
+            :offset="[10, 10]"
+          >
             Click to see options.
           </q-tooltip>
         </q-tr>
@@ -123,7 +138,7 @@
       no-esc-dismiss
       no-backdrop-dismiss
       :content-css="{minWidth: '80vw', minHeight: '80vh'}"
-      >
+    >
 
       <div style="padding: 30px">
         <div class="q-display-1 q-mb-md">New Holding</div>
@@ -412,8 +427,10 @@
 
 <script>
 // import tableData from 'assets/table-data'
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 import { values } from 'lodash'
+import { mapHoldingFields } from '../../store/pattys'
+
 export default {
   data () {
     return {
@@ -475,6 +492,7 @@ export default {
     }
   },
   computed: {
+    ...mapHoldingFields(['newHoldingModal', 'holding']),
     vatTypes () {
       return this.$store.getters['pattys/getVatTypes'].map(e => {
         return {
@@ -533,7 +551,7 @@ export default {
         }
       })
     },
-    ...mapState('pattys', ['holding', 'newHoldingModal']),
+    // ...mapState('pattys', ['holding', 'newHoldingModal']),
     holdings () {
       return values(this.$store.getters['pattys/getHoldings'])
     },

@@ -531,8 +531,16 @@
 
       </div>
     </q-modal>
-    <barangay-table ref="barangayTable" :params="addressType" @barangay-location-selected="locationSelected"/>
-    <city-table ref="cityTable" :params="addressType" @city-location-selected="locationSelected"/>
+    <barangay-table
+      ref="barangayTable"
+      :params="addressType"
+      @barangay-location-selected="locationSelected"
+    />
+    <city-table
+      ref="cityTable"
+      :params="addressType"
+      @city-location-selected="locationSelected"
+    />
   </div>
 </template>
 

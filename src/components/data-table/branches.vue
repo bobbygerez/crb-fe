@@ -13,11 +13,20 @@
       @request="request"
       :loading="loading"
     >
-      <template slot="top-right" slot-scope="props">
-        <q-search hide-underline v-model="filter"/>
+      <template
+        slot="top-right"
+        slot-scope="props"
+      >
+        <q-search
+          hide-underline
+          v-model="filter"
+        />
       </template>
 
-      <template slot="body" slot-scope="props">
+      <template
+        slot="body"
+        slot-scope="props"
+      >
         <q-tr :props="props">
           <q-td key="name">{{props.row.name }}</q-td>
           <q-td key="company">{{props.row.company.name }}</q-td>
@@ -35,7 +44,10 @@
 
           </q-td>
           <q-td key="created">{{ props.row.created_at }}</q-td>
-          <q-td key="actions" :props="props">
+          <q-td
+            key="actions"
+            :props="props"
+          >
             <q-btn
               round
               outline
@@ -55,7 +67,7 @@
           </q-td>
         </q-tr>
       </template>
-      
+
     </q-table>
 
     <q-modal
@@ -104,6 +116,7 @@
           </div>
         </div>
         <div class="row">
+<<<<<<< HEAD
           <div class="col-xs-12 col-sm-3">
             <q-input
               v-model="branch.business_info.telephone"
@@ -185,11 +198,29 @@
               :max-height="100"
               rows="2"
             />
+=======
+          <div class="col-xs-12 ">
+            <q-input
+              v-model="accessRight.name"
+              float-label="Name"
+              clearable
+            />
+>>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
           </div>
         </div>
         <br>
-        <q-btn color="red" v-close-overlay label="Close" @click="hideModal()"/>
-        <q-btn color="primary" @click="update()" label="Submit" class="q-ml-sm"/>
+        <q-btn
+          color="red"
+          v-close-overlay
+          label="Close"
+          @click="hideModal()"
+        />
+        <q-btn
+          color="primary"
+          @click="update()"
+          label="Submit"
+          class="q-ml-sm"
+        />
       </div>
     </q-modal>
     <q-modal
@@ -238,6 +269,7 @@
           </div>
         </div>
         <div class="row">
+<<<<<<< HEAD
           <div class="col-xs-12 col-sm-3">
             <q-input
               v-model="branch.business_info.telephone"
@@ -334,23 +366,47 @@
         <q-btn color="red" v-close-overlay label="Close" @click="hideModal()"/>
         <q-btn color="primary" @click="store()" label="Submit" class="q-ml-sm"/>
        </div>
+=======
+          <div class="col-xs-12 ">
+            <q-input
+              v-model="accessRight.name"
+              float-label="Name"
+              clearable
+            />
+          </div>
+        </div>
+        <br>
+        <q-btn
+          color="red"
+          v-close-overlay
+          label="Close"
+          @click="hideModal()"
+        />
+        <q-btn
+          color="primary"
+          @click="store()"
+          label="Submit"
+          class="q-ml-sm"
+        />
+      </div>
+>>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
     </q-modal>
   </div>
 </template>
 
 <script>
 // import tableData from 'assets/table-data'
-import _ from "lodash";
-import { mapState } from "vuex";
+import _ from 'lodash'
+import { mapState } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
-      model: "2016-10-24T10:40:14.674Z",
-      superior: "",
+      model: '2016-10-24T10:40:14.674Z',
+      superior: '',
       selectedRoles: [],
       editBranchModal: false,
       options: [5, 10, 15, 20],
-      lastPage: "",
+      lastPage: '',
       serverData: [],
       serverPagination: {
         page: 1,
@@ -358,17 +414,18 @@ export default {
         rowsPerPage: 10 // specifying this determines pagination is server-side
       },
       columns: [
-        { name: "name", label: "Name", field: "name", align: "left" },
-        { name: "company", label: "Company", align: "left", field: "company"},
-        { name: "address", label: "Address", align: "left", field: "address"},
-        { name: "created", label: "Created", align: "left", field: "created" },
-        { name: "actions", label: "Actions", align: "left", field: "actions" }
+        { name: 'name', label: 'Name', field: 'name', align: 'left' },
+        { name: 'company', label: 'Company', align: 'left', field: 'company' },
+        { name: 'address', label: 'Address', align: 'left', field: 'address' },
+        { name: 'created', label: 'Created', align: 'left', field: 'created' },
+        { name: 'actions', label: 'Actions', align: 'left', field: 'actions' }
       ],
-      filter: "",
+      filter: '',
       loading: false
-    };
+    }
   },
   computed: {
+<<<<<<< HEAD
     ...mapState("branches", ["branch"]),
     companies () {
       return this.$store.getters['branches/companies'].map(e => {
@@ -381,8 +438,14 @@ export default {
     newBranchModal:{
       get(){
         return this.$store.getters['branches/newBranchModal']
+=======
+    ...mapState('accessRights', ['accessRight']),
+    newAccessRightModal: {
+      get () {
+        return this.$store.getters['accessRights/newAccessRightModal']
+>>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
       },
-      set(){
+      set () {
 
       }
     },
@@ -446,8 +509,9 @@ export default {
     }
   },
   methods: {
-    store() {
+    store () {
       this.$axios
+<<<<<<< HEAD
         .post(`/branches`, {
           branch: this.branch,
           address: this.branch.address,
@@ -460,12 +524,29 @@ export default {
             icon: "check",
             message: `${this.branch.name}created successfully`
           });
+=======
+        .post(`/access_rights`, {
+          name: this.accessRight.name
+        })
+        .then(res => {
+          this.hideModal()
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
-          });
-        });
+          })
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `${this.accessRight.name}created successfully`
+          })
+>>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
+          this.request({
+            pagination: this.serverPagination,
+            filter: this.filter
+          })
+        })
     },
+<<<<<<< HEAD
     deleteRow(branchId) {
       this.$axios.get(`/branches/${branchId}?id=${branchId}`).then(res => {
         this.$store.dispatch("branches/branch", res.data.branch);
@@ -473,38 +554,55 @@ export default {
           color: "negative",
           icon: "delete",
           message: `Delete ${res.data.branch.name} ?`,
+=======
+    deleteRow (accessRightId) {
+      this.$axios.get(`/access_rights/${accessRightId}?id=${accessRightId}`).then(res => {
+        this.$store.dispatch('accessRights/accessRight', res.data.accessRight)
+        this.$q.notify({
+          color: 'negative',
+          icon: 'delete',
+          message: `Delete ${res.data.accessRight.name} ?`,
+>>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
           actions: [
             {
-              label: "OK",
+              label: 'OK',
               handler: () => {
                 this.$axios
                   .delete(`/branches/${this.branch.id}?id=${this.branch.id}`)
                   .then(res => {
                     this.$q.notify({
+<<<<<<< HEAD
                       color: "positive",
                       icon: "check",
                       message: `${this.branch.name} deleted successfully`
                     });
+=======
+                      color: 'positive',
+                      icon: 'check',
+                      message: `${this.accessRight.name} deleted successfully`
+                    })
+>>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
                     this.request({
                       pagination: this.serverPagination,
                       filter: this.filter
-                    });
-                     this.hideModal();
+                    })
+                    this.hideModal()
                   })
                   .catch(err => {
                     this.$q.notify({
-                      color: "negative",
-                      icon: "warning",
+                      color: 'negative',
+                      icon: 'warning',
                       message: `${err.response.data.message}`
-                    });
-                  });
+                    })
+                  })
               }
             }
           ]
-        });
-      });
+        })
+      })
       // .catch()
     },
+<<<<<<< HEAD
     update() {
        this.$axios.put(`/branches/${this.branch.id}`, {
         id: this.branch.id,
@@ -529,11 +627,26 @@ export default {
             color: 'positive',
             icon: 'check',
             message: `${res.data.branch.name} update successfully`
+=======
+    update () {
+      this.$axios
+        .put(`/access_rights/${this.accessRight.id}`, {
+          id: this.accessRight.id,
+          name: this.accessRight.name
+        })
+        .then(res => {
+          this.editRoleModal = false
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `${this.accessRight.name} updated successfully`
+>>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
           })
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
           })
+<<<<<<< HEAD
         })
         .catch()
     },
@@ -543,15 +656,27 @@ export default {
     },
     showModal() {
       this.editBranchModal = true;
+=======
+          this.hideModal()
+        })
+        .catch()
     },
-    paginationLast(currentPage) {
+    hideModal () {
+      this.$store.dispatch('accessRights/newAccessRightModal', false)
+      this.editAccessRightModal = false
+    },
+    showModal () {
+      this.editAccessRightModal = true
+>>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
+    },
+    paginationLast (currentPage) {
       if (this.lastPage > currentPage) {
-        return false;
+        return false
       }
-      return true;
+      return true
     },
-    request(props) {
-      this.loading = true;
+    request (props) {
+      this.loading = true
       this.$axios
         .get(
           `/branches?filter=${this.filter}&page=${props.pagination.page}&perPage=${
@@ -559,34 +684,43 @@ export default {
           }`
         )
         .then(res => {
-          this.serverPagination = props.pagination;
-          this.serverData = _.values(res.data.branches.data);
-          this.serverPagination.rowsNumber = res.data.branches.total;
-          this.lastPage = res.data.branches.last_page;
-          this.loading = false;
+          this.serverPagination = props.pagination
+          this.serverData = _.values(res.data.branches.data)
+          this.serverPagination.rowsNumber = res.data.branches.total
+          this.lastPage = res.data.branches.last_page
+          this.loading = false
         })
         .catch(error => {
           // there's an error... do SOMETHING
-          console.log(error);
+          console.log(error)
           // we tell QTable to exit the "loading" state
-          this.loading = false;
-        });
+          this.loading = false
+        })
     },
+<<<<<<< HEAD
     edit(branchId) {
       this.$axios.get(`branches/${branchId}/edit?id=${branchId}`).then(res => {
         this.showModal();
         this.$store.dispatch("branches/branch", res.data.branch);
         this.$store.dispatch("branches/companies", [res.data.branch.company]);
       });
+=======
+    edit (accessRightId) {
+      this.$axios.get(`access_rights/${accessRightId}/edit?id=${accessRightId}`).then(res => {
+        this.showModal()
+        this.$store.dispatch('accessRights/accessRight', res.data.accessRight)
+      })
+>>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
     }
   },
-  mounted() {
+  mounted () {
     this.request({
       pagination: this.serverPagination,
       filter: this.filter
-    });
+    })
   },
   watch: {
+<<<<<<< HEAD
     'branch.name' (val) {
       this.$store.dispatch('branches/branchName', val)
     },
@@ -636,7 +770,11 @@ export default {
     },
     'branch.business_info.website' (val) {
       this.$store.dispatch('branches/branchWebsite', val)
+=======
+    'accessRight.name' (val) {
+      this.$store.dispatch('accessRights/accessRightName', val)
+>>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
     }
   }
-};
+}
 </script>

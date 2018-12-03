@@ -36,15 +36,15 @@
             >{{ superior.name }}</span>
           </q-td>
           <q-td key="subordinates">
-            <span
-              v-for="(subordinate, i) in props.row.children"
-              :key="i"
-            >
+            <div class="row">
               <q-chip
+                class="q-mb-xs"
+                v-for="(subordinate, i) in props.row.children"
+                :key="i"
                 small
                 color="teal"
               >{{ subordinate.name }}</q-chip>
-            </span>
+            </div>
           </q-td>
           <q-td key="created">{{ props.row.created_at }}</q-td>
           <q-td
@@ -193,7 +193,7 @@
           <div class="col-xs-12 col-sm-6">
             <q-select
               v-model="role.parent_id"
-              :options="superiorRolesOptions"
+              :options="superiorRoleOptions"
               float-label="Superior"
               clearable
               chips
@@ -425,7 +425,7 @@ export default {
         this.$store.dispatch('roles/superiorRoles', res.data.superiorRoles)
       })
     },
-    subordinateRoles () {
+    getSubordinateRoles () {
       this.$axios.get(`/user-subordinate-roles`).then(res => {
         this.$store.dispatch(
           'roles/subordinateRoles',
