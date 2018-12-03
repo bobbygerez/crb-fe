@@ -164,20 +164,11 @@
       <div style="padding: 30px">
         <div class="row">
           <div class="col-xs-12 col-sm-6">
-<<<<<<< HEAD
-            <div class="q-display-1 q-mb-md">New Menu</div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-12 col-sm-6">
-            <q-input v-model="menu.name" float-label="Name" clearable/>
-=======
             <q-input
               v-model="menu.name"
               float-label="Name"
               clearable
             />
->>>>>>> 97f29fcb1edc688c081856722d16b796444c6545
           </div>
           <div class="col-xs-12 col-sm-6">
             <q-select
@@ -198,7 +189,7 @@
             />
           </div>
         </div>
-        
+
         <br>
         <q-btn
           color="red"
@@ -252,17 +243,17 @@ export default {
     }
   },
   computed: {
-    ...mapState("menus", ["menus", "menu"]),
+    ...mapState('menus', ['menus', 'menu']),
     userMenus: {
-      get() {
-        return this.$store.getters["menus/userMenus"].map(e => {
+      get () {
+        return this.$store.getters['menus/userMenus'].map(e => {
           return {
             label: e.name,
             value: e.id
-          };
-        });
+          }
+        })
       },
-      set(val) {}
+      set (val) { }
     },
     superiorMenus: {
       get () {
@@ -320,22 +311,22 @@ export default {
             filter: this.filter
           })
           this.$q.notify({
-            color: "positive",
-            icon: "check",
+            color: 'positive',
+            icon: 'check',
             message: `${this.menu.name}created successfully`
-          });
+          })
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
-          });
-        });
+          })
+        })
     },
-    deleteRow(menuId) {
+    deleteRow (menuId) {
       this.$axios.get(`/menus/${menuId}?id=${menuId}`).then(res => {
-        this.$store.dispatch("menus/menu", res.data.menu);
+        this.$store.dispatch('menus/menu', res.data.menu)
         this.$q.notify({
-          color: "negative",
-          icon: "delete",
+          color: 'negative',
+          icon: 'delete',
           message: `Delete ${res.data.menu.name} ?`,
           actions: [
             {
@@ -345,15 +336,15 @@ export default {
                   .delete(`/menus/${this.menu.id}?id=${this.menu.id}`)
                   .then(res => {
                     this.$q.notify({
-                      color: "positive",
-                      icon: "check",
+                      color: 'positive',
+                      icon: 'check',
                       message: `${this.menu.name} deleted successfully`
-                    });
+                    })
                     this.request({
                       pagination: this.serverPagination,
                       filter: this.filter
-                    });
-                     this.hideModal();
+                    })
+                    this.hideModal()
                   })
                   .catch(err => {
                     this.$q.notify({
@@ -392,9 +383,9 @@ export default {
         })
         .catch()
     },
-    hideModal() {
-      this.$store.dispatch('menus/newMenuModal', false);
-      this.editRoleModal = false;
+    hideModal () {
+      this.$store.dispatch('menus/newMenuModal', false)
+      this.editRoleModal = false
     },
     showModal () {
       this.editRoleModal = true
@@ -435,20 +426,20 @@ export default {
         this.$store.dispatch('menus/submenus', res.data.submenus)
       })
     },
-    userSubMenus() {
+    userSubMenus () {
       this.$axios.get(`/user-sub-menus`).then(res => {
         this.$store.dispatch(
-          "menus/userMenus",
+          'menus/userMenus',
           res.data.menus
-        );
-      });
+        )
+      })
     }
   },
   mounted () {
     this.request({
       pagination: this.serverPagination,
       filter: this.filter
-    });
+    })
     this.userSubMenus()
   },
   watch: {

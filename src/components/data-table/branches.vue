@@ -13,11 +13,20 @@
       @request="request"
       :loading="loading"
     >
-      <template slot="top-right" slot-scope="props">
-        <q-search hide-underline v-model="filter"/>
+      <template
+        slot="top-right"
+        slot-scope="props"
+      >
+        <q-search
+          hide-underline
+          v-model="filter"
+        />
       </template>
 
-      <template slot="body" slot-scope="props">
+      <template
+        slot="body"
+        slot-scope="props"
+      >
         <q-tr :props="props">
           <q-td key="name">{{props.row.name }}</q-td>
           <q-td key="company">{{props.row.company.name }}</q-td>
@@ -35,7 +44,10 @@
 
           </q-td>
           <q-td key="created">{{ props.row.created_at }}</q-td>
-          <q-td key="actions" :props="props">
+          <q-td
+            key="actions"
+            :props="props"
+          >
             <q-btn
               round
               outline
@@ -55,7 +67,7 @@
           </q-td>
         </q-tr>
       </template>
-      
+
     </q-table>
 
     <q-modal
@@ -73,12 +85,26 @@
         </div>
         <div class="row">
           <div class="col-xs-12 ">
-            <q-input v-model="accessRight.name" float-label="Name" clearable/>
+            <q-input
+              v-model="accessRight.name"
+              float-label="Name"
+              clearable
+            />
           </div>
         </div>
         <br>
-        <q-btn color="red" v-close-overlay label="Close" @click="hideModal()"/>
-        <q-btn color="primary" @click="update()" label="Submit" class="q-ml-sm"/>
+        <q-btn
+          color="red"
+          v-close-overlay
+          label="Close"
+          @click="hideModal()"
+        />
+        <q-btn
+          color="primary"
+          @click="update()"
+          label="Submit"
+          class="q-ml-sm"
+        />
       </div>
     </q-modal>
     <q-modal
@@ -96,12 +122,26 @@
         </div>
         <div class="row">
           <div class="col-xs-12 ">
-            <q-input v-model="accessRight.name" float-label="Name" clearable/>
+            <q-input
+              v-model="accessRight.name"
+              float-label="Name"
+              clearable
+            />
           </div>
         </div>
         <br>
-        <q-btn color="red" v-close-overlay label="Close" @click="hideModal()"/>
-        <q-btn color="primary" @click="store()" label="Submit" class="q-ml-sm"/>
+        <q-btn
+          color="red"
+          v-close-overlay
+          label="Close"
+          @click="hideModal()"
+        />
+        <q-btn
+          color="primary"
+          @click="store()"
+          label="Submit"
+          class="q-ml-sm"
+        />
       </div>
     </q-modal>
   </div>
@@ -109,17 +149,17 @@
 
 <script>
 // import tableData from 'assets/table-data'
-import _ from "lodash";
-import { mapState } from "vuex";
+import _ from 'lodash'
+import { mapState } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
-      model: "2016-10-24T10:40:14.674Z",
-      superior: "",
+      model: '2016-10-24T10:40:14.674Z',
+      superior: '',
       selectedRoles: [],
       editAccessRightModal: false,
       options: [5, 10, 15, 20],
-      lastPage: "",
+      lastPage: '',
       serverData: [],
       serverPagination: {
         page: 1,
@@ -127,125 +167,125 @@ export default {
         rowsPerPage: 10 // specifying this determines pagination is server-side
       },
       columns: [
-        { name: "name", label: "Name", field: "name", align: "left" },
-        { name: "company", label: "Company", align: "left", field: "company"},
-        { name: "address", label: "Address", align: "left", field: "address"},
-        { name: "created", label: "Created", align: "left", field: "created" },
-        { name: "actions", label: "Actions", align: "left", field: "actions" }
+        { name: 'name', label: 'Name', field: 'name', align: 'left' },
+        { name: 'company', label: 'Company', align: 'left', field: 'company' },
+        { name: 'address', label: 'Address', align: 'left', field: 'address' },
+        { name: 'created', label: 'Created', align: 'left', field: 'created' },
+        { name: 'actions', label: 'Actions', align: 'left', field: 'actions' }
       ],
-      filter: "",
+      filter: '',
       loading: false
-    };
+    }
   },
   computed: {
-    ...mapState("accessRights", ["accessRight"]),
-    newAccessRightModal:{
-      get(){
+    ...mapState('accessRights', ['accessRight']),
+    newAccessRightModal: {
+      get () {
         return this.$store.getters['accessRights/newAccessRightModal']
       },
-      set(){
+      set () {
 
       }
     }
   },
   methods: {
-    store() {
+    store () {
       this.$axios
         .post(`/access_rights`, {
-          name: this.accessRight.name,
+          name: this.accessRight.name
         })
         .then(res => {
-          this.hideModal();
+          this.hideModal()
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
-          });
+          })
           this.$q.notify({
-            color: "positive",
-            icon: "check",
+            color: 'positive',
+            icon: 'check',
             message: `${this.accessRight.name}created successfully`
-          });
+          })
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
-          });
-        });
+          })
+        })
     },
-    deleteRow(accessRightId) {
+    deleteRow (accessRightId) {
       this.$axios.get(`/access_rights/${accessRightId}?id=${accessRightId}`).then(res => {
-        this.$store.dispatch("accessRights/accessRight", res.data.accessRight);
+        this.$store.dispatch('accessRights/accessRight', res.data.accessRight)
         this.$q.notify({
-          color: "negative",
-          icon: "delete",
+          color: 'negative',
+          icon: 'delete',
           message: `Delete ${res.data.accessRight.name} ?`,
           actions: [
             {
-              label: "OK",
+              label: 'OK',
               handler: () => {
                 this.$axios
                   .delete(`/access_rights/${this.accessRight.id}?id=${this.accessRight.id}`)
                   .then(res => {
                     this.$q.notify({
-                      color: "positive",
-                      icon: "check",
+                      color: 'positive',
+                      icon: 'check',
                       message: `${this.accessRight.name} deleted successfully`
-                    });
+                    })
                     this.request({
                       pagination: this.serverPagination,
                       filter: this.filter
-                    });
-                     this.hideModal();
+                    })
+                    this.hideModal()
                   })
                   .catch(err => {
                     this.$q.notify({
-                      color: "negative",
-                      icon: "warning",
+                      color: 'negative',
+                      icon: 'warning',
                       message: `${err.response.data.message}`
-                    });
-                  });
+                    })
+                  })
               }
             }
           ]
-        });
-      });
+        })
+      })
       // .catch()
     },
-    update() {
+    update () {
       this.$axios
         .put(`/access_rights/${this.accessRight.id}`, {
           id: this.accessRight.id,
           name: this.accessRight.name
         })
         .then(res => {
-          this.editRoleModal = false;
+          this.editRoleModal = false
           this.$q.notify({
-            color: "positive",
-            icon: "check",
+            color: 'positive',
+            icon: 'check',
             message: `${this.accessRight.name} updated successfully`
-          });
+          })
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
-          });
-          this.hideModal();
+          })
+          this.hideModal()
         })
-        .catch();
+        .catch()
     },
-    hideModal() {
-      this.$store.dispatch('accessRights/newAccessRightModal', false);
-      this.editAccessRightModal = false;
+    hideModal () {
+      this.$store.dispatch('accessRights/newAccessRightModal', false)
+      this.editAccessRightModal = false
     },
-    showModal() {
-      this.editAccessRightModal = true;
+    showModal () {
+      this.editAccessRightModal = true
     },
-    paginationLast(currentPage) {
+    paginationLast (currentPage) {
       if (this.lastPage > currentPage) {
-        return false;
+        return false
       }
-      return true;
+      return true
     },
-    request(props) {
-      this.loading = true;
+    request (props) {
+      this.loading = true
       this.$axios
         .get(
           `/branches?filter=${this.filter}&page=${props.pagination.page}&perPage=${
@@ -253,36 +293,36 @@ export default {
           }`
         )
         .then(res => {
-          this.serverPagination = props.pagination;
-          this.serverData = _.values(res.data.branches.data);
-          this.serverPagination.rowsNumber = res.data.branches.total;
-          this.lastPage = res.data.branches.last_page;
-          this.loading = false;
+          this.serverPagination = props.pagination
+          this.serverData = _.values(res.data.branches.data)
+          this.serverPagination.rowsNumber = res.data.branches.total
+          this.lastPage = res.data.branches.last_page
+          this.loading = false
         })
         .catch(error => {
           // there's an error... do SOMETHING
-          console.log(error);
+          console.log(error)
           // we tell QTable to exit the "loading" state
-          this.loading = false;
-        });
+          this.loading = false
+        })
     },
-    edit(accessRightId) {
+    edit (accessRightId) {
       this.$axios.get(`access_rights/${accessRightId}/edit?id=${accessRightId}`).then(res => {
-        this.showModal();
-        this.$store.dispatch("accessRights/accessRight", res.data.accessRight);
-      });
+        this.showModal()
+        this.$store.dispatch('accessRights/accessRight', res.data.accessRight)
+      })
     }
   },
-  mounted() {
+  mounted () {
     this.request({
       pagination: this.serverPagination,
       filter: this.filter
-    });
+    })
   },
   watch: {
-    "accessRight.name"(val) {
-      this.$store.dispatch("accessRights/accessRightName", val);
+    'accessRight.name' (val) {
+      this.$store.dispatch('accessRights/accessRightName', val)
     }
   }
-};
+}
 </script>

@@ -1,12 +1,30 @@
 <template>
-  <div class="q-pa-sm">
-    <q-btn
-      color="positive"
-      label=" New Holding"
-      class="q-mb-md"
-      @click="showNewHoldingModal()"
-    />
-    <holdings></holdings>
+  <div
+    class="q-pa-sm"
+    ref="tableContainer"
+  >
+    <q-page>
+      <q-scroll-observable @scroll="userHasScrolled" />
+      <holdings></holdings>
+      <q-page-sticky
+        position="bottom"
+        :offset="$q.theme === 'mat' ? [18, 18] : [18, 18]"
+      >
+        <transition
+          appear
+          enter-active-class="animated fadeInUpBig"
+          leave-active-class="animated fadeOutDownBig"
+        >
+          <q-btn
+            v-if="showFab"
+            fab
+            color="primary"
+            icon="mdi-plus"
+            @click="showNewHoldingModal"
+          />
+        </transition>
+      </q-page-sticky>
+    </q-page>
   </div>
 </template>
 
@@ -15,7 +33,15 @@ import holdings from 'components/data-table/holdings.vue'
 import { mapActions, mapState } from 'vuex'
 import { axios } from 'plugins/axios'
 import Hold from 'assets/services/holdings/api'
+
 export default {
+  data () {
+    return {
+      showFab: false,
+      currentRoute: this.$route.path.replace('/dashboard', '.'),
+      dark: true
+    }
+  },
   computed: {
     ...mapState('globals', ['perPage', 'page'])
   },
@@ -38,6 +64,20 @@ export default {
         .then(res => {
           this.setHoldings(res.data.holdings)
         })
+    },
+    userHasScrolled (scroll) {
+      // {
+      //   position: 56, // pixels from top
+      //   direction: 'down', // 'down' or 'up'
+      //   directionChanged: false, // has direction changed since this handler was called?
+      //   inflexionPosition: 56 // last scroll position where user changed scroll direction
+      // }
+      let diff = scroll.direction === 'down' ? scroll.inflexionPosition + scroll.position : scroll.inflexionPosition - scroll.position
+      if (diff >= 300 && scroll.direction === 'up') {
+        this.showFab = false
+      } else {
+        this.showFab = true
+      }
     }
   },
   components: {
