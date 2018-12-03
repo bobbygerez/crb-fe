@@ -36,15 +36,15 @@
             >{{ superior.name }}</span>
           </q-td>
           <q-td key="subordinates">
-            <span
-              v-for="(subordinate, i) in props.row.children"
-              :key="i"
-            >
+            <div class="row">
               <q-chip
+                class="q-mb-xs"
+                v-for="(subordinate, i) in props.row.children"
+                :key="i"
                 small
                 color="teal"
               >{{ subordinate.name }}</q-chip>
-            </span>
+            </div>
           </q-td>
           <q-td key="created">{{ props.row.created_at }}</q-td>
           <q-td
