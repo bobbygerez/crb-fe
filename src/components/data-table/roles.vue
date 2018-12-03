@@ -193,7 +193,7 @@
           <div class="col-xs-12 col-sm-6">
             <q-select
               v-model="role.parent_id"
-              :options="superiorRolesOptions"
+              :options="superiorRoleOptions"
               float-label="Superior"
               clearable
               chips
@@ -425,7 +425,7 @@ export default {
         this.$store.dispatch('roles/superiorRoles', res.data.superiorRoles)
       })
     },
-    subordinateRoles () {
+    getSubordinateRoles () {
       this.$axios.get(`/user-subordinate-roles`).then(res => {
         this.$store.dispatch(
           'roles/subordinateRoles',
