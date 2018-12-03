@@ -116,7 +116,6 @@
           </div>
         </div>
         <div class="row">
-<<<<<<< HEAD
           <div class="col-xs-12 col-sm-3">
             <q-input
               v-model="branch.business_info.telephone"
@@ -198,14 +197,6 @@
               :max-height="100"
               rows="2"
             />
-=======
-          <div class="col-xs-12 ">
-            <q-input
-              v-model="accessRight.name"
-              float-label="Name"
-              clearable
-            />
->>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
           </div>
         </div>
         <br>
@@ -269,7 +260,6 @@
           </div>
         </div>
         <div class="row">
-<<<<<<< HEAD
           <div class="col-xs-12 col-sm-3">
             <q-input
               v-model="branch.business_info.telephone"
@@ -366,30 +356,6 @@
         <q-btn color="red" v-close-overlay label="Close" @click="hideModal()"/>
         <q-btn color="primary" @click="store()" label="Submit" class="q-ml-sm"/>
        </div>
-=======
-          <div class="col-xs-12 ">
-            <q-input
-              v-model="accessRight.name"
-              float-label="Name"
-              clearable
-            />
-          </div>
-        </div>
-        <br>
-        <q-btn
-          color="red"
-          v-close-overlay
-          label="Close"
-          @click="hideModal()"
-        />
-        <q-btn
-          color="primary"
-          @click="store()"
-          label="Submit"
-          class="q-ml-sm"
-        />
-      </div>
->>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
     </q-modal>
   </div>
 </template>
@@ -425,7 +391,6 @@ export default {
     }
   },
   computed: {
-<<<<<<< HEAD
     ...mapState("branches", ["branch"]),
     companies () {
       return this.$store.getters['branches/companies'].map(e => {
@@ -438,12 +403,6 @@ export default {
     newBranchModal:{
       get(){
         return this.$store.getters['branches/newBranchModal']
-=======
-    ...mapState('accessRights', ['accessRight']),
-    newAccessRightModal: {
-      get () {
-        return this.$store.getters['accessRights/newAccessRightModal']
->>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
       },
       set () {
 
@@ -511,7 +470,6 @@ export default {
   methods: {
     store () {
       this.$axios
-<<<<<<< HEAD
         .post(`/branches`, {
           branch: this.branch,
           address: this.branch.address,
@@ -524,29 +482,12 @@ export default {
             icon: "check",
             message: `${this.branch.name}created successfully`
           });
-=======
-        .post(`/access_rights`, {
-          name: this.accessRight.name
-        })
-        .then(res => {
-          this.hideModal()
-          this.request({
-            pagination: this.serverPagination,
-            filter: this.filter
-          })
-          this.$q.notify({
-            color: 'positive',
-            icon: 'check',
-            message: `${this.accessRight.name}created successfully`
-          })
->>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
           })
         })
     },
-<<<<<<< HEAD
     deleteRow(branchId) {
       this.$axios.get(`/branches/${branchId}?id=${branchId}`).then(res => {
         this.$store.dispatch("branches/branch", res.data.branch);
@@ -554,15 +495,6 @@ export default {
           color: "negative",
           icon: "delete",
           message: `Delete ${res.data.branch.name} ?`,
-=======
-    deleteRow (accessRightId) {
-      this.$axios.get(`/access_rights/${accessRightId}?id=${accessRightId}`).then(res => {
-        this.$store.dispatch('accessRights/accessRight', res.data.accessRight)
-        this.$q.notify({
-          color: 'negative',
-          icon: 'delete',
-          message: `Delete ${res.data.accessRight.name} ?`,
->>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
           actions: [
             {
               label: 'OK',
@@ -571,17 +503,10 @@ export default {
                   .delete(`/branches/${this.branch.id}?id=${this.branch.id}`)
                   .then(res => {
                     this.$q.notify({
-<<<<<<< HEAD
                       color: "positive",
                       icon: "check",
                       message: `${this.branch.name} deleted successfully`
                     });
-=======
-                      color: 'positive',
-                      icon: 'check',
-                      message: `${this.accessRight.name} deleted successfully`
-                    })
->>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
                     this.request({
                       pagination: this.serverPagination,
                       filter: this.filter
@@ -602,7 +527,6 @@ export default {
       })
       // .catch()
     },
-<<<<<<< HEAD
     update() {
        this.$axios.put(`/branches/${this.branch.id}`, {
         id: this.branch.id,
@@ -627,26 +551,11 @@ export default {
             color: 'positive',
             icon: 'check',
             message: `${res.data.branch.name} update successfully`
-=======
-    update () {
-      this.$axios
-        .put(`/access_rights/${this.accessRight.id}`, {
-          id: this.accessRight.id,
-          name: this.accessRight.name
-        })
-        .then(res => {
-          this.editRoleModal = false
-          this.$q.notify({
-            color: 'positive',
-            icon: 'check',
-            message: `${this.accessRight.name} updated successfully`
->>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
           })
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
           })
-<<<<<<< HEAD
         })
         .catch()
     },
@@ -656,18 +565,6 @@ export default {
     },
     showModal() {
       this.editBranchModal = true;
-=======
-          this.hideModal()
-        })
-        .catch()
-    },
-    hideModal () {
-      this.$store.dispatch('accessRights/newAccessRightModal', false)
-      this.editAccessRightModal = false
-    },
-    showModal () {
-      this.editAccessRightModal = true
->>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
     },
     paginationLast (currentPage) {
       if (this.lastPage > currentPage) {
@@ -697,20 +594,12 @@ export default {
           this.loading = false
         })
     },
-<<<<<<< HEAD
     edit(branchId) {
       this.$axios.get(`branches/${branchId}/edit?id=${branchId}`).then(res => {
         this.showModal();
         this.$store.dispatch("branches/branch", res.data.branch);
         this.$store.dispatch("branches/companies", [res.data.branch.company]);
       });
-=======
-    edit (accessRightId) {
-      this.$axios.get(`access_rights/${accessRightId}/edit?id=${accessRightId}`).then(res => {
-        this.showModal()
-        this.$store.dispatch('accessRights/accessRight', res.data.accessRight)
-      })
->>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
     }
   },
   mounted () {
@@ -720,7 +609,6 @@ export default {
     })
   },
   watch: {
-<<<<<<< HEAD
     'branch.name' (val) {
       this.$store.dispatch('branches/branchName', val)
     },
@@ -770,10 +658,6 @@ export default {
     },
     'branch.business_info.website' (val) {
       this.$store.dispatch('branches/branchWebsite', val)
-=======
-    'accessRight.name' (val) {
-      this.$store.dispatch('accessRights/accessRightName', val)
->>>>>>> 7a8358d7519d30591b19768d6a1326f0b0d41b08
     }
   }
 }
