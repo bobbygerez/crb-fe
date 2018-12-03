@@ -7,6 +7,7 @@ import users from './users'
 import roles from './roles'
 import menus from './menus'
 import accessRights from './access-rights'
+import branches from './branches'
 import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
@@ -26,7 +27,8 @@ export default function (/* { ssrContext } */) {
       users,
       roles,
       menus,
-      accessRights
+      accessRights,
+      branches
     },
     plugins: [createPersistedState()]
   })
