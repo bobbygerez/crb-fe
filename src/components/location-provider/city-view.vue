@@ -16,10 +16,11 @@
             <q-icon name="mdi-arrow-left" />
           </q-btn>
           <!-- <q-toolbar-title> -->
-          <div class="col-6 col-md-4">
+          <div class="col-6 col-md-8">
             <q-input
               :before="[{icon:'mdi-magnify'}]"
-              color="none"
+              :dark="showMaxResult"
+              color="default"
               hide-underline
               placeholder="Search Cities"
               clearable
@@ -30,14 +31,15 @@
             />
           </div>
           <div
-            class="col-2 col-md-2"
+            class="col-2 col-md-3"
             v-if="showMaxResult === true"
           >
             <q-select
               placeholder="Results"
-              :prefix="!$q.screen.xs ? 'Result: ' : ''"
-              color="none"
+              :prefix="!($q.screen.sm || $q.screen.xs) ? 'Result: ' : ''"
+              color="default"
               v-model="maxResult"
+              inverted
               @focus="showMaxResult = true"
               @input="searchCities"
               :options="[

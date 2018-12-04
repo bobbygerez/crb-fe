@@ -66,11 +66,11 @@
         rows="2"
       />
     </div>
-    <!-- <div class="row">
+    <div class="row">
       <div class="col-xs-12 col-sm-6">
         <q-select
           v-model="holding.address.country_id"
-          :options="countries"
+          :options="countryOptions"
           float-label="Country"
           clearable
         />
@@ -78,7 +78,7 @@
       <div class="col-xs-12 col-sm-6">
         <q-select
           v-model="holding.address.region_id"
-          :options="regions"
+          :options="regionOptions"
           float-label="Region"
           clearable
         />
@@ -88,7 +88,7 @@
       <div class="col-xs-12 col-sm-4">
         <q-select
           v-model="holding.address.province_id"
-          :options="provinces"
+          :options="provinceOptions"
           float-label="Province"
           clearable
         />
@@ -96,7 +96,7 @@
       <div class="col-xs-12 col-sm-4">
         <q-select
           v-model="holding.address.city_id"
-          :options="cities"
+          :options="cityOptions"
           float-label="City"
           clearable
         />
@@ -104,7 +104,7 @@
       <div class="col-xs-12 col-sm-4">
         <q-select
           v-model="holding.address.brgy_id"
-          :options="brgys"
+          :options="brgyOptions"
           float-label="Barangay"
           clearable
         />
@@ -118,7 +118,7 @@
           rows="2"
         />
       </div>
-    </div> -->
+    </div>
     <br>
     <q-btn
       color="primary"
@@ -130,12 +130,52 @@
 </template>
 
 <script>
+
 import { mapHoldingFields } from '../../store/pattys'
+import { mapGlobalFields } from '../../store/globals'
+
 export default {
   computed: {
     ...mapHoldingFields(['holding', 'businessTypes', 'vatTypes']),
-    bizTypeOptions () { return this.businessTypes.map(v => { return { label: v.name, value: v.id } }) },
-    vatTypeOptions () { return this.vatTypes.map(v => { return { label: v.name, value: v.id } }) }
+    ...mapGlobalFields(['countries', 'regions', 'provinces', 'cities', 'brgys', 'countryList']),
+    bizTypeOptions () {
+      return this.businessTypes.map(v => {
+        return { label: v.name, value: v.id }
+      })
+    },
+    vatTypeOptions () {
+      return this.vatTypes.map(v => {
+        return { label: v.name, value: v.id }
+      })
+    },
+    countryOptions () {
+      return this.countries.map(v => {
+        return { label: v.description, value: v.id }
+      })
+    },
+    regionOptions () {
+      return this.regions.map(v => {
+        return { label: v.description, value: v.id }
+      })
+    },
+    provinceOptions () {
+      return this.provinces.map(v => {
+        return { label: v.description, value: v.id }
+      })
+    },
+    cityOptions () {
+      return this.cities.map(v => {
+        return { label: v.description, value: v.id }
+      })
+    },
+    brgyOptions () {
+      return this.brgys.map(v => {
+        return { label: v.description, value: v.id }
+      })
+    }
+  },
+  mounted () {
+    console.log('countryList', this.countryList) // this.$store.getters['globals/countryList'])
   }
 }
 </script>

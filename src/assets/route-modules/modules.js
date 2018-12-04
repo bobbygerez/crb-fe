@@ -3,5 +3,7 @@ export default [
   'roles',
   'companies',
   'holdings',
-  'branches'
+  'branches',
+  'menus',
+  'access-right'
 ]

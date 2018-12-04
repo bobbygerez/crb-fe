@@ -413,14 +413,6 @@
         />
       </div>
     </q-modal>
-    <generic-modal
-      :moduleTitle="'New Holding'"
-      ref="holdingForm"
-      :modalModel="newHoldingModal"
-      @generic-modal-hidden="newHoldingModal = false"
-    >
-      <holding-form></holding-form>
-    </generic-modal>
   </div>
 </template>
 
@@ -429,14 +421,8 @@
 // import { mapState } from 'vuex'
 import { values } from 'lodash'
 import { mapHoldingFields } from '../../store/pattys'
-import GenericModal from 'components/modals/generic-modal'
-import HoldingForm from 'components/forms/holding'
 
 export default {
-  components: {
-    GenericModal,
-    HoldingForm
-  },
   data () {
     return {
       selectedCountry: '',

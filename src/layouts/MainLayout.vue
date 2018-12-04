@@ -90,9 +90,10 @@
             :label="subMenu.name"
             v-for="(subMenu, x) in menu.all_children"
             :key="x"
-            :to="slug(`/dashboard/submenu/${subMenu.id}/${subMenu.name}`)"
+            :to="`/dashboard/${subMenu.name}`"
             group="g"
           >
+          <!-- "slug(`/dashboard/submenu/${subMenu.id}/${subMenu.name}`)" -->
             <!-- <q-item link v-for="(subMenuChild,y) in subMenu.sub_menus_child" :key="y" :to="slug(`/dashboard/submenu/${subMenu.id}/${subMenu.name}/${subMenu.id}/${subMenuChild.description}`)">
               <q-item-main :label="subMenuChild.description" />
             </q-item> -->
@@ -108,13 +109,13 @@
 </template>
 
 <script>
-import slug from 'components/mixins/slug'
+// import slug from 'components/mixins/slug'
 import { mapState } from 'vuex'
 import { unSetAuthHeader } from 'plugins/axios'
 
 export default {
-  mixins: [slug],
-  name: 'MyLayout',
+  // mixins: [slug],
+  name: 'MainLayout',
   data () {
     return {
       text2: '',
