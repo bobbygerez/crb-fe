@@ -8,6 +8,7 @@ import roles from './roles'
 import menus from './menus'
 import accessRights from './access-rights'
 import branches from './branches'
+import categories from './categories'
 import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
@@ -28,7 +29,8 @@ export default function (/* { ssrContext } */) {
       roles,
       menus,
       accessRights,
-      branches
+      branches,
+      categories
     },
     plugins: [createPersistedState()]
   })

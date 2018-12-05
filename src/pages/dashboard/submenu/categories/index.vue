@@ -1,22 +1,22 @@
 <template>
   <div class="q-pa-sm">
-    <classes></classes>
+    <categories></categories>
     <q-page-sticky
       position="bottom-left"
       :offset="[16, 16]"
     >
-      <q-btn
+      <!-- <q-btn
         color="primary"
         @click="showNewBranchModal()"
       >
         <q-icon name="add"></q-icon>New Class
-      </q-btn>
+      </q-btn> -->
     </q-page-sticky>
   </div>
 </template>
 
 <script type="text/javascript">
-import classes from 'components/data-table/classes.vue'
+import categories from 'components/data-table/categories.vue'
 import { mapActions } from 'vuex'
 export default {
   created () {
@@ -57,7 +57,7 @@ export default {
     }
   },
   components: {
-    classes
+    categories
   }
 }
 </script>
