@@ -18,27 +18,11 @@ const dashBoardModules = (appModules) => {
   let dashboard = {
     path: '',
     meta: {
-<<<<<<< HEAD
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/dashboard/submenu/:submenu/classes',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{
-      path: '',
-      component: () => import('pages/dashboard/submenu/classes/index.vue')
-    }],
-    meta: {
-      requiresAuth: true
-    }
-=======
       title: 'Home',
       needAuth: true
     },
     component: () =>
       import('pages/dashboard/index')
->>>>>>> d9f090f639a14ea17fbdeac8e876900a979c6e2f
   }
   modules.push(dashboard)
   appModules.forEach(v => {

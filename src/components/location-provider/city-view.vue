@@ -31,7 +31,7 @@
             />
           </div>
           <div
-            class="col-2 col-md-3"
+            class="col-3 col-md-3"
             v-if="showMaxResult === true"
           >
             <q-select
@@ -112,20 +112,17 @@
                 </q-card-title>
                 <q-card-separator />
                 <q-card-main class="q-pa-none">
-                  <q-list no-border>
+                  <q-list no-border multiline>
                     <q-item
-                      v-for="col in props.cols.filter(col => col.name !== 'desc')"
+                      v-for="col in props.cols.filter(col => col.name !== 'city')"
                       :key="col.name"
                     >
-                      <q-item-main>
-                        <q-item-tile
-                          label
-                          class="text-truncate"
-                        >{{ col.label }}</q-item-tile>
-                      </q-item-main>
-                      <q-item-side right>
-                        <q-item-tile class="text-truncate">{{ col.value }}</q-item-tile>
+                      <q-item-side>
+                        <q-item-tile class="text-truncate">{{ col.label }}</q-item-tile>
                       </q-item-side>
+                      <q-item-main>
+                        <q-item-tile label style="text-align:right;">{{ col.value }}</q-item-tile>
+                      </q-item-main>
                     </q-item>
                   </q-list>
                 </q-card-main>

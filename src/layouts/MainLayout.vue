@@ -84,20 +84,34 @@
           :label="menu.name"
           v-for="(menu, i) in menus "
           :key="i"
-          group="g"
+          group="main"
         >
-          <q-collapsible
-            :label="subMenu.name"
+          <div
             v-for="(subMenu, x) in menu.all_children"
             :key="x"
-            :to="`/dashboard/${subMenu.name}`"
-            group="g"
           >
-          <!-- "slug(`/dashboard/submenu/${subMenu.id}/${subMenu.name}`)" -->
-            <!-- <q-item link v-for="(subMenuChild,y) in subMenu.sub_menus_child" :key="y" :to="slug(`/dashboard/submenu/${subMenu.id}/${subMenu.name}/${subMenu.id}/${subMenuChild.description}`)">
-              <q-item-main :label="subMenuChild.description" />
-            </q-item> -->
-          </q-collapsible>
+            <template v-if="subMenu.all_children.length">
+              <q-collapsible
+                :label="subMenu.name"
+                :to="`/dashboard/${subMenu.name}`"
+                group="sub"
+              >
+                <!-- "slug(`/dashboard/submenu/${subMenu.id}/${subMenu.name}`)" -->
+                <!-- <q-item link v-for="(subMenuChild,y) in subMenu.sub_menus_child" :key="y" :to="slug(`/dashboard/submenu/${subMenu.id}/${subMenu.name}/${subMenu.id}/${subMenuChild.description}`)">
+                    <q-item-main :label="subMenuChild.description" />
+                  </q-item> -->
+              </q-collapsible>
+            </template>
+            <template v-else>
+              <q-item
+                link
+                :to="`/dashboard/${replaceAll(subMenu.name,' ', '-')}`"
+              >
+                <q-item-side icon="mdi-chevron-right" />
+                <q-item-main :label="subMenu.name" />
+              </q-item>
+            </template>
+          </div>
         </q-collapsible>
       </q-list>
     </q-layout-drawer>
@@ -112,6 +126,8 @@
 // import slug from 'components/mixins/slug'
 import { mapState } from 'vuex'
 import { unSetAuthHeader } from 'plugins/axios'
+
+const replaceAll = (str, find, replace) => str.replace(new RegExp(find, 'g'), replace)
 
 export default {
   // mixins: [slug],
@@ -128,6 +144,7 @@ export default {
     ...mapState('globals', ['menus', 'pageMeta'])
   },
   methods: {
+    replaceAll,
     logout () {
       this.$q.dialog({
         title: 'Logout',
