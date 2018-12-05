@@ -24,16 +24,25 @@
           />
         </transition>
       </q-page-sticky>
+      <generic-modal
+      :title="'New Holding'"
+      :model="newHoldingModal"
+      @hide="newHoldingModal = false"
+    >
+      <holding-form></holding-form>
+    </generic-modal>
     </q-page>
   </div>
 </template>
 
 <script type="text/javascript">
-import holdings from 'components/data-table/holdings.vue'
+import Holdings from 'components/data-table/holdings.vue'
 import { mapActions, mapState } from 'vuex'
 import { axios } from 'plugins/axios'
 import Hold from 'assets/services/holdings/api'
 import { mapHoldingFields } from '../../../../store/pattys'
+import GenericModal from 'components/modals/generic-modal'
+import HoldingForm from 'components/forms/holding'
 
 export default {
   data () {
@@ -92,7 +101,9 @@ export default {
     }
   },
   components: {
-    holdings
+    GenericModal,
+    HoldingForm,
+    Holdings
   }
 }
 </script>

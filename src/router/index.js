@@ -10,9 +10,9 @@ Vue.use(VueRouter)
  * If not building with SSR mode, you can
  * directly export the Router instantiation
  */
+// ,ssrContext
 export default function ({
-  store,
-  ssrContext
+  store
 }) {
   const Router = new VueRouter({
     scrollBehavior: () => ({
@@ -36,6 +36,7 @@ export default function ({
           }
         })
       } else {
+        console.log('to', to)
         store.dispatch('globals/setPageMeta', to.meta)
         next()
       }
