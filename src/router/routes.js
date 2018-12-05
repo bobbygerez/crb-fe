@@ -25,20 +25,20 @@ const dashBoardModules = (appModules) => {
       import('pages/dashboard/index')
   }
   modules.push(dashboard)
-  appModules.forEach(v => {
-    let n = v.name ? v.name : capitalize(replaceAll(v, '-', ' '))
-    let p = v.path ? v.path : v
+  appModules.forEach(mod => {
+    let name = mod.name ? mod.name : capitalize(replaceAll(mod, '-', ' '))
+    let path = mod.path ? mod.path : mod
 
     let indexModule = {
-      path: p,
+      path: path,
       components: {
-        default: load(p + '/index')
+        default: load(path + '/index')
         // actions: () => {
         //   return import('components/generic-action-bar-menu')
         // }
       },
       meta: {
-        title: n,
+        title: name.endsWith('s') ? name : name.concat('s'),
         needAuth: true,
         section: 'index'
       }
