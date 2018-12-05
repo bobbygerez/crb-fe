@@ -3,13 +3,16 @@
     <q-table
       :data="holdings"
       :columns="columns"
-      row-key="name"
+      row-key="__index"
       :visible-columns="visibleColumns"
       :loading="loading"
       :rows-per-page-options="rowsOptions"
       :pagination.sync="paginationControl"
       :separator="separator"
       :filter="filter"
+      :filter-method="customFilter"
+      color="primary"
+      :selected.sync="selected"
     >
       <template
         slot="top-left"
@@ -28,7 +31,11 @@
         slot="body"
         slot-scope="props"
       >
-        <q-tr :props="props">
+        <q-tr
+          class="cursor-pointer"
+          :props="props"
+          @click.native="selected = [{ __index: props.row.__index }]; test12(props)"
+        >
           <q-td key="name">{{props.row.name}}</q-td>
           <q-td
             key="address"
@@ -43,28 +50,10 @@
           <q-td
             key="created_at"
             :props="props"
-          >{{props.row.created_at}}</q-td>
-          <!-- <q-td
-            key="actions"
-            :props="props"
           >
-            <q-btn
-              round
-              outline
-              color="positive"
-              icon="edit"
-              class="q-ma-sm"
-              @click="edit(props.row.id)"
-            />
-            <q-btn
-              round
-              outline
-              color="negative"
-              icon="delete"
-              class="q-ma-sm"
-              @click="deleteRow(props.row.id)"
-            />
-          </q-td>-->
+            {{props.row.created_at}}
+          </q-td>
+
           <q-popover touch-position>
             <q-list
               link
@@ -417,8 +406,6 @@
 </template>
 
 <script>
-// import tableData from 'assets/table-data'
-// import { mapState } from 'vuex'
 import { values } from 'lodash'
 import { mapHoldingFields } from '../../store/pattys'
 
@@ -431,7 +418,6 @@ export default {
       minimizedModal: false,
       rowsOptions: [3, 5, 7, 10, 15, 25, 50, 0],
       loading: false,
-      // columns: ['name', 'address'],
       markers: [
         {
           position: { lat: 12.879721, lng: 121.774017 }
@@ -450,36 +436,28 @@ export default {
         {
           name: 'address',
           label: 'Address',
-          align: 'left'
+          field: row => row.address.street_lot_blk,
+          align: 'left',
+          sortable: true
         },
         {
           name: 'created_at',
           label: 'Created At',
+          field: 'created_at',
           align: 'left',
           sortable: true
         }
-        // ,
-        // { name: 'actions',
-        //   label: 'Actions',
-        //   align: 'left'
-
-        // }
       ],
       filter: '',
-      visibleColumns: ['name', 'address', 'created_at', 'actions'],
+      visibleColumns: ['name', 'address', 'created_at'],
       separator: 'horizontal',
       selection: 'multiple',
-      selected: [
-        // initial selection
-        { name: 'Ice cream sandwich' }
-      ],
+      selected: [],
       pagination: {
         page: 2
       },
-      paginationControl: { rowsPerPage: 15, page: 1 },
-      // loading: false,
-      dark: true,
-      selectedSecond: [{ name: 'Eclair' }]
+      paginationControl: { rowsPerPage: 7, page: 1 },
+      dark: true
     }
   },
   computed: {
@@ -491,7 +469,6 @@ export default {
           value: e.id
         }
       })
-      // return this.getVatTypes()
     },
     businessTypes () {
       return this.$store.getters['pattys/getBusinessTypes'].map(e => {
@@ -556,6 +533,23 @@ export default {
     }
   },
   methods: {
+    // this is actually the default filtering method:
+    customFilter (rows, terms, cols, cellValue) {
+      // push columns you want to include in filtering
+      cols.push(
+        { field: row => row.address.country.description },
+        { field: row => row.address.region.description },
+        { field: row => row.address.city.description },
+        { field: row => row.address.province.description }
+      )
+      const lowerTerms = terms ? terms.toLowerCase() : ''
+      return rows.filter(row => cols.some(col => (cellValue(col, row) + '').toLowerCase().indexOf(lowerTerms) !== -1))
+    },
+    getCellValue1 (col, row) {
+      const val = typeof col.field === 'function' ? col.field(row) : row[col.field]
+      return col.format ? col.format(val) : val
+    },
+    test12 (props) { console.log('props', props) },
     hideModal () {
       this.$store.dispatch('pattys/setNewHoldingModal', false)
     },
