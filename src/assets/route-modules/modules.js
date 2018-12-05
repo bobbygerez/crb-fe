@@ -5,5 +5,6 @@ export default [
   'holdings',
   'branches',
   'menus',
-  'access-right'
+  'access-right',
+  'categories'
 ]
