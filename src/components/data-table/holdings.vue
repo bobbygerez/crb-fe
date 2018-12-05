@@ -1,6 +1,7 @@
 <template>
   <div>
     <q-table
+      class="q-mb-xl q-pb-lg"
       :data="holdings"
       :columns="columns"
       row-key="__index"
@@ -402,14 +403,19 @@
         />
       </div>
     </q-modal>
+    <generic-list-data-table :data="holdings" :columns="columns"/>
   </div>
 </template>
 
 <script>
 import { values } from 'lodash'
 import { mapHoldingFields } from '../../store/pattys'
+import GenericListDataTable from 'components/data-table/generic-list-data-table'
 
 export default {
+  components: {
+    GenericListDataTable
+  },
   data () {
     return {
       selectedCountry: '',
