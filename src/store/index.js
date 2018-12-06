@@ -9,6 +9,7 @@ import menus from './menus'
 import accessRights from './access-rights'
 import branches from './branches'
 import categories from './categories'
+import packages from './packages'
 import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
@@ -30,7 +31,8 @@ export default function (/* { ssrContext } */) {
       menus,
       accessRights,
       branches,
-      categories
+      categories,
+      packages
     },
     plugins: [createPersistedState()]
   })
