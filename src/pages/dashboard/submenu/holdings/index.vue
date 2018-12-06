@@ -8,7 +8,7 @@
       <holdings></holdings>
       <q-page-sticky
         position="bottom"
-        :offset="$q.theme === 'mat' ? [18, 18] : [18, 18]"
+        :offset="$q.theme === 'mat' ? [16, 16] : [16, 16]"
       >
         <transition
           appear

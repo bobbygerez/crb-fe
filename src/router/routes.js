@@ -1,11 +1,9 @@
 import routeModules from 'assets/route-modules/modules'
-
-// return capitalize string
-const capitalize = (str) => str.split(' ').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')
-// return replaced string
-const replaceAll = (str, find, replace) => str.replace(new RegExp(find, 'g'), replace)
-// load component path
-const load = (component) => () => import(`pages/dashboard/submenu/${component}`)
+import {
+  capitalize,
+  replaceAll,
+  load
+} from 'assets/utils/app-utils'
 
 const routes = [{
   path: '/',
@@ -24,7 +22,9 @@ const dashBoardModules = (appModules) => {
     component: () =>
       import('pages/dashboard/index')
   }
+  // append dashboard first as this is the parent route
   modules.push(dashboard)
+  // append the submenus under dashboard route
   appModules.forEach(mod => {
     let name = mod.name ? mod.name : capitalize(replaceAll(mod, '-', ' '))
     let path = mod.path ? mod.path : mod
@@ -82,6 +82,7 @@ const dashBoardModules = (appModules) => {
     modules.push(indexModule)
     // temp.push(mainModule, viewModule, updateModule, deleteModule, createModule)
   })
+  // return the module array
   return modules
 }
 
@@ -93,7 +94,7 @@ routes.push({
   path: '/dashboard',
   component: () =>
     import('layouts/MainLayout'),
-  children: dashboardChildren
+  children: dashboardChildren // add all children
 })
 
 // Always leave this as last one
