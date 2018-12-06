@@ -1,7 +1,21 @@
 <template>
   <div>
-    <q-btn round outline color="positive" icon="edit" class="q-ma-sm" @click="create()"/>
-    <q-btn round outline color="negative" icon="delete" class="q-ma-sm" @click="deleteSelected()"/>
+    <q-btn
+      round
+      outline
+      color="positive"
+      icon="edit"
+      class="q-ma-sm"
+      @click="create()"
+    />
+    <q-btn
+      round
+      outline
+      color="negative"
+      icon="delete"
+      class="q-ma-sm"
+      @click="deleteSelected()"
+    />
     <div class="q-mb-sm row no-wrap items-center">
       <q-select
         v-model="tickStrategy"
@@ -49,7 +63,10 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-xs-12 col-sm-12" v-if="ticked.length > 0">
+          <div
+            class="col-xs-12 col-sm-12"
+            v-if="ticked.length > 0"
+          >
             <q-input
               v-model="name"
               float-label="Parent Category"
@@ -74,11 +91,10 @@
               clearable
             />
           </div>
-          
-        
-      </div>
-      <br />
-      <q-btn
+
+        </div>
+        <br />
+        <q-btn
           color="red"
           v-close-overlay
           label="Close"
@@ -93,27 +109,27 @@
       </div>
     </q-modal>
   </div>
-  
+
 </template>
 
 <script>
 // import tableData from 'assets/table-data'
-import _ from "lodash";
-import { mapState } from "vuex";
+// import _ from 'lodash'
+// import { mapState } from 'vuex'
 
 export default {
-  data() {
+  data () {
     return {
       name: '',
       ticked: [],
       tickFilter: null,
-      tickStrategy: "strict",
-      model: "2016-10-24T10:40:14.674Z",
-      superior: "",
+      tickStrategy: 'strict',
+      model: '2016-10-24T10:40:14.674Z',
+      superior: '',
       selectedRoles: [],
       newCategoryModal: false,
       options: [5, 10, 15, 20],
-      lastPage: "",
+      lastPage: '',
       serverData: [],
       serverPagination: {
         page: 1,
@@ -121,53 +137,53 @@ export default {
         rowsPerPage: 10 // specifying this determines pagination is server-side
       },
       columns: [
-        { name: "name", label: "Name", field: "name", align: "left" },
-        { name: "desc", label: "Description", align: "left", field: "desc" },
-        { name: "created", label: "Created", align: "left", field: "created" },
-        { name: "actions", label: "Actions", align: "left", field: "actions" }
+        { name: 'name', label: 'Name', field: 'name', align: 'left' },
+        { name: 'desc', label: 'Description', align: 'left', field: 'desc' },
+        { name: 'created', label: 'Created', align: 'left', field: 'created' },
+        { name: 'actions', label: 'Actions', align: 'left', field: 'actions' }
       ],
-      filter: "",
+      filter: '',
       loading: false
-    };
+    }
   },
   computed: {
-    categories() {
-      let categories = this.$store.getters["categories/categories"];
+    categories () {
+      let categories = this.$store.getters['categories/categories']
       const map = e => ({
           id: e.id,
           label: e.name,
           children: e.all_children.map(map) // recursive call
         }),
-        tree = categories.map(map);
-      return tree;
+        tree = categories.map(map)
+      return tree
     }
   },
   methods: {
-    create() {
+    create () {
       console.log(this.ticked.length <= 1)
-      console.log(this.tickStrategy === "strict")
-      if ( this.ticked.length <= 1 && this.tickStrategy === "strict") {
+      console.log(this.tickStrategy === 'strict')
+      if (this.ticked.length <= 1 && this.tickStrategy === 'strict') {
         this.newCategoryModal = true
-      }else{
-         this.$q.notify({
-          color: "negative",
-          icon: "warning",
+      } else {
+        this.$q.notify({
+          color: 'negative',
+          icon: 'warning',
           message: `'strict' strategy  and selected must be less than 2. (${this.ticked.length} selected)`
-        });
+        })
       }
     },
-    deleteSelected() {
-      console.log(this.ticked);
+    deleteSelected () {
+      console.log(this.ticked)
     },
-    onLazyLoad({ node, key, done, fail }) {
+    onLazyLoad ({ node, key, done, fail }) {
       // call fail() if any error occurs
       setTimeout(() => {
         // simulate loading and setting an empty node
-        if (key.indexOf("Lazy load empty") > -1) {
-          done([]);
-          return;
+        if (key.indexOf('Lazy load empty') > -1) {
+          done([])
+          return
         }
-        const label = node.label;
+        const label = node.label
         done([
           { label: `${label}.1` },
           { label: `${label}.2`, lazy: true },
@@ -178,10 +194,10 @@ export default {
               { label: `${label}.3.2`, lazy: true }
             ]
           }
-        ]);
-      }, 1000);
+        ])
+      }, 1000)
     },
-    store() {
+    store () {
       this.$axios
         .post(`/branches`, {
           branch: this.branch,
@@ -189,58 +205,58 @@ export default {
           businessInfo: this.branch.business_info
         })
         .then(res => {
-          this.hideModal();
+          this.hideModal()
           this.$q.notify({
-            color: "positive",
-            icon: "check",
+            color: 'positive',
+            icon: 'check',
             message: `${this.branch.name}created successfully`
-          });
+          })
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
-          });
-        });
+          })
+        })
     },
-    deleteRow(branchId) {
+    deleteRow (branchId) {
       this.$axios.get(`/branches/${branchId}?id=${branchId}`).then(res => {
-        this.$store.dispatch("branches/branch", res.data.branch);
+        this.$store.dispatch('branches/branch', res.data.branch)
         this.$q.notify({
-          color: "negative",
-          icon: "delete",
+          color: 'negative',
+          icon: 'delete',
           message: `Delete ${res.data.branch.name} ?`,
           actions: [
             {
-              label: "OK",
+              label: 'OK',
               handler: () => {
                 this.$axios
                   .delete(`/branches/${this.branch.id}?id=${this.branch.id}`)
                   .then(res => {
                     this.$q.notify({
-                      color: "positive",
-                      icon: "check",
+                      color: 'positive',
+                      icon: 'check',
                       message: `${this.branch.name} deleted successfully`
-                    });
+                    })
                     this.request({
                       pagination: this.serverPagination,
                       filter: this.filter
-                    });
-                    this.hideModal();
+                    })
+                    this.hideModal()
                   })
                   .catch(err => {
                     this.$q.notify({
-                      color: "negative",
-                      icon: "warning",
+                      color: 'negative',
+                      icon: 'warning',
                       message: `${err.response.data.message}`
-                    });
-                  });
+                    })
+                  })
               }
             }
           ]
-        });
-      });
+        })
+      })
       // .catch()
     },
-    update() {
+    update () {
       this.$axios
         .put(`/branches/${this.branch.id}`, {
           id: this.branch.id,
@@ -260,107 +276,107 @@ export default {
           website: this.branch.business_info.website
         })
         .then(res => {
-          this.editBranchModal = false;
+          this.editBranchModal = false
           this.$q.notify({
-            color: "positive",
-            icon: "check",
+            color: 'positive',
+            icon: 'check',
             message: `${res.data.branch.name} update successfully`
-          });
+          })
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
-          });
+          })
         })
-        .catch();
+        .catch()
     },
-    closeModal() {
-      this.newCategoryModal = false;
+    closeModal () {
+      this.newCategoryModal = false
     },
-    paginationLast(currentPage) {
+    paginationLast (currentPage) {
       if (this.lastPage > currentPage) {
-        return false;
+        return false
       }
-      return true;
+      return true
     },
-    request(props) {
-      this.loading = true;
+    request (props) {
+      this.loading = true
       this.$axios
         .get(`/categories?filter=${this.filter}`)
         .then(res => {
-          this.$store.dispatch("categories/categories", res.data.categories);
+          this.$store.dispatch('categories/categories', res.data.categories)
         })
         .catch(error => {
           // there's an error... do SOMETHING
-          console.log(error);
+          console.log(error)
           // we tell QTable to exit the "loading" state
-          this.loading = false;
-        });
+          this.loading = false
+        })
     },
-    edit(branchId) {
+    edit (branchId) {
       this.$axios.get(`branches/${branchId}/edit?id=${branchId}`).then(res => {
-        this.showModal();
-        this.$store.dispatch("branches/branch", res.data.branch);
-        this.$store.dispatch("branches/companies", [res.data.branch.company]);
-      });
+        this.showModal()
+        this.$store.dispatch('branches/branch', res.data.branch)
+        this.$store.dispatch('branches/companies', [res.data.branch.company])
+      })
     }
   },
-  mounted() {
+  mounted () {
     this.request({
       pagination: this.serverPagination,
       filter: this.filter
-    });
+    })
   },
   watch: {
-    "branch.name"(val) {
-      this.$store.dispatch("branches/branchName", val);
+    'branch.name' (val) {
+      this.$store.dispatch('branches/branchName', val)
     },
-    "branch.company_id"(val) {
-      this.$store.dispatch("branches/branchId", val);
+    'branch.company_id' (val) {
+      this.$store.dispatch('branches/branchId', val)
     },
-    "branch.desc"(val) {
-      this.$store.dispatch("branches/branchDesc", val);
+    'branch.desc' (val) {
+      this.$store.dispatch('branches/branchDesc', val)
     },
-    "branch.address.country_id"(val) {
-      if (val === null || val === undefined) return;
-      this.$store.dispatch("globals/getRegions", val);
-      this.$store.dispatch("branches/branchCountryId", val);
+    'branch.address.country_id' (val) {
+      if (val === null || val === undefined) return
+      this.$store.dispatch('globals/getRegions', val)
+      this.$store.dispatch('branches/branchCountryId', val)
     },
-    "branch.address.region_id"(val) {
-      this.$store.dispatch("globals/getProvinces", val);
-      this.$store.dispatch("branches/branchRegionId", val);
+    'branch.address.region_id' (val) {
+      this.$store.dispatch('globals/getProvinces', val)
+      this.$store.dispatch('branches/branchRegionId', val)
     },
-    "branch.address.province_id"(val) {
-      this.$store.dispatch("globals/getCities", val);
-      this.$store.dispatch("branches/branchProvinceId", val);
+    'branch.address.province_id' (val) {
+      this.$store.dispatch('globals/getCities', val)
+      this.$store.dispatch('branches/branchProvinceId', val)
     },
-    "branch.address.city_id"(val) {
-      this.$store.dispatch("globals/getBrgys", val);
-      this.$store.dispatch("branches/branchCityId", val);
+    'branch.address.city_id' (val) {
+      this.$store.dispatch('globals/getBrgys', val)
+      this.$store.dispatch('branches/branchCityId', val)
     },
-    "branch.address.brgy_id"(val) {
-      this.$store.dispatch("branches/branchBrgyId", val);
+    'branch.address.brgy_id' (val) {
+      this.$store.dispatch('branches/branchBrgyId', val)
     },
-    "branch.address.street_lot_blk"(val) {
-      this.$store.dispatch("branches/branchStreetLotBlk", val);
+    'branch.address.street_lot_blk' (val) {
+      this.$store.dispatch('branches/branchStreetLotBlk', val)
     },
-    "branch.business_info.business_type_id"(val) {
-      this.$store.dispatch("branches/branchBusinessTypeId", val);
+    'branch.business_info.business_type_id' (val) {
+      this.$store.dispatch('branches/branchBusinessTypeId', val)
     },
-    "branch.business_info.vat_type_id"(val) {
-      this.$store.dispatch("branches/branchVatTypeId", val);
+    'branch.business_info.vat_type_id' (val) {
+      this.$store.dispatch('branches/branchVatTypeId', val)
     },
-    "branch.business_info.telephone"(val) {
-      this.$store.dispatch("branches/branchTelephone", val);
+    'branch.business_info.telephone' (val) {
+      this.$store.dispatch('branches/branchTelephone', val)
     },
-    "branch.business_info.email"(val) {
-      this.$store.dispatch("branches/branchEmail", val);
+    'branch.business_info.email' (val) {
+      this.$store.dispatch('branches/branchEmail', val)
     },
-    "branch.business_info.tin"(val) {
-      this.$store.dispatch("branches/branchTin", val);
+    'branch.business_info.tin' (val) {
+      this.$store.dispatch('branches/branchTin', val)
     },
-    "branch.business_info.website"(val) {
-      this.$store.dispatch("branches/branchWebsite", val);
+    'branch.business_info.website' (val) {
+      this.$store.dispatch('branches/branchWebsite', val)
     }
   }
-};
+}
 </script>

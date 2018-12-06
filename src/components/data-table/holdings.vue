@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-table
+    <!-- <q-table
       class="q-mb-xl q-pb-lg"
       :data="holdings"
       :columns="columns"
@@ -35,7 +35,7 @@
         <q-tr
           class="cursor-pointer"
           :props="props"
-          @click.native="selected = [{ __index: props.row.__index }]; test12(props)"
+          @click.native="selected = [{ __index: props.row.__index }];"
         >
           <q-td key="name">{{props.row.name}}</q-td>
           <q-td
@@ -60,9 +60,6 @@
               link
               style="min-width: 100px"
             >
-              <!-- <q-item :to="currentRoute + '/' + props.row.id + '/view'">
-                <q-item-main label="View" />
-              </q-item>-->
               <q-item
                 @click.native="edit(props.row.id)"
                 v-close-overlay
@@ -115,8 +112,7 @@
           @click="props.toggleFullscreen"
         />
       </template>
-    </q-table>
-    <br>
+    </q-table> -->
     <q-modal
       v-model="minimizedModal"
       no-esc-dismiss
@@ -403,7 +399,15 @@
         />
       </div>
     </q-modal>
-    <generic-list-data-table :data="holdings" :columns="columns"/>
+    <generic-list-data-table
+      :data="holdings"
+      :columns="columns"
+      color="primary"
+      :actions="['edit', 'delete']"
+      @edit="edit"
+      @delete="deleteRow"
+      theme="secondary"
+    />
   </div>
 </template>
 
@@ -447,11 +451,42 @@ export default {
           sortable: true
         },
         {
+          name: 'brgy',
+          label: 'Barangay',
+          field: row => row.address.brgy.description,
+          align: 'left',
+          sortable: true,
+          hideonload: true
+        },
+        {
+          name: 'city',
+          label: 'City',
+          field: row => row.address.city.description,
+          align: 'left',
+          sortable: true
+        },
+        {
+          name: 'province',
+          label: 'Province',
+          field: row => row.address.province.description,
+          align: 'left',
+          sortable: true
+        },
+        {
+          name: 'region',
+          label: 'Region',
+          field: row => row.address.region.description,
+          align: 'left',
+          sortable: true,
+          hideonload: true
+        },
+        {
           name: 'created_at',
           label: 'Created At',
           field: 'created_at',
           align: 'left',
-          sortable: true
+          sortable: true,
+          hideonload: true
         }
       ],
       filter: '',
@@ -525,51 +560,37 @@ export default {
         }
       })
     },
-    // ...mapState('pattys', ['holding', 'newHoldingModal']),
     holdings () {
       return values(this.$store.getters['pattys/getHoldings'])
-    },
-    // perPage () {
-    //   return this.$store.getters['pattys/holdings']
-    // },
-    tableClass () {
-      if (this.dark) {
-        return 'bg-black'
-      }
     }
   },
   methods: {
-    // this is actually the default filtering method:
-    customFilter (rows, terms, cols, cellValue) {
-      // push columns you want to include in filtering
-      cols.push(
-        { field: row => row.address.country.description },
-        { field: row => row.address.region.description },
-        { field: row => row.address.city.description },
-        { field: row => row.address.province.description }
-      )
-      const lowerTerms = terms ? terms.toLowerCase() : ''
-      return rows.filter(row => cols.some(col => (cellValue(col, row) + '').toLowerCase().indexOf(lowerTerms) !== -1))
-    },
-    getCellValue1 (col, row) {
-      const val = typeof col.field === 'function' ? col.field(row) : row[col.field]
-      return col.format ? col.format(val) : val
-    },
-    test12 (props) { console.log('props', props) },
+    // testActions (data) {
+    //   console.log('testActions', data)
+    // },
+    // customFilter (rows, terms, cols, cellValue) {
+    //   // push columns you want to include in filtering
+    //   cols.push(
+    //     { field: row => row.address.country.description },
+    //     { field: row => row.address.region.description },
+    //     { field: row => row.address.city.description },
+    //     { field: row => row.address.province.description }
+    //   )
+    //   const lowerTerms = terms ? terms.toLowerCase() : ''
+    //   return rows.filter(row => cols.some(col => (cellValue(col, row) + '').toLowerCase().indexOf(lowerTerms) !== -1))
+    // },
     hideModal () {
       this.$store.dispatch('pattys/setNewHoldingModal', false)
     },
     index () {
-      let data = this
       this.$axios
         .get(`/holdings`)
-        .then(function (res) {
-          data.$store.dispatch('pattys/setHoldings', res.data.holdings)
+        .then(res => {
+          this.$store.dispatch('pattys/setHoldings', res.data.holdings)
         })
         .catch()
     },
     create () {
-      let data = this
       this.$axios
         .post(`/holdings`, {
           id: this.holding.id,
@@ -588,39 +609,38 @@ export default {
           email: this.holding.business_info.email,
           website: this.holding.business_info.website
         })
-        .then(function (res) {
-          data.index()
-          data.hideModal()
+        .then(res => {
+          this.index()
+          this.hideModal()
         })
     },
     deleteRow (id) {
-      let data = this
       this.$axios
         .get(`/holdings/${id}?id=${id}`)
-        .then(function (res) {
-          data.$store.dispatch('pattys/setHolding', res.data.holding)
-          data.$q.notify({
+        .then(res => {
+          this.$store.dispatch('pattys/setHolding', res.data.holding)
+          this.$q.notify({
             color: 'negative',
             icon: 'delete',
-            message: `Delete ${data.holding.name}?`,
+            message: `Delete ${this.holding.name}?`,
             actions: [
               {
                 label: 'OK',
                 handler: () => {
-                  data.$axios
+                  this.$axios
                     .delete(
-                      `/holdings/${data.holding.id}?id=${data.holding.id}`
+                      `/holdings/${this.holding.id}?id=${this.holding.id}`
                     )
-                    .then(function (res) {
-                      data.$q.notify({
+                    .then(res => {
+                      this.$q.notify({
                         color: 'positive',
                         icon: 'check',
-                        message: `${data.holding.name} deleted successfully`
+                        message: `${this.holding.name} deleted successfully`
                       })
-                      data.index()
+                      this.index()
                     })
-                    .catch(function (err) {
-                      data.$q.notify({
+                    .catch(err => {
+                      this.$q.notify({
                         color: 'negative',
                         icon: 'delete',
                         message: `${err.response}`
@@ -634,17 +654,15 @@ export default {
         .catch()
     },
     edit (id) {
-      let data = this
       this.$axios
         .get(`/holdings/${id}/edit?id=${id}`)
-        .then(function (res) {
-          data.$store.dispatch('pattys/setHolding', res.data.holding)
-          data.minimizedModal = true
+        .then(res => {
+          this.$store.dispatch('pattys/setHolding', res.data.holding)
+          this.minimizedModal = true
         })
         .catch()
     },
     update (id) {
-      var data = this
       this.$axios
         .put(`/holdings/${this.holding.id}`, {
           id: this.holding.id,
@@ -663,14 +681,14 @@ export default {
           email: this.holding.business_info.email,
           website: this.holding.business_info.website
         })
-        .then(function (res) {
-          data.minimizedModal = false
-          data.$q.notify({
+        .then(res => {
+          this.minimizedModal = false
+          this.$q.notify({
             color: 'positive',
             icon: 'check',
-            message: `${data.holding.name} update successfully`
+            message: `${this.holding.name} update successfully`
           })
-          data.index()
+          this.index()
         })
         .catch()
     }

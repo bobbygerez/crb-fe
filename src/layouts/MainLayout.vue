@@ -117,24 +117,23 @@
     </q-layout-drawer>
 
     <q-page-container>
-      <router-view />
+      <!-- mode="out-in" appear-->
+      <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" appear :duration="300" @leave="resetScroll">
+        <router-view />
+      </transition>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-// import slug from 'components/mixins/slug'
 import { mapState } from 'vuex'
 import { unSetAuthHeader } from 'plugins/axios'
-
-const replaceAll = (str, find, replace) => str.replace(new RegExp(find, 'g'), replace)
+import { replaceAll } from 'assets/utils/app-utils'
 
 export default {
-  // mixins: [slug],
   name: 'MainLayout',
   data () {
     return {
-      text2: '',
       leftDrawerOpen: this.$q.platform.is.desktop,
       customDialogModel: true
     }
@@ -144,6 +143,11 @@ export default {
     ...mapState('globals', ['menus', 'pageMeta'])
   },
   methods: {
+    resetScroll (el, done) {
+      document.documentElement.scrollTop = 0
+      document.body.scrollTop = 0
+      done()
+    },
     replaceAll,
     logout () {
       this.$q.dialog({

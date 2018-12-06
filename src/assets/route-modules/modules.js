@@ -1,6 +1,6 @@
 /**
  * add the module here so it will be included in the route array
- * note: a module name is same as the pages/dashboard/submenu/<folder/module name>
+ * note: a module name is same the name of the folder under src/pages/dashboard/submenu/ folder
  */
 export default [
   'users',
