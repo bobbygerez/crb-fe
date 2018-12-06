@@ -11,9 +11,5 @@ export default [
   'menus',
   'access-right',
   'categories',
-<<<<<<< HEAD
   'packages'
-=======
-  'classes'
->>>>>>> 2815f12d1dbd044f9da8c023e59a75db0315be0c
 ]

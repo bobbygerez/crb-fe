@@ -136,7 +136,6 @@
               clearable
             />
           </div>
-<<<<<<< HEAD
         </div>
         <br>
         <q-btn color="red" v-close-overlay label="Close" @click="closeModal()"/>
@@ -144,32 +143,10 @@
       </div>
     </q-modal>
   </div>
-=======
-
-        </div>
-        <br />
-        <q-btn
-          color="red"
-          v-close-overlay
-          label="Close"
-          @click="closeModal()"
-        />
-        <q-btn
-          color="primary"
-          @click="update()"
-          label="Submit"
-          class="q-ml-sm"
-        />
-      </div>
-    </q-modal>
-  </div>
-
->>>>>>> 2815f12d1dbd044f9da8c023e59a75db0315be0c
 </template>
 
 <script>
 // import tableData from 'assets/table-data'
-<<<<<<< HEAD
 import _ from "lodash";
 import { mapState } from "vuex";
 function getObject(array, key, value) {
@@ -183,11 +160,6 @@ function getObject(array, key, value) {
   });
   return o;
 }
-=======
-// import _ from 'lodash'
-// import { mapState } from 'vuex'
-
->>>>>>> 2815f12d1dbd044f9da8c023e59a75db0315be0c
 export default {
   data () {
     return {
@@ -201,23 +173,7 @@ export default {
       desc: "",
       ticked: [],
       tickFilter: null,
-<<<<<<< HEAD
       tickStrategy: "strict",
-=======
-      tickStrategy: 'strict',
-      model: '2016-10-24T10:40:14.674Z',
-      superior: '',
-      selectedRoles: [],
-      newCategoryModal: false,
-      options: [5, 10, 15, 20],
-      lastPage: '',
-      serverData: [],
-      serverPagination: {
-        page: 1,
-        rowsNumber: 10,
-        rowsPerPage: 10 // specifying this determines pagination is server-side
-      },
->>>>>>> 2815f12d1dbd044f9da8c023e59a75db0315be0c
       columns: [
         { name: 'name', label: 'Name', field: 'name', align: 'left' },
         { name: 'desc', label: 'Description', align: 'left', field: 'desc' },
@@ -229,20 +185,14 @@ export default {
     }
   },
   computed: {
-<<<<<<< HEAD
     ...mapState("categories", ["category"]),
     categories() {
       let categories = this.$store.getters["categories/categories"];
-=======
-    categories () {
-      let categories = this.$store.getters['categories/categories']
->>>>>>> 2815f12d1dbd044f9da8c023e59a75db0315be0c
       const map = e => ({
           id: e.id,
           label: e.name,
           children: e.all_children.map(map) // recursive call
         }),
-<<<<<<< HEAD
         tree = categories.map(map);
       return tree;
     },
@@ -286,52 +236,6 @@ export default {
       }
     },
     store() {
-=======
-        tree = categories.map(map)
-      return tree
-    }
-  },
-  methods: {
-    create () {
-      console.log(this.ticked.length <= 1)
-      console.log(this.tickStrategy === 'strict')
-      if (this.ticked.length <= 1 && this.tickStrategy === 'strict') {
-        this.newCategoryModal = true
-      } else {
-        this.$q.notify({
-          color: 'negative',
-          icon: 'warning',
-          message: `'strict' strategy  and selected must be less than 2. (${this.ticked.length} selected)`
-        })
-      }
-    },
-    deleteSelected () {
-      console.log(this.ticked)
-    },
-    onLazyLoad ({ node, key, done, fail }) {
-      // call fail() if any error occurs
-      setTimeout(() => {
-        // simulate loading and setting an empty node
-        if (key.indexOf('Lazy load empty') > -1) {
-          done([])
-          return
-        }
-        const label = node.label
-        done([
-          { label: `${label}.1` },
-          { label: `${label}.2`, lazy: true },
-          {
-            label: `${label}.3`,
-            children: [
-              { label: `${label}.3.1`, lazy: true },
-              { label: `${label}.3.2`, lazy: true }
-            ]
-          }
-        ])
-      }, 1000)
-    },
-    store () {
->>>>>>> 2815f12d1dbd044f9da8c023e59a75db0315be0c
       this.$axios
         .post(`/categories`, {
           parent_id: this.parent.id,
@@ -341,24 +245,16 @@ export default {
         .then(res => {
           this.hideModal()
           this.$q.notify({
-<<<<<<< HEAD
             color: "positive",
             icon: "check",
             message: `${this.name} created successfully`
           });
-=======
-            color: 'positive',
-            icon: 'check',
-            message: `${this.branch.name}created successfully`
-          })
->>>>>>> 2815f12d1dbd044f9da8c023e59a75db0315be0c
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
           })
         })
     },
-<<<<<<< HEAD
     hideModal() {
       this.newCategoryModal = false;
       this.editCategoryModal = false;
@@ -472,46 +368,6 @@ export default {
           message: `Please select 'strict' in tick strategy`
         });
       }
-=======
-    deleteRow (branchId) {
-      this.$axios.get(`/branches/${branchId}?id=${branchId}`).then(res => {
-        this.$store.dispatch('branches/branch', res.data.branch)
-        this.$q.notify({
-          color: 'negative',
-          icon: 'delete',
-          message: `Delete ${res.data.branch.name} ?`,
-          actions: [
-            {
-              label: 'OK',
-              handler: () => {
-                this.$axios
-                  .delete(`/branches/${this.branch.id}?id=${this.branch.id}`)
-                  .then(res => {
-                    this.$q.notify({
-                      color: 'positive',
-                      icon: 'check',
-                      message: `${this.branch.name} deleted successfully`
-                    })
-                    this.request({
-                      pagination: this.serverPagination,
-                      filter: this.filter
-                    })
-                    this.hideModal()
-                  })
-                  .catch(err => {
-                    this.$q.notify({
-                      color: 'negative',
-                      icon: 'warning',
-                      message: `${err.response.data.message}`
-                    })
-                  })
-              }
-            }
-          ]
-        })
-      })
-      // .catch()
->>>>>>> 2815f12d1dbd044f9da8c023e59a75db0315be0c
     },
     update () {
       this.$axios
@@ -522,21 +378,12 @@ export default {
           desc: this.category.desc
         })
         .then(res => {
-<<<<<<< HEAD
           this.editCategoryModal = false;
           this.$q.notify({
             color: "positive",
             icon: "check",
             message: `${this.category.name} update successfully`
           });
-=======
-          this.editBranchModal = false
-          this.$q.notify({
-            color: 'positive',
-            icon: 'check',
-            message: `${res.data.branch.name} update successfully`
-          })
->>>>>>> 2815f12d1dbd044f9da8c023e59a75db0315be0c
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
@@ -547,19 +394,8 @@ export default {
     closeModal () {
       this.newCategoryModal = false
     },
-<<<<<<< HEAD
     request(props) {
       this.loading = true;
-=======
-    paginationLast (currentPage) {
-      if (this.lastPage > currentPage) {
-        return false
-      }
-      return true
-    },
-    request (props) {
-      this.loading = true
->>>>>>> 2815f12d1dbd044f9da8c023e59a75db0315be0c
       this.$axios
         .get(`/categories?filter=${this.filter}`)
         .then(res => {
@@ -572,7 +408,6 @@ export default {
           this.loading = false
         })
     },
-<<<<<<< HEAD
     edit() {
       if (this.tickStrategy === "strict") {
         if (this.ticked.length === 1) {
@@ -598,14 +433,6 @@ export default {
           message: `Please select 'strict' in tick strategy`
         });
       }
-=======
-    edit (branchId) {
-      this.$axios.get(`branches/${branchId}/edit?id=${branchId}`).then(res => {
-        this.showModal()
-        this.$store.dispatch('branches/branch', res.data.branch)
-        this.$store.dispatch('branches/companies', [res.data.branch.company])
-      })
->>>>>>> 2815f12d1dbd044f9da8c023e59a75db0315be0c
     }
   },
   mounted () {
@@ -615,63 +442,11 @@ export default {
     })
   },
   watch: {
-<<<<<<< HEAD
     "category.name"(val) {
       this.$store.dispatch("categories/categoryName", val);
     },
     "category.desc"(val) {
       this.$store.dispatch("categories/categoryDesc", val);
-=======
-    'branch.name' (val) {
-      this.$store.dispatch('branches/branchName', val)
-    },
-    'branch.company_id' (val) {
-      this.$store.dispatch('branches/branchId', val)
-    },
-    'branch.desc' (val) {
-      this.$store.dispatch('branches/branchDesc', val)
-    },
-    'branch.address.country_id' (val) {
-      if (val === null || val === undefined) return
-      this.$store.dispatch('globals/getRegions', val)
-      this.$store.dispatch('branches/branchCountryId', val)
-    },
-    'branch.address.region_id' (val) {
-      this.$store.dispatch('globals/getProvinces', val)
-      this.$store.dispatch('branches/branchRegionId', val)
-    },
-    'branch.address.province_id' (val) {
-      this.$store.dispatch('globals/getCities', val)
-      this.$store.dispatch('branches/branchProvinceId', val)
-    },
-    'branch.address.city_id' (val) {
-      this.$store.dispatch('globals/getBrgys', val)
-      this.$store.dispatch('branches/branchCityId', val)
-    },
-    'branch.address.brgy_id' (val) {
-      this.$store.dispatch('branches/branchBrgyId', val)
-    },
-    'branch.address.street_lot_blk' (val) {
-      this.$store.dispatch('branches/branchStreetLotBlk', val)
-    },
-    'branch.business_info.business_type_id' (val) {
-      this.$store.dispatch('branches/branchBusinessTypeId', val)
-    },
-    'branch.business_info.vat_type_id' (val) {
-      this.$store.dispatch('branches/branchVatTypeId', val)
-    },
-    'branch.business_info.telephone' (val) {
-      this.$store.dispatch('branches/branchTelephone', val)
-    },
-    'branch.business_info.email' (val) {
-      this.$store.dispatch('branches/branchEmail', val)
-    },
-    'branch.business_info.tin' (val) {
-      this.$store.dispatch('branches/branchTin', val)
-    },
-    'branch.business_info.website' (val) {
-      this.$store.dispatch('branches/branchWebsite', val)
->>>>>>> 2815f12d1dbd044f9da8c023e59a75db0315be0c
     }
   }
 }
