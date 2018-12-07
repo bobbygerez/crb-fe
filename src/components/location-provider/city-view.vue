@@ -32,7 +32,7 @@
           </div>
           <div
             class="col-3 col-md-3"
-            v-if="showMaxResult === true"
+            v-show="showMaxResult === true"
           >
             <q-select
               placeholder="Results"
@@ -60,7 +60,7 @@
         <!-- conditional rendering, shows table on list or grid view depending on the selected view mode -->
         <!-- <template v-if="tableViewSettings.mode === 'grid'"> -->
         <div
-          v-if="tableViewSettings.mode === 'grid'"
+          v-show="tableViewSettings.mode === 'grid'"
           class="q-mx-sm q-my-sm"
         >
           <q-inner-loading :visible="loading">
@@ -99,7 +99,7 @@
             <div
               slot="item"
               slot-scope="props"
-              class="q-pa-xs col-xs-12 col-sm-6 col-md-4 transition-generic"
+              class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-xl-3 transition-generic"
               :style="props.selected ? 'transform: scale(0.95);' : ''"
             >
               <q-card
@@ -155,7 +155,7 @@
         <!-- </template> -->
         <!-- <template > -->
         <div
-          v-if="tableViewSettings.mode === 'list'"
+          v-show="tableViewSettings.mode === 'list'"
           class="q-mx-sm q-my-sm"
         >
           <q-table

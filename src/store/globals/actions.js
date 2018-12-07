@@ -42,12 +42,8 @@ export const getCountries = ({
 }
 
 export const getRegions = ({
-  commit,
-  state
+  commit
 }, countryId) => {
-  if (state.regions.length) {
-    return
-  }
   axios.get(`/regions/${countryId}`)
     .then(function (res) {
       commit('SET_REGIONS', res.data.regions)
