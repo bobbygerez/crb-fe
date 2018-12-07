@@ -113,7 +113,7 @@
         />
       </template>
     </q-table> -->
-    <q-modal
+    <!-- <q-modal
       v-model="minimizedModal"
       no-esc-dismiss
       no-backdrop-dismiss
@@ -255,7 +255,7 @@
           class="q-ml-sm"
         />
       </div>
-    </q-modal>
+    </q-modal> -->
 
     <q-modal
       v-model="minimizedModal"

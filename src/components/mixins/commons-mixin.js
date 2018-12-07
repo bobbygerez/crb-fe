@@ -12,9 +12,8 @@ export default {
         return { label: v.name, value: v.id }
       })
     }
-
   },
   methods: {
-    ...mapActions('globals', ['getRegions', 'getProvinces', 'getCities', 'getBrgys', 'getBusinessTypes', 'getVatTypes'])
+    ...mapActions('globals', ['getBusinessTypes', 'getVatTypes'])
   }
 }

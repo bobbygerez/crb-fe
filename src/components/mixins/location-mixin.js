@@ -2,20 +2,10 @@ import { mapGlobalFields } from '../../store/globals'
 import { mapActions } from 'vuex'
 export default {
   methods: {
-    ...mapActions('globals', ['getRegions', 'getProvinces', 'getCities', 'getBrgys', 'getBusinessTypes', 'getVatTypes'])
+    ...mapActions('globals', ['getRegions', 'getProvinces', 'getCities', 'getBrgys'])
   },
   computed: {
     ...mapGlobalFields(['countries', 'regions', 'provinces', 'cities', 'brgys', 'countryList']),
-    bizTypeOptions () {
-      return this.businessTypes.map(v => {
-        return { label: v.name, value: v.id }
-      })
-    },
-    vatTypeOptions () {
-      return this.vatTypes.map(v => {
-        return { label: v.name, value: v.id }
-      })
-    },
     countryOptions () {
       return this.countries.map(v => {
         return { label: v.description, value: v.id }
