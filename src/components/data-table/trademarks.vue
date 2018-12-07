@@ -3,7 +3,7 @@
     <q-table
       ref="table"
       color="primary"
-      title="All Packages"
+      title="All Trademarks"
       :data="serverData"
       :columns="columns"
       :filter="filter"
@@ -29,6 +29,8 @@
       >
         <q-tr :props="props">
           <q-td key="name">{{props.row.name }}</q-td>
+          <q-td key="company">{{props.row.company.name }}</q-td>
+          <q-td key="desc">{{props.row.desc }}</q-td>
           <q-td key="created">{{ props.row.created_at }}</q-td>
           <q-td
             key="actions"
@@ -54,11 +56,10 @@
         </q-tr>
       </template>
 
-    
     </q-table>
 
     <q-modal
-      v-model="editPackageModal"
+      v-model="editTrademarkModal"
       minimized
       no-esc-dismiss
       no-backdrop-dismiss
@@ -67,21 +68,28 @@
       <div style="padding: 30px">
         <div class="row">
           <div class="col-xs-12 ">
-            <div class="q-display-1 q-mb-md">Edit {{ packagee.name }}</div>
+            <div class="q-display-1 q-mb-md">Edit {{ trademark.name }}</div>
           </div>
         </div>
-        
         <div class="row">
           <div class="col-xs-12 ">
             <q-input
-              v-model="packagee.name"
-              float-label="Name"
-              clearable
-            />
+                v-model="trademark.company.name"
+                float-label="Company"
+                clearable
+                disable
+              />
           </div>
           <div class="col-xs-12 ">
             <q-input
-              v-model="packagee.desc"
+                v-model="trademark.name"
+                float-label="Name"
+                clearable
+              />
+          </div>
+          <div class="col-xs-12 col-sm-12">
+            <q-input
+              v-model="trademark.desc"
               type="textarea"
               float-label="Description"
               :max-height="100"
@@ -89,6 +97,7 @@
               clearable
             />
           </div>
+
         </div>
         <br>
         <q-btn
@@ -106,7 +115,7 @@
       </div>
     </q-modal>
     <q-modal
-      v-model="newPackageModal"
+      v-model="newTrademarkModal"
       minimized
       no-esc-dismiss
       no-backdrop-dismiss
@@ -115,20 +124,27 @@
       <div style="padding: 30px">
         <div class="row">
           <div class="col-xs-12 ">
-            <div class="q-display-1 q-mb-md">New Package</div>
+            <div class="q-display-1 q-mb-md">New Trademark</div>
           </div>
         </div>
         <div class="row">
-          <div class="col-xs-12 ">
-            <q-input
-              v-model="packagee.name"
-              float-label="Name"
-              clearable
+          <div class="col-xs-12 col-sm-12">
+            <q-select
+              v-model="trademark.company_id"
+              :options="userCompanies"
+              float-label="Company"
             />
           </div>
           <div class="col-xs-12 ">
             <q-input
-              v-model="packagee.desc"
+                v-model="trademark.name"
+                float-label="Name"
+                clearable
+              />
+          </div>
+          <div class="col-xs-12 col-sm-12">
+            <q-input
+              v-model="trademark.desc"
               type="textarea"
               float-label="Description"
               :max-height="100"
@@ -136,7 +152,9 @@
               clearable
             />
           </div>
+
         </div>
+        
         <br>
         <q-btn
           color="red"
@@ -158,14 +176,14 @@
 <script>
 // import tableData from 'assets/table-data'
 import _ from 'lodash'
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
   data () {
     return {
       model: '2016-10-24T10:40:14.674Z',
       superior: '',
       selectedRoles: [],
-      editPackageModal: false,
+      editTrademarkModal: false,
       options: [5, 10, 15, 20],
       lastPage: '',
       serverData: [],
@@ -176,6 +194,8 @@ export default {
       },
       columns: [
         { name: 'name', label: 'Name', field: 'name', align: 'left' },
+        { name: 'company', label: 'Company', field: 'company', align: 'left' },
+        { name: 'desc', label: 'Desc', align: 'left', field: 'desc' },
         { name: 'created', label: 'Created', align: 'left', field: 'created' },
         { name: 'actions', label: 'Actions', align: 'left', field: 'actions' }
       ],
@@ -184,52 +204,59 @@ export default {
     }
   },
   computed: {
-    ...mapState('accessRights', ['accessRight']),
-    ...mapState('packages', ['packagee', 'newPackageModal']),
-    newAccessRightModal: {
-      get () {
-        return this.$store.getters['accessRights/newAccessRightModal']
+    ...mapState('trademarks', ['trademark']),
+    newTrademarkModal:{
+      get(){
+        return this.$store.getters['trademarks/newTrademarkModal']
       },
-      set () {
+      set(val){
 
       }
+    },
+    userCompanies () {
+      return this.$store.getters['trademarks/userCompanies'].map(e => {
+        return {
+          label: e.name,
+          value: e.id
+        }
+      })
     }
   },
   methods: {
     store () {
       this.$axios
-        .post(`/packages`, this.packagee)
+        .post(`/trademarks`, this.trademark)
         .then(res => {
-          this.request({
-            pagination: this.serverPagination,
-            filter: this.filter
-          })
           this.hideModal()
           this.$q.notify({
             color: 'positive',
             icon: 'check',
-            message: `${this.packagee.name}created successfully`
+            message: `${this.trademark.name}created successfully`
+          })
+          this.request({
+            pagination: this.serverPagination,
+            filter: this.filter
           })
         })
     },
-    deleteRow (packageId) {
-      this.$axios.get(`/packages/${packageId}?id=${packageId}`).then(res => {
-        this.$store.dispatch('packages/packagee', res.data.package)
+    deleteRow (TrademarkId) {
+      this.$axios.get(`/trademarks/${TrademarkId}?id=${TrademarkId}`).then(res => {
+        this.$store.dispatch('trademarks/trademark', res.data.trademark)
         this.$q.notify({
           color: 'negative',
           icon: 'delete',
-          message: `Delete ${res.data.package.name} ?`,
+          message: `Delete ${res.data.trademark.name} ?`,
           actions: [
             {
-              label: 'OK',
+              label: 'Ok',
               handler: () => {
                 this.$axios
-                  .delete(`/packages/${this.packagee.id}?id=${this.packagee.id}`)
+                  .delete(`/trademarks/${this.trademark.id}?id=${this.trademark.id}`)
                   .then(res => {
                     this.$q.notify({
                       color: 'positive',
                       icon: 'check',
-                      message: `${this.packagee.name} deleted successfully`
+                      message: `${this.trademark.name} deleted successfully`
                     })
                     this.request({
                       pagination: this.serverPagination,
@@ -252,53 +279,46 @@ export default {
       // .catch()
     },
     update () {
-      this.$axios
-        .put(`/packages/${this.packagee.id}`, {
-          id: this.packagee.id,
-          name: this.packagee.name,
-          desc: this.packagee.desc
-        })
-        .then(res => {
+      this.$axios.put(`/trademarks/${this.trademark.id}`, {
+        id: this.trademark.id,
+        company_id: this.trademark.company_id,
+        name: this.trademark.name,
+        desc: this.trademark.desc
+      })
+        .then((res) => {
           this.hideModal()
           this.$q.notify({
             color: 'positive',
             icon: 'check',
-            message: `${this.packagee.name} updated successfully`
+            message: `${this.trademark.name} update successfully`
           })
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
           })
-          this.hideModal()
         })
         .catch()
     },
     hideModal () {
-      this.$store.dispatch('packages/newPackageModal', false)
-      this.editPackageModal = false
+      this.$store.dispatch('trademarks/newTrademarkModal', false)
+      this.editTrademarkModal = false
     },
     showModal () {
-      this.editPackageModal = true
-    },
-    paginationLast (currentPage) {
-      if (this.lastPage > currentPage) {
-        return false
-      }
-      return true
+      this.editTrademarkModal = true
     },
     request (props) {
       this.loading = true
       this.$axios
         .get(
-          `/packages?filter=${this.filter}&page=${props.pagination.page}&perPage=${
+          `/trademarks?filter=${this.filter}&page=${props.pagination.page}&perPage=${
             props.pagination.rowsPerPage
           }`
         )
         .then(res => {
           this.serverPagination = props.pagination
-          this.serverData = _.values(res.data.packages.data)
-          this.serverPagination.rowsNumber = res.data.packages.total
-          this.lastPage = res.data.packages.last_page
+          this.serverData = _.values(res.data.trademarks.data)
+          this.serverPagination.rowsNumber = res.data.trademarks.total
+          this.lastPage = res.data.trademarks.last_page
           this.loading = false
         })
         .catch(error => {
@@ -308,10 +328,10 @@ export default {
           this.loading = false
         })
     },
-    edit (packageId) {
-      this.$axios.get(`packages/${packageId}/edit?id=${packageId}`).then(res => {
+    edit (trademarkId) {
+      this.$axios.get(`trademarks/${trademarkId}/edit?id=${trademarkId}`).then(res => {
         this.showModal()
-        this.$store.dispatch('packages/packagee', res.data.package)
+        this.$store.dispatch('trademarks/trademark', res.data.trademark)
       })
     }
   },
@@ -322,11 +342,14 @@ export default {
     })
   },
   watch: {
-    'packagee.name' (val) {
-      this.$store.dispatch('packages/packageeName', val)
+    'trademark.name' (val) {
+      this.$store.dispatch('trademarks/trademarkName', val)
     },
-    'packagee.desc' (val) {
-      this.$store.dispatch('packages/packageeDesc', val)
+    'trademark.desc' (val) {
+      this.$store.dispatch('trademarks/trademarkDesc', val)
+    },
+    'trademark.company_id' (val){
+      this.$store.dispatch('trademarks/trademarkCompanyId', val)
     }
   }
 }

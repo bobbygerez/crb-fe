@@ -11,5 +11,7 @@ export default [
   'menus',
   'access-right',
   'categories',
-  'packages'
+  'packages',
+  'trademarks',
+  'franchisees'
 ]

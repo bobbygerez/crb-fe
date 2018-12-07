@@ -10,6 +10,7 @@ import accessRights from './access-rights'
 import branches from './branches'
 import categories from './categories'
 import packages from './packages'
+import trademarks from './trademarks'
 import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
@@ -32,7 +33,8 @@ export default function (/* { ssrContext } */) {
       accessRights,
       branches,
       categories,
-      packages
+      packages,
+      trademarks
     },
     plugins: [createPersistedState()]
   })
