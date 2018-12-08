@@ -54,7 +54,6 @@
         </q-tr>
       </template>
 
-    
     </q-table>
 
     <q-modal
@@ -70,7 +69,7 @@
             <div class="q-display-1 q-mb-md">Edit {{ packagee.name }}</div>
           </div>
         </div>
-        
+
         <div class="row">
           <div class="col-xs-12 ">
             <q-input
@@ -291,7 +290,7 @@ export default {
       this.$axios
         .get(
           `/packages?filter=${this.filter}&page=${props.pagination.page}&perPage=${
-            props.pagination.rowsPerPage
+          props.pagination.rowsPerPage
           }`
         )
         .then(res => {

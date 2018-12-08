@@ -208,7 +208,6 @@
               :options="civilStatusOptions"
               float-label="Civil Status"
               clearable
-              chips
             />
           </div>
         </div>
@@ -219,25 +218,22 @@
               :options="genderOptions"
               float-label="Gender"
               clearable
-              chips
             />
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-select
               v-model="user.address.country_id"
-              :options="countries"
+              :options="countryOptions"
               float-label="Country"
               clearable
-              chips
             />
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-select
               v-model="user.address.region_id"
-              :options="regions"
+              :options="regionOptions"
               float-label="Region"
               clearable
-              chips
             />
           </div>
 
@@ -247,19 +243,17 @@
           <div class="col-xs-12 col-sm-4">
             <q-select
               v-model="user.address.province_id"
-              :options="provinces"
+              :options="provinceOptions"
               float-label="Province"
               clearable
-              chips
             />
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-select
               v-model="user.address.city_id"
-              :options="cities"
+              :options="cityOptions"
               float-label="City"
               clearable
-              chips
               :after="[
                   {
                     icon: 'mdi-magnify',
@@ -275,10 +269,9 @@
           <div class="col-xs-12 col-sm-4">
             <q-select
               v-model="user.address.brgy_id"
-              :options="brgys"
+              :options="brgyOptions"
               float-label="Brgy"
               clearable
-              chips
               :after="[
                   {
                     icon: 'mdi-magnify',
@@ -438,7 +431,6 @@
               :options="civilStatusOptions"
               float-label="Civil Status"
               clearable
-              chips
             />
           </div>
         </div>
@@ -449,25 +441,22 @@
               :options="genderOptions"
               float-label="Gender"
               clearable
-              chips
             />
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-select
               v-model="user.address.country_id"
-              :options="countries"
+              :options="countryOptions"
               float-label="Country"
               clearable
-              chips
             />
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-select
               v-model="user.address.region_id"
-              :options="regions"
+              :options="regionOptions"
               float-label="Region"
               clearable
-              chips
             />
           </div>
 
@@ -477,28 +466,25 @@
           <div class="col-xs-12 col-sm-4">
             <q-select
               v-model="user.address.province_id"
-              :options="provinces"
+              :options="provinceOptions"
               float-label="Province"
               clearable
-              chips
             />
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-select
               v-model="user.address.city_id"
-              :options="cities"
+              :options="cityOptions"
               float-label="City"
               clearable
-              chips
             />
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-select
               v-model="user.address.brgy_id"
-              :options="brgys"
+              :options="brgyOptions"
               float-label="Brgy"
               clearable
-              chips
             />
           </div>
         </div>
@@ -547,9 +533,12 @@
 <script>
 import { values } from 'lodash'
 import { mapUserFields } from '../../store/users'
+import { mapGlobalFields } from '../../store/globals'
 
 import BarangayTable from 'components/location-provider/barangay-view'
 import CityTable from 'components/location-provider/city-view'
+
+// import { createAddress } from 'assets/models/Address'
 
 export default {
   components: {
@@ -585,6 +574,7 @@ export default {
   },
   computed: {
     ...mapUserFields(['user', 'roles', 'civilStatuses', 'newUserModal', 'genders']),
+    ...mapGlobalFields(['countries', 'regions', 'provinces', 'cities', 'brgys']),
     roleOptions () {
       return this.roles.map(e => {
         return {
@@ -598,53 +588,51 @@ export default {
         return this.user.roles.map(e => {
           return e.id
         })
-        // this.selectedRoles = roles
-        // return roles
       },
       set (val) {
         this.selectedRoles = val
       }
     },
-    countries () {
-      return this.$store.getters['globals/getCountries'].map(e => {
+    countryOptions () {
+      return this.countries.map(e => {
         return {
           label: e.description,
           value: e.id
         }
       })
     },
-    regions () {
-      return this.$store.getters['globals/getRegions'].map(e => {
+    regionOptions () {
+      return this.regions.map(e => {
         return {
           label: e.description,
           value: e.id
         }
       })
     },
-    provinces () {
-      let provinces = this.$store.getters['globals/getProvinces']
-      if (provinces === undefined) return []
-      return provinces.map(e => {
+    provinceOptions () {
+      // let provinces = this.$store.getters['globals/getProvinces']
+      // if (provinces === undefined) return []
+      return this.provinces.map(e => {
         return {
           label: e.description,
           value: e.id
         }
       })
     },
-    cities () {
-      let cities = this.$store.getters['globals/getCities']
-      if (cities === undefined) return []
-      return cities.map(e => {
+    cityOptions () {
+      // let cities = this.$store.getters['globals/getCities']
+      // if (cities === undefined) return []
+      return this.cities.map(e => {
         return {
           label: e.description,
           value: e.id
         }
       })
     },
-    brgys () {
-      let brgys = this.$store.getters['globals/getBrgys']
-      if (brgys === undefined) return []
-      return brgys.map(e => {
+    brgyOptions () {
+      // let brgys = this.$store.getters['globals/getBrgys']
+      // if (brgys === undefined) return []
+      return this.brgys.map(e => {
         return {
           label: e.description,
           value: e.id
@@ -801,17 +789,46 @@ export default {
     locationSelected (loc, where) {
       console.log('locationSelected =>', loc)
       console.log('locationSelected where =>', where)
-      // if (location) {
-      //   let address = {
-      //     brgy: loc.description,
-      //     city: loc.city.description,
-      //     province: loc.province.description,
-      //     region: loc.region.description,
-      //     country: loc.region.country.description
-      //   }
-      //   // set the address fields based on type
-      //   this.setAddressFields(where, address)
-      // }
+      console.log('address before', this.user.address)
+      if (loc) {
+        // let address = {
+        console.log('address options', this.countries, this.regions, this.cities, this.brgys)
+        // this.countries = []
+        this.regions = []
+        this.cities = []
+        this.brgys = []
+
+        // this.countries.push({ label: loc.region.country.description, value: loc.region.country.id })
+        this.regions.push({ label: loc.region.description, value: loc.region.id })
+        this.provinces.push({ label: loc.province.description, value: loc.province.id })
+        this.cities.push({ label: loc.city.description, value: loc.city.id })
+        this.brgys.push({ label: loc.description, value: loc.id })
+        console.log('address options', this.countries, this.regions, this.cities, this.brgys)
+        // this.user.address. loc.description,
+        // city: loc.city.description,
+        // province: loc.province.description,
+        // region: loc.region.description,
+        // country: loc.region.country.description
+        this.user.address.country_id = loc.region.country.id
+        this.user.address.region_id = loc.region.id
+        this.user.address.province_id = loc.province.id
+        this.user.address.city_id = loc.city.id
+        this.user.address.brgy_id = loc.id
+        this.user.address.street_lot_blk = this.user.address.street_lot_blk
+        // this.user.address = createAddress({
+        //   country_id: loc.region.country.id,
+        //   region_id: loc.region.id,
+        //   province_id: loc.province.id,
+        //   city_id: loc.city.id,
+        //   brgy_id: loc.id,
+        //   street_lot_blk: this.user.address.street_lot_blk
+        // })
+        // }
+        // set the address fields based on type
+        // this.setAddressFields(where, address)
+        // check address
+        console.log('new setted address', this.user.address)
+      }
     }
   },
   mounted () {

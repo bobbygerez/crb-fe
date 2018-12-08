@@ -12,16 +12,51 @@
           dense
           @click="$refs.modalBarangay.hide()"
         >
-          <q-icon name="keyboard_arrow_left" />
+          <q-icon name="mdi-arrow-left" />
         </q-btn>
+        <div class="col-6 col-md-8">
+          <q-input
+            :before="[{icon:'mdi-magnify'}]"
+            :dark="showMaxResult"
+            color="default"
+            hide-underline
+            placeholder="Search Barangays"
+            clearable
+            v-model="filter"
+            @input="searchBarangays"
+            @focus="showMaxResult = true"
+            @blur="checkFilterStatus"
+          />
+        </div>
+        <div
+          class="col-3 col-md-3"
+          v-show="showMaxResult"
+        >
+          <q-select
+            placeholder="Results"
+            :prefix="!($q.screen.sm || $q.screen.xs) ? 'Result: ' : ''"
+            color="default"
+            inverted
+            v-model="maxResult"
+            @focus="showMaxResult = true"
+            @input="searchBarangays"
+            :options="[
+                    { label: '5', value: 5 },
+                    { label: '10', value: 10 },
+                    { label: '20', value: 20, selected: true },
+                    { label: '50', value: 50 },
+                    { label: '100', value: 100 }
+                  ]"
+            hide-underline
+          />
+        </div>
         <q-toolbar-title>
-          Select Barangay
         </q-toolbar-title>
         <table-view-mode-action />
       </q-toolbar>
       <!-- conditional rendering, shows table on list or grid view depending on the selected view mode -->
-      <template v-if="tableViewSettings.mode === 'grid'">
-        <div class="q-mx-sm q-my-sm">
+      <!-- <template v-if="tableViewSettings.mode === 'grid'"> -->
+        <div v-show="tableViewSettings.mode === 'grid'" class="q-mx-sm q-my-sm">
           <q-inner-loading :visible="loading">
             <q-spinner
               color="secondary"
@@ -41,7 +76,7 @@
             row-key="__index"
             color="secondary"
           >
-            <template
+            <!-- <template
               slot="top-left"
               slot-scope="props"
             >
@@ -71,11 +106,11 @@
                   hide-underline
                 />
               </template>
-            </template>
+            </template> -->
             <div
               slot="item"
               slot-scope="props"
-              class="q-pa-xs col-xs-12 col-sm-6 col-md-4 transition-generic"
+              class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-xl-3 transition-generic"
               :style="props.selected ? 'transform: scale(0.95);' : ''"
             >
               <q-card
@@ -135,9 +170,9 @@
             </q-btn>
           </q-page-sticky>
         </div>
-      </template>
-      <template v-else-if="tableViewSettings.mode === 'list'">
-        <div class="q-mx-sm q-my-sm">
+      <!-- </template> -->
+      <!-- <template v-else-if="tableViewSettings.mode === 'list'"> -->
+        <div v-show="tableViewSettings.mode === 'list'" class="q-mx-sm q-my-sm">
           <q-table
             binary-state-sort
             ref="listQTable"
@@ -154,7 +189,7 @@
             row-key="__index"
             color="secondary"
           >
-            <template
+            <!-- <template
               slot="top-left"
               slot-scope="props"
             >
@@ -214,7 +249,7 @@
                 :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
                 @click="props.toggleFullscreen"
               />
-            </template>
+            </template> -->
             <q-tr
               slot="body"
               slot-scope="props"
@@ -257,7 +292,7 @@
             </q-btn>
           </q-page-sticky>
         </div>
-      </template>
+      <!-- </template> -->
       <q-page-sticky
         position="bottom-right"
         :offset="[18, 60]"
@@ -276,17 +311,13 @@
 </template>
 
 <script>
-// import Location from 'assets/services/location'
 import TableViewModeAction from 'components/actions-generic/table-view-mode-action'
-// import { mapState, mapActions, mapGetters } from 'vuex'
 import { setTimeout } from 'timers'
 import { debounce } from 'quasar'
 import { mapGlobalFields } from '../../store/globals'
 
 export default {
   computed: {
-    // ...mapState('commons', ['tableViewMode', 'locationData']),
-    // ...mapGetters('commons', ['getTableViewMode', 'getLocationData'])
     ...mapGlobalFields(['tableViewSettings', 'locationData'])
   },
   components: {
@@ -294,22 +325,6 @@ export default {
   },
   name: 'barangay-table',
   props: {
-    // type check
-    // height: Number,
-    // type check plus other validations
-    // age: {
-    //   type: Number,
-    //   default: 0,
-    //   required: true,
-    //   validator: function (value) {
-    //     return value >= 0
-    //   }
-    // }
-    // params: {
-    //   type: Object,
-    //   default: () => {},
-    //   required: false
-    // }
     params: [String, Object],
     show1: {
       type: Boolean,
@@ -423,7 +438,7 @@ export default {
         return
       }
       this.loading = true
-      debounce(this.getBarangays(), 500)
+      this.debouncedFunction()
     },
     getBarangays () {
       console.log('hey', 'ho')
@@ -454,6 +469,10 @@ export default {
         this.loading = false
         console.log(err.data)
       })
+
+    this.debouncedFunction = debounce(() => {
+      this.getBarangays()
+    }, 500)
   },
   watch: {
     'pagination' () {
