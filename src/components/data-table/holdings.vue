@@ -113,7 +113,7 @@
         />
       </template>
     </q-table> -->
-    <q-modal
+    <!-- <q-modal
       v-model="minimizedModal"
       no-esc-dismiss
       no-backdrop-dismiss
@@ -255,7 +255,7 @@
           class="q-ml-sm"
         />
       </div>
-    </q-modal>
+    </q-modal> -->
 
     <q-modal
       v-model="minimizedModal"
@@ -497,8 +497,7 @@ export default {
       pagination: {
         page: 2
       },
-      paginationControl: { rowsPerPage: 7, page: 1 },
-      dark: true
+      paginationControl: { rowsPerPage: 7, page: 1 }
     }
   },
   computed: {
@@ -714,31 +713,31 @@ export default {
     'holding.name' (val) {
       this.$store.dispatch('pattys/setHoldingName', val)
     },
-    'holding.address.country_id' (val) {
-      if (val === null || val === undefined) return
-      this.$store.dispatch('globals/getRegions', val)
-    },
-    'holding.address.region_id' (val) {
-      this.$store.dispatch('globals/getProvinces', val)
-      this.$store.dispatch('pattys/setHoldingRegion', val)
-    },
-    'holding.address.province_id' (val) {
-      this.$store.dispatch('pattys/setHoldingProvince', val)
-      this.$store.dispatch('globals/getCities', val)
-    },
-    'holding.address.city_id' (val) {
-      this.$store.dispatch('pattys/setHoldingCity', val)
-      this.$store.dispatch('globals/getBrgys', val)
-    },
-    'holding.address.brgy_id' (val) {
-      this.$store.dispatch('pattys/setHoldingBrgy', val)
-    },
+    // 'holding.address.country_id' (val) {
+    //   if (val === null || val === undefined) return
+    //   this.$store.dispatch('globals/getRegions', val)
+    // },
+    // 'holding.address.region_id' (val) {
+    //   this.$store.dispatch('globals/getProvinces', val)
+    //   this.$store.dispatch('pattys/setHoldingRegion', val)
+    // },
+    // 'holding.address.province_id' (val) {
+    //   this.$store.dispatch('pattys/setHoldingProvince', val)
+    //   this.$store.dispatch('globals/getCities', val)
+    // },
+    // 'holding.address.city_id' (val) {
+    //   this.$store.dispatch('pattys/setHoldingCity', val)
+    //   this.$store.dispatch('globals/getBrgys', val)
+    // },
+    // 'holding.address.brgy_id' (val) {
+    //   this.$store.dispatch('pattys/setHoldingBrgy', val)
+    // },
     'holding.desc' (val) {
       this.$store.dispatch('pattys/setHoldingDesc', val)
     },
-    'holding.address.street_lot_blk' (val) {
-      this.$store.dispatch('pattys/setHoldingAddress', val)
-    },
+    // 'holding.address.street_lot_blk' (val) {
+    //   this.$store.dispatch('pattys/setHoldingAddress', val)
+    // },
     'holding.business_info.business_type_id' (val) {
       this.$store.dispatch('pattys/setHoldingBusinessType', val)
     },

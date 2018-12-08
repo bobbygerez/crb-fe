@@ -97,17 +97,15 @@
               </q-list>
             </q-popover>
             <q-tooltip
-          v-if="!$q.platform.is.cordova && actions"
-          :delay="1000"
-          anchor="bottom middle"
-          self="bottom middle"
-          :offset="[10, 10]"
-        >
-
-          Click to see options.
-        </q-tooltip>
+              v-if="!$q.platform.is.cordova && actions"
+              :delay="1000"
+              anchor="bottom middle"
+              self="bottom middle"
+              :offset="[10, 10]"
+            >
+              Click to see options.
+            </q-tooltip>
           </q-td>
-
         </q-tr>
       </template>
     </q-table>
