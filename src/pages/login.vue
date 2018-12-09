@@ -172,6 +172,7 @@ export default {
       this.$axios.post(`password/create`,{
         email: this.email
       }).then(res => {
+        this.$refs.minimizedModal.hide()
         this.$q.notify({ type: 'positive', message: res.data.message })
       }) .catch(error => {
           this.loading = false

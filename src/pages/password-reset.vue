@@ -50,6 +50,7 @@
                 @keyup.enter="reset"
               />
             </f-v-field-validator>
+            
             <br>
             <div>
               <br>
@@ -71,7 +72,13 @@
               class="q-my-sm"
             />
           </form>
+          <q-btn
+                  flat
+                  color="white"
+                  to="/"
+                >Login</q-btn>
         </div>
+        
       </q-page>
     </q-page-container>
   </q-layout>
@@ -142,9 +149,16 @@ export default {
             'Content-Type': 'application/json',
             'X-Requested-With': 'XMLHttpRequest'
         }
-    }).then().catch(error => {
+    }).then(res =>{
+      this.loading = false
+      let msg = res.data.message
+      this.$q.notify({ type: 'positive', message: msg})
+    }).catch(error => {
                 this.loading = false
-                this.$q.notify({ type: 'negative', message: error})
+                let err = error.response.data.errors.password.map(function(i){
+                    return i;
+                })
+                this.$q.notify({ type: 'negative', message: err})
             });
       
     },
