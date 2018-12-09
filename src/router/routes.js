@@ -8,6 +8,9 @@ import {
 const routes = [{
   path: '/',
   component: () => import('pages/Login.vue')
+}, {
+  path: '/password/reset/:token',
+  component: () => import('pages/password-reset.vue')
 }]
 
 const dashBoardModules = (appModules) => {
