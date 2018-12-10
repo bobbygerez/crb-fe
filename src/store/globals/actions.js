@@ -6,7 +6,7 @@ export const getBusinessTypes = ({
   commit,
   state
 }) => {
-  if (state.businessTypes.length) {
+  if (state.businessTypes.length > 1) {
     return
   }
   axios.get('/business_types')
@@ -19,7 +19,7 @@ export const getVatTypes = ({
   commit,
   state
 }) => {
-  if (state.vatTypes.length) {
+  if (state.vatTypes.length > 1) {
     return
   }
   axios.get('/vat_types')
@@ -32,7 +32,7 @@ export const getCountries = ({
   commit,
   state
 }) => {
-  if (state.countries.length) {
+  if (state.countries.length > 1) {
     return
   }
   axios.get('/countries')

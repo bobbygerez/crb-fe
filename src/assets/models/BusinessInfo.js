@@ -1,36 +1,34 @@
 /* eslint-disable */
-export class BusinessInfo {
-  constructor({
-    business_type = null, // object
-    business_type_id = null,
-    businessable_id = null,
-    businessable_type = '',
-    email = '',
-    id = null,
-    telephone = '',
-    tin = '',
-    vat_type = null, // object
-    vat_type_id = null,
-    website = ''
-  } = {}) {
-    this.business_type = business_type
-    this.business_type_id = business_type_id
-    this.businessable_id = businessable_id
-    this.businessable_type = businessable_type
-    this.email = email
-    this.id = id
-    this.telephone = telephone
-    this.tin = tin
-    this.vat_type = vat_type
-    this.vat_type_id = vat_type_id
-    this.website = website
-  }
-}
+export const BusinessInfo = ({
+  business_type = BusinessType(), // object
+  business_type_id = null,
+  businessable_id = null,
+  businessable_type = '',
+  email = '',
+  id = null,
+  telephone = '',
+  tin = '',
+  vat_type = VatType(), // object
+  vat_type_id = null,
+  website = ''
+} = {}) => ({
+  business_type,
+  business_type_id,
+  businessable_id,
+  businessable_type,
+  email,
+  id,
+  telephone,
+  tin,
+  vat_type,
+  vat_type_id,
+  website
+})
 
-export function createBusinessInfo(data) {
+export const createBusinessInfo = (data) => {
   const business_type = createBusinessType(data.business_type)
   const vat_type = createVatType(data.vat_type)
-  return Object.freeze(new BusinessInfo({
+  return Object.freeze(BusinessInfo({
     business_type: business_type,
     business_type_id: data.business_type_id,
     businessable_id: data.businessable_id,
@@ -45,30 +43,22 @@ export function createBusinessInfo(data) {
   }))
 }
 
-export class VatType {
-  constructor({
-    id = null,
-    name = ''
-  } = {}) {
-    this.id = id
-    this.name = name
-  }
-}
+export const VatType = ({
+  id = null,
+  name = ''
+} = {}) => ({
+  id,
+  name
+})
 
-export function createVatType(data) {
-  return Object.freeze(new VatType(data))
-}
+export const createVatType = (data) => Object.freeze(VatType(data))
 
-export class BusinessType {
-  constructor({
-    id = null,
-    name = ''
-  } = {}) {
-    this.id = id
-    this.name = name
-  }
-}
+export const BusinessType = ({
+  id = null,
+  name = ''
+} = {}) => ({
+  id,
+  name
+})
 
-export function createBusinessType(data) {
-  return Object.freeze(new BusinessType(data))
-}
+export const createBusinessType = (data) => Object.freeze(BusinessType(data))

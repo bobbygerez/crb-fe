@@ -210,6 +210,7 @@ export default {
   },
   mounted () {
     this.localModule = this.holding
+    console.log('@mounted => ', this.localModule)
   }
 }
 </script>

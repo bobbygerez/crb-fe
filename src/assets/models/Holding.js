@@ -1,35 +1,46 @@
-import { createAddress } from './Address';
-import { createBusinessInfo } from './BusinessInfo';
-import { createSomeImage } from './SomeImage';
+import {
+  createAddress,
+  Address
+} from './Address'
+import {
+  createBusinessInfo,
+  BusinessInfo
+} from './BusinessInfo'
+import {
+  createSomeImage,
+  SomeImage
+} from './SomeImage'
+import {
+  Company,
+  createCompany
+} from './Company'
 
 /* eslint-disable */
-export class Holding {
-  constructor({
-    address = null,
-    business_info = null,
-    companies = [],
-    desc = '',
-    id = null,
-    images = [],
-    name = ''
-  } = {}) {
-    this.address = address
-    this.business_info = business_info
-    this.companies = companies
-    this.desc = desc
-    this.id = id
-    this.images = images
-    this.name = name
-  }
-}
+export const Holding = ({
+  address = Address(),
+  business_info = BusinessInfo(),
+  companies = [Company()],
+  desc = '',
+  id = null,
+  images = [SomeImage()],
+  name = ''
+} = {}) => ({
+  address,
+  business_info,
+  companies,
+  desc,
+  id,
+  images,
+  name
+})
 
-export function createHolding(data) {
+export const createHolding = (data) => {
   const address = createAddress(data.address)
   const business_info = createBusinessInfo(data.business_info)
-  const companies = data.companies.map(c => createCompanies(c))
+  const companies = data.companies.map(c => createCompany(c))
   const images = data.images.map(i => createSomeImage(i))
 
-  return Object.freeze(new Holding({
+  return Object.freeze(Holding({
     address: address,
     business_info: business_info,
     companies: companies,

@@ -67,11 +67,9 @@ export default {
   methods: {
     ...mapActions('pattys', [
       'setHoldings',
-      'getBusinessTypes',
-      'getVatTypes',
       'setNewHoldingModal'
     ]),
-    ...mapActions('globals', ['getCountries']),
+    ...mapActions('globals', ['getCountries', 'getBusinessTypes', 'getVatTypes']),
     showNewHoldingModal () {
       this.setNewHoldingModal(true)
     },
