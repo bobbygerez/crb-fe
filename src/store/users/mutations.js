@@ -1,4 +1,7 @@
-export { updateField } from 'vuex-map-fields'
+export {
+  updateField
+}
+  from 'vuex-map-fields'
 
 export const SET_USERS = (state, payload) => {
   state.users = payload

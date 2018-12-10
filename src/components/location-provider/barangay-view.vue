@@ -14,7 +14,7 @@
         >
           <q-icon name="mdi-arrow-left" />
         </q-btn>
-        <div class="col-6 col-md-8">
+        <div class="col-6 col-md-7">
           <q-input
             :before="[{icon:'mdi-magnify'}]"
             :dark="showMaxResult"
@@ -437,7 +437,6 @@ export default {
       if (this.filter.trim() === '') {
         return
       }
-      this.loading = true
       this.debouncedFunction()
     },
     getBarangays () {
@@ -471,6 +470,7 @@ export default {
       })
 
     this.debouncedFunction = debounce(() => {
+      this.loading = true
       this.getBarangays()
     }, 500)
   },
@@ -479,13 +479,6 @@ export default {
       let table = this.$refs.listQTable
       console.log('listQtable', table)
       console.log('pag', this.pagination)
-      // if (this.pagination.rowsPerPage === 0 || (this.pagination.rowsPerPage > 20 && this.pagination.rowsPerPage < 100)) {
-      //   console.log('pag', this.pagination.rowsPerPage)
-      //   this.rowsOptions = []
-      // } else {
-      //   console.log('pag', this.pagination.rowsPerPage)
-      //   this.rowsOptions = this.rowOptionsDefault
-      // }
     }
   }
 }

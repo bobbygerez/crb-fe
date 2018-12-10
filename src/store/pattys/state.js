@@ -1,4 +1,6 @@
-import { Holding } from '../../assets/models/Holding'
+import {
+  Holding
+} from '../../assets/models/Holding'
 
 export default {
   newHoldingModal: false,

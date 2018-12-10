@@ -503,7 +503,7 @@ export default {
   computed: {
     ...mapHoldingFields(['newHoldingModal', 'holding']),
     vatTypes () {
-      return this.$store.getters['pattys/getVatTypes'].map(e => {
+      return this.$store.getters['globals/getVatTypes'].map(e => {
         return {
           label: e.name,
           value: e.id
@@ -511,7 +511,7 @@ export default {
       })
     },
     businessTypes () {
-      return this.$store.getters['pattys/getBusinessTypes'].map(e => {
+      return this.$store.getters['globals/getBusinessTypes'].map(e => {
         return {
           label: e.name,
           value: e.id

@@ -20,5 +20,8 @@ export const getVatTypes = (state) => state.vatTypes
 export const getMenus = (state) => state.menus
 
 export const countryList = (state) => state.countries.map(v => {
-  return { label: v.description, value: v.id }
+  return {
+    label: v.description,
+    value: v.id
+  }
 })

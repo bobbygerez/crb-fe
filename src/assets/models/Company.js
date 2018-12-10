@@ -3,11 +3,11 @@ import {
   Address
 } from './Address'
 import {
-  createBusinessInfo
+  createBusinessInfo,
+  BusinessInfo
 } from './BusinessInfo'
 import {
-  createHolding,
-  Holding
+  createHolding
 } from './Holding'
 import {
   createBranch,
@@ -18,9 +18,9 @@ import {
 export const Company = ({
   address = Address(),
   branches = [Branch()], // array of branches
-  business_info = null,
+  business_info = BusinessInfo(),
   desc = '',
-  holding = Holding(),
+  holding = {},
   holding_id = null,
   id = null,
   name = ''

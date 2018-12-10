@@ -1,4 +1,7 @@
-export { getField } from 'vuex-map-fields'
+export {
+  getField
+}
+  from 'vuex-map-fields'
 // export const getField = (state) => getField(state)
 
 // export const getUsers = (state) => state.users

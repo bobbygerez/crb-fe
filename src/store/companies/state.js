@@ -1,7 +1,9 @@
 // import {
 // Address
 // } from '../../assets/models/Address'
-import { Company } from '../../assets/models/Company'
+import {
+  Company
+} from '../../assets/models/Company'
 
 export default {
   holdings: [],
