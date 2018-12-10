@@ -18,5 +18,6 @@ export default {
     desc: null
   },
   userCompanies: [],
-  userTrademarks: []
+  userTrademarks: [],
+  newFranchiseeModal: false
 }

@@ -230,7 +230,7 @@
       :content-css="{minWidth: '80vw', minHeight: '80vh'}"
     >
       <div style="padding: 30px">
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-xs-12 ">
             <div class="q-display-1 q-mb-md">New Franchisee</div>
           </div>
@@ -359,7 +359,7 @@
               rows="2"
             />
           </div>
-        </div>
+        </div> -->
         <br>
         <q-btn
           color="red"
@@ -580,7 +580,6 @@ export default {
     },
     hideModal () {
       this.$store.dispatch('franchisees/newFranchiseeModal', false)
-      console.log('asdf')
       this.editFranchiseeModal = false
     },
     showModal () {
