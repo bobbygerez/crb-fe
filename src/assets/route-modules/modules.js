@@ -13,5 +13,6 @@ export default [
   'categories',
   'packages',
   'trademarks',
-  'franchisees'
+  'franchisees',
+  'vendors'
 ]
