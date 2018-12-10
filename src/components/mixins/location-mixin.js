@@ -34,6 +34,7 @@ export default {
   },
   data () {
     return {
+      // set this in component create or mounted hook for which that component's module is
       localModule: null
     }
   },

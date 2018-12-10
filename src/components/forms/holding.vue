@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 30px">
-    <div class="row">
+    <div class="row gutter-xs">
       <div class="col-xs-12 col-sm-6">
         <q-input
           v-model="holding.name"
@@ -26,7 +26,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row gutter-xs">
       <div class="col-xs-12 col-sm-3">
         <q-input
           v-model="holding.business_info.telephone"
@@ -66,7 +66,7 @@
         rows="2"
       />
     </div>
-    <div class="row">
+    <div class="row gutter-xs">
       <div class="col-xs-12 col-sm-6">
         <q-select
           v-model="holding.address.country_id"
@@ -90,7 +90,7 @@
         />
       </div>
     </div>
-    <div class="row">
+    <div class="row gutter-xs">
       <div class="col-xs-12 col-sm-4">
         <q-select
           v-model="holding.address.province_id"

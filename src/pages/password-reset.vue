@@ -50,7 +50,7 @@
                 @keyup.enter="reset"
               />
             </f-v-field-validator>
-            
+
             <br>
             <div>
               <br>
@@ -64,8 +64,7 @@
               </q-btn>
               <br>
               <br>
-              
-              
+
             </div>
             <f-v-error-summary
               :valObj="$v"
@@ -73,12 +72,12 @@
             />
           </form>
           <q-btn
-                  flat
-                  color="white"
-                  to="/"
-                >Login</q-btn>
+            flat
+            color="white"
+            to="/"
+          >Login</q-btn>
         </div>
-        
+
       </q-page>
     </q-page-container>
   </q-layout>
@@ -87,7 +86,7 @@
 <script>
 // import axios from 'axios'
 import { required } from 'vuelidate/lib/validators'
-import { setAuthHeader } from 'plugins/axios'
+// import { setAuthHeader } from 'plugins/axios'
 import FVErrorSummary from 'components/form-validations/FVErrorSummary'
 import FVFieldValidator from 'components/form-validations/FVFieldValidator'
 import { mapActions, mapState } from 'vuex'
@@ -122,13 +121,13 @@ export default {
   computed: {
     ...mapState('pattys', ['token'])
   },
-  created(){
-      this.getUserInfo();
+  created () {
+    this.getUserInfo()
   },
   methods: {
     ...mapActions('pattys', ['setToken', 'setUser', 'setUserLogin']),
     ...mapActions('globals', ['setMenus']),
-    reset() {
+    reset () {
       this.$v.form.$touch()
       if (this.$v.form.$error) {
         this.$q.notify('Please review fields again.')
@@ -139,36 +138,34 @@ export default {
       }
       this.loading = true
 
-      this.$axios.post(`password/reset`,{
+      this.$axios.post(`password/reset`, {
         email: this.form.email,
         password: this.form.password,
         password_confirmation: this.form.password_confirmation,
         token: this.form.token
       }, {
         headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
         }
-    }).then(res =>{
-      this.loading = false
-      let msg = res.data.message
-      this.$q.notify({ type: 'positive', message: msg})
-    }).catch(error => {
-                this.loading = false
-                let err = error.response.data.errors.password.map(function(i){
-                    return i;
-                })
-                this.$q.notify({ type: 'negative', message: err})
-            });
-      
+      }).then(res => {
+        this.loading = false
+        let msg = res.data.message
+        this.$q.notify({ type: 'positive', message: msg })
+      }).catch(error => {
+        this.loading = false
+        let err = error.response.data.errors.password.map(function (i) {
+          return i
+        })
+        this.$q.notify({ type: 'negative', message: err })
+      })
     },
-    getUserInfo(){
-        this.$axios.get(`password/find/${this.$route.params.token}`)
-            .then(res =>{
-                this.form.token = this.$route.params.token
-                this.form.email = res.data.email
-            })
-        ;
+    getUserInfo () {
+      this.$axios.get(`password/find/${this.$route.params.token}`)
+        .then(res => {
+          this.form.token = this.$route.params.token
+          this.form.email = res.data.email
+        })
     }
   }
 }
