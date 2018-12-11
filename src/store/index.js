@@ -11,6 +11,8 @@ import branches from './branches'
 import categories from './categories'
 import packages from './packages'
 import trademarks from './trademarks'
+import franchisees from './franchisees'
+import vendors from './vendors'
 import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
@@ -34,7 +36,9 @@ export default function (/* { ssrContext } */) {
       branches,
       categories,
       packages,
-      trademarks
+      trademarks,
+      franchisees,
+      vendors
     },
     plugins: [createPersistedState()]
   })
