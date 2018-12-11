@@ -29,21 +29,9 @@
       >
         <q-tr :props="props">
           <q-td key="name">{{props.row.name }}</q-td>
-          <q-td key="company">{{props.row.trademarks.name }}</q-td>
-          <q-td key="company">{{props.row.trademarks.company.name }}</q-td>
-          <q-td
-            key="address"
-            :props="props"
-          >
-            {{props.row.address.street_lot_blk}}
-            <br />
-            {{props.row.address.brgy.description}}
-            <br />
-            {{props.row.address.city.description }},
-            <br />
-            {{props.row.address.region.description }}
-
-          </q-td>
+          <q-td key="franchisee">{{props.row.franchisable.name }}</q-td>
+          <q-td key="trademark">{{props.row.trademarks.name }}</q-td>
+          <q-td key="franchisor">{{props.row.trademarks.company.name }}</q-td>
           <q-td
             key="actions"
             :props="props"
@@ -83,19 +71,13 @@
             <div class="q-display-1 q-mb-md">Edit {{ franchisee.name }}</div>
           </div>
         </div>
+        
         <div class="row">
           <div class="col-xs-12 col-sm-4">
             <q-select
               v-model="franchisee.trademark_id"
               :options="userTrademarks"
               float-label="Trademarks"
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-select
-              v-model="franchisee.trademarks.company_id"
-              :options="userCompanies"
-              float-label="Company"
             />
           </div>
           <div class="col-xs-12 col-sm-4">
@@ -106,26 +88,49 @@
             />
           </div>
           <div class="col-xs-12 col-sm-4">
+            <q-input
+              v-model="trademarkCompanyName"
+              float-label="Franchisor"
+              disable
+            />
+          </div>
+          <div class="col-xs-12 col-sm-6">
             <q-select
-              v-model="franchisee.business_info.business_type_id"
-              :options="businessTypes"
-              float-label="Business Type"
-              clearable
+              v-model="franchisee.franchisable_type"
+              :options="franchisableType"
+              float-label="Franchisable Type"
+            />
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <q-select
+              v-model="franchisee.franchisable_id"
+              :options="userEntities"
+              float-label="Franchisee"
             />
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="franchisee.business_info.vat_type_id"
+              v-model="businessInfo.business_type_id"
+              :options="businessTypes"
+              float-label="Business Type"
+              clearable
+              disable
+            />
+          </div>
+          <div class="col-xs-12 col-sm-4">
+            <q-select
+              v-model="businessInfo.vat_type_id"
               :options="vatTypes"
               float-label="Vat Type"
               clearable
+              disable
             />
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-input
-              v-model="franchisee.business_info.telephone"
+              v-model="businessInfo.telephone"
               float-label="Telephone"
-              clearable
+              disable
             />
           </div>
         </div>
@@ -133,41 +138,41 @@
           
           <div class="col-xs-12 col-sm-4">
             <q-input
-              v-model="franchisee.business_info.email"
+              v-model="businessInfo.email"
               float-label="Email"
-              clearable
+              disable
             />
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-input
-              v-model="franchisee.business_info.tin"
+              v-model="businessInfo.tin"
               float-label="TIN"
-              clearable
+              disable
             />
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-input
-              v-model="franchisee.business_info.website"
+              v-model="businessInfo.website"
               float-label="Website"
-              clearable
+              disable
             />
           </div>
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-6">
             <q-select
-              v-model="franchisee.address.country_id"
+              v-model="address.country_id"
               :options="countries"
               float-label="Country"
-              clearable
+              disable
             />
           </div>
           <div class="col-xs-12 col-sm-6">
             <q-select
-              v-model="franchisee.address.region_id"
+              v-model="address.region_id"
               :options="regions"
               float-label="Region"
-              clearable
+              disable
             />
           </div>
 
@@ -175,35 +180,36 @@
         <div class="row">
           <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="franchisee.address.province_id"
+              v-model="address.province_id"
               :options="provinces"
               float-label="Province"
-              clearable
+              disable
             />
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="franchisee.address.city_id"
+              v-model="address.city_id"
               :options="cities"
               float-label="City"
-              clearable
+              disable
             />
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="franchisee.address.brgy_id"
+              v-model="address.brgy_id"
               :options="brgys"
               float-label="Barangay"
-              clearable
+              disable
             />
           </div>
           <div class="col-xs-12 col-sm-12">
             <q-input
-              v-model="franchisee.address.street_lot_blk"
+              v-model="address.street_lot_blk"
               type="textarea"
               float-label="Block, Lot &amp; Street"
               :max-height="100"
               rows="2"
+              disable
             />
           </div>
         </div>
@@ -230,97 +236,111 @@
       :content-css="{minWidth: '80vw', minHeight: '80vh'}"
     >
       <div style="padding: 30px">
-        <!-- <div class="row">
+        <div class="row">
           <div class="col-xs-12 ">
             <div class="q-display-1 q-mb-md">New Franchisee</div>
           </div>
         </div>
         <div class="row">
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="franchisee.company_id"
-              :options="companies"
-              float-label="Company"
+              v-model="franchisee.trademark_id"
+              :options="userTrademarks"
+              float-label="Trademarks"
             />
           </div>
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
             <q-input
               v-model="franchisee.name"
-              float-label="Branch name"
+              float-label="Name"
               clearable
             />
           </div>
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
+            <q-input
+              v-model="trademarkCompanyName"
+              float-label="Franchisor"
+              disable
+            />
+          </div>
+          <div class="col-xs-12 col-sm-6">
             <q-select
-              v-model="franchisee.business_info.business_type_id"
+              v-model="franchisee.franchisable_type"
+              :options="franchisableType"
+              float-label="Franchisable Type"
+            />
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <q-select
+              v-model="franchisee.franchisable_id"
+              :options="userEntities"
+              float-label="Franchisee"
+            />
+          </div>
+          <div class="col-xs-12 col-sm-4">
+            <q-select
+              v-model="businessInfo.business_type_id"
               :options="businessTypes"
               float-label="Business Type"
               clearable
+              disable
             />
           </div>
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="franchisee.business_info.vat_type_id"
+              v-model="businessInfo.vat_type_id"
               :options="vatTypes"
               float-label="Vat Type"
               clearable
+              disable
+            />
+          </div>
+          <div class="col-xs-12 col-sm-4">
+            <q-input
+              v-model="businessInfo.telephone"
+              float-label="Telephone"
+              disable
             />
           </div>
         </div>
         <div class="row">
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
             <q-input
-              v-model="franchisee.business_info.telephone"
-              float-label="Telephone"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-3">
-            <q-input
-              v-model="franchisee.business_info.email"
+              v-model="businessInfo.email"
               float-label="Email"
-              clearable
+              disable
             />
           </div>
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
             <q-input
-              v-model="franchisee.business_info.tin"
+              v-model="businessInfo.tin"
               float-label="TIN"
-              clearable
+              disable
             />
           </div>
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
             <q-input
-              v-model="franchisee.business_info.website"
+              v-model="businessInfo.website"
               float-label="Website"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-12">
-            <q-input
-              v-model="franchisee.desc"
-              type="textarea"
-              float-label="Description"
-              :max-height="100"
-              rows="2"
+              disable
             />
           </div>
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-6">
             <q-select
-              v-model="franchisee.address.country_id"
+              v-model="address.country_id"
               :options="countries"
               float-label="Country"
-              clearable
+              disable
             />
           </div>
           <div class="col-xs-12 col-sm-6">
             <q-select
-              v-model="franchisee.address.region_id"
+              v-model="address.region_id"
               :options="regions"
               float-label="Region"
-              clearable
+              disable
             />
           </div>
 
@@ -328,38 +348,39 @@
         <div class="row">
           <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="franchisee.address.province_id"
+              v-model="address.province_id"
               :options="provinces"
               float-label="Province"
-              clearable
+              disable
             />
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="franchisee.address.city_id"
+              v-model="address.city_id"
               :options="cities"
               float-label="City"
-              clearable
+              disable
             />
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="franchisee.address.brgy_id"
+              v-model="address.brgy_id"
               :options="brgys"
               float-label="Barangay"
-              clearable
+              disable
             />
           </div>
           <div class="col-xs-12 col-sm-12">
             <q-input
-              v-model="franchisee.address.street_lot_blk"
+              v-model="address.street_lot_blk"
               type="textarea"
               float-label="Block, Lot &amp; Street"
               :max-height="100"
               rows="2"
+              disable
             />
           </div>
-        </div> -->
+        </div>
         <br>
         <q-btn
           color="red"
@@ -382,9 +403,30 @@
 // import tableData from 'assets/table-data'
 import _ from 'lodash'
 import { mapState } from 'vuex'
+
+function getObject (array, key, value) {
+
+  var o
+  array.some(function iter (a) {
+    
+    if (a[key] === value) {
+      o = a
+      return true
+    }
+    return Array.isArray(a.children) && a.children.some(iter)
+  })
+  return o
+}
+
 export default {
   data () {
     return {
+      franchisableId: '',
+      franchisableType:[
+        { value: 'App\\Model\\Holding', label: 'Holding'},
+        { value: 'App\\Model\\Company', label: 'Company'},
+        { value: 'App\\Model\\Branch', label: 'Branch'}
+      ],
       model: '2016-10-24T10:40:14.674Z',
       superior: '',
       selectedRoles: [],
@@ -399,9 +441,9 @@ export default {
       },
       columns: [
         { name: 'name', label: 'Name', field: 'name', align: 'left' },
+        { name: 'franchisee', label: 'Franchisee', align: 'left', field: 'franchisee' },
         { name: 'trademark', label: 'Trademark', align: 'left', field: 'created' },
-        { name: 'company', label: 'Company', align: 'left', field: 'company' },
-        { name: 'address', label: 'Address', align: 'left', field: 'address' },
+        { name: 'franchisor', label: 'Franchisor', align: 'left', field: 'franchisor' },
         { name: 'actions', label: 'Actions', align: 'left', field: 'actions' }
       ],
       filter: '',
@@ -410,7 +452,15 @@ export default {
   },
   computed: {
     ...mapState('branches', ['branch']),
-    ...mapState('franchisees', ['franchisee']),
+    ...mapState('franchisees', ['franchisee', 'trademarkCompanyName', 'address', 'businessInfo']),
+    userEntities () {
+      return this.$store.getters['franchisees/userEntities'].map(e => {
+        return {
+          label: e.name,
+          value: e.id
+        }
+      })
+    },
     franchisees () {
       return this.$store.getters['franchisees/franchisees'].map(e => {
         return {
@@ -505,11 +555,7 @@ export default {
   methods: {
     store () {
       this.$axios
-        .post(`/franchisees`, {
-          franchisee: this.franchisee,
-          address: this.franchisee.address,
-          businessInfo: this.franchisee.business_info
-        })
+        .post(`/franchisees`, this.franchisee)
         .then(res => {
           this.hideModal()
           this.$q.notify({
@@ -565,16 +611,16 @@ export default {
     update () {
       this.$axios.put(`/franchisees/${this.franchisee.id}`, this.franchisee)
         .then((res) => {
-          // this.editBranchModal = false
-          // this.$q.notify({
-          //   color: 'positive',
-          //   icon: 'check',
-          //   message: `${res.data.branch.name} update successfully`
-          // })
-          // this.request({
-          //   pagination: this.serverPagination,
-          //   filter: this.filter
-          // })
+          this.editFranchiseeModal = false
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `${this.franchisee.name} update successfully`
+          })
+          this.request({
+            pagination: this.serverPagination,
+            filter: this.filter
+          })
         })
         .catch()
     },
@@ -610,15 +656,7 @@ export default {
         })
     },
     edit (franchiseeId) {
-      this.$axios.get('/user-trademarks')
-        .then(res => {
-          this.$store.dispatch('franchisees/userTrademarks', res.data.userTrademarks)
-        })
-
-      this.$axios.get('/user-companies')
-        .then(res => {
-          this.$store.dispatch('franchisees/userCompanies', res.data.userCompanies)
-        })
+      
 
       this.$axios.get(`franchisees/${franchiseeId}/edit?id=${franchiseeId}`).then(res => {
         this.showModal()
@@ -631,9 +669,15 @@ export default {
       pagination: this.serverPagination,
       filter: this.filter
     })
+    this.$axios.get('/user-trademarks')
+        .then(res => {
+          this.$store.dispatch('franchisees/userTrademarks', res.data.userTrademarks)
+        })
   },
   watch: {
     'franchisee.trademark_id'(val){
+      let trademark = (getObject(this.$store.getters['franchisees/userTrademarks'], 'id', val))
+      this.$store.dispatch('franchisees/trademarkCompanyName', trademark.company.name)
       this.$store.dispatch('franchisees/franchiseeTrademarkId', val)
     },
     'franchisee.trademarks.company_id'(val){
@@ -642,46 +686,23 @@ export default {
     'franchisee.name' (val) {
       this.$store.dispatch('franchisees/franchiseeName', val)
     },
-    'franchisee.address.country_id' (val) {
-      if (val === null || val === undefined) return
-      this.$store.dispatch('globals/getRegions', val)
-      this.$store.dispatch('franchisees/franchiseeCountryId', val)
+    'franchisee.franchisable_type' (val){
+      this.$axios.get(`modelable-user-models?modelType=${val}`)
+          .then(res => {
+            this.$store.dispatch('franchisees/userEntities', res.data.userModels)
+          })
     },
-    'franchisee.address.region_id' (val) {
-      this.$store.dispatch('globals/getProvinces', val)
-      this.$store.dispatch('franchisees/franchiseeRegionId', val)
-    },
-    'franchisee.address.province_id' (val) {
-      this.$store.dispatch('globals/getCities', val)
-      this.$store.dispatch('franchisees/franchiseeProvinceId', val)
-    },
-    'franchisee.address.city_id' (val) {
-      this.$store.dispatch('globals/getBrgys', val)
-      this.$store.dispatch('franchisees/franchiseeCityId', val)
-    },
-    'franchisee.address.brgy_id' (val) {
-      this.$store.dispatch('franchisees/franchiseeBrgyId', val)
-    },
-    'franchisee.address.street_lot_blk' (val) {
-      this.$store.dispatch('franchisees/franchiseeStreetLotBlk', val)
-    },
-    'franchisee.business_info.business_type_id' (val) {
-      this.$store.dispatch('franchisees/franchiseeBusinessTypeId', val)
-    },
-    'franchisee.business_info.vat_type_id' (val) {
-      this.$store.dispatch('franchisees/franchiseeVatTypeId', val)
-    },
-    'franchisee.business_info.telephone' (val) {
-      this.$store.dispatch('franchisees/franchiseeTelephone', val)
-    },
-    'franchisee.business_info.email' (val) {
-      this.$store.dispatch('franchisees/franchiseeEmail', val)
-    },
-    'franchisee.business_info.tin' (val) {
-      this.$store.dispatch('franchisees/franchiseeTin', val)
-    },
-    'franchisee.business_info.website' (val) {
-      this.$store.dispatch('franchisees/franchiseeWebsite', val)
+    'franchisee.franchisable_id' (val){
+      if(val === undefined || val === ''){
+        return
+      }
+      let franchisableType = this.franchisee.franchisable_type
+      this.$axios.get(`modelable-address-business-info?id=${val}&modelType=${franchisableType}`)
+          .then(res => {
+            this.$store.dispatch('franchisees/address', res.data.address)
+            this.$store.dispatch('franchisees/businessInfo', res.data.businessInfo)
+          })
+      this.$store.dispatch('franchisees/franchiseeFranchisableId', val);
     }
   }
 }

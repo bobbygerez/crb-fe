@@ -17,7 +17,10 @@ export default {
     name: null,
     desc: null
   },
-  userCompanies: [],
   userTrademarks: [],
-  newFranchiseeModal: false
+  newFranchiseeModal: false,
+  userEntities: [],
+  trademarkCompanyName: '',
+  address: {},
+  businessInfo: {}
 }

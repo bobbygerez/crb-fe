@@ -28,75 +28,6 @@ export const franchiseeName = ({
   commit('franchiseeName', payload)
 }
 
-export const franchiseeCountryId = ({
-  commit
-}, payload) => {
-  commit('franchiseeCountryId', payload)
-}
-
-export const franchiseeRegionId = ({
-  commit
-}, payload) => {
-  commit('franchiseeRegionId', payload)
-}
-
-export const franchiseeProvinceId = ({
-  commit
-}, payload) => {
-  commit('franchiseeProvinceId', payload)
-}
-
-export const franchiseeCityId = ({
-  commit
-}, payload) => {
-  commit('franchiseeCityId', payload)
-}
-
-export const franchiseeBrgyId = ({
-  commit
-}, payload) => {
-  commit('franchiseeBrgyId', payload)
-}
-
-export const franchiseeStreetLotBlk = ({
-  commit
-}, payload) => {
-  commit('franchiseeStreetLotBlk', payload)
-}
-
-export const franchiseeBusinessTypeId = ({
-  commit
-}, payload) => {
-  commit('franchiseeBusinessTypeId', payload)
-}
-
-export const franchiseeVatTypeId = ({commit}, payload) => {
-  
-  commit('franchiseeVatTypeId', payload)
-}
-
-export const franchiseeTelephone = ({commit}, payload) => {
-  commit('franchiseeTelephone', payload)
-}
-
-export const franchiseeEmail = ({commit}, payload) => {
-  commit('franchiseeEmail', payload)
-}
-
-export const franchiseeTin = ({commit}, payload) => {
-  commit('franchiseeTin', payload)
-}
-
-export const franchiseeWebsite = ({commit}, payload) => {
-  commit('franchiseeWebsite', payload)
-}
-
-export const userCompanies = ({
-  commit
-}, payload) => {
-  commit('userCompanies', payload)
-}
-
 export const userTrademarks = ({
   commit
 }, payload) => {
@@ -107,4 +38,34 @@ export const newFranchiseeModal = ({
   commit
 }, payload) => {
   commit('newFranchiseeModal', payload)
+}
+
+export const userEntities = ({
+  commit
+}, payload) => {
+  commit('userEntities', payload)
+}
+
+export const trademarkCompanyName = ({
+  commit
+}, payload) => {
+  commit('trademarkCompanyName', payload)
+}
+
+export const franchiseeFranchisableId = ({
+  commit
+}, payload) => {
+  commit('franchiseeFranchisableId', payload)
+}
+
+export const address = ({
+  commit
+}, payload) => {
+  commit('address', payload)
+}
+
+export const businessInfo = ({
+  commit
+}, payload) => {
+  commit('businessInfo', payload)
 }
