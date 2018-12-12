@@ -1,6 +1,8 @@
 <template>
   <div>
-    <q-btn flat round dense :icon="tableViewSettings.icon" name="Change View" @click="changeViewMode()">
+    <q-btn flat round dense :icon="tableViewSettings.icon" name="Change View" @click="changeViewMode()"
+      v-bind="$attrs"
+    >
       <q-tooltip :disable="$q.platform.is.mobile" :delay="500">
         {{ viewModeLabel }}
       </q-tooltip>
@@ -17,6 +19,7 @@ import { mapGlobalFields } from '../../store/globals'
 
 export default {
   name: 'table-view-mode-action',
+  inheritAttrs: false,
   data () {
     return {
       gridIcon: 'mdi-view-grid',

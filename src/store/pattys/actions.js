@@ -47,8 +47,14 @@ export const setPerPage = ({
 
 export const setHoldings = ({
   commit
-}, payload) => {
-  commit('SET_HOLDINGS', payload)
+}) => {
+  axios
+    .get(`/holdings`)
+    .then(res => {
+      // this.$store.dispatch('pattys/setHoldings', res.data.holdings)
+      commit('SET_HOLDINGS', res.data.holdings)
+    })
+    .catch()
 }
 
 export const setHolding = ({

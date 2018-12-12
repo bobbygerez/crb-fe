@@ -1,17 +1,23 @@
 <template>
-  <div>
+  <div class="q-mx-sm q-my-sm">
+    <!-- <div v-show="tableViewSettings.mode === 'grid'" class="q-mx-sm q-my-sm"> -->
+    <q-inner-loading :visible="loading">
+      <q-spinner
+        color="secondary"
+        :size="30"
+      />
+    </q-inner-loading>
     <q-table
-      class="q-mb-xl"
+      grid
+      selection="single"
+      :pagination.sync="paginationControl"
+      hide-header
       :data="data"
       :columns="columns"
-      row-key="__index"
-      :visible-columns="visibleColumns"
-      :loading="loading"
-      :rows-per-page-options="rowsOptions"
-      :pagination.sync="paginationControl"
-      :separator="separator"
       :filter="filter"
       :selected.sync="selected"
+      :visible-columns="visibleColumns"
+      row-key="__index"
       v-bind="$attrs"
       :color="theme"
     >
@@ -41,18 +47,6 @@
           :columns="columns"
           v-if="topRightOptions.visibleCols"
         />
-        <q-select
-          :color="theme"
-          v-model="separator"
-          v-if="topRightOptions.cellLines"
-          :options="[
-            { label: 'Horizontal', value: 'horizontal' },
-            { label: 'Vertical', value: 'vertical' },
-            { label: 'Cell', value: 'cell' },
-            { label: 'None', value: 'none' }
-          ]"
-          hide-underline
-        />
         <q-btn
           flat
           round
@@ -63,53 +57,76 @@
         />
         <table-view-mode-action />
       </template>
-      <template
-        slot="body"
+
+      <div
+        slot="item"
         slot-scope="props"
+        class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-xl-3 transition-generic"
+        :style="props.selected ? 'transform: scale(0.95);' : ''"
       >
-        <q-tr
-          :props="props"
-          @click.native="selected = [{ __index: props.row.__index }]"
-          :class="'cursor-pointer'"
+        <q-card
+          class="transition-generic cursor-pointer"
+          :class="props.selected ? 'bg-grey-2' : ''"
+          @click.native="selected = [{ __index: props.row.__index }]; props.selected = true"
         >
-          <q-td
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
-          >
-            <template>{{ col.value }}</template>
-            <q-popover
-              touch-position
-              v-if="actions"
+          <q-card-title class="relative-position">
+            {{ props.cols[0].value }}
+          </q-card-title>
+          <q-card-separator />
+          <q-card-main class="q-pa-none">
+            <q-list
+              no-border
+              multiline
             >
-              <q-list
-                link
-                style="min-width: 100px"
+              <q-item
+                v-for="col in props.cols"
+                :key="col.name"
               >
-                <template v-for="(action, idx) in actions">
-                  <q-item
-                    :key="idx"
-                    @click.native="$emit(`${action}`, props.row.id)"
-                    v-close-overlay
-                  >
-                    <q-item-main :label="capitalize(`${action}`)" />
-                  </q-item>
-                </template>
-              </q-list>
-            </q-popover>
-            <q-tooltip
-              v-if="!$q.platform.is.cordova && actions"
-              :delay="1000"
-              anchor="bottom middle"
-              self="bottom middle"
-              :offset="[10, 10]"
+                <q-item-side>
+                  <q-item-tile class="text-truncate">{{ col.label }}</q-item-tile>
+                </q-item-side>
+                <q-item-main>
+                  <q-item-tile
+                    label
+                    style="text-align:right;"
+                  >{{ col.value }}</q-item-tile>
+                </q-item-main>
+              </q-item>
+            </q-list>
+          </q-card-main>
+          <q-popover
+            touch-position
+            v-if="actions"
+          >
+            <q-list
+              link
+              style="min-width: 100px"
             >
-              Click to see options.
-            </q-tooltip>
-          </q-td>
-        </q-tr>
-      </template>
+              <template v-for="(action, idx) in actions">
+                <q-item
+                  :key="idx"
+                  @click.native="$emit(`${action}`, props.row.id)"
+                  v-close-overlay
+                >
+                  <q-item-main :label="capitalize(`${action}`)" />
+                </q-item>
+              </template>
+            </q-list>
+          </q-popover>
+          <q-tooltip
+            :disable="$q.platform.is.mobile"
+            :delay="1000"
+            anchor="bottom middle"
+            v-close-overlay
+            self="bottom middle"
+            :offset="[10, 10]"
+          >
+            Click to Select.
+          </q-tooltip>
+        </q-card>
+      </div>
     </q-table>
+
     <q-page-sticky
       position="bottom-right"
       :offset="[16, 16]"
