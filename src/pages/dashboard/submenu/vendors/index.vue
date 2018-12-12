@@ -1,13 +1,13 @@
 <template>
   <div class="q-pa-sm">
-    <franchisees></franchisees>
+    <vendors></vendors>
     <q-page-sticky
       position="bottom-left"
       :offset="[16, 16]"
     >
       <q-btn
         color="primary"
-        @click="showNewFranchiseechModal()"
+        @click="showNewBranchModal()"
       >
         <q-icon name="add"></q-icon>New Franchisee
       </q-btn>
@@ -16,7 +16,7 @@
 </template>
 
 <script type="text/javascript">
-import franchisees from 'components/data-table/franchisees.vue'
+import vendors from 'components/data-table/vendors.vue'
 import { mapActions } from 'vuex'
 export default {
   created () {
@@ -32,32 +32,29 @@ export default {
       'getCountries',
       'getRegions'
     ]),
-    showNewFranchiseechModal () {
-      this.$store.dispatch('franchisees/newFranchiseeModal', true)
-      this.$store.dispatch('franchisees/trademarkCompanyName', null)
-      this.$store.dispatch('franchisees/franchisee',{
-        franchisable_type: '',
-        franchisable_id: null
-      })
-      this.$store.dispatch('franchisees/address', {
-         country_id: null,
+    showNewBranchModal () {
+      this.$store.dispatch('branches/newBranchModal', true)
+      
+      this.$store.dispatch('branches/branch', {
+        address: {
+          country_id: null,
           region_id: null,
           province_id: null,
           city_id: null,
           brgy_id: null,
           street_lot_blk: null
-        })
-      this.$store.dispatch('franchisees/businessInfo', {
-         email: null,
-         telephone: null,
-         tin: null,
-         vat_type_id: null,
-        website: null
+        },
+        business_info: {
+          business_type_id: null,
+          vat_type_id: null
+        },
+        name: null,
+        desc: null
       })
     }
   },
   components: {
-    franchisees
+    vendors
   }
 }
 </script>
