@@ -1,6 +1,6 @@
 import {
-  Address
-} from '../../assets/models/Address'
+  Holding
+} from '../../assets/models/Holding'
 
 export default {
   newHoldingModal: false,
@@ -13,15 +13,17 @@ export default {
   page: 1,
   perPage: 30,
   holdingName: '',
-  holding: {
-    address: new Address(),
-    business_info: {
-      business_type_id: null
-    },
-    name: null,
-    desc: null
-  },
-  holdings: [],
+  // holding: {
+  //   address: new Address(),
+  //   business_info: {
+  //     business_type_id: null
+  //   },
+  //   name: null,
+  //   desc: null
+  // },
+  holding: Holding(),
+  // holdings: [],
+  holdings: [Holding()],
   token: null,
   user: [],
   userLogin: false,

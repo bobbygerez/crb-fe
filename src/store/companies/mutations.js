@@ -54,15 +54,25 @@ export const SET_COMPANY_VAT_TYPE = (state, payload) => {
   state.company.business_info.vat_type_id = payload
 }
 
-export const SET_COMPANY_TELEPHONE = (state, payload) => { state.company.business_info.telephone = payload }
+export const SET_COMPANY_TELEPHONE = (state, payload) => {
+  state.company.business_info.telephone = payload
+}
 
-export const SET_COMPANY_EMAIL = (state, payload) => { state.company.business_info.email = payload }
+export const SET_COMPANY_EMAIL = (state, payload) => {
+  state.company.business_info.email = payload
+}
 
-export const SET_COMPANY_TIN = (state, payload) => { state.company.business_info.tin = payload }
+export const SET_COMPANY_TIN = (state, payload) => {
+  state.company.business_info.tin = payload
+}
 
-export const SET_COMPANY_WEBSITE = (state, payload) => { state.company.business_info.website = payload }
+export const SET_COMPANY_WEBSITE = (state, payload) => {
+  state.company.business_info.website = payload
+}
 
-export const SET_PAGE = (state, payload) => { state.page = payload }
+export const SET_PAGE = (state, payload) => {
+  state.page = payload
+}
 
 export const SET_PER_PAGE = (state, payload) => {
   state.perPage = payload

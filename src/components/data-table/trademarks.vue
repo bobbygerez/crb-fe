@@ -154,7 +154,7 @@
           </div>
 
         </div>
-        
+
         <br>
         <q-btn
           color="red"
@@ -176,7 +176,7 @@
 <script>
 // import tableData from 'assets/table-data'
 import _ from 'lodash'
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -205,11 +205,11 @@ export default {
   },
   computed: {
     ...mapState('trademarks', ['trademark']),
-    newTrademarkModal:{
-      get(){
+    newTrademarkModal: {
+      get () {
         return this.$store.getters['trademarks/newTrademarkModal']
       },
-      set(val){
+      set (val) {
 
       }
     },
@@ -348,7 +348,7 @@ export default {
     'trademark.desc' (val) {
       this.$store.dispatch('trademarks/trademarkDesc', val)
     },
-    'trademark.company_id' (val){
+    'trademark.company_id' (val) {
       this.$store.dispatch('trademarks/trademarkCompanyId', val)
     }
   }
