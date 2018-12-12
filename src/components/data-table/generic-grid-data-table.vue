@@ -1,5 +1,5 @@
 <template>
-  <div class="q-mx-sm q-my-sm">
+  <div>
     <!-- <div v-show="tableViewSettings.mode === 'grid'" class="q-mx-sm q-my-sm"> -->
     <q-inner-loading :visible="loading">
       <q-spinner
@@ -8,7 +8,7 @@
       />
     </q-inner-loading>
     <q-table
-      grid
+      :grid="mode === 'grid'"
       selection="single"
       :pagination.sync="paginationControl"
       hide-header
@@ -59,6 +59,7 @@
       </template>
 
       <div
+        v-if="mode === 'grid'"
         slot="item"
         slot-scope="props"
         class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-xl-3 transition-generic"
@@ -125,6 +126,53 @@
           </q-tooltip>
         </q-card>
       </div>
+      <template
+        v-if="mode === 'list'"
+        slot="body"
+        slot-scope="props"
+      >
+        <q-tr
+          :props="props"
+          @click.native="selected = [{ __index: props.row.__index }]"
+          :class="'cursor-pointer'"
+        >
+          <q-td
+            v-for="col in props.cols"
+            :key="col.name"
+            :props="props"
+          >
+            <template>{{ col.value }}</template>
+            <q-popover
+              touch-position
+              v-if="actions"
+            >
+              <q-list
+                link
+                style="min-width: 100px"
+              >
+                <template v-for="(action, idx) in actions">
+                  <q-item
+                    :key="idx"
+                    @click.native="$emit(`${action}`, props.row.id)"
+                    v-close-overlay
+                  >
+                    <q-item-main :label="capitalize(`${action}`)" />
+                  </q-item>
+                </template>
+              </q-list>
+            </q-popover>
+            <q-tooltip
+              v-if="!$q.platform.is.cordova && actions"
+              :delay="1000"
+              anchor="bottom middle"
+              self="bottom middle"
+              :offset="[10, 10]"
+            >
+              Click to see options.
+            </q-tooltip>
+          </q-td>
+        </q-tr>
+      </template>
     </q-table>
 
     <q-page-sticky
@@ -170,6 +218,10 @@ export default {
     theme: {
       type: String,
       default: 'primary'
+    },
+    mode: {
+      type: String,
+      default: 'list'
     },
     search: {
       Boolean,

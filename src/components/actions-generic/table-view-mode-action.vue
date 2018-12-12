@@ -41,7 +41,8 @@ export default {
     ...mapGlobalFields(['tableViewSettings'])
   },
   mounted () {
-    this.tableViewModeIcon = this.tableViewMode === 'list' ? this.gridIcon : this.listIcon
+    // this.tableViewModeIcon = this.tableViewMode === 'list' ? this.gridIcon : this.listIcon
+    this.changeViewMode()
   }
 }
 </script>
