@@ -71,7 +71,7 @@
             <div class="q-display-1 q-mb-md">Edit {{ franchisee.name }}</div>
           </div>
         </div>
-        
+
         <div class="row">
           <div class="col-xs-12 col-sm-4">
             <q-select
@@ -135,7 +135,7 @@
           </div>
         </div>
         <div class="row">
-          
+
           <div class="col-xs-12 col-sm-4">
             <q-input
               v-model="businessInfo.email"
@@ -405,10 +405,8 @@ import _ from 'lodash'
 import { mapState } from 'vuex'
 
 function getObject (array, key, value) {
-
   var o
   array.some(function iter (a) {
-    
     if (a[key] === value) {
       o = a
       return true
@@ -422,10 +420,10 @@ export default {
   data () {
     return {
       franchisableId: '',
-      franchisableType:[
-        { value: 'App\\Model\\Holding', label: 'Holding'},
-        { value: 'App\\Model\\Company', label: 'Company'},
-        { value: 'App\\Model\\Branch', label: 'Branch'}
+      franchisableType: [
+        { value: 'App\\Model\\Holding', label: 'Holding' },
+        { value: 'App\\Model\\Company', label: 'Company' },
+        { value: 'App\\Model\\Branch', label: 'Branch' }
       ],
       model: '2016-10-24T10:40:14.674Z',
       superior: '',
@@ -477,7 +475,7 @@ export default {
         }
       })
     },
-     userTrademarks () {
+    userTrademarks () {
       return this.$store.getters['franchisees/userTrademarks'].map(e => {
         return {
           label: e.name,
@@ -490,7 +488,7 @@ export default {
         return this.$store.getters['franchisees/newFranchiseeModal']
       },
       set () {
-       
+
       }
     },
     countries () {
@@ -640,13 +638,11 @@ export default {
           }`
         )
         .then(res => {
-          
           this.serverPagination = props.pagination
           this.serverData = _.values(res.data.franchisees.data)
           this.serverPagination.rowsNumber = res.data.franchisees.total
           this.lastPage = res.data.franchisees.last_page
           this.loading = false
-
         })
         .catch(error => {
           // there's an error... do SOMETHING
@@ -656,8 +652,6 @@ export default {
         })
     },
     edit (franchiseeId) {
-      
-
       this.$axios.get(`franchisees/${franchiseeId}/edit?id=${franchiseeId}`).then(res => {
         this.showModal()
         this.$store.dispatch('franchisees/franchisee', res.data.franchisee)
@@ -670,39 +664,39 @@ export default {
       filter: this.filter
     })
     this.$axios.get('/user-trademarks')
-        .then(res => {
-          this.$store.dispatch('franchisees/userTrademarks', res.data.userTrademarks)
-        })
+      .then(res => {
+        this.$store.dispatch('franchisees/userTrademarks', res.data.userTrademarks)
+      })
   },
   watch: {
-    'franchisee.trademark_id'(val){
+    'franchisee.trademark_id' (val) {
       let trademark = (getObject(this.$store.getters['franchisees/userTrademarks'], 'id', val))
       this.$store.dispatch('franchisees/trademarkCompanyName', trademark.company.name)
       this.$store.dispatch('franchisees/franchiseeTrademarkId', val)
     },
-    'franchisee.trademarks.company_id'(val){
+    'franchisee.trademarks.company_id' (val) {
       this.$store.dispatch('franchisees/franchiseeTrademarkCompanyId', val)
     },
     'franchisee.name' (val) {
       this.$store.dispatch('franchisees/franchiseeName', val)
     },
-    'franchisee.franchisable_type' (val){
+    'franchisee.franchisable_type' (val) {
       this.$axios.get(`modelable-user-models?modelType=${val}`)
-          .then(res => {
-            this.$store.dispatch('franchisees/userEntities', res.data.userModels)
-          })
+        .then(res => {
+          this.$store.dispatch('franchisees/userEntities', res.data.userModels)
+        })
     },
-    'franchisee.franchisable_id' (val){
-      if(val === undefined || val === ''){
+    'franchisee.franchisable_id' (val) {
+      if (val === undefined || val === '') {
         return
       }
       let franchisableType = this.franchisee.franchisable_type
       this.$axios.get(`modelable-address-business-info?id=${val}&modelType=${franchisableType}`)
-          .then(res => {
-            this.$store.dispatch('franchisees/address', res.data.address)
-            this.$store.dispatch('franchisees/businessInfo', res.data.businessInfo)
-          })
-      this.$store.dispatch('franchisees/franchiseeFranchisableId', val);
+        .then(res => {
+          this.$store.dispatch('franchisees/address', res.data.address)
+          this.$store.dispatch('franchisees/businessInfo', res.data.businessInfo)
+        })
+      this.$store.dispatch('franchisees/franchiseeFranchisableId', val)
     }
   }
 }
