@@ -12,6 +12,8 @@ import categories from './categories'
 import packages from './packages'
 import trademarks from './trademarks'
 import franchisees from './franchisees'
+import logistics from './logistics'
+import commissaries from './commissaries'
 import vendors from './vendors'
 import createPersistedState from 'vuex-persistedstate'
 
@@ -38,6 +40,8 @@ export default function (/* { ssrContext } */) {
       packages,
       trademarks,
       franchisees,
+      logistics,
+      commissaries,
       vendors
     },
     plugins: [createPersistedState()]
