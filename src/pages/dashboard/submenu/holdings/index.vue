@@ -5,7 +5,7 @@
   >
     <q-page>
       <q-scroll-observable @scroll="userHasScrolled" />
-      <holdings></holdings>
+      <holdings-table></holdings-table>
       <q-page-sticky
         position="bottom"
         :offset="$q.theme === 'mat' ? [16, 16] : [16, 16]"
@@ -25,39 +25,52 @@
         </transition>
       </q-page-sticky>
       <generic-modal
-      :title="'New Holding'"
-      :model="newHoldingModal"
-      @hide="newHoldingModal = false"
-    >
-      <holding-form></holding-form>
-    </generic-modal>
+        :title="'New Holding'"
+        :model="newHoldingModal"
+        @hide="newHoldingModal = false"
+      >
+        <new-holding-form></new-holding-form>
+      </generic-modal>
+      <generic-modal
+        :title="'Edit Holding'"
+        :model="editHoldingView"
+        @hide="editHoldingView = false"
+      >
+        <edit-holding-form></edit-holding-form>
+      </generic-modal>
     </q-page>
   </div>
 </template>
 
 <script type="text/javascript">
-import Holdings from 'components/data-table/holdings.vue'
 import { mapActions, mapState } from 'vuex'
-import { axios } from 'plugins/axios'
-import Hold from 'assets/services/holdings/api'
+import HoldingApi from './scripts/api'
 import { mapHoldingFields } from '../../../../store/pattys'
 import GenericModal from 'components/modals/generic-modal'
-import HoldingForm from 'components/forms/holding'
+import HoldingsTable from './tables/holdings.vue'
+import NewHoldingForm from './forms/new'
+import EditHoldingForm from './forms/edit'
 
 export default {
+  components: {
+    GenericModal,
+    NewHoldingForm,
+    HoldingsTable,
+    EditHoldingForm
+  },
   data () {
     return {
       showFab: false,
-      currentRoute: this.$route.path.replace('/dashboard', '.'),
-      dark: true
+      dark: true,
+      minimizedModal: false
     }
   },
   computed: {
-    ...mapHoldingFields(['newHoldingModal']),
+    ...mapHoldingFields(['newHoldingModal', 'editHoldingView']),
     ...mapState('globals', ['perPage', 'page'])
   },
   created () {
-    Hold.getHolds(this.page, this.perPage).then(res => {
+    HoldingApi.getHolds(this.page, this.perPage).then(res => {
       this.setHoldings(res.data.holdings)
     })
     this.getCountries()
@@ -72,13 +85,6 @@ export default {
     ...mapActions('globals', ['getCountries', 'getBusinessTypes', 'getVatTypes']),
     showNewHoldingModal () {
       this.setNewHoldingModal(true)
-    },
-    getStart () {
-      axios
-        .get('/holdings?page=' + this.page + '&perPage=' + this.perPage)
-        .then(res => {
-          this.setHoldings(res.data.holdings)
-        })
     },
     userHasScrolled (scroll) {
       // {
@@ -97,11 +103,8 @@ export default {
         this.showFab = true
       }
     }
-  },
-  components: {
-    GenericModal,
-    HoldingForm,
-    Holdings
+
   }
+
 }
 </script>

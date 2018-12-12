@@ -1,0 +1,248 @@
+<template>
+  <div style="padding: 30px">
+    <div class="row gutter-xs">
+      <div class="col-xs-12 col-sm-6">
+        <q-input
+          v-model="newHolding.name"
+          float-label="Holding name"
+          clearable
+        />
+      </div>
+      <div class="col-xs-12 col-sm-3">
+        <q-select
+          v-model="newHolding.business_info.business_type_id"
+          :options="bizTypeOptions"
+          float-label="Business Type"
+          clearable
+        />
+      </div>
+      <div class="col-xs-12 col-sm-3">
+        <q-select
+          v-model="newHolding.business_info.vat_type_id"
+          :options="vatTypeOptions"
+          float-label="Vat Type"
+          clearable
+        />
+      </div>
+    </div>
+
+    <div class="row gutter-xs">
+      <div class="col-xs-12 col-sm-3">
+        <q-input
+          v-model="newHolding.business_info.telephone"
+          float-label="Telephone"
+          clearable
+        />
+      </div>
+      <div class="col-xs-12 col-sm-3">
+        <q-input
+          v-model="newHolding.business_info.email"
+          float-label="Email"
+          clearable
+        />
+      </div>
+      <div class="col-xs-12 col-sm-3">
+        <q-input
+          v-model="newHolding.business_info.tin"
+          float-label="TIN"
+          clearable
+        />
+      </div>
+      <div class="col-xs-12 col-sm-3">
+        <q-input
+          v-model="newHolding.business_info.website"
+          float-label="Website"
+          clearable
+        />
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12">
+      <q-input
+        v-model="newHolding.desc"
+        type="textarea"
+        float-label="Description"
+        :max-height="100"
+        rows="2"
+      />
+    </div>
+    <div class="row gutter-xs">
+      <div class="col-xs-12 col-sm-6">
+        <q-select
+          v-model="newHolding.address.country_id"
+          :options="countryOptions"
+          float-label="Country"
+          clearable
+          filter
+          autofocus-filter
+          radio
+        />
+      </div>
+      <div class="col-xs-12 col-sm-6">
+        <q-select
+          v-model="newHolding.address.region_id"
+          :options="regionOptions"
+          float-label="Region"
+          clearable
+          filter
+          autofocus-filter
+          radio
+        />
+      </div>
+    </div>
+    <div class="row gutter-xs">
+      <div class="col-xs-12 col-sm-4">
+        <q-select
+          v-model="newHolding.address.province_id"
+          :options="provinceOptions"
+          float-label="Province"
+          clearable
+          filter
+          autofocus-filter
+          radio
+        />
+      </div>
+      <div class="col-xs-12 col-sm-4">
+        <q-select
+          v-model="newHolding.address.city_id"
+          :options="cityOptions"
+          float-label="City"
+          clearable
+          filter
+          autofocus-filter
+          radio
+          :after="[
+                  {
+                    icon: 'mdi-magnify',
+                    handler () {
+                      addressType = 'present'
+                      $refs.cityTable.show()
+                      // do something
+                    }
+                  }
+                ]"
+        />
+      </div>
+      <div class="col-xs-12 col-sm-4">
+        <q-select
+          v-model="newHolding.address.brgy_id"
+          :options="brgyOptions"
+          float-label="Barangay"
+          clearable
+          filter
+          autofocus-filter
+          radio
+          :after="[
+                  {
+                    icon: 'mdi-magnify',
+                    handler () {
+                      addressType = 'present'
+                      $refs.barangayTable.show()
+                      // do something
+                    }
+                  }
+                ]"
+        />
+      </div>
+      <div class="col-xs-12 col-sm-12">
+        <q-input
+          v-model="newHolding.address.street_lot_blk"
+          type="textarea"
+          float-label="Block, Lot &amp; Street"
+          :max-height="100"
+          rows="2"
+        />
+      </div>
+    </div>
+    <br>
+    <q-btn
+      color="primary"
+      @click="create()"
+      label="Submit"
+      class="q-ml-sm"
+    />
+    <barangay-table
+      ref="barangayTable"
+      :params="addressType"
+      @barangay-location-selected="locationSelected"
+    />
+    <city-table
+      ref="cityTable"
+      :params="addressType"
+      @city-location-selected="locationSelected"
+    />
+  </div>
+</template>
+
+<script>
+
+import { mapHoldingFields } from '../../../../../store/pattys'
+import BarangayTable from 'components/location-provider/barangay-view'
+import CityTable from 'components/location-provider/city-view'
+import LocationMixin from 'components/mixins/location-mixin'
+import CommonsMixin from 'components/mixins/commons-mixin'
+import { Holding } from 'assets/models/Holding'
+import { mapActions } from 'vuex'
+
+export default {
+  mixins: [LocationMixin, CommonsMixin],
+  components: {
+    BarangayTable,
+    CityTable
+  },
+  data () {
+    return {
+      addressType: 'home'
+    }
+  },
+  computed: {
+    ...mapHoldingFields(['newHolding', 'newHoldingModal'])
+  },
+  methods: {
+    ...mapActions('pattys', ['setHoldings']),
+    locationSelected (loc, where) {
+      if (loc) {
+        this.newHolding.address.country_id = loc.region.country.id
+        this.newHolding.address.region_id = loc.region.id
+        this.newHolding.address.province_id = loc.province.id
+        this.newHolding.address.city_id = loc.city.id
+        this.newHolding.address.brgy_id = loc.id
+        this.newHolding.address.street_lot_blk = this.newHolding.address.street_lot_blk
+      }
+    },
+    create () {
+      this.$axios
+        .post(`/holdings`, {
+          id: this.newHolding.id,
+          name: this.newHolding.name,
+          desc: this.newHolding.desc,
+          country_id: this.newHolding.address.country_id,
+          region_id: this.newHolding.address.region_id,
+          province_id: this.newHolding.address.province_id,
+          city_id: this.newHolding.address.city_id,
+          brgy_id: this.newHolding.address.brgy_id,
+          street_lot_blk: this.newHolding.address.street_lot_blk,
+          business_type_id: this.newHolding.business_info.business_type_id,
+          vat_type_id: this.newHolding.business_info.vat_type_id,
+          telephone: this.newHolding.business_info.telephone,
+          tin: this.newHolding.business_info.tin,
+          email: this.newHolding.business_info.email,
+          website: this.newHolding.business_info.website
+        })
+        .then(res => {
+          this.setHoldings()
+          this.newHoldingModal = false
+        })
+    }
+  },
+  // hooks
+  mounted () {
+    this.newHolding = Holding()
+    this.localModule = this.newHolding
+    console.log('@New mounted => ', this.localModule)
+  }
+}
+</script>
+
+<style>
+</style>

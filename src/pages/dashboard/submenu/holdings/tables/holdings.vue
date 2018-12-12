@@ -257,7 +257,7 @@
       </div>
     </q-modal> -->
 
-    <q-modal
+    <!-- <q-modal
       v-model="minimizedModal"
       no-esc-dismiss
       no-backdrop-dismiss
@@ -398,7 +398,7 @@
           class="q-ml-sm"
         />
       </div>
-    </q-modal>
+    </q-modal> -->
     <generic-list-data-table
       :data="holdings"
       :columns="columns"
@@ -407,18 +407,32 @@
       @edit="edit"
       @delete="deleteRow"
       theme="secondary"
+      v-show="tableViewSettings.mode === 'list'"
+    />
+
+    <generic-grid-data-table
+      :data="holdings"
+      :columns="columns"
+      color="primary"
+      :actions="['edit', 'delete']"
+      @edit="edit"
+      @delete="deleteRow"
+      theme="secondary"
+      v-show="tableViewSettings.mode === 'grid'"
     />
   </div>
 </template>
 
 <script>
-import { values } from 'lodash'
-import { mapHoldingFields } from '../../store/pattys'
+import { mapHoldingFields } from '../../../../../store/pattys'
 import GenericListDataTable from 'components/data-table/generic-list-data-table'
+import GenericGridDataTable from 'components/data-table/generic-grid-data-table'
+import { mapGlobalFields } from '../../../../../store/globals'
 
 export default {
   components: {
-    GenericListDataTable
+    GenericListDataTable,
+    GenericGridDataTable
   },
   data () {
     return {
@@ -501,67 +515,8 @@ export default {
     }
   },
   computed: {
-    ...mapHoldingFields(['newHoldingModal', 'holding']),
-    vatTypes () {
-      return this.$store.getters['globals/getVatTypes'].map(e => {
-        return {
-          label: e.name,
-          value: e.id
-        }
-      })
-    },
-    businessTypes () {
-      return this.$store.getters['globals/getBusinessTypes'].map(e => {
-        return {
-          label: e.name,
-          value: e.id
-        }
-      })
-    },
-    regions () {
-      if (this.$store.getters['globals/getRegions'] === undefined) return []
-      return this.$store.getters['globals/getRegions'].map(e => {
-        return {
-          label: e.description,
-          value: e.id
-        }
-      })
-    },
-    countries () {
-      return this.$store.getters['globals/getCountries'].map(e => {
-        return {
-          label: e.description,
-          value: e.id
-        }
-      })
-    },
-    provinces () {
-      return this.$store.getters['globals/getProvinces'].map(e => {
-        return {
-          label: e.description,
-          value: e.id
-        }
-      })
-    },
-    cities () {
-      return this.$store.getters['globals/getCities'].map(e => {
-        return {
-          label: e.description,
-          value: e.id
-        }
-      })
-    },
-    brgys () {
-      return this.$store.getters['globals/getBrgys'].map(e => {
-        return {
-          label: e.description,
-          value: e.id
-        }
-      })
-    },
-    holdings () {
-      return values(this.$store.getters['pattys/getHoldings'])
-    }
+    ...mapHoldingFields(['newHoldingModal', 'holding', 'holdings', 'editHoldingView', 'editHolding']),
+    ...mapGlobalFields(['tableViewSettings'])
   },
   methods: {
     // testActions (data) {
@@ -589,30 +544,7 @@ export default {
         })
         .catch()
     },
-    create () {
-      this.$axios
-        .post(`/holdings`, {
-          id: this.holding.id,
-          name: this.holding.name,
-          desc: this.holding.desc,
-          country_id: this.holding.address.country_id,
-          region_id: this.holding.address.region_id,
-          province_id: this.holding.address.province_id,
-          city_id: this.holding.address.city_id,
-          brgy_id: this.holding.address.brgy_id,
-          street_lot_blk: this.holding.address.street_lot_blk,
-          business_type_id: this.holding.business_info.business_type_id,
-          vat_type_id: this.holding.business_info.vat_type_id,
-          telephone: this.holding.business_info.telephone,
-          tin: this.holding.business_info.tin,
-          email: this.holding.business_info.email,
-          website: this.holding.business_info.website
-        })
-        .then(res => {
-          this.index()
-          this.hideModal()
-        })
-    },
+
     deleteRow (id) {
       this.$axios
         .get(`/holdings/${id}?id=${id}`)
@@ -656,41 +588,13 @@ export default {
       this.$axios
         .get(`/holdings/${id}/edit?id=${id}`)
         .then(res => {
-          this.$store.dispatch('pattys/setHolding', res.data.holding)
-          this.minimizedModal = true
-        })
-        .catch()
-    },
-    update (id) {
-      this.$axios
-        .put(`/holdings/${this.holding.id}`, {
-          id: this.holding.id,
-          name: this.holding.name,
-          desc: this.holding.desc,
-          country_id: this.holding.address.country_id,
-          region_id: this.holding.address.region_id,
-          province_id: this.holding.address.province_id,
-          city_id: this.holding.address.city_id,
-          brgy_id: this.holding.address.brgy_id,
-          street_lot_blk: this.holding.address.street_lot_blk,
-          business_type_id: this.holding.business_info.business_type_id,
-          vat_type_id: this.holding.business_info.vat_type_id,
-          telephone: this.holding.business_info.telephone,
-          tin: this.holding.business_info.tin,
-          email: this.holding.business_info.email,
-          website: this.holding.business_info.website
-        })
-        .then(res => {
-          this.minimizedModal = false
-          this.$q.notify({
-            color: 'positive',
-            icon: 'check',
-            message: `${this.holding.name} update successfully`
-          })
-          this.index()
+          // this.$store.dispatch('pattys/setHolding', res.data.holding)
+          this.editHolding = res.data.holding
+          this.editHoldingView = true
         })
         .catch()
     }
+
   },
   watch: {
     'paginationControl.page' (page) {
