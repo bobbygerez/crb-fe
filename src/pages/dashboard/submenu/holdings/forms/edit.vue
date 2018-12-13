@@ -1,8 +1,8 @@
 <template>
-  <div style="padding: 30px">
+  <div class="q-ma-lg">
     <!-- <div class="q-display-1 q-mb-md">Edit {{ holding.name }}</div> -->
 
-    <div class="row">
+    <div class="row gutter-sm">
       <div class="col-xs-12 col-sm-6">
         <q-input
           v-model="editHolding.name"
@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row gutter-sm">
       <div class="col-xs-12 col-sm-3">
         <q-input
           v-model="editHolding.business_info.telephone"
@@ -68,58 +68,104 @@
         rows="2"
       />
     </div>
-    <div class="row">
-      <div class="col-xs-12 col-sm-6">
-        <q-select
-          v-model="editHolding.address.country_id"
-          :options="countryOptions"
-          float-label="Country"
-          clearable
-        />
+
+    <div class="relative-position">
+      <div class="row gutter-sm">
+        <div class="col-xs-12 col-sm-6">
+          <q-select
+            v-model="editHolding.address.country_id"
+            :options="countryOptions"
+            float-label="Country"
+            clearable
+            filter
+            filter-placeholder="Select Country"
+            autofocus-filter
+          />
+        </div>
+        <div class="col-xs-12 col-sm-6">
+          <q-select
+            v-model="editHolding.address.region_id"
+            :options="regionOptions"
+            float-label="Region"
+            clearable
+            filter
+            filter-placeholder="Select Region"
+            autofocus-filter
+          />
+        </div>
       </div>
-      <div class="col-xs-12 col-sm-6">
-        <q-select
-          v-model="editHolding.address.region_id"
-          :options="regionOptions"
-          float-label="Region"
-          clearable
-        />
+      <div class="row gutter-sm">
+        <div class="col-xs-12 col-sm-4">
+          <q-select
+            v-model="editHolding.address.province_id"
+            :options="provinceOptions"
+            float-label="Province"
+            clearable
+            filter
+            filter-placeholder="Select Province"
+            autofocus-filter
+          />
+        </div>
+        <div class="col-xs-12 col-sm-4">
+          <q-select
+            v-model="editHolding.address.city_id"
+            :options="cityOptions"
+            float-label="City"
+            clearable
+            filter
+            filter-placeholder="Select City"
+            autofocus-filter
+            :after="[
+                  {
+                    icon: 'mdi-magnify',
+                    handler () {
+                      addressType = 'present'
+                      $refs.cityTable.show()
+                      // do something
+                    }
+                  }
+                ]"
+          />
+        </div>
+        <div class="col-xs-12 col-sm-4">
+          <q-select
+            v-model="editHolding.address.brgy_id"
+            :options="brgyOptions"
+            float-label="Barangay"
+            clearable
+            filter
+            filter-placeholder="Select Barangay"
+            autofocus-filter
+            :after="[
+                  {
+                    icon: 'mdi-magnify',
+                    handler () {
+                      addressType = 'present'
+                      $refs.barangayTable.show()
+                      // do something
+                    }
+                  }
+                ]"
+          />
+        </div>
       </div>
+      <q-inner-loading :visible="addressInnerLoading">
+        <component
+          :is="`q-spinner-${$q.platform.is === 'ios' ? 'ios' : 'mat'}`"
+          size="30px"
+          color="secondary"
+        />
+      </q-inner-loading>
+
     </div>
-    <div class="row">
-      <div class="col-xs-12 col-sm-4">
-        <q-select
-          v-model="editHolding.address.province_id"
-          :options="provinceOptions"
-          float-label="Province"
-          clearable
-        />
-      </div>
-      <div class="col-xs-12 col-sm-4">
-        <q-select
-          v-model="editHolding.address.city_id"
-          :options="cityOptions"
-          float-label="City"
-          clearable
-        />
-      </div>
-      <div class="col-xs-12 col-sm-4">
-        <q-select
-          v-model="editHolding.address.brgy_id"
-          :options="brgyOptions"
-          float-label="Barangay"
-          clearable
-        />
-      </div>
-      <div class="col-xs-12 col-sm-12">
-        <q-input
-          v-model="editHolding.address.street_lot_blk"
-          type="textarea"
-          float-label="Block, Lot &amp; Street"
-          :max-height="100"
-          rows="2"
-        />
-      </div>
+    <div class="col-xs-12 col-sm-12">
+      <q-input
+        v-model="editHolding.address.street_lot_blk"
+        type="textarea"
+        float-label="Block, Lot &amp; Street"
+        :max-height="100"
+        rows="2"
+      />
     </div>
     <br>
     <q-btn
@@ -132,6 +178,16 @@
       @click="update(editHolding.id)"
       label="Update"
       class="q-ml-sm"
+    />
+    <barangay-table
+      ref="barangayTable"
+      :params="addressType"
+      @barangay-location-selected="locationSelected"
+    />
+    <city-table
+      ref="cityTable"
+      :params="addressType"
+      @city-location-selected="locationSelected"
     />
   </div>
 </template>
@@ -202,9 +258,24 @@ export default {
         .catch()
     }
   },
-  mounted () {
-    this.localModule = this.editHolding
-    console.log('@Edit mounted => ', this.localModule)
+  watch: {
+    'editHolding.address.country_id' (val) {
+      if (val === null || val === undefined) return
+      console.log('getregions', this['localModule'])
+      this.getRegions(val)
+    },
+    'editHolding.address.region_id' (val) {
+      console.log('getProvinces', this['localModule'])
+      this.getProvinces(val)
+    },
+    'editHolding.address.province_id' (val) {
+      console.log('getCities', this['localModule'])
+      this.getCities(val)
+    },
+    'editHolding.address.city_id' (val) {
+      console.log('getBrgys', this['localModule'])
+      this.getBrgys(val)
+    }
   }
 }
 </script>

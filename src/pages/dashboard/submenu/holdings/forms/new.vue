@@ -1,6 +1,6 @@
 <template>
-  <div style="padding: 30px">
-    <div class="row gutter-xs">
+  <div class="q-ma-lg">
+    <div class="row gutter-sm">
       <div class="col-xs-12 col-sm-6">
         <q-input
           v-model="newHolding.name"
@@ -26,7 +26,7 @@
       </div>
     </div>
 
-    <div class="row gutter-xs">
+    <div class="row gutter-sm">
       <div class="col-xs-12 col-sm-3">
         <q-input
           v-model="newHolding.business_info.telephone"
@@ -66,52 +66,53 @@
         rows="2"
       />
     </div>
-    <div class="row gutter-xs">
-      <div class="col-xs-12 col-sm-6">
-        <q-select
-          v-model="newHolding.address.country_id"
-          :options="countryOptions"
-          float-label="Country"
-          clearable
-          filter
-          autofocus-filter
-          radio
-        />
+    <div class="relative-position">
+      <div class="row gutter-sm">
+        <div class="col-xs-12 col-sm-6">
+          <q-select
+            v-model="newHolding.address.country_id"
+            :options="countryOptions"
+            float-label="Country"
+            clearable
+            filter
+            filter-placeholder="Select Country"
+            autofocus-filter
+          />
+        </div>
+        <div class="col-xs-12 col-sm-6">
+          <q-select
+            v-model="newHolding.address.region_id"
+            :options="regionOptions"
+            float-label="Region"
+            clearable
+            filter
+            filter-placeholder="Select Region"
+            autofocus-filter
+          />
+        </div>
       </div>
-      <div class="col-xs-12 col-sm-6">
-        <q-select
-          v-model="newHolding.address.region_id"
-          :options="regionOptions"
-          float-label="Region"
-          clearable
-          filter
-          autofocus-filter
-          radio
-        />
-      </div>
-    </div>
-    <div class="row gutter-xs">
-      <div class="col-xs-12 col-sm-4">
-        <q-select
-          v-model="newHolding.address.province_id"
-          :options="provinceOptions"
-          float-label="Province"
-          clearable
-          filter
-          autofocus-filter
-          radio
-        />
-      </div>
-      <div class="col-xs-12 col-sm-4">
-        <q-select
-          v-model="newHolding.address.city_id"
-          :options="cityOptions"
-          float-label="City"
-          clearable
-          filter
-          autofocus-filter
-          radio
-          :after="[
+      <div class="row gutter-sm">
+        <div class="col-xs-12 col-sm-4">
+          <q-select
+            v-model="newHolding.address.province_id"
+            :options="provinceOptions"
+            float-label="Province"
+            clearable
+            filter
+            filter-placeholder="Select Province"
+            autofocus-filter
+          />
+        </div>
+        <div class="col-xs-12 col-sm-4">
+          <q-select
+            v-model="newHolding.address.city_id"
+            :options="cityOptions"
+            float-label="City"
+            clearable
+            filter
+            filter-placeholder="Select City"
+            autofocus-filter
+            :after="[
                   {
                     icon: 'mdi-magnify',
                     handler () {
@@ -121,18 +122,18 @@
                     }
                   }
                 ]"
-        />
-      </div>
-      <div class="col-xs-12 col-sm-4">
-        <q-select
-          v-model="newHolding.address.brgy_id"
-          :options="brgyOptions"
-          float-label="Barangay"
-          clearable
-          filter
-          autofocus-filter
-          radio
-          :after="[
+          />
+        </div>
+        <div class="col-xs-12 col-sm-4">
+          <q-select
+            v-model="newHolding.address.brgy_id"
+            :options="brgyOptions"
+            float-label="Barangay"
+            clearable
+            filter
+            filter-placeholder="Select Barangay"
+            autofocus-filter
+            :after="[
                   {
                     icon: 'mdi-magnify',
                     handler () {
@@ -142,17 +143,25 @@
                     }
                   }
                 ]"
-        />
+          />
+        </div>
       </div>
-      <div class="col-xs-12 col-sm-12">
-        <q-input
-          v-model="newHolding.address.street_lot_blk"
-          type="textarea"
-          float-label="Block, Lot &amp; Street"
-          :max-height="100"
-          rows="2"
+      <q-inner-loading :visible="addressInnerLoading">
+        <component
+          :is="`q-spinner-${$q.platform.is === 'ios' ? 'ios' : 'mat'}`"
+          size="30px"
+          color="secondary"
         />
-      </div>
+      </q-inner-loading>
+    </div>
+    <div class="col-xs-12 col-sm-12">
+      <q-input
+        v-model="newHolding.address.street_lot_blk"
+        type="textarea"
+        float-label="Block, Lot &amp; Street"
+        :max-height="100"
+        rows="2"
+      />
     </div>
     <br>
     <q-btn
@@ -238,8 +247,28 @@ export default {
   // hooks
   mounted () {
     this.newHolding = Holding()
-    this.localModule = this.newHolding
-    console.log('@New mounted => ', this.localModule)
+    // console.log('platform', this.$q.platform)
+    // this.localModule = this.newHolding
+    // console.log('@New mounted => ', this.localModule)
+  },
+  watch: {
+    'newHolding.address.country_id' (val) {
+      if (val === null || val === undefined) return
+      console.log('getregions', this['localModule'])
+      this.getRegions(val)
+    },
+    'newHolding.address.region_id' (val) {
+      console.log('getProvinces', this['localModule'])
+      this.getProvinces(val)
+    },
+    'newHolding.address.province_id' (val) {
+      console.log('getCities', this['localModule'])
+      this.getCities(val)
+    },
+    'newHolding.address.city_id' (val) {
+      console.log('getBrgys', this['localModule'])
+      this.getBrgys(val)
+    }
   }
 }
 </script>

@@ -27,5 +27,6 @@ export default {
     barangayView: false,
     cityView: false,
     location: null
-  } // for getting addresses
+  }, // for getting addresses
+  addressInnerLoading: false
 }

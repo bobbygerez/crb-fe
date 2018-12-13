@@ -1,6 +1,10 @@
 <template>
-  <q-layout view="Lhh lpr lFf">
-    <q-layout-header :reveal="pageMeta.hasTabs ? false : true">
+  <q-layout view="hHh Lpr lFf">
+    <!-- <q-layout view="Lhh lpr lFf"> -->
+    <q-layout-header
+      :inverted="$q.platform.mobile"
+      :reveal="pageMeta.hasTabs ? false : true"
+    >
       <q-toolbar
         color="primary"
         :inverted="$q.theme === 'ios'"
@@ -118,7 +122,13 @@
 
     <q-page-container>
       <!-- mode="out-in" appear-->
-      <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" appear :duration="300" @leave="resetScroll">
+      <transition
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut"
+        appear
+        :duration="300"
+        @leave="resetScroll"
+      >
         <router-view />
       </transition>
     </q-page-container>

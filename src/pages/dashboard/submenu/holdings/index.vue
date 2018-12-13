@@ -1,6 +1,6 @@
 <template>
   <div
-    class="q-pa-sm"
+    class="q-pa-md"
     ref="tableContainer"
   >
     <q-page>
