@@ -8,7 +8,7 @@
       @edit="edit"
       @delete="deleteRow"
       theme="secondary"
-      v-show="tableViewSettings.mode === 'list'"
+      v-show="tableViewSettingsGlobal.mode === 'list'"
     />
     <generic-grid-data-table
       :data="holdings"
@@ -18,7 +18,7 @@
       @edit="edit"
       @delete="deleteRow"
       theme="secondary"
-      v-show="tableViewSettings.mode === 'grid'"
+      v-show="tableViewSettingsGlobal.mode === 'grid'"
     />
   </div>
 </template>
@@ -116,7 +116,7 @@ export default {
   },
   computed: {
     ...mapHoldingFields(['newHoldingModal', 'holding', 'holdings', 'editHoldingView', 'editHolding']),
-    ...mapGlobalFields(['tableViewSettings'])
+    ...mapGlobalFields(['tableViewSettingsGlobal'])
   },
   methods: {
     // customFilter (rows, terms, cols, cellValue) {

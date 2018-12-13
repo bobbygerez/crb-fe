@@ -55,7 +55,8 @@
           @click="props.toggleFullscreen"
           v-if="topRightOptions.fullscreenToggle"
         />
-        <table-view-mode-action />
+        <!-- <table-view-mode-action /> -->
+        <global-change-table-view />
       </template>
 
       <div
@@ -146,12 +147,14 @@
 
 <script>
 import TableViewModeAction from 'components/actions-generic/table-view-mode-action'
+import GlobalChangeTableView from 'components/actions-generic/table-view-mode-global-action'
 
 const capitalize = (str) => str.split(' ').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')
 
 export default {
   components: {
-    TableViewModeAction
+    TableViewModeAction,
+    GlobalChangeTableView
   },
   name: 'generic-list-data-table',
   props: {
