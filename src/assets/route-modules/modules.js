@@ -17,5 +17,6 @@ export default [
   'vendors',
   'logistics',
   'commissaries',
-  'other-vendors'
+  'other-vendors',
+  'items'
 ]

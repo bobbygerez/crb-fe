@@ -118,6 +118,10 @@
 
     <q-page-container>
       <!-- mode="out-in" appear-->
+      <q-breadcrumbs class="q-ma-sm">
+      <q-icon name="keyboard_arrow_right" slot="separator" slot-scope="props" />
+      <q-breadcrumbs-el :to="`/${path}`" v-for="(path, i) in pathArray" :key="i" v-if="i != 0">{{path}}</q-breadcrumbs-el>
+    </q-breadcrumbs>
       <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" appear :duration="300" @leave="resetScroll">
         <router-view />
       </transition>
@@ -134,6 +138,7 @@ export default {
   name: 'MainLayout',
   data () {
     return {
+      pathArray: [],
       leftDrawerOpen: this.$q.platform.is.desktop,
       customDialogModel: true
     }
@@ -166,7 +171,14 @@ export default {
         console.log('Logout cancelled', e.message)
       })
     }
-  }
+  },
+  watch:{
+    $route (to, from){
+        this.pathArray = this.$route.path.split('/')
+
+        console.log(this.pathArray)
+    }
+} 
 }
 </script>
 
