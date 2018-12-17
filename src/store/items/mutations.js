@@ -6,6 +6,14 @@ export const item = (state, payload) => {
   state.item = payload
 }
 
+export const itemSKU = (state, payload) => {
+  state.item.sku = payload
+}
+
+export const itemBarcode = (state, payload) => {
+  state.item.barcode = payload
+}
+
 export const itemName = (state, payload) => {
   state.item.name = payload
 }
@@ -40,6 +48,10 @@ export const itemDesc = (state, payload) => {
 
 export const editItemModal = (state, payload) => {
   state.editItemModal = payload
+}
+
+export const newItemModal = (state, payload) => {
+  state.newItemModal = payload
 }
 
 export const packages = (state, payload) => {

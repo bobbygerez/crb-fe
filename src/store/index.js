@@ -16,6 +16,7 @@ import logistics from './logistics'
 import commissaries from './commissaries'
 import otherVendors from './other-vendors'
 import items from './items'
+import vendorables from './vendorables'
 import vendors from './vendors'
 import createPersistedState from 'vuex-persistedstate'
 
@@ -46,6 +47,7 @@ export default function (/* { ssrContext } */) {
       commissaries,
       otherVendors,
       items,
+      vendorables,
       vendors
     },
     plugins: [createPersistedState()]

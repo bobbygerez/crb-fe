@@ -10,6 +10,18 @@ export const item = ({
   commit('item', payload)
 }
 
+export const itemSKU = ({
+  commit
+}, payload) => {
+  commit('itemSKU', payload)
+}
+
+export const itemBarcode = ({
+  commit
+}, payload) => {
+  commit('itemBarcode', payload)
+}
+
 export const itemName = ({
   commit
 }, payload) => {
@@ -62,6 +74,12 @@ export const editItemModal = ({
   commit
 }, payload) => {
   commit('editItemModal', payload)
+}
+
+export const newItemModal = ({
+  commit
+}, payload) => {
+  commit('newItemModal', payload)
 }
 
 export const packages = ({

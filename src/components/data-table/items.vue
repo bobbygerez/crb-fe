@@ -144,7 +144,15 @@
       </div>
 
     </q-table>
-
+    <generic-list-data-table
+      :data="holdings"
+      :columns="columns"
+      color="primary"
+      :actions="['edit', 'delete']"
+      @edit="edit"
+      @delete="deleteRow"
+      theme="secondary"
+    />
     <q-modal
       v-model="editItemModal"
       minimized
@@ -163,6 +171,21 @@
               clearable
             />
           </div>
+          <div class="col-xs-12 col-sm-4">
+            <q-input
+              v-model="item.sku"
+              float-label="SKU"
+              clearable
+            />
+          </div>
+          <div class="col-xs-12 col-sm-4">
+            <q-input
+              v-model="item.barcode"
+              float-label="Barcode"
+              clearable
+            />
+          </div>
+          
 
           <div class="col-xs-12 col-sm-4">
             <input-price label="Price" :value="item.price" v-model="item.price"></input-price>
@@ -174,7 +197,7 @@
               clearable
             />
           </div>
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
             <q-select
               v-model="item.package_id"
               :options="packages"
@@ -182,21 +205,21 @@
               clearable
             />
           </div>
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
             <q-input
               v-model="item.minimum"
               float-label="Minimum Stock"
               clearable
             />
           </div>
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
             <q-input
               v-model="item.maximum"
               float-label="Maximum Stock"
               clearable
             />
           </div>
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
             <q-input
               v-model="item.reorder_level"
               float-label="Reorder Level"
@@ -230,132 +253,85 @@
 
       </div>
     </q-modal>
-    <!-- <q-modal
-      v-model="newOtherVendorModal"
+    <q-modal
+      v-model="newItemModal"
       minimized
       no-esc-dismiss
       no-backdrop-dismiss
       :content-css="{minWidth: '80vw', minHeight: '80vh'}"
     >
       <div style="padding: 30px">
-        <div class="q-display-1 q-mb-md">New Other-Vendor </div>
+        <div class="q-display-1 q-mb-md">Edit {{ item.name }}</div>
 
         <div class="row">
           <div class="col-xs-12 col-sm-4">
             <q-input
-              v-model="otherVendor.name"
-              float-label="Other Vendor's name"
+              v-model="item.name"
+              float-label="Name"
+              clearable
+            />
+          </div>
+          <div class="col-xs-12 col-sm-4">
+            <q-input
+              v-model="item.sku"
+              float-label="SKU"
+              clearable
+            />
+          </div>
+          <div class="col-xs-12 col-sm-4">
+            <q-input
+              v-model="item.barcode"
+              float-label="Barcode"
+              clearable
+            />
+          </div>
+          
+
+          <div class="col-xs-12 col-sm-4">
+            <input-price label="Price" :value="item.price" v-model="item.price"></input-price>
+          </div>
+          <div class="col-xs-12 col-sm-4">
+            <q-input
+              v-model="item.qty"
+              float-label="In stock"
               clearable
             />
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="otherVendor.business_info.business_type_id"
-              :options="businessTypes"
-              float-label="Business Type"
+              v-model="item.package_id"
+              :options="packages"
+              float-label="Package"
               clearable
             />
           </div>
           <div class="col-xs-12 col-sm-4">
-            <q-select
-              v-model="otherVendor.business_info.vat_type_id"
-              :options="vatTypes"
-              float-label="Vat Type"
-              clearable
-            />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-3">
             <q-input
-              v-model="otherVendor.business_info.telephone"
-              float-label="Telephone"
+              v-model="item.minimum"
+              float-label="Minimum Stock"
               clearable
             />
           </div>
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
             <q-input
-              v-model="otherVendor.business_info.email"
-              float-label="Email"
+              v-model="item.maximum"
+              float-label="Maximum Stock"
               clearable
             />
           </div>
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
             <q-input
-              v-model="otherVendor.business_info.tin"
-              float-label="TIN"
+              v-model="item.reorder_level"
+              float-label="Reorder Level"
+              suffix="%"
               clearable
             />
           </div>
-          <div class="col-xs-12 col-sm-3">
-            <q-input
-              v-model="otherVendor.business_info.website"
-              float-label="Website"
-              clearable
-            />
-          </div>
-        </div>
-        <div class="row">
           <div class="col-xs-12 col-sm-12">
             <q-input
-              v-model="otherVendor.desc"
+              v-model="item.desc"
               type="textarea"
               float-label="Description"
-              :max-height="100"
-              rows="2"
-            />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-12 col-sm-6">
-            <q-select
-              v-model="otherVendor.address.country_id"
-              :options="countries"
-              float-label="Country"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-6">
-            <q-select
-              v-model="otherVendor.address.region_id"
-              :options="regions"
-              float-label="Region"
-              clearable
-            />
-          </div>
-
-        </div>
-        <div class="row">
-          <div class="col-xs-12 col-sm-4">
-            <q-select
-              v-model="otherVendor.address.province_id"
-              :options="provinces"
-              float-label="Province"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-select
-              v-model="otherVendor.address.city_id"
-              :options="cities"
-              float-label="City"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-select
-              v-model="otherVendor.address.brgy_id"
-              :options="brgys"
-              float-label="Barangay"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-12">
-            <q-input
-              v-model="otherVendor.address.street_lot_blk"
-              type="textarea"
-              float-label="Block, Lot &amp; Street"
               :max-height="100"
               rows="2"
             />
@@ -370,13 +346,13 @@
         />
         <q-btn
           color="primary"
-          @click="store()"
+          @click="update()"
           label="Submit"
           class="q-ml-sm"
         />
 
       </div>
-    </q-modal> -->
+    </q-modal>
   </div>
 </template>
 
@@ -388,7 +364,7 @@ export default {
   data () {
 
     return {
-      actions: ['edit', 'delete', 'add vendor'],
+      actions: ['edit', 'delete', 'vendors'],
       editotherVendorsModal: false,
       options: [5, 10, 15, 20],
       lastPage: '',
@@ -416,7 +392,7 @@ export default {
   },
   computed: {
     ...mapState('otherVendors', ['otherVendor', 'newOtherVendorModal']),
-    ...mapState('items', ['item', 'editItemModal']),
+    ...mapState('items', ['item', 'editItemModal', 'newItemModal']),
     
     packages () {
       return this.$store.getters['items/packages'].map(e => {
@@ -436,8 +412,14 @@ export default {
         this.edit(itemId)
       }else if(action === 'delete') {
         this.deleteRow(itemId)
-      }else if(action === 'add vendor') {
-        console.log('asdf')
+      }else if(action === 'vendors') {
+        this.$axios.get(`items/${itemId}/edit?id=${itemId}`)
+        .then(res => {
+          this.$router.push(`items/${itemId}/vendors`)
+          this.$route.meta.title = res.data.item.name
+          this.$store.dispatch('items/item', res.data.item)
+        })
+       
       }
     },
     store () {
@@ -456,25 +438,25 @@ export default {
           })
         })
     },
-    deleteRow (otherVendorId) {
-      this.$axios.get(`/other_vendors/${otherVendorId}?id=${otherVendorId}`)
+    deleteRow (itemId) {
+      this.$axios.get(`/items/${itemId}?id=${itemId}`)
         .then((res) => {
-          this.$store.dispatch('otherVendors/otherVendor', res.data.otherVendor)
+          this.$store.dispatch('items/item', res.data.item)
           this.$q.notify({
             color: 'negative',
             icon: 'delete',
-            message: `Delete ${res.data.otherVendor.name}?`,
+            message: `Delete ${res.data.item.name}?`,
             actions: [
 
               {
                 label: 'OK',
                 handler: () => {
-                  this.$axios.delete(`/other_vendors/${this.otherVendor.id}?id=${this.otherVendor.id}`)
+                  this.$axios.delete(`/items/${this.item.id}?id=${this.item.id}`)
                     .then((res) => {
                       this.$q.notify({
                         color: 'positive',
                         icon: 'check',
-                        message: `${this.otherVendor.name} deleted successfully`
+                        message: `${this.item.name} deleted successfully`
                       })
                       this.request({
                         pagination: this.serverPagination,
@@ -564,6 +546,12 @@ export default {
     })
   },
   watch: {
+    'item.sku' (val) {
+      this.$store.dispatch('items/itemSKU', val)
+    },
+    'item.barcode' (val) {
+      this.$store.dispatch('items/itemBarcode', val)
+    },
     'item.name' (val) {
       this.$store.dispatch('items/itemName', val)
     },
