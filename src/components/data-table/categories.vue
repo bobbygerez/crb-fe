@@ -1,8 +1,29 @@
 <template>
   <div>
-    <q-btn round outline color="positive" icon="add" class="q-ma-sm" @click="showCreateModal()"/>
-    <q-btn round outline color="light" icon="edit" class="q-ma-sm" @click="edit()"/>
-    <q-btn round outline color="negative" icon="delete" class="q-ma-sm" @click="deleteSelected()"/>
+    <q-btn
+      round
+      outline
+      color="positive"
+      icon="add"
+      class="q-ma-sm"
+      @click="showCreateModal()"
+    />
+    <q-btn
+      round
+      outline
+      color="light"
+      icon="edit"
+      class="q-ma-sm"
+      @click="edit()"
+    />
+    <q-btn
+      round
+      outline
+      color="negative"
+      icon="delete"
+      class="q-ma-sm"
+      @click="deleteSelected()"
+    />
     <div class="q-mb-sm row no-wrap items-center">
       <q-select
         v-model="tickStrategy"

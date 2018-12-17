@@ -290,7 +290,7 @@ export default {
       this.$axios
         .get(
           `/packages?filter=${this.filter}&page=${props.pagination.page}&perPage=${
-          props.pagination.rowsPerPage
+            props.pagination.rowsPerPage
           }`
         )
         .then(res => {

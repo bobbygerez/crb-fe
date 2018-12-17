@@ -35,46 +35,53 @@ export const getCountries = ({
   if (state.countries.length > 1) {
     return
   }
+  commit('SET_ADDRESS_INNER_LOADING', true)
   axios.get('/countries')
     .then(function (res) {
       commit('SET_COUNTRIES', res.data.countries)
+      commit('SET_ADDRESS_INNER_LOADING', false)
     })
 }
 
 export const getRegions = ({
   commit
 }, countryId) => {
+  commit('SET_ADDRESS_INNER_LOADING', true)
   axios.get(`/regions/${countryId}`)
     .then(function (res) {
       commit('SET_REGIONS', res.data.regions)
+      commit('SET_ADDRESS_INNER_LOADING', false)
     })
 }
 export const getProvinces = ({
-  commit,
-  state
+  commit
 }, regionId) => {
+  commit('SET_ADDRESS_INNER_LOADING', true)
   axios.get(`/provinces/${regionId}`)
     .then(function (res) {
       commit('SET_PROVINCES', res.data.provinces)
+      commit('SET_ADDRESS_INNER_LOADING', false)
     })
 }
 export const getCities = ({
-  commit,
-  state
+  commit
 }, provinceId) => {
+  commit('SET_ADDRESS_INNER_LOADING', true)
   axios.get(`/cities/${provinceId}`)
     .then(function (res) {
       commit('SET_CITIES', res.data.cities)
+      commit('SET_ADDRESS_INNER_LOADING', false)
     })
 }
 
 export const getBrgys = ({
-  commit,
-  state
+  commit
 }, cityId) => {
+  commit('SET_ADDRESS_INNER_LOADING', true)
   axios.get(`/brgys/${cityId}`)
     .then(function (res) {
       commit('SET_BRGYS', res.data.brgys)
+      commit('SET_ADDRESS_INNER_LOADING', false)
     })
 }
 

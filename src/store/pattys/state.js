@@ -4,6 +4,8 @@ import {
 
 export default {
   newHoldingModal: false,
+  editHoldingView: false,
+  editHolding: Holding(),
   businessTypes: [],
   brgys: [],
   cities: [],
@@ -21,7 +23,8 @@ export default {
   //   name: null,
   //   desc: null
   // },
-  holding: Holding(),
+  newHolding: Holding(),
+  holding: null,
   // holdings: [],
   holdings: [Holding()],
   token: null,

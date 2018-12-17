@@ -74,18 +74,18 @@
         <div class="row">
           <div class="col-xs-12 ">
             <q-input
-                v-model="trademark.company.name"
-                float-label="Company"
-                clearable
-                disable
-              />
+              v-model="trademark.company.name"
+              float-label="Company"
+              clearable
+              disable
+            />
           </div>
           <div class="col-xs-12 ">
             <q-input
-                v-model="trademark.name"
-                float-label="Name"
-                clearable
-              />
+              v-model="trademark.name"
+              float-label="Name"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-12">
             <q-input
@@ -137,10 +137,10 @@
           </div>
           <div class="col-xs-12 ">
             <q-input
-                v-model="trademark.name"
-                float-label="Name"
-                clearable
-              />
+              v-model="trademark.name"
+              float-label="Name"
+              clearable
+            />
           </div>
           <div class="col-xs-12 col-sm-12">
             <q-input

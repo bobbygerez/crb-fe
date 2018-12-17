@@ -381,7 +381,7 @@ export default {
         { name: 'name', label: 'Name', field: 'name', align: 'left' },
         { name: 'company', label: 'Company', align: 'left', field: 'company' },
         { name: 'branch', label: 'Assigned Branch', align: 'left', field: 'branch' },
-         { name: 'vendor', label: 'Vendor', align: 'left', field: 'vendor' },
+        { name: 'vendor', label: 'Vendor', align: 'left', field: 'vendor' },
         { name: 'actions', label: 'Actions', align: 'left', field: 'actions' }
       ],
       filter: '',
@@ -582,13 +582,11 @@ export default {
           }`
         )
         .then(res => {
-          
           this.serverPagination = props.pagination
           this.serverData = _.values(res.data.vendors.data)
           this.serverPagination.rowsNumber = res.data.vendors.total
           this.lastPage = res.data.vendors.last_page
           this.loading = false
-
         })
         .catch(error => {
           // there's an error... do SOMETHING

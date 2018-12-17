@@ -547,12 +547,11 @@ export default {
               }
             ]
           })
-         
         })
       // .catch()
     },
     update () {
-      this.$axios.put(`/other_vendors/${this.otherVendor.id}`, this.otherVendor )
+      this.$axios.put(`/other_vendors/${this.otherVendor.id}`, this.otherVendor)
         .then((res) => {
           this.editotherVendorsModal = false
           this.$q.notify({
@@ -567,7 +566,7 @@ export default {
         })
         .catch()
     },
-    
+
     paginationLast (currentPage) {
       if (this.lastPage > currentPage) {
         return false
@@ -597,15 +596,14 @@ export default {
         })
     },
     edit (otherVendorsId) {
-
       this.$axios.get(`other_vendors/${otherVendorsId}/edit?id=${otherVendorsId}`)
         .then(res => {
           this.editotherVendorsModal = true
           this.$store.dispatch('otherVendors/otherVendor', res.data.otherVendor)
         })
     },
-    hideModal(){
-      this.$store.dispatch('otherVendors/newOtherVendorModal', false);
+    hideModal () {
+      this.$store.dispatch('otherVendors/newOtherVendorModal', false)
     }
   },
   mounted () {
