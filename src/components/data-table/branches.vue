@@ -587,7 +587,7 @@ export default {
       this.$axios
         .get(
           `/branches?filter=${this.filter}&page=${props.pagination.page}&perPage=${
-          props.pagination.rowsPerPage
+            props.pagination.rowsPerPage
           }`
         )
         .then(res => {

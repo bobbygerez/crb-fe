@@ -547,12 +547,11 @@ export default {
               }
             ]
           })
-         
         })
       // .catch()
     },
     update () {
-      this.$axios.put(`/logistics/${this.logistic.id}`, this.logistic )
+      this.$axios.put(`/logistics/${this.logistic.id}`, this.logistic)
         .then((res) => {
           this.editLogisticModal = false
           this.$q.notify({
@@ -567,7 +566,7 @@ export default {
         })
         .catch()
     },
-    
+
     paginationLast (currentPage) {
       if (this.lastPage > currentPage) {
         return false
@@ -597,15 +596,14 @@ export default {
         })
     },
     edit (logisticId) {
-
       this.$axios.get(`logistics/${logisticId}/edit?id=${logisticId}`)
         .then(res => {
           this.editLogisticModal = true
           this.$store.dispatch('logistics/logistic', res.data.logistic)
         })
     },
-    hideModal(){
-      this.$store.dispatch('logistics/newLogisticModal', false);
+    hideModal () {
+      this.$store.dispatch('logistics/newLogisticModal', false)
     }
   },
   mounted () {

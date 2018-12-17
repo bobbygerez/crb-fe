@@ -30,7 +30,7 @@
         <q-tr :props="props">
           <q-td key="name">
             {{props.row.name}}
-          <q-popover
+            <q-popover
               touch-position
               v-if="actions"
             >
@@ -60,31 +60,31 @@
             key="qty"
             :props="props"
           >
-          {{ props.row.qty }}
+            {{ props.row.qty }}
           </q-td>
           <q-td
             key="package"
             :props="props"
           >
-          {{ props.row.package.name }}
+            {{ props.row.package.name }}
           </q-td>
-           <q-td
+          <q-td
             key="minimum"
             :props="props"
           >
-          {{ props.row.minimum }}
+            {{ props.row.minimum }}
           </q-td>
-           <q-td
+          <q-td
             key="maximum"
             :props="props"
           >
-          {{ props.row.maximum }}
+            {{ props.row.maximum }}
           </q-td>
-           <q-td
+          <q-td
             key="reorder_level"
             :props="props"
           >
-          {{ props.row.reorder_level }}
+            {{ props.row.reorder_level }}
           </q-td>
           <q-td
             key="actions"
@@ -165,7 +165,11 @@
           </div>
 
           <div class="col-xs-12 col-sm-4">
-            <input-price label="Price" :value="item.price" v-model="item.price"></input-price>
+            <input-price
+              label="Price"
+              :value="item.price"
+              v-model="item.price"
+            ></input-price>
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-input
@@ -386,7 +390,6 @@ import _ from 'lodash'
 import { mapState } from 'vuex'
 export default {
   data () {
-
     return {
       actions: ['edit', 'delete', 'add vendor'],
       editotherVendorsModal: false,
@@ -411,13 +414,13 @@ export default {
       loading: false
     }
   },
-  components:{
+  components: {
     inputPrice
   },
   computed: {
     ...mapState('otherVendors', ['otherVendor', 'newOtherVendorModal']),
     ...mapState('items', ['item', 'editItemModal']),
-    
+
     packages () {
       return this.$store.getters['items/packages'].map(e => {
         return {
@@ -431,12 +434,12 @@ export default {
     capitalize (string) {
       return (string.charAt(0).toUpperCase() + string.slice(1).toLowerCase())
     },
-    myFunction(action, itemId){
-      if(action === 'edit'){
+    myFunction (action, itemId) {
+      if (action === 'edit') {
         this.edit(itemId)
-      }else if(action === 'delete') {
+      } else if (action === 'delete') {
         this.deleteRow(itemId)
-      }else if(action === 'add vendor') {
+      } else if (action === 'add vendor') {
         console.log('asdf')
       }
     },
@@ -493,12 +496,11 @@ export default {
               }
             ]
           })
-         
         })
       // .catch()
     },
     update () {
-      this.$axios.put(`/items/${this.item.id}`, this.item )
+      this.$axios.put(`/items/${this.item.id}`, this.item)
         .then((res) => {
           this.hideModal()
           this.$q.notify({
@@ -513,7 +515,7 @@ export default {
         })
         .catch()
     },
-    
+
     paginationLast (currentPage) {
       if (this.lastPage > currentPage) {
         return false
@@ -543,18 +545,17 @@ export default {
         })
     },
     edit (itemId) {
-
       this.$axios.get(`items/${itemId}/edit?id=${itemId}`)
         .then(res => {
           this.showModal()
           this.$store.dispatch('items/item', res.data.item)
         })
     },
-    hideModal(){
-      this.$store.dispatch('items/editItemModal', false);
+    hideModal () {
+      this.$store.dispatch('items/editItemModal', false)
     },
-    showModal(){
-      this.$store.dispatch('items/editItemModal', true);
+    showModal () {
+      this.$store.dispatch('items/editItemModal', true)
     }
   },
   mounted () {
@@ -567,26 +568,26 @@ export default {
     'item.name' (val) {
       this.$store.dispatch('items/itemName', val)
     },
-    'item.price' (val){
+    'item.price' (val) {
       this.$store.dispatch('items/itemPrice', val)
     },
-    'item.qty' (val){
+    'item.qty' (val) {
       this.$store.dispatch('items/itemQty', val)
     },
-    'item.package_id' (val){
+    'item.package_id' (val) {
       this.$store.dispatch('items/itemPackageId', val)
     },
-    'item.minimum'(val){
-       this.$store.dispatch('items/itemMinimum', val)
+    'item.minimum' (val) {
+      this.$store.dispatch('items/itemMinimum', val)
     },
-    'item.maximum'(val){
-       this.$store.dispatch('items/itemMaximum', val)
+    'item.maximum' (val) {
+      this.$store.dispatch('items/itemMaximum', val)
     },
-    'item.reorder_level'(val){
-       this.$store.dispatch('items/itemReorderLevel', val)
+    'item.reorder_level' (val) {
+      this.$store.dispatch('items/itemReorderLevel', val)
     },
-    'item.desc'(val){
-       this.$store.dispatch('items/itemDesc', val)
+    'item.desc' (val) {
+      this.$store.dispatch('items/itemDesc', val)
     }
   }
 

@@ -547,12 +547,11 @@ export default {
               }
             ]
           })
-         
         })
       // .catch()
     },
     update () {
-      this.$axios.put(`/commissaries/${this.commissary.id}`, this.commissary )
+      this.$axios.put(`/commissaries/${this.commissary.id}`, this.commissary)
         .then((res) => {
           this.editCommissaryModal = false
           this.$q.notify({
@@ -567,7 +566,7 @@ export default {
         })
         .catch()
     },
-    
+
     paginationLast (currentPage) {
       if (this.lastPage > currentPage) {
         return false
@@ -597,15 +596,14 @@ export default {
         })
     },
     edit (commissaryId) {
-
       this.$axios.get(`commissaries/${commissaryId}/edit?id=${commissaryId}`)
         .then(res => {
           this.editCommissaryModal = true
           this.$store.dispatch('commissaries/commissary', res.data.commissary)
         })
     },
-    hideModal(){
-      this.$store.dispatch('commissaries/newCommissaryModal', false);
+    hideModal () {
+      this.$store.dispatch('commissaries/newCommissaryModal', false)
     }
   },
   mounted () {

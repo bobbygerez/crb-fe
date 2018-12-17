@@ -35,23 +35,23 @@ export default {
     showNewFranchiseechModal () {
       this.$store.dispatch('franchisees/newFranchiseeModal', true)
       this.$store.dispatch('franchisees/trademarkCompanyName', null)
-      this.$store.dispatch('franchisees/franchisee',{
+      this.$store.dispatch('franchisees/franchisee', {
         franchisable_type: '',
         franchisable_id: null
       })
       this.$store.dispatch('franchisees/address', {
-         country_id: null,
-          region_id: null,
-          province_id: null,
-          city_id: null,
-          brgy_id: null,
-          street_lot_blk: null
-        })
+        country_id: null,
+        region_id: null,
+        province_id: null,
+        city_id: null,
+        brgy_id: null,
+        street_lot_blk: null
+      })
       this.$store.dispatch('franchisees/businessInfo', {
-         email: null,
-         telephone: null,
-         tin: null,
-         vat_type_id: null,
+        email: null,
+        telephone: null,
+        tin: null,
+        vat_type_id: null,
         website: null
       })
     }

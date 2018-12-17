@@ -52,11 +52,11 @@
         </div>
         <q-toolbar-title>
         </q-toolbar-title>
-        <table-view-mode-action />
+        <table-view-mode-action @view-change="viewMode = $event"/>
       </q-toolbar>
       <!-- conditional rendering, shows table on list or grid view depending on the selected view mode -->
       <!-- <template v-if="tableViewSettings.mode === 'grid'"> -->
-        <div v-show="tableViewSettings.mode === 'grid'" class="q-mx-sm q-my-sm">
+        <div v-show="viewMode === 'grid'" class="q-mx-sm q-my-sm">
           <q-inner-loading :visible="loading">
             <q-spinner
               color="secondary"
@@ -172,7 +172,7 @@
         </div>
       <!-- </template> -->
       <!-- <template v-else-if="tableViewSettings.mode === 'list'"> -->
-        <div v-show="tableViewSettings.mode === 'list'" class="q-mx-sm q-my-sm">
+        <div v-show="viewMode === 'list'" class="q-mx-sm q-my-sm">
           <q-table
             binary-state-sort
             ref="listQTable"
@@ -334,6 +334,7 @@ export default {
   },
   data () {
     return {
+      viewMode: 'list',
       showMaxResult: false,
       maxResult: 20,
       rowOptionsDefault: [5, 10, 20, 50, 100, 0],

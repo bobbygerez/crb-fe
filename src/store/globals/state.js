@@ -23,9 +23,18 @@ export default {
     icon: 'mdi-view-grid',
     innerLoading: false
   },
+  tableViewSettingsGlobal: {
+    mode: 'list',
+    iconGrid: 'mdi-view-grid',
+    iconList: 'mdi-view-list',
+    tooltipMsg: 'Grid View',
+    icon: 'mdi-view-grid',
+    innerLoading: false
+  },
   locationData: {
     barangayView: false,
     cityView: false,
     location: null
-  } // for getting addresses
+  }, // for getting addresses
+  addressInnerLoading: false
 }

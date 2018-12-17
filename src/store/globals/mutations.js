@@ -38,3 +38,5 @@ export const SET_MENUS = (state, payload) => {
 export const SET_PAGE_META = (state, payload) => {
   state.pageMeta = payload
 }
+
+export const SET_ADDRESS_INNER_LOADING = (state, payload) => { state.addressInnerLoading = payload }

@@ -55,12 +55,12 @@
           <!-- </q-toolbar-title> -->
           <q-toolbar-title>
           </q-toolbar-title>
-          <table-view-mode-action />
+          <table-view-mode-action @view-change="viewMode = $event"/>
         </q-toolbar>
         <!-- conditional rendering, shows table on list or grid view depending on the selected view mode -->
         <!-- <template v-if="tableViewSettings.mode === 'grid'"> -->
         <div
-          v-show="tableViewSettings.mode === 'grid'"
+          v-show="viewMode === 'grid'"
           class="q-mx-sm q-my-sm"
         >
           <q-inner-loading :visible="loading">
@@ -155,7 +155,7 @@
         <!-- </template> -->
         <!-- <template > -->
         <div
-          v-show="tableViewSettings.mode === 'list'"
+          v-show="viewMode === 'list'"
           class="q-mx-sm q-my-sm"
         >
           <q-table
@@ -342,6 +342,7 @@ export default {
   },
   data () {
     return {
+      viewMode: 'list',
       visible: false,
       opened: false,
       showMaxResult: false,
