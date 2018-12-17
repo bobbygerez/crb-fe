@@ -270,7 +270,7 @@
 
 <script>
 // import tableData from 'assets/table-data'
-import { values } from 'lodash'
+// import _ from 'lodash'
 import { mapState } from 'vuex'
 export default {
   data () {
@@ -280,20 +280,18 @@ export default {
       lastPage: '',
       serverData: [],
       serverPagination: {
-        sortBy: null, // String, column "name" property value
-        descending: false,
         page: 1,
         rowsNumber: 10,
         rowsPerPage: 10 // specifying this determines pagination is server-side
       },
       columns: [
-        { name: 'name', label: 'Company', field: 'company', align: 'left', sortable: true, required: true },
+        { name: 'Company', label: 'Company', field: 'company', align: 'left', sortable: true, required: true },
         {
-          name: 'holding',
+          name: 'Holding',
           required: true,
           label: 'Holding',
           align: 'left',
-          field: row => row.holding.name
+          field: 'holding'
         },
         { name: 'address', label: 'Address', field: 'address', align: 'left' },
         { name: 'created', label: 'Created', field: 'created', align: 'left' },
@@ -452,7 +450,6 @@ export default {
     request (props) {
       this.loading = true
       console.log('request', props)
-
       this.$axios
         .get(
           `/companies?filter=${props.filter}&page=${props.pagination.page}&perPage=${
@@ -462,10 +459,11 @@ export default {
         .then(res => {
           this.serverPagination = props.pagination
           // this.serverData = _.values(res.data.companies.data)
-          this.serverData = values(res.data.companies.data)
+          this.serverData = res.data.companies.data
           this.serverPagination.rowsNumber = res.data.companies.total
           this.lastPage = res.data.companies.last_page
           this.loading = false
+          console.log('request', props)
         })
         .catch(error => {
           // there's an error... do SOMETHING
@@ -488,10 +486,10 @@ export default {
     }
   },
   mounted () {
-    // console.log('mounted', {
-    //   pagination: this.serverPagination,
-    //   filter: this.filter
-    // })
+    console.log('mounted', {
+      pagination: this.serverPagination,
+      filter: this.filter
+    })
     this.request({
       pagination: this.serverPagination,
       filter: this.filter
