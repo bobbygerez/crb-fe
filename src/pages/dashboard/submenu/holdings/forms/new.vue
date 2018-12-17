@@ -240,7 +240,17 @@ export default {
         })
         .then(res => {
           this.setHoldings()
+          this.$q.notify({
+            type: 'positive',
+            message: `${this.newHolding.name} Successfully added.`
+          })
           this.newHoldingModal = false
+        })
+        .catch(e => {
+          this.$q.notify({
+            type: 'negative',
+            message: 'Some error occured.'
+          })
         })
     }
   },
@@ -254,19 +264,19 @@ export default {
   watch: {
     'newHolding.address.country_id' (val) {
       if (val === null || val === undefined) return
-      console.log('getregions', this['localModule'])
+      console.log('getregions', this['newHolding'])
       this.getRegions(val)
     },
     'newHolding.address.region_id' (val) {
-      console.log('getProvinces', this['localModule'])
+      console.log('getProvinces', this['newHolding'])
       this.getProvinces(val)
     },
     'newHolding.address.province_id' (val) {
-      console.log('getCities', this['localModule'])
+      console.log('getCities', this['newHolding'])
       this.getCities(val)
     },
     'newHolding.address.city_id' (val) {
-      console.log('getBrgys', this['localModule'])
+      console.log('getBrgys', this['newHolding'])
       this.getBrgys(val)
     }
   }

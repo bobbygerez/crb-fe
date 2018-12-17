@@ -2,17 +2,17 @@
 export const Address = ({
   addressable_id = null,
   addressable_type = null,
-  country_id = '',
+  country_id = null,
   country = Country(), // object
-  region_id = '',
+  region_id = null,
   region = Region(), // object
-  province_id = '',
+  province_id = null,
   province = null,
-  city_id = '',
+  city_id = null,
   city = City(),
-  brgy_id = '',
+  brgy_id = null,
   brgy = Barangay(),
-  street_lot_blk = ''
+  street_lot_blk = null
 } = {}) => ({
   addressable_id,
   addressable_type,

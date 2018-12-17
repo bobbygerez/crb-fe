@@ -62,7 +62,7 @@
           v-if="topRightOptions.fullscreenToggle"
         />
         <!-- <table-view-mode-action /> -->
-        <global-change-table-view />
+        <global-change-table-view v-show="!props.inFullscreen" />
       </template>
       <template
         slot="body"

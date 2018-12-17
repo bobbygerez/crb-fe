@@ -261,19 +261,19 @@ export default {
   watch: {
     'editHolding.address.country_id' (val) {
       if (val === null || val === undefined) return
-      console.log('getregions', this['localModule'])
+      console.log('getregions', this['editHolding'])
       this.getRegions(val)
     },
     'editHolding.address.region_id' (val) {
-      console.log('getProvinces', this['localModule'])
+      console.log('getProvinces', this['editHolding'])
       this.getProvinces(val)
     },
     'editHolding.address.province_id' (val) {
-      console.log('getCities', this['localModule'])
+      console.log('getCities', this['editHolding'])
       this.getCities(val)
     },
     'editHolding.address.city_id' (val) {
-      console.log('getBrgys', this['localModule'])
+      console.log('getBrgys', this['editHolding'])
       this.getBrgys(val)
     }
   }

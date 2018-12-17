@@ -36,12 +36,6 @@ export default {
   },
   data () {
     return {
-      selectedCountry: '',
-      terms: '',
-      holdingName: '',
-      minimizedModal: false,
-      rowsOptions: [3, 5, 7, 10, 15, 25, 50, 0],
-      loading: false,
       markers: [
         {
           position: { lat: 12.879721, lng: 121.774017 }
@@ -102,16 +96,7 @@ export default {
           sortable: true,
           hideonload: true
         }
-      ],
-      filter: '',
-      visibleColumns: ['name', 'address', 'created_at'],
-      separator: 'horizontal',
-      selection: 'multiple',
-      selected: [],
-      pagination: {
-        page: 2
-      },
-      paginationControl: { rowsPerPage: 7, page: 1 }
+      ]
     }
   },
   computed: {
@@ -119,20 +104,6 @@ export default {
     ...mapGlobalFields(['tableViewSettingsGlobal'])
   },
   methods: {
-    // customFilter (rows, terms, cols, cellValue) {
-    //   // push columns you want to include in filtering
-    //   cols.push(
-    //     { field: row => row.address.country.description },
-    //     { field: row => row.address.region.description },
-    //     { field: row => row.address.city.description },
-    //     { field: row => row.address.province.description }
-    //   )
-    //   const lowerTerms = terms ? terms.toLowerCase() : ''
-    //   return rows.filter(row => cols.some(col => (cellValue(col, row) + '').toLowerCase().indexOf(lowerTerms) !== -1))
-    // },
-    hideModal () {
-      this.$store.dispatch('pattys/setNewHoldingModal', false)
-    },
     index () {
       this.$axios
         .get(`/holdings`)

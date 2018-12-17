@@ -19,7 +19,7 @@
 <script type="text/javascript">
 
 import items from 'components/data-table/items.vue'
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   computed: {
     ...mapState('pattys', ['page', 'perPage'])
@@ -28,34 +28,33 @@ export default {
     this.packages()
   },
   methods: {
-    packages(){
+    packages () {
       this.$axios.get('packages-all')
-        .then(res =>{
-           this.$store.dispatch('items/packages', res.data.packages)
-        });
+        .then(res => {
+          this.$store.dispatch('items/packages', res.data.packages)
+        })
     },
     showNewOtherModalModal () {
       this.$store.dispatch('otherVendors/otherVendor', {
-            address: {
-                country_id : '',
-                region_id : '',
-                province_id : '',
-                city_id : '',
-                brgy_id : '',
-                street_lot_blk : ''
-            },
-            business_info: {
-                business_type_id: null,
-                vat_type_id: null,
-                email: '',
-                telephone: '',
-                tin: '',
-                vat_type_id: '',
-                website: ''
-            },
-            name: null,
-            desc: null
-        });
+        address: {
+          country_id: '',
+          region_id: '',
+          province_id: '',
+          city_id: '',
+          brgy_id: '',
+          street_lot_blk: ''
+        },
+        business_info: {
+          business_type_id: null,
+          vat_type_id: null,
+          email: '',
+          telephone: '',
+          tin: '',
+          website: ''
+        },
+        name: null,
+        desc: null
+      })
       this.$store.dispatch('otherVendors/newOtherVendorModal', true)
     }
   },
