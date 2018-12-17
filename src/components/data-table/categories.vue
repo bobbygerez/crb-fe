@@ -4,9 +4,17 @@
       round
       outline
       color="positive"
+      icon="add"
+      class="q-ma-sm"
+      @click="showCreateModal()"
+    />
+    <q-btn
+      round
+      outline
+      color="light"
       icon="edit"
       class="q-ma-sm"
-      @click="create()"
+      @click="edit()"
     />
     <q-btn
       round

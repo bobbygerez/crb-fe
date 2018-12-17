@@ -3,7 +3,7 @@
     <q-table
       ref="table"
       color="primary"
-      title="All Branches"
+      title="All Other-Vendors"
       :data="serverData"
       :columns="columns"
       :filter="filter"
@@ -28,8 +28,9 @@
         slot-scope="props"
       >
         <q-tr :props="props">
-          <q-td key="name">{{props.row.name }}</q-td>
-          <q-td key="company">{{props.row.company.name }}</q-td>
+          <q-td key="name">
+            {{props.row.name}}
+          </q-td>
           <q-td
             key="address"
             :props="props"
@@ -43,7 +44,12 @@
             {{props.row.address.region.description }}
 
           </q-td>
-          <q-td key="created">{{ props.row.created_at }}</q-td>
+          <q-td
+            key="created"
+            :props="props"
+          >
+            {{props.row.created_at}}
+          </q-td>
           <q-td
             key="actions"
             :props="props"
@@ -66,89 +72,124 @@
             />
           </q-td>
         </q-tr>
+
       </template>
+
+      <div
+        slot="pagination"
+        slot-scope="props"
+        class="row flex-center q-py-sm"
+      >
+        <q-btn
+          round
+          dense
+          size="sm"
+          icon="undo"
+          color="secondary"
+          class="q-mr-sm"
+          :disable="props.isFirstPage"
+          @click="props.prevPage"
+        />
+        <div
+          class="q-mr-sm"
+          style="font-size: small"
+        >
+          Page {{ props.pagination.page }} / {{ props.pagination.pagesNumber }}
+        </div>
+        <q-btn
+          round
+          dense
+          size="sm"
+          icon="redo"
+          color="secondary"
+          :disable="paginationLast(props.pagination.page)"
+          @click="props.nextPage"
+        />
+      </div>
 
     </q-table>
 
     <q-modal
-      v-model="editBranchModal"
+      v-model="editotherVendorsModal"
       minimized
       no-esc-dismiss
       no-backdrop-dismiss
       :content-css="{minWidth: '80vw', minHeight: '80vh'}"
     >
       <div style="padding: 30px">
+        <div class="q-display-1 q-mb-md">Edit {{ otherVendor.name }}</div>
+
         <div class="row">
-          <div class="col-xs-12 ">
-            <div class="q-display-1 q-mb-md">Edit {{ branch.name }}</div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-12 col-sm-3">
-            <q-select
-              v-model="branch.company_id"
-              :options="companies"
-              float-label="Company"
-            />
-          </div>
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
             <q-input
-              v-model="branch.name"
-              float-label="Branch name"
+              v-model="otherVendor.name"
+              float-label="otherVendors name"
               clearable
             />
           </div>
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="branch.business_info.business_type_id"
+              v-model="otherVendor.business_info.business_type_id"
               :options="businessTypes"
               float-label="Business Type"
               clearable
             />
           </div>
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="branch.business_info.vat_type_id"
+              v-model="otherVendor.business_info.vat_type_id"
               :options="vatTypes"
               float-label="Vat Type"
               clearable
             />
           </div>
         </div>
+
         <div class="row">
           <div class="col-xs-12 col-sm-3">
             <q-input
-              v-model="branch.business_info.telephone"
+              v-model="otherVendor.business_info.telephone"
               float-label="Telephone"
               clearable
             />
           </div>
           <div class="col-xs-12 col-sm-3">
             <q-input
-              v-model="branch.business_info.email"
+              v-model="otherVendor.business_info.email"
               float-label="Email"
               clearable
             />
           </div>
           <div class="col-xs-12 col-sm-3">
             <q-input
-              v-model="branch.business_info.tin"
+              v-model="otherVendor.business_info.tin"
               float-label="TIN"
               clearable
             />
           </div>
           <div class="col-xs-12 col-sm-3">
             <q-input
-              v-model="branch.business_info.website"
+              v-model="otherVendor.business_info.website"
               float-label="Website"
               clearable
             />
           </div>
         </div>
         <div class="row">
+          <div class="col-xs-12 col-sm-12">
+            <q-input
+              v-model="otherVendor.desc"
+              type="textarea"
+              float-label="Description"
+              :max-height="100"
+              rows="2"
+            />
+          </div>
+        </div>
+        <div class="row">
           <div class="col-xs-12 col-sm-6">
             <q-select
-              v-model="branch.address.country_id"
+              v-model="otherVendor.address.country_id"
               :options="countries"
               float-label="Country"
               clearable
@@ -156,7 +197,7 @@
           </div>
           <div class="col-xs-12 col-sm-6">
             <q-select
-              v-model="branch.address.region_id"
+              v-model="otherVendor.address.region_id"
               :options="regions"
               float-label="Region"
               clearable
@@ -167,7 +208,7 @@
         <div class="row">
           <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="branch.address.province_id"
+              v-model="otherVendor.address.province_id"
               :options="provinces"
               float-label="Province"
               clearable
@@ -175,7 +216,7 @@
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="branch.address.city_id"
+              v-model="otherVendor.address.city_id"
               :options="cities"
               float-label="City"
               clearable
@@ -183,7 +224,7 @@
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="branch.address.brgy_id"
+              v-model="otherVendor.address.brgy_id"
               :options="brgys"
               float-label="Barangay"
               clearable
@@ -191,7 +232,7 @@
           </div>
           <div class="col-xs-12 col-sm-12">
             <q-input
-              v-model="branch.address.street_lot_blk"
+              v-model="otherVendor.address.street_lot_blk"
               type="textarea"
               float-label="Block, Lot &amp; Street"
               :max-height="100"
@@ -199,7 +240,7 @@
             />
           </div>
         </div>
-        <br>
+        <br />
         <q-btn
           color="red"
           v-close-overlay
@@ -212,85 +253,79 @@
           label="Submit"
           class="q-ml-sm"
         />
+
       </div>
     </q-modal>
     <q-modal
-      v-model="newBranchModal"
+      v-model="newOtherVendorModal"
       minimized
       no-esc-dismiss
       no-backdrop-dismiss
       :content-css="{minWidth: '80vw', minHeight: '80vh'}"
     >
       <div style="padding: 30px">
+        <div class="q-display-1 q-mb-md">New Other-Vendor </div>
+
         <div class="row">
-          <div class="col-xs-12 ">
-            <div class="q-display-1 q-mb-md">New Branch</div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-12 col-sm-3">
-            <q-select
-              v-model="branch.company_id"
-              :options="companies"
-              float-label="Company"
-            />
-          </div>
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
             <q-input
-              v-model="branch.name"
-              float-label="Branch name"
+              v-model="otherVendor.name"
+              float-label="Other Vendor's name"
               clearable
             />
           </div>
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="branch.business_info.business_type_id"
+              v-model="otherVendor.business_info.business_type_id"
               :options="businessTypes"
               float-label="Business Type"
               clearable
             />
           </div>
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="branch.business_info.vat_type_id"
+              v-model="otherVendor.business_info.vat_type_id"
               :options="vatTypes"
               float-label="Vat Type"
               clearable
             />
           </div>
         </div>
+
         <div class="row">
           <div class="col-xs-12 col-sm-3">
             <q-input
-              v-model="branch.business_info.telephone"
+              v-model="otherVendor.business_info.telephone"
               float-label="Telephone"
               clearable
             />
           </div>
           <div class="col-xs-12 col-sm-3">
             <q-input
-              v-model="branch.business_info.email"
+              v-model="otherVendor.business_info.email"
               float-label="Email"
               clearable
             />
           </div>
           <div class="col-xs-12 col-sm-3">
             <q-input
-              v-model="branch.business_info.tin"
+              v-model="otherVendor.business_info.tin"
               float-label="TIN"
               clearable
             />
           </div>
           <div class="col-xs-12 col-sm-3">
             <q-input
-              v-model="branch.business_info.website"
+              v-model="otherVendor.business_info.website"
               float-label="Website"
               clearable
             />
           </div>
+        </div>
+        <div class="row">
           <div class="col-xs-12 col-sm-12">
             <q-input
-              v-model="branch.desc"
+              v-model="otherVendor.desc"
               type="textarea"
               float-label="Description"
               :max-height="100"
@@ -301,7 +336,7 @@
         <div class="row">
           <div class="col-xs-12 col-sm-6">
             <q-select
-              v-model="branch.address.country_id"
+              v-model="otherVendor.address.country_id"
               :options="countries"
               float-label="Country"
               clearable
@@ -309,7 +344,7 @@
           </div>
           <div class="col-xs-12 col-sm-6">
             <q-select
-              v-model="branch.address.region_id"
+              v-model="otherVendor.address.region_id"
               :options="regions"
               float-label="Region"
               clearable
@@ -320,7 +355,7 @@
         <div class="row">
           <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="branch.address.province_id"
+              v-model="otherVendor.address.province_id"
               :options="provinces"
               float-label="Province"
               clearable
@@ -328,7 +363,7 @@
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="branch.address.city_id"
+              v-model="otherVendor.address.city_id"
               :options="cities"
               float-label="City"
               clearable
@@ -336,7 +371,7 @@
           </div>
           <div class="col-xs-12 col-sm-4">
             <q-select
-              v-model="branch.address.brgy_id"
+              v-model="otherVendor.address.brgy_id"
               :options="brgys"
               float-label="Barangay"
               clearable
@@ -344,7 +379,7 @@
           </div>
           <div class="col-xs-12 col-sm-12">
             <q-input
-              v-model="branch.address.street_lot_blk"
+              v-model="otherVendor.address.street_lot_blk"
               type="textarea"
               float-label="Block, Lot &amp; Street"
               :max-height="100"
@@ -352,7 +387,7 @@
             />
           </div>
         </div>
-        <br>
+        <br />
         <q-btn
           color="red"
           v-close-overlay
@@ -365,6 +400,7 @@
           label="Submit"
           class="q-ml-sm"
         />
+
       </div>
     </q-modal>
   </div>
@@ -377,10 +413,7 @@ import { mapState } from 'vuex'
 export default {
   data () {
     return {
-      model: '2016-10-24T10:40:14.674Z',
-      superior: '',
-      selectedRoles: [],
-      editBranchModal: false,
+      editotherVendorsModal: false,
       options: [5, 10, 15, 20],
       lastPage: '',
       serverData: [],
@@ -391,33 +424,16 @@ export default {
       },
       columns: [
         { name: 'name', label: 'Name', field: 'name', align: 'left' },
-        { name: 'company', label: 'Company', align: 'left', field: 'company' },
-        { name: 'address', label: 'Address', align: 'left', field: 'address' },
-        { name: 'created', label: 'Created', align: 'left', field: 'created' },
-        { name: 'actions', label: 'Actions', align: 'left', field: 'actions' }
+        { name: 'address', label: 'Address', field: 'address', align: 'left' },
+        { name: 'created', label: 'Created', field: 'created', align: 'left' },
+        { name: 'actions', label: 'Actions', field: 'actions', align: 'left' }
       ],
       filter: '',
       loading: false
     }
   },
   computed: {
-    ...mapState('branches', ['branch']),
-    companies () {
-      return this.$store.getters['branches/companies'].map(e => {
-        return {
-          label: e.name,
-          value: e.id
-        }
-      })
-    },
-    newBranchModal: {
-      get () {
-        return this.$store.getters['branches/newBranchModal']
-      },
-      set () {
-
-      }
-    },
+    ...mapState('otherVendors', ['otherVendor', 'newOtherVendorModal']),
     countries () {
       return this.$store.getters['globals/getCountries'].map(e => {
         return {
@@ -480,17 +496,13 @@ export default {
   methods: {
     store () {
       this.$axios
-        .post(`/branches`, {
-          branch: this.branch,
-          address: this.branch.address,
-          businessInfo: this.branch.business_info
-        })
+        .post(`/other_vendors`, this.otherVendor)
         .then(res => {
           this.hideModal()
           this.$q.notify({
             color: 'positive',
             icon: 'check',
-            message: `${this.branch.name}created successfully`
+            message: `${this.otherVendor.name}created successfully`
           })
           this.request({
             pagination: this.serverPagination,
@@ -498,69 +510,54 @@ export default {
           })
         })
     },
-    deleteRow (branchId) {
-      this.$axios.get(`/branches/${branchId}?id=${branchId}`).then(res => {
-        this.$store.dispatch('branches/branch', res.data.branch)
-        this.$q.notify({
-          color: 'negative',
-          icon: 'delete',
-          message: `Delete ${res.data.branch.name} ?`,
-          actions: [
-            {
-              label: 'OK',
-              handler: () => {
-                this.$axios
-                  .delete(`/branches/${this.branch.id}?id=${this.branch.id}`)
-                  .then(res => {
-                    this.$q.notify({
-                      color: 'positive',
-                      icon: 'check',
-                      message: `${this.branch.name} deleted successfully`
+    deleteRow (otherVendorId) {
+      this.$axios.get(`/other_vendors/${otherVendorId}?id=${otherVendorId}`)
+        .then((res) => {
+          this.$store.dispatch('otherVendors/otherVendor', res.data.otherVendor)
+          this.$q.notify({
+            color: 'negative',
+            icon: 'delete',
+            message: `Delete ${res.data.otherVendor.name}?`,
+            actions: [
+
+              {
+                label: 'OK',
+                handler: () => {
+                  this.$axios.delete(`/other_vendors/${this.otherVendor.id}?id=${this.otherVendor.id}`)
+                    .then((res) => {
+                      this.$q.notify({
+                        color: 'positive',
+                        icon: 'check',
+                        message: `${this.otherVendor.name} deleted successfully`
+                      })
+                      this.request({
+                        pagination: this.serverPagination,
+                        filter: this.filter
+                      })
+                      this.loading = false
                     })
-                    this.request({
-                      pagination: this.serverPagination,
-                      filter: this.filter
+                    .catch((err) => {
+                      this.$q.notify({
+                        color: 'negative',
+                        icon: 'warning',
+                        message: `${err.response.data.message}`
+                      })
                     })
-                    this.hideModal()
-                  })
-                  .catch(err => {
-                    this.$q.notify({
-                      color: 'negative',
-                      icon: 'warning',
-                      message: `${err.response.data.message}`
-                    })
-                  })
+                }
               }
-            }
-          ]
+            ]
+          })
         })
-      })
       // .catch()
     },
     update () {
-      this.$axios.put(`/branches/${this.branch.id}`, {
-        id: this.branch.id,
-        name: this.branch.name,
-        desc: this.branch.desc,
-        country_id: this.branch.address.country_id,
-        region_id: this.branch.address.region_id,
-        province_id: this.branch.address.province_id,
-        city_id: this.branch.address.city_id,
-        brgy_id: this.branch.address.brgy_id,
-        street_lot_blk: this.branch.address.street_lot_blk,
-        business_type_id: this.branch.business_info.business_type_id,
-        vat_type_id: this.branch.business_info.vat_type_id,
-        telephone: this.branch.business_info.telephone,
-        tin: this.branch.business_info.tin,
-        email: this.branch.business_info.email,
-        website: this.branch.business_info.website
-      })
+      this.$axios.put(`/other_vendors/${this.otherVendor.id}`, this.otherVendor)
         .then((res) => {
-          this.editBranchModal = false
+          this.editotherVendorsModal = false
           this.$q.notify({
             color: 'positive',
             icon: 'check',
-            message: `${res.data.branch.name} update successfully`
+            message: `${this.otherVendor.name} update successfully`
           })
           this.request({
             pagination: this.serverPagination,
@@ -569,13 +566,7 @@ export default {
         })
         .catch()
     },
-    hideModal () {
-      this.$store.dispatch('branches/newBranchModal', false)
-      this.editBranchModal = false
-    },
-    showModal () {
-      this.editBranchModal = true
-    },
+
     paginationLast (currentPage) {
       if (this.lastPage > currentPage) {
         return false
@@ -586,15 +577,15 @@ export default {
       this.loading = true
       this.$axios
         .get(
-          `/branches?filter=${this.filter}&page=${props.pagination.page}&perPage=${
+          `/other_vendors?filter=${this.filter}&page=${props.pagination.page}&perPage=${
             props.pagination.rowsPerPage
           }`
         )
         .then(res => {
           this.serverPagination = props.pagination
-          this.serverData = _.values(res.data.branches.data)
-          this.serverPagination.rowsNumber = res.data.branches.total
-          this.lastPage = res.data.branches.last_page
+          this.serverData = _.values(res.data.otherVendors.data)
+          this.serverPagination.rowsNumber = res.data.otherVendors.total
+          this.lastPage = res.data.otherVendors.last_page
           this.loading = false
         })
         .catch(error => {
@@ -604,12 +595,15 @@ export default {
           this.loading = false
         })
     },
-    edit (branchId) {
-      this.$axios.get(`branches/${branchId}/edit?id=${branchId}`).then(res => {
-        this.showModal()
-        this.$store.dispatch('branches/branch', res.data.branch)
-        this.$store.dispatch('branches/companies', [res.data.branch.company])
-      })
+    edit (otherVendorsId) {
+      this.$axios.get(`other_vendors/${otherVendorsId}/edit?id=${otherVendorsId}`)
+        .then(res => {
+          this.editotherVendorsModal = true
+          this.$store.dispatch('otherVendors/otherVendor', res.data.otherVendor)
+        })
+    },
+    hideModal () {
+      this.$store.dispatch('otherVendors/newOtherVendorModal', false)
     }
   },
   mounted () {
@@ -619,56 +613,58 @@ export default {
     })
   },
   watch: {
-    'branch.name' (val) {
-      this.$store.dispatch('branches/branchName', val)
+    'otherVendor.name' (val) {
+      this.$store.dispatch('otherVendors/otherVendorName', val)
     },
-    'branch.company_id' (val) {
-      this.$store.dispatch('branches/branchId', val)
+    'otherVendor.desc' (val) {
+      this.$store.dispatch('otherVendors/otherVendorDesc', val)
     },
-    'branch.desc' (val) {
-      this.$store.dispatch('branches/branchDesc', val)
-    },
-    'branch.address.country_id' (val) {
-      if (val === null || val === undefined) return
+    'otherVendor.address.country_id' (val) {
+      if (val === '') { return }
       this.$store.dispatch('globals/getRegions', val)
-      this.$store.dispatch('branches/branchCountryId', val)
+      this.$store.dispatch('otherVendors/otherVendorCountry', val)
     },
-    'branch.address.region_id' (val) {
+    'otherVendor.address.region_id' (val) {
+      if (val === '') { return }
       this.$store.dispatch('globals/getProvinces', val)
-      this.$store.dispatch('branches/branchRegionId', val)
+      this.$store.dispatch('otherVendors/otherVendorRegion', val)
     },
-    'branch.address.province_id' (val) {
+    'otherVendor.address.province_id' (val) {
+      if (val === '') { return }
+      this.$store.dispatch('otherVendors/otherVendorProvince', val)
       this.$store.dispatch('globals/getCities', val)
-      this.$store.dispatch('branches/branchProvinceId', val)
     },
-    'branch.address.city_id' (val) {
+    'otherVendor.address.city_id' (val) {
+      if (val === '') { return }
+      this.$store.dispatch('otherVendors/otherVendorCity', val)
       this.$store.dispatch('globals/getBrgys', val)
-      this.$store.dispatch('branches/branchCityId', val)
     },
-    'branch.address.brgy_id' (val) {
-      this.$store.dispatch('branches/branchBrgyId', val)
+    'otherVendor.address.brgy_id' (val) {
+      if (val === '') { return }
+      this.$store.dispatch('otherVendors/otherVendorBrgy', val)
     },
-    'branch.address.street_lot_blk' (val) {
-      this.$store.dispatch('branches/branchStreetLotBlk', val)
+    'otherVendor.business_info.business_type_id' (val) {
+      this.$store.dispatch('otherVendors/otherVendorBusinessType', val)
     },
-    'branch.business_info.business_type_id' (val) {
-      this.$store.dispatch('branches/branchBusinessTypeId', val)
+    'otherVendor.business_info.vat_type_id' (val) {
+      this.$store.dispatch('otherVendors/otherVendorVatType', val)
     },
-    'branch.business_info.vat_type_id' (val) {
-      this.$store.dispatch('branches/branchVatTypeId', val)
+    'otherVendor.address.street_lot_blk' (val) {
+      this.$store.dispatch('otherVendors/otherVendorStreetLotBlk', val)
     },
-    'branch.business_info.telephone' (val) {
-      this.$store.dispatch('branches/branchTelephone', val)
+    'otherVendor.business_info.telephone' (val) {
+      this.$store.dispatch('otherVendors/otherVendorTelephone', val)
     },
-    'branch.business_info.email' (val) {
-      this.$store.dispatch('branches/branchEmail', val)
+    'otherVendor.business_info.email' (val) {
+      this.$store.dispatch('otherVendors/otherVendorEmail', val)
     },
-    'branch.business_info.tin' (val) {
-      this.$store.dispatch('branches/branchTin', val)
+    'otherVendor.business_info.tin' (val) {
+      this.$store.dispatch('otherVendors/otherVendorTin', val)
     },
-    'branch.business_info.website' (val) {
-      this.$store.dispatch('branches/branchWebsite', val)
+    'otherVendor.business_info.website' (val) {
+      this.$store.dispatch('otherVendors/otherVendorWebsite', val)
     }
   }
+
 }
 </script>

@@ -559,32 +559,33 @@ export default {
           this.$q.notify({
             color: 'positive',
             icon: 'check',
-            message: `${this.franchisee.name}created successfully`
+            message: `${this.franchisee.name} created successfully`
           })
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
           })
         })
+      this.loading = false
     },
-    deleteRow (branchId) {
-      this.$axios.get(`/branches/${branchId}?id=${branchId}`).then(res => {
-        this.$store.dispatch('branches/branch', res.data.branch)
+    deleteRow (franchiseeId) {
+      this.$axios.get(`/franchisees/${franchiseeId}?id=${franchiseeId}`).then(res => {
+        this.$store.dispatch('franchisees/franchisee', res.data.franchisee)
         this.$q.notify({
           color: 'negative',
           icon: 'delete',
-          message: `Delete ${res.data.branch.name} ?`,
+          message: `Delete ${res.data.franchisee.name} ?`,
           actions: [
             {
               label: 'OK',
               handler: () => {
                 this.$axios
-                  .delete(`/branches/${this.branch.id}?id=${this.branch.id}`)
+                  .delete(`/franchisees/${this.franchisee.id}?id=${this.franchisee.id}`)
                   .then(res => {
                     this.$q.notify({
                       color: 'positive',
                       icon: 'check',
-                      message: `${this.branch.name} deleted successfully`
+                      message: `${this.franchisee.name} deleted successfully`
                     })
                     this.request({
                       pagination: this.serverPagination,
@@ -681,6 +682,9 @@ export default {
       this.$store.dispatch('franchisees/franchiseeName', val)
     },
     'franchisee.franchisable_type' (val) {
+      if (val === undefined || val === '') {
+        return
+      }
       this.$axios.get(`modelable-user-models?modelType=${val}`)
         .then(res => {
           this.$store.dispatch('franchisees/userEntities', res.data.userModels)

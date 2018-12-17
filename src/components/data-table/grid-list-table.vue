@@ -141,50 +141,50 @@
       <!-- <template
 
       > -->
-        <q-tr
-          v-show="mode === 'list'"
-          slot="body"
-          slot-scope="props"
+      <q-tr
+        v-show="mode === 'list'"
+        slot="body"
+        slot-scope="props"
+        :props="props"
+        @click.native="selected = [{ __index: props.row.__index }]"
+        :class="'cursor-pointer'"
+      >
+        <q-td
+          v-for="col in props.cols"
+          :key="col.name"
           :props="props"
-          @click.native="selected = [{ __index: props.row.__index }]"
-          :class="'cursor-pointer'"
         >
-          <q-td
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
+          <template>{{ col.value }}</template>
+          <q-popover
+            touch-position
+            v-if="actions"
           >
-            <template>{{ col.value }}</template>
-            <q-popover
-              touch-position
-              v-if="actions"
+            <q-list
+              link
+              style="min-width: 100px"
             >
-              <q-list
-                link
-                style="min-width: 100px"
-              >
-                <template v-for="(action, idx) in actions">
-                  <q-item
-                    :key="idx"
-                    @click.native="$emit(`${action}`, props.row.id)"
-                    v-close-overlay
-                  >
-                    <q-item-main :label="capitalize(`${action}`)" />
-                  </q-item>
-                </template>
-              </q-list>
-            </q-popover>
-            <q-tooltip
-              v-if="!$q.platform.is.cordova && actions"
-              :delay="1000"
-              anchor="bottom middle"
-              self="bottom middle"
-              :offset="[10, 10]"
-            >
-              Click to see options.
-            </q-tooltip>
-          </q-td>
-        </q-tr>
+              <template v-for="(action, idx) in actions">
+                <q-item
+                  :key="idx"
+                  @click.native="$emit(`${action}`, props.row.id)"
+                  v-close-overlay
+                >
+                  <q-item-main :label="capitalize(`${action}`)" />
+                </q-item>
+              </template>
+            </q-list>
+          </q-popover>
+          <q-tooltip
+            v-if="!$q.platform.is.cordova && actions"
+            :delay="1000"
+            anchor="bottom middle"
+            self="bottom middle"
+            :offset="[10, 10]"
+          >
+            Click to see options.
+          </q-tooltip>
+        </q-td>
+      </q-tr>
       <!-- </template> -->
     </q-table>
 

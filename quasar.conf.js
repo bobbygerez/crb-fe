@@ -11,6 +11,7 @@ module.exports = function (ctx) {
     // app plugins (/src/plugins)
     plugins: [
       // 'i18n',
+      'vue2-filters',
       'axios',
       'vuelidate'
       // 'vue-signature-pad'

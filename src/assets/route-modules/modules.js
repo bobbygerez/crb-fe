@@ -14,5 +14,9 @@ export default [
   'packages',
   'trademarks',
   'franchisees',
-  'vendors'
+  'vendors',
+  'logistics',
+  'commissaries',
+  'other-vendors',
+  'items'
 ]
