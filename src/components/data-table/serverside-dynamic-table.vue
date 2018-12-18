@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="q-mb-xl">
     <q-inner-loading :visible="innerLoading && tableViewSettingsGlobal.mode === 'grid'">
       <q-spinner
         color="secondary"
@@ -7,7 +7,6 @@
       />
     </q-inner-loading>
     <q-table
-      class="q-mb-xl"
       :grid="tableViewSettingsGlobal.mode === 'grid'"
       :hide-header="tableViewSettingsGlobal.mode === 'grid'"
       :data="data"
@@ -212,14 +211,12 @@
 
 <script>
 import { mapGlobalFields } from '../../store/globals'
-import TableViewModeAction from 'components/actions-generic/table-view-mode-action'
 import GlobalChangeTableView from 'components/actions-generic/table-view-mode-global-action'
 
 const capitalize = (str) => str.split(' ').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')
 
 export default {
   components: {
-    TableViewModeAction,
     GlobalChangeTableView
   },
   name: 'serverside-dynamic-table',

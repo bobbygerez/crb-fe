@@ -221,7 +221,7 @@ export default {
           required: true,
           label: 'Holding',
           align: 'left',
-          field: row => row.holding.name
+          field: row => { return row.holding.name === null ? '' : row.holding.name }
         },
         { name: 'address', label: 'Address', field: row => row.address.street_lot_blk, align: 'left' },
         {

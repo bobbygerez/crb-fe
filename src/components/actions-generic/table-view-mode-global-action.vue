@@ -28,9 +28,6 @@ export default {
   },
   computed: {
     ...mapGlobalFields(['tableViewSettingsGlobal'])
-  },
-  mounted () {
-    this.changeViewMode()
   }
 }
 </script>
