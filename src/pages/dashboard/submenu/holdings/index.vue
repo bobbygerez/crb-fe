@@ -48,11 +48,6 @@ export default {
     EditHoldingForm,
     AddActionFab
   },
-  created () {
-    // HoldingApi.getHolds(this.page, this.perPage).then(res => {
-    //   this.setHoldings(res.data.holdings)
-    // })
-  },
   computed: {
     ...mapHoldingFields(['editHolding'])
   },

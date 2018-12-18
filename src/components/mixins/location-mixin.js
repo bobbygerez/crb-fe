@@ -36,29 +36,4 @@ export default {
       })
     }
   }
-  // data () {
-  //   return {
-  //     // set this in component create or mounted hook for which that component's module is
-  //     localModule: null
-  //   }
-  // }
-  // watch: {
-  //   'localModule.address.country_id' (val) {
-  //     if (val === null || val === undefined) return
-  //     console.log('getregions', this['localModule'])
-  //     this.getRegions(val)
-  //   },
-  //   'localModule.address.region_id' (val) {
-  //     console.log('getProvinces', this['localModule'])
-  //     this.getProvinces(val)
-  //   },
-  //   'localModule.address.province_id' (val) {
-  //     console.log('getCities', this['localModule'])
-  //     this.getCities(val)
-  //   },
-  //   'localModule.address.city_id' (val) {
-  //     console.log('getBrgys', this['localModule'])
-  //     this.getBrgys(val)
-  //   }
-  // }
 }

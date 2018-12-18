@@ -14,7 +14,6 @@
 /**
  * This action changes the view type of generic datatable components
  */
-// import { mapActions, mapState } from 'vuex'
 import { mapGlobalFields } from '../../store/globals'
 
 export default {
@@ -26,13 +25,11 @@ export default {
       this.tableViewSettingsGlobal.tooltipMsg = this.tableViewSettingsGlobal.mode === 'grid' ? 'List view' : 'Grid view'
       this.tableViewSettingsGlobal.icon = this.tableViewSettingsGlobal.mode === 'grid' ? this.tableViewSettingsGlobal.iconList : this.tableViewSettingsGlobal.iconGrid
     }
-    // ...mapActions('commons', ['setTableViewMode'])
   },
   computed: {
     ...mapGlobalFields(['tableViewSettingsGlobal'])
   },
   mounted () {
-    // this.tableViewModeIcon = this.tableViewMode === 'list' ? this.gridIcon : this.listIcon
     this.changeViewMode()
   }
 }

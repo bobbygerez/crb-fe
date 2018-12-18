@@ -1,3 +1,8 @@
+export {
+  updateField
+}
+  from 'vuex-map-fields'
+
 export const SET_COMPANIES = (state, payload) => {
   state.companies = payload
 }

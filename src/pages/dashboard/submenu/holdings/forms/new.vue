@@ -186,12 +186,12 @@
 <script>
 
 import { mapHoldingFields } from '../../../../../store/pattys'
+import { mapActions } from 'vuex'
 import BarangayTable from 'components/location-provider/barangay-view'
 import CityTable from 'components/location-provider/city-view'
 import LocationMixin from 'components/mixins/location-mixin'
 import CommonsMixin from 'components/mixins/commons-mixin'
 import { Holding } from 'assets/models/Holding'
-import { mapActions } from 'vuex'
 
 export default {
   mixins: [LocationMixin, CommonsMixin],
@@ -254,29 +254,21 @@ export default {
         })
     }
   },
-  // hooks
   mounted () {
     this.newHolding = Holding()
-    // console.log('platform', this.$q.platform)
-    // this.localModule = this.newHolding
-    // console.log('@New mounted => ', this.localModule)
   },
   watch: {
     'newHolding.address.country_id' (val) {
       if (val === null || val === undefined) return
-      console.log('getregions', this['newHolding'])
       this.getRegions(val)
     },
     'newHolding.address.region_id' (val) {
-      console.log('getProvinces', this['newHolding'])
       this.getProvinces(val)
     },
     'newHolding.address.province_id' (val) {
-      console.log('getCities', this['newHolding'])
       this.getCities(val)
     },
     'newHolding.address.city_id' (val) {
-      console.log('getBrgys', this['newHolding'])
       this.getBrgys(val)
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-inner-loading :visible="innerLoading">
+    <q-inner-loading :visible="innerLoading && tableViewSettingsGlobal.mode === 'grid'">
       <q-spinner
         color="secondary"
         :size="30"
@@ -8,9 +8,8 @@
     </q-inner-loading>
     <q-table
       class="q-mb-xl"
-      grid
-      selection="single"
-      hide-header
+      :grid="tableViewSettingsGlobal.mode === 'grid'"
+      :hide-header="tableViewSettingsGlobal.mode === 'grid'"
       :data="data"
       :columns="columns"
       row-key="__index"
@@ -20,6 +19,7 @@
       :pagination.sync="paginationControl"
       :separator="separator"
       :filter="filterOpts"
+      :selection="tableViewSettingsGlobal.mode === 'grid' ? 'single' : 'none'"
       :selected.sync="selected"
       v-bind="$attrs"
       :color="theme"
@@ -51,19 +51,32 @@
           :columns="columns"
           v-if="topRightOptions.visibleCols"
         />
+        <q-select
+          :color="theme"
+          v-model="separator"
+          v-show="topRightOptions.cellLines && tableViewSettingsGlobal.mode === 'list'"
+          :options="[
+            { label: 'Horizontal', value: 'horizontal' },
+            { label: 'Vertical', value: 'vertical' },
+            { label: 'Cell', value: 'cell' },
+            { label: 'None', value: 'none' }
+          ]"
+          hide-underline
+        />
         <q-btn
           flat
           round
           dense
           :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
           @click="props.toggleFullscreen"
-          v-if="topRightOptions.fullscreenToggle"
+          v-show="topRightOptions.fullscreenToggle"
         />
         <!-- <table-view-mode-action /> -->
-        <global-change-table-view v-show="!props.inFullscreen" />
+        <global-change-table-view />
       </template>
 
       <div
+        v-show="tableViewSettingsGlobal.mode === 'grid'"
         slot="item"
         slot-scope="props"
         class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-xl-3 transition-generic"
@@ -101,7 +114,7 @@
           </q-card-main>
           <q-popover
             touch-position
-            v-if="actions"
+            v-show="actions"
           >
             <q-list
               link
@@ -131,6 +144,54 @@
           </q-tooltip>
         </q-card>
       </div>
+      <!-- <template
+
+      > -->
+      <q-tr
+        slot="body"
+        slot-scope="props"
+        v-show="tableViewSettingsGlobal.mode === 'list'"
+        :props="props"
+        @click.native="selected = [{ __index: props.row.__index }]"
+        :class="'cursor-pointer'"
+      >
+        <q-td
+          v-for="col in props.cols"
+          :key="col.name"
+          :props="props"
+        >
+          <template>{{ col.value }}</template>
+          <q-popover
+            touch-position
+            v-show="actions"
+          >
+            <q-list
+              link
+              style="min-width: 100px"
+            >
+              <template v-for="(action, idx) in actions">
+                <q-item
+                  :key="idx"
+                  @click.native="$emit(`${action}`, props.row.id, props.row)"
+                  v-close-overlay
+                >
+                  <q-item-main :label="capitalize(`${action}`)" />
+                </q-item>
+              </template>
+            </q-list>
+          </q-popover>
+          <q-tooltip
+            v-show="!$q.platform.is.cordova && actions"
+            :delay="1000"
+            anchor="bottom middle"
+            self="bottom middle"
+            :offset="[10, 10]"
+          >
+            Click to see options.
+          </q-tooltip>
+        </q-td>
+      </q-tr>
+      <!-- </template> -->
     </q-table>
     <q-page-sticky
       position="bottom-right"
@@ -150,6 +211,7 @@
 </template>
 
 <script>
+import { mapGlobalFields } from '../../store/globals'
 import TableViewModeAction from 'components/actions-generic/table-view-mode-action'
 import GlobalChangeTableView from 'components/actions-generic/table-view-mode-global-action'
 
@@ -160,7 +222,7 @@ export default {
     TableViewModeAction,
     GlobalChangeTableView
   },
-  name: 'serverside-list-table',
+  name: 'serverside-dynamic-table',
   props: {
     data: {
       type: [Array, Object],
@@ -230,6 +292,7 @@ export default {
     }
   },
   computed: {
+    ...mapGlobalFields(['tableViewSettingsGlobal']),
     paginationControl: {
       set () {
 
