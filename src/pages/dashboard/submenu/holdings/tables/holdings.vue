@@ -1,23 +1,31 @@
 <template>
   <div>
-    <generic-list-data-table
-      :data="holdings"
+    <serverside-list-table
+      :data="serverData"
       :columns="columns"
-      color="primary"
       :actions="['edit', 'delete']"
       @edit="edit"
       @delete="deleteRow"
+      :pagination="serverPagination"
+      :innerLoading="loading"
       theme="secondary"
+      @serverside-request="request"
+      @search-change="filter = $event"
+      :searchField="filter"
       v-show="tableViewSettingsGlobal.mode === 'list'"
     />
-    <generic-grid-data-table
-      :data="holdings"
+    <serverside-grid-table
+      :data="serverData"
       :columns="columns"
-      color="primary"
       :actions="['edit', 'delete']"
       @edit="edit"
       @delete="deleteRow"
+      :pagination="serverPagination"
+      :innerLoading="loading"
       theme="secondary"
+      @serverside-request="request"
+      @search-change="filter = $event"
+      :searchField="filter"
       v-show="tableViewSettingsGlobal.mode === 'grid'"
     />
   </div>
@@ -28,14 +36,21 @@ import { mapHoldingFields } from '../../../../../store/pattys'
 import GenericListDataTable from 'components/data-table/generic-list-data-table'
 import GenericGridDataTable from 'components/data-table/generic-grid-data-table'
 import { mapGlobalFields } from '../../../../../store/globals'
+import ServersideListTable from 'components/data-table/serverside-list-table'
+import ServersideGridTable from 'components/data-table/serverside-grid-table'
+import TableMixin from 'components/mixins/table-mixin.js'
 
 export default {
+  mixins: [TableMixin],
   components: {
     GenericListDataTable,
-    GenericGridDataTable
+    GenericGridDataTable,
+    ServersideListTable,
+    ServersideGridTable
   },
   data () {
     return {
+      moduleName: 'holdings',
       markers: [
         {
           position: { lat: 12.879721, lng: 121.774017 }
@@ -96,7 +111,8 @@ export default {
           sortable: true,
           hideonload: true
         }
-      ]
+      ],
+      options: [5, 10, 15, 20]
     }
   },
   computed: {
@@ -111,58 +127,66 @@ export default {
           this.$store.dispatch('pattys/setHoldings', res.data.holdings)
         })
         .catch()
-    },
-
-    deleteRow (id) {
-      this.$axios
-        .get(`/holdings/${id}?id=${id}`)
-        .then(res => {
-          this.$store.dispatch('pattys/setHolding', res.data.holding)
-          this.$q.notify({
-            color: 'negative',
-            icon: 'delete',
-            message: `Delete ${this.holding.name}?`,
-            actions: [
-              {
-                label: 'OK',
-                handler: () => {
-                  this.$axios
-                    .delete(
-                      `/holdings/${this.holding.id}?id=${this.holding.id}`
-                    )
-                    .then(res => {
-                      this.$q.notify({
-                        color: 'positive',
-                        icon: 'check',
-                        message: `${this.holding.name} deleted successfully`
-                      })
-                      this.index()
-                    })
-                    .catch(err => {
-                      this.$q.notify({
-                        color: 'negative',
-                        icon: 'delete',
-                        message: `${err.response}`
-                      })
-                    })
-                }
-              }
-            ]
-          })
-        })
-        .catch()
-    },
-    edit (id) {
-      this.$axios
-        .get(`/holdings/${id}/edit?id=${id}`)
-        .then(res => {
-          this.editHolding = res.data.holding
-          this.editHoldingView = true
-        })
-        .catch()
     }
 
+    // deleteRow (id, row) {
+    //   console.log('rowdata', row)
+    //   this.$axios
+    //     .get(`/holdings/${id}?id=${id}`)
+    //     .then(res => {
+    //       this.$store.dispatch('pattys/setHolding', res.data.holding)
+    //       this.$q.notify({
+    //         color: 'negative',
+    //         icon: 'delete',
+    //         message: `Delete ${this.holding.name}?`,
+    //         actions: [
+    //           {
+    //             label: 'OK',
+    //             handler: () => {
+    //               this.$axios
+    //                 .delete(
+    //                   `/holdings/${this.holding.id}?id=${this.holding.id}`
+    //                 )
+    //                 .then(res => {
+    //                   this.$q.notify({
+    //                     color: 'positive',
+    //                     icon: 'check',
+    //                     message: `${this.holding.name} deleted successfully`
+    //                   })
+    //                   this.index()
+    //                 })
+    //                 .catch(err => {
+    //                   this.$q.notify({
+    //                     color: 'negative',
+    //                     icon: 'delete',
+    //                     message: `${err.response}`
+    //                   })
+    //                 })
+    //             }
+    //           }
+    //         ]
+    //       })
+    //     })
+    //     .catch()
+    // },
+    // edit (id) {
+    //   this.$axios
+    //     .get(`/holdings/${id}/edit?id=${id}`)
+    //     .then(res => {
+    //       this.editHolding = res.data.holding
+    //       this.editHoldingView = true
+    //       this.$emit('edit-data')
+    //     })
+    //     .catch()
+    // }
+
   },
+  // mounted () {
+  //   this.request({
+  //     pagination: this.serverPagination,
+  //     filter: this.filter
+  //   })
+  // },
   watch: {
     'paginationControl.page' (page) {
       this.$q.notify({

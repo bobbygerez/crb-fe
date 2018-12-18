@@ -87,9 +87,10 @@
           round
           dense
           size="sm"
-          icon="undo"
+          icon="mdi-chevron-left"
           color="secondary"
           class="q-mr-sm"
+          v-ripple
           :disable="props.isFirstPage"
           @click="props.prevPage"
         />
@@ -97,14 +98,15 @@
           class="q-mr-sm"
           style="font-size: small"
         >
-          Page {{ props.pagination.page }} / {{ props.pagination.pagesNumber }}
+          Page {{ props.pagination.page }} / {{ props.pagination.totalPages }}
         </div>
         <q-btn
           round
           dense
           size="sm"
-          icon="redo"
+          icon="mdi-chevron-right"
           color="secondary"
+          v-ripple
           :disable="paginationLast(props.pagination.page)"
           @click="props.nextPage"
         />
@@ -284,7 +286,8 @@ export default {
         descending: false,
         page: 1,
         rowsNumber: 10,
-        rowsPerPage: 10 // specifying this determines pagination is server-side
+        rowsPerPage: 10, // specifying this determines pagination is server-side
+        totalPages: null
       },
       columns: [
         { name: 'name', label: 'Company', field: 'company', align: 'left', sortable: true, required: true },
@@ -464,6 +467,7 @@ export default {
           // this.serverData = _.values(res.data.companies.data)
           this.serverData = values(res.data.companies.data)
           this.serverPagination.rowsNumber = res.data.companies.total
+          this.serverPagination.totalPages = res.data.companies.last_page
           this.lastPage = res.data.companies.last_page
           this.loading = false
         })

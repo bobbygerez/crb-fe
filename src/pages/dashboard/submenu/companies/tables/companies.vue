@@ -1,116 +1,33 @@
 <template>
   <div>
-    <q-table
-      ref="table"
-      color="primary"
-      title="All Companies"
+    <serverside-list-table
       :data="serverData"
       :columns="columns"
-      :filter="filter"
-      row-key="name"
-      :pagination.sync="serverPagination"
-      :rows-per-page-options="options"
-      @request="request"
-      :loading="loading"
-    >
-      <template
-        slot="top-right"
-        slot-scope="props"
-      >
-        <q-search
-          hide-underline
-          v-model="filter"
-        />
-      </template>
-
-      <template
-        slot="body"
-        slot-scope="props"
-      >
-        <q-tr :props="props">
-          <q-td key="company">
-            {{props.row.name}}
-          </q-td>
-          <q-td key="holding">
-            {{props.row.holding.name}}
-          </q-td>
-          <q-td
-            key="address"
-            :props="props"
-          >
-            {{props.row.address.street_lot_blk}}
-            <br />
-            {{props.row.address.brgy.description}}
-            <br />
-            {{props.row.address.city.description }},
-            <br />
-            {{props.row.address.region.description }}
-
-          </q-td>
-          <q-td
-            key="created"
-            :props="props"
-          >
-            {{props.row.created_at}}
-          </q-td>
-          <q-td
-            key="actions"
-            :props="props"
-          >
-            <q-btn
-              round
-              outline
-              color="positive"
-              icon="edit"
-              class="q-ma-sm"
-              @click="edit(props.row.id)"
-            />
-            <q-btn
-              round
-              outline
-              color="negative"
-              icon="delete"
-              class="q-ma-sm"
-              @click="deleteRow(props.row.id)"
-            />
-          </q-td>
-        </q-tr>
-
-      </template>
-
-      <div
-        slot="pagination"
-        slot-scope="props"
-        class="row flex-center q-py-sm"
-      >
-        <q-btn
-          round
-          dense
-          size="sm"
-          icon="undo"
-          color="secondary"
-          class="q-mr-sm"
-          :disable="props.isFirstPage"
-          @click="props.prevPage"
-        />
-        <div
-          class="q-mr-sm"
-          style="font-size: small"
-        >
-          Page {{ props.pagination.page }} / {{ props.pagination.pagesNumber }}
-        </div>
-        <q-btn
-          round
-          dense
-          size="sm"
-          icon="redo"
-          color="secondary"
-          :disable="paginationLast(props.pagination.page)"
-          @click="props.nextPage"
-        />
-      </div>
-
-    </q-table>
+      :actions="['edit', 'delete']"
+      @edit="edit"
+      @delete="deleteRow"
+      :pagination="serverPagination"
+      :innerLoading="loading"
+      theme="secondary"
+      @serverside-request="request"
+      @search-change="filter = $event"
+      :searchField="filter"
+      v-show="tableViewSettingsGlobal.mode === 'list'"
+    />
+    <serverside-grid-table
+      :data="serverData"
+      :columns="columns"
+      :actions="['edit', 'delete']"
+      @edit="edit"
+      @delete="deleteRow"
+      :pagination="serverPagination"
+      :innerLoading="loading"
+      theme="secondary"
+      @serverside-request="request"
+      @search-change="filter = $event"
+      :searchField="filter"
+      v-show="tableViewSettingsGlobal.mode === 'grid'"
+    />
 
     <q-modal
       v-model="editCompanyModal"
@@ -270,9 +187,19 @@
 
 <script>
 // import tableData from 'assets/table-data'
-// import _ from 'lodash'
+import { values } from 'lodash'
 import { mapState } from 'vuex'
+// import { mapHoldingFields } from '../../../../../store/pattys'
+// import GenericListDataTable from 'components/data-table/generic-list-data-table'
+// import GenericGridDataTable from 'components/data-table/generic-grid-data-table'
+import ServersideListTable from 'components/data-table/serverside-list-table'
+import ServersideGridTable from 'components/data-table/serverside-grid-table'
+import { mapGlobalFields } from '../../../../../store/globals'
 export default {
+  components: {
+    ServersideListTable,
+    ServersideGridTable
+  },
   data () {
     return {
       editCompanyModal: false,
@@ -280,22 +207,61 @@ export default {
       lastPage: '',
       serverData: [],
       serverPagination: {
+        sortBy: null, // String, column "name" property value
+        descending: false,
         page: 1,
         rowsNumber: 10,
-        rowsPerPage: 10 // specifying this determines pagination is server-side
+        rowsPerPage: 10, // specifying this determines pagination is server-side
+        totalPages: null
       },
       columns: [
-        { name: 'Company', label: 'Company', field: 'company', align: 'left', sortable: true, required: true },
+        { name: 'name', label: 'Company', field: row => row.name, align: 'left', sortable: true, required: true },
         {
-          name: 'Holding',
+          name: 'holding',
           required: true,
           label: 'Holding',
           align: 'left',
-          field: 'holding'
+          field: row => row.holding.name
         },
-        { name: 'address', label: 'Address', field: 'address', align: 'left' },
-        { name: 'created', label: 'Created', field: 'created', align: 'left' },
-        { name: 'actions', label: 'Actions', field: 'actions', align: 'left' }
+        { name: 'address', label: 'Address', field: row => row.address.street_lot_blk, align: 'left' },
+        {
+          name: 'brgy',
+          label: 'Barangay',
+          field: row => row.address.brgy.description,
+          align: 'left',
+          sortable: true,
+          hideonload: true
+        },
+        {
+          name: 'city',
+          label: 'City',
+          field: row => row.address.city.description,
+          align: 'left',
+          sortable: true
+        },
+        {
+          name: 'province',
+          label: 'Province',
+          field: row => row.address.province.description,
+          align: 'left',
+          sortable: true
+        },
+        {
+          name: 'region',
+          label: 'Region',
+          field: row => row.address.region.description,
+          align: 'left',
+          sortable: true,
+          hideonload: true
+        },
+        {
+          name: 'created_at',
+          label: 'Created At',
+          field: 'created_at',
+          align: 'left',
+          sortable: true,
+          hideonload: true
+        }
       ],
       filter: '',
       loading: false
@@ -303,6 +269,7 @@ export default {
   },
   computed: {
     ...mapState('companies', ['company']),
+    ...mapGlobalFields(['tableViewSettingsGlobal']),
     holdings () {
       return this.$store.getters['companies/getHoldings'].map(e => {
         return {
@@ -450,6 +417,7 @@ export default {
     request (props) {
       this.loading = true
       console.log('request', props)
+
       this.$axios
         .get(
           `/companies?filter=${props.filter}&page=${props.pagination.page}&perPage=${
@@ -459,11 +427,11 @@ export default {
         .then(res => {
           this.serverPagination = props.pagination
           // this.serverData = _.values(res.data.companies.data)
-          this.serverData = res.data.companies.data
+          this.serverData = values(res.data.companies.data)
           this.serverPagination.rowsNumber = res.data.companies.total
+          // this.serverPagination.totalPages = res.data.companies.last_page
           this.lastPage = res.data.companies.last_page
           this.loading = false
-          console.log('request', props)
         })
         .catch(error => {
           // there's an error... do SOMETHING
@@ -486,10 +454,10 @@ export default {
     }
   },
   mounted () {
-    console.log('mounted', {
-      pagination: this.serverPagination,
-      filter: this.filter
-    })
+    // console.log('mounted', {
+    //   pagination: this.serverPagination,
+    //   filter: this.filter
+    // })
     this.request({
       pagination: this.serverPagination,
       filter: this.filter

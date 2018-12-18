@@ -252,7 +252,8 @@ export default {
             icon: 'check',
             message: `${this.editHolding.name} update successfully`
           })
-          this.setHoldings()
+          // this.setHoldings()
+          this.$emit('updated')
           this.editHoldingView = false
         })
         .catch()
