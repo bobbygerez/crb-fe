@@ -14,5 +14,6 @@ export default {
   },
   newItemModal: false,
   editItemModal: false,
-  packages: []
+  packages: [],
+  userEntities: []
 }

@@ -82,6 +82,12 @@ export const newItemModal = ({
   commit('newItemModal', payload)
 }
 
+export const userEntities = ({
+  commit
+}, payload) => {
+  commit('userEntities', payload)
+}
+
 export const packages = ({
   commit
 }, payload) => {

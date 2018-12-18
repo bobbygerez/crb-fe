@@ -22,3 +22,38 @@ export const vendorablePivotDisPercentage = ({
   commit('vendorablePivotDisPercentage', payload)
 }
 
+export const vendorablePivotPrice = ({
+  commit
+}, payload) => {
+  commit('vendorablePivotPrice', payload)
+}
+
+export const vendorablePivotStartDate = ({
+  commit
+}, payload) => {
+  commit('vendorablePivotStartDate', payload)
+}
+
+export const vendorablePivotEndDate = ({
+  commit
+}, payload) => {
+  commit('vendorablePivotEndDate', payload)
+}
+
+export const vendorablePivotVolume = ({
+  commit
+}, payload) => {
+  commit('vendorablePivotVolume', payload)
+}
+
+export const vendorablePivotRemarks = ({
+  commit
+}, payload) => {
+  commit('vendorablePivotRemarks', payload)
+}
+
+export const vendorableModal = ({
+  commit
+}, payload) => {
+  commit('vendorableModal', payload)
+}

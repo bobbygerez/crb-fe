@@ -75,7 +75,7 @@
 
       </template>
 
-      <div
+      <!-- <div
         slot="pagination"
         slot-scope="props"
         class="row flex-center q-py-sm"
@@ -105,7 +105,7 @@
           :disable="paginationLast(props.pagination.page)"
           @click="props.nextPage"
         />
-      </div>
+      </div> -->
 
     </q-table>
 

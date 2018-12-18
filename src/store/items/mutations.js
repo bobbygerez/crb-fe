@@ -57,3 +57,7 @@ export const newItemModal = (state, payload) => {
 export const packages = (state, payload) => {
   state.packages = payload
 }
+
+export const userEntities = (state, payload) => {
+  state.userEntities = payload
+}

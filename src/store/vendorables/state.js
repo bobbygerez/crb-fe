@@ -1,4 +1,10 @@
 export default {
   vendorables: [],
-  vendorable: {}
+  vendorable: {
+    pivot: {
+      rank: '',
+      dis_percentage: ''
+    }
+  },
+  vendorableModal: false
 }

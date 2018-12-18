@@ -28,55 +28,45 @@
 
         </template>
 
-        <!-- <div
-        slot="pagination"
-        slot-scope="props"
-        class="row flex-center q-py-sm"
-      >
-        <q-btn
-          round
-          dense
-          size="sm"
-          icon="undo"
-          color="secondary"
-          class="q-mr-sm"
-          :disable="props.isFirstPage"
-          @click="props.prevPage"
-        />
-        <div
-          class="q-mr-sm"
-          style="font-size: small"
-        >
-          Page {{ props.pagination.page }} / {{ props.pagination.pagesNumber }}
-        </div>
-        <q-btn
-          round
-          dense
-          size="sm"
-          icon="redo"
-          color="secondary"
-          :disable="paginationLast(props.pagination.page)"
-          @click="props.nextPage"
-        />
-      </div> -->
 
     </q-table>
     <q-modal v-model="editVendorableModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
         <div style="padding: 30px">
 
             <div class="row">
-                <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-12 col-sm-3">
                     <q-input v-model="vendorName" float-label="Name" disable />
                 </div>
-                <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-12 col-sm-3">
                     <q-input v-model="vendorType" float-label="Type" disable />
                 </div>
 
-                <div class="col-xs-12 col-sm-6">
-                    <q-input v-model="vendorable.pivot.rank " float-label="Rank" />
+                <div class="col-xs-12 col-sm-3">
+                    <q-input v-model="vendorable.pivot.rank " float-label="Prospect level" clearable />
                 </div>
-                <div class="col-xs-12 col-sm-6">
-                    <q-input v-model="vendorable.pivot.dis_percentage " float-label="Distribution Percentage" suffix="%" />
+                <div class="col-xs-12 col-sm-3">
+                    <q-input v-model="vendorable.pivot.dis_percentage " float-label="Distribution Percentage" suffix="%" clearable/>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-datetime v-model="vendorable.pivot.start_date" type="date" float-label="Start Date"/>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-datetime v-model="vendorable.pivot.end_date" type="date" float-label="End Date"/>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <input-price label="Price" :value="vendorablPrice" v-model="vendorablePrice"></input-price>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-input v-model="vendorable.pivot.volume" float-label="Volume" clearable/>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-input v-model="createdBy" float-label="Created By" clearable disable/>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-input v-model="approvedBy" float-label="Approved By" clearable disable/>
+                </div>
+                <div class="col-xs-12 col-sm-12">
+                    <q-input v-model="vendorable.pivot.remarks" type="textarea" float-label="Remarks" :max-height="100" rows="2" />
                 </div>
             </div>
             <br />
@@ -86,14 +76,14 @@
         </div>
     </q-modal>
     <!-- <q-modal
-      v-model="newItemModal"
+      v-model="vendorableModal"
       minimized
       no-esc-dismiss
       no-backdrop-dismiss
       :content-css="{minWidth: '80vw', minHeight: '80vh'}"
     >
       <div style="padding: 30px">
-        <div class="q-display-1 q-mb-md">Edit {{ item.name }}</div>
+        <div class="q-display-1 q-mb-md">{{ item.name }}'s vendor</div>
 
         <div class="row">
           <div class="col-xs-12 col-sm-4">
@@ -197,9 +187,11 @@ export default {
     data() {
 
         return {
+            createdBy: '',
+            approvedBy: '',
             vendorType: '',
             vendorName: '',
-            actions: ['edit', 'delete', 'add vendor'],
+            actions: ['edit', 'delete'],
             editVendorableModal: false,
             options: [5, 10, 15, 20],
             lastPage: '',
@@ -211,7 +203,7 @@ export default {
             },
             columns: [{
                     name: 'name',
-                    label: 'Name',
+                    label: 'Company Name',
                     field: 'name',
                     align: 'left'
                 },
@@ -242,9 +234,8 @@ export default {
         inputPrice
     },
     computed: {
-        ...mapState('otherVendors', ['otherVendor', 'newOtherVendorModal']),
-        ...mapState('items', ['item', 'editItemModal', 'newItemModal']),
-         ...mapState('vendorables', ['vendorable']),
+        ...mapState('items', ['item']),
+         ...mapState('vendorables', ['vendorable', 'vendorableModal']),
         packages() {
             return this.$store.getters['items/packages'].map(e => {
                 return {
@@ -252,6 +243,16 @@ export default {
                     value: e.id
                 }
             })
+        },
+        vendorablePrice: {
+            get(){
+                let price = this.vendorable.pivot.price;
+                return parseFloat(price);
+            },
+            set(val){
+                 this.$store.dispatch('vendorables/vendorablePivotPrice', val)
+            }
+
         }
     },
     methods: {
@@ -271,9 +272,7 @@ export default {
             if (action === 'edit') {
                 this.edit(itemId, vendorableId, vendorableType)
             } else if (action === 'delete') {
-                this.deleteRow(itemId)
-            } else if (action === 'add vendor') {
-                this.editVendorableModal = true
+                this.deleteRow(itemId, vendorableId, vendorableType)
             }
         },
         store() {
@@ -292,14 +291,14 @@ export default {
                     })
                 })
         },
-        deleteRow(itemId) {
-            this.$axios.get(`/items/${itemId}?id=${itemId}`)
+        deleteRow(itemId, vendorableId, vendorableType) {
+            this.$axios.get(`vendorables/${itemId}?id=${itemId}&vendorable_id=${vendorableId}&vendorable_type=${vendorableType}`)
                 .then((res) => {
-                    this.$store.dispatch('items/item', res.data.item)
+                    this.$store.dispatch('vendorables/vendorable', res.data.vendorable)
                     this.$q.notify({
                         color: 'negative',
                         icon: 'delete',
-                        message: `Delete ${res.data.item.name}?`,
+                        message: `Delete ${res.data.vendorName} vendor?`,
                         actions: [
 
                             {
@@ -336,16 +335,16 @@ export default {
         update() {
             this.$axios.put(`/vendorables/${this.item.id}`, this.vendorable)
                 .then((res) => {
-                    // this.hideModal()
-                    // this.$q.notify({
-                    //     color: 'positive',
-                    //     icon: 'check',
-                    //     message: `${this.otherVendor.name} update successfully`
-                    // })
-                    // this.request({
-                    //     pagination: this.serverPagination,
-                    //     filter: this.filter
-                    // })
+                    this.hideModal()
+                    this.$q.notify({
+                        color: 'positive',
+                        icon: 'check',
+                        message: `${this.item.name}'s vendor update successfully`
+                    })
+                    this.request({
+                        pagination: this.serverPagination,
+                        filter: this.filter
+                    })
                 })
                 .catch()
         },
@@ -384,12 +383,15 @@ export default {
                 .then(res => {
                     this.showModal()
                     this.vendorName = res.data.vendorName
+                    this.createdBy = res.data.createdBy
+                    this.approvedBy = res.data.approvedBy
                     this.vendorType = this.reduceString(vendorableType)
                     this.$store.dispatch('vendorables/vendorable', res.data.vendorable)
                 })
         },
         hideModal() {
-            this.$store.dispatch('items/editItemModal', false);
+            this.editVendorableModal = false
+            this.$store.dispatch('vendorables/vendorableModal', false)
         },
         showModal() {
             this.editVendorableModal = true
@@ -407,6 +409,18 @@ export default {
         },
         'vendorable.pivot.dis_percentage'(val) {
             this.$store.dispatch('vendorables/vendorablePivotDisPercentage', val)
+        },
+        'vendorable.pivot.start_date'(val){
+            this.$store.dispatch('vendorables/vendorablePivotStartDate', val)
+        },
+        'vendorable.pivot.end_date'(val){
+            this.$store.dispatch('vendorables/vendorablePivotEndDate', val)
+        },
+       'vendorable.pivot.volume'(val){
+           this.$store.dispatch('vendorables/vendorablePivotVolume', val)
+        },
+        'vendorable.pivot.remarks'(val){
+            this.$store.dispatch('vendorables/vendorablePivotRemarks', val)
         }
     }
 
