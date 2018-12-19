@@ -7,9 +7,16 @@
       <!-- scroll aware for hiding showing fab -->
       <q-scroll-observable @scroll="hasScrolled" />
       <!-- the main table that will be displayed -->
-      <holdings-table ref="holdingTable" @edit-data="editHolding = $event.holding; $refs.editModalForm.show()"/>
+      <holdings-table
+        ref="holdingTable"
+        @edit-data="editHolding = $event.holding; $refs.editModalForm.show()"
+      />
       <!-- add fab action found at bottom of table -->
-      <add-action-fab :show="showFab" @fab-click="$refs.addModalForm.show()" />
+      <add-action-fab
+        color="primary"
+        :show="showFab"
+        @fab-click="$refs.addModalForm.show()"
+      />
       <!-- new form modal displayed on fab click -->
       <generic-modal
         :title="'New Holding'"

@@ -64,6 +64,7 @@
         />
         <q-btn
           flat
+          :color="theme"
           round
           dense
           :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
@@ -71,7 +72,7 @@
           v-show="topRightOptions.fullscreenToggle"
         />
         <!-- <table-view-mode-action /> -->
-        <global-change-table-view />
+        <global-change-table-view :color="theme" />
       </template>
 
       <div

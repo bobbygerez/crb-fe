@@ -11,8 +11,8 @@
     >
       <q-btn
         v-show="show"
+        v-bind="$attrs"
         fab
-        color="primary"
         icon="mdi-plus"
         @click="$emit('fab-click')"
       />

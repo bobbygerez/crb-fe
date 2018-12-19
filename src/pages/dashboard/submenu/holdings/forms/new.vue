@@ -2,11 +2,20 @@
   <div class="q-ma-lg">
     <div class="row gutter-sm">
       <div class="col-xs-12 col-sm-6">
-        <q-input
+        <!-- <q-input
           v-model="newHolding.name"
           float-label="Holding name"
           clearable
-        />
+        /> -->
+        <f-v-field-validator :val="$v.newHolding.name">
+          <q-input
+            @blur="$v.newHolding.name.$touch"
+            :error="$v.newHolding.name.$error"
+            v-model="newHolding.name"
+            float-label="Holding name"
+            clearable
+          />
+        </f-v-field-validator>
       </div>
       <div class="col-xs-12 col-sm-3">
         <q-select
@@ -163,6 +172,10 @@
         rows="2"
       />
     </div>
+    <f-v-error-summary
+      :valObj="$v"
+      class="q-my-sm"
+    />
     <br>
     <q-btn
       color="primary"
@@ -187,17 +200,22 @@
 
 import { mapHoldingFields } from '../../../../../store/pattys'
 import { mapActions } from 'vuex'
+import { required, email } from 'vuelidate/lib/validators'
+import FVErrorSummary from 'components/form-validations/FVErrorSummary'
+import FVFieldValidator from 'components/form-validations/FVFieldValidator'
 import BarangayTable from 'components/location-provider/barangay-view'
 import CityTable from 'components/location-provider/city-view'
 import LocationMixin from 'components/mixins/location-mixin'
 import CommonsMixin from 'components/mixins/commons-mixin'
-import { Holding } from 'assets/models/Holding'
+import { Holding, newHoldingFormValidationRule } from 'assets/models/Holding'
 
 export default {
   mixins: [LocationMixin, CommonsMixin],
   components: {
     BarangayTable,
-    CityTable
+    CityTable,
+    FVErrorSummary,
+    FVFieldValidator
   },
   data () {
     return {
@@ -220,6 +238,8 @@ export default {
       }
     },
     create () {
+      this.$v.newHolding.$touch()
+      console.log('validations', this.$v)
       this.$axios
         .post(`/holdings`, {
           id: this.newHolding.id,
@@ -252,6 +272,14 @@ export default {
             message: 'Some error occured.'
           })
         })
+    }
+  },
+  validations () {
+    // newHolding: {
+    //   name: { required, _$Holding_name: () => true }
+    // }
+    return {
+      newHolding: newHoldingFormValidationRule(required, email, () => true)
     }
   },
   mounted () {

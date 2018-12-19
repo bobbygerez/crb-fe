@@ -4,11 +4,20 @@
 
     <div class="row gutter-sm">
       <div class="col-xs-12 col-sm-6">
-        <q-input
+        <!-- <q-input
           v-model="editHolding.name"
           float-label="Holding name"
           clearable
-        />
+        /> -->
+        <f-v-field-validator :val="$v.editHolding.name">
+          <q-input
+            @blur="$v.editHolding.name.$touch"
+            :error="$v.editHolding.name.$error"
+            v-model="editHolding.name"
+            float-label="Holding name"
+            clearable
+          />
+        </f-v-field-validator>
       </div>
       <div class="col-xs-12 col-sm-3">
         <q-select
@@ -167,18 +176,31 @@
         rows="2"
       />
     </div>
+    <div>
+      <f-v-error-summary
+        :valObj="$v"
+        class="q-my-sm"
+      />
+    </div>
     <br>
-    <q-btn
-      color="red"
-      v-close-overlay
-      label="Close"
-    />
-    <q-btn
-      color="primary"
-      @click="update(editHolding.id)"
-      label="Update"
-      class="q-ml-sm"
-    />
+    <div class="row justify-end">
+      <div class="column">
+        <q-btn
+          color="negative"
+          flat
+          v-close-overlay
+          label="Cancel"
+        />
+      </div>
+      <div class="column">
+        <q-btn
+          color="primary"
+          @click="update(editHolding.id)"
+          label="Update"
+          class="q-ml-sm"
+        />
+      </div>
+    </div>
     <barangay-table
       ref="barangayTable"
       :params="addressType"
@@ -194,17 +216,23 @@
 
 <script>
 import { mapHoldingFields } from '../../../../../store/pattys'
+import { required, email } from 'vuelidate/lib/validators'
+import FVErrorSummary from 'components/form-validations/FVErrorSummary'
+import FVFieldValidator from 'components/form-validations/FVFieldValidator'
 import BarangayTable from 'components/location-provider/barangay-view'
 import CityTable from 'components/location-provider/city-view'
 import LocationMixin from 'components/mixins/location-mixin'
 import CommonsMixin from 'components/mixins/commons-mixin'
 import { mapActions } from 'vuex'
+import { editHoldingFormValidationRule } from 'assets/models/Holding'
 
 export default {
   mixins: [LocationMixin, CommonsMixin],
   components: {
     BarangayTable,
-    CityTable
+    CityTable,
+    FVErrorSummary,
+    FVFieldValidator
   },
   data () {
     return {
@@ -213,6 +241,15 @@ export default {
   },
   computed: {
     ...mapHoldingFields(['newHolding', 'editHolding', 'editHoldingView'])
+  },
+  validations () {
+    // editHolding: {
+    //   name: { required }
+    // }
+    // some condition or whatever
+    return {
+      editHolding: editHoldingFormValidationRule(required, email, () => true)
+    }
   },
   methods: {
     ...mapActions('pattys', ['setHoldings']),
@@ -227,6 +264,11 @@ export default {
       }
     },
     update (id) {
+      this.$v.editHolding.$touch()
+      if (this.$v.editHolding.$error) {
+        console.log('validations => ', this.$v)
+        return
+      }
       this.$axios
         .put(`/holdings/${this.editHolding.id}`, {
           id: this.editHolding.id,
@@ -264,6 +306,9 @@ export default {
       if (val === null || val === undefined) return
       console.log('getregions', this['editHolding'])
       this.getRegions(val)
+      this.getProvinces(val)
+      this.getCities(val)
+      this.getBrgys(val)
     },
     'editHolding.address.region_id' (val) {
       console.log('getProvinces', this['editHolding'])

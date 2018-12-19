@@ -1,9 +1,22 @@
 <template>
-  <transition enter-active-class="animated flipInX" leave-active-class="animated flipOutX" appear>
-    <q-alert v-if="hasErrors" type="negative">
-      <div v-for="(error, index) in errors" :key="index">{{ error }}</div>
+  <div>
+    <!-- <transition
+      enter-active-class="animated flipInX"
+      leave-active-class="animated flipOutX"
+      appear
+    > -->
+    <q-alert
+      v-if="hasErrors"
+      type="negative"
+      class="animate-pop"
+    >
+      <div
+        v-for="(error, index) in errors"
+        :key="index"
+      >{{ error }}</div>
     </q-alert>
-  </transition>
+    <!-- </transition> -->
+  </div>
 </template>
 <script>
 const replaceAll = (str, find, replace) => str.replace(new RegExp(find, 'g'), replace)

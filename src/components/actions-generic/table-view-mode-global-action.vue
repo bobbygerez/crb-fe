@@ -1,9 +1,18 @@
 <template>
   <div>
-    <q-btn flat round dense :icon="tableViewSettingsGlobal.icon" name="Change View" @click="changeViewMode"
+    <q-btn
+      flat
+      round
+      dense
+      :icon="tableViewSettingsGlobal.icon"
+      name="Change View"
+      @click="changeViewMode"
       v-bind="$attrs"
     >
-      <q-tooltip :disable="$q.platform.is.mobile" :delay="500">
+      <q-tooltip
+        :disable="$q.platform.is.mobile"
+        :delay="500"
+      >
         {{ this.tableViewSettingsGlobal.tooltipMsg }}
       </q-tooltip>
     </q-btn>

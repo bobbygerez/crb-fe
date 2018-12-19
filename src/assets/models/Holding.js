@@ -50,3 +50,133 @@ export const createHolding = (data) => {
     name: data.name
   }))
 }
+
+// TODO: refine validation rules
+export const newHoldingFormValidationRule = (required, email, anon) => {
+  return {
+    address: {
+      country_id: {
+        required,
+        _$Country: anon
+      },
+      region_id: {
+        required,
+        _$Region: anon
+      },
+      province_id: {
+        required,
+        _$Province: anon
+      },
+      city_id: {
+        required,
+        _$City: anon
+      },
+      brgy_id: {
+        required,
+        _$Barangay: anon
+      },
+      street_lot_blk: {
+        required,
+        _$Address: anon
+      }
+    },
+    business_info: {
+      business_type_id: {
+        required,
+        _$Business_type: anon
+      },
+      email: {
+        required,
+        email,
+        _$Email: anon
+      },
+      telephone: {
+        required,
+        _$Telephone: anon
+      },
+      tin: {
+        required,
+        _$TIN: anon
+      },
+      vat_type_id: {
+        required,
+        _$Vat_type: anon
+      },
+      // website = ''
+    },
+    desc: {
+      required
+    },
+    //id = null,
+    // images = [SomeImage()],
+    name: {
+      required,
+      _$Holding_name: anon
+    }
+  }
+}
+
+// TODO: refine validation rule
+export const editHoldingFormValidationRule = (required, email, anon) => {
+  return {
+    address: {
+      country_id: {
+        required,
+        _$Country: anon
+      },
+      region_id: {
+        required,
+        _$Region: anon
+      },
+      province_id: {
+        required,
+        _$Province: anon
+      },
+      city_id: {
+        required,
+        _$City: anon
+      },
+      brgy_id: {
+        required,
+        _$Barangay: anon
+      },
+      street_lot_blk: {
+        required,
+        _$Address: anon
+      }
+    },
+    business_info: {
+      business_type_id: {
+        required,
+        _$Business_type: anon
+      },
+      email: {
+        required,
+        email,
+        _$Email: anon
+      },
+      telephone: {
+        required,
+        _$Telephone: anon
+      },
+      tin: {
+        required,
+        _$TIN: anon
+      },
+      vat_type_id: {
+        required,
+        _$Vat_type: anon
+      },
+      // website = ''
+    },
+    desc: {
+      required
+    },
+    //id = null,
+    // images = [SomeImage()],
+    name: {
+      required,
+      _$Holding_name: anon
+    }
+  }
+}
