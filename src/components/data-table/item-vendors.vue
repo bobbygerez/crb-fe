@@ -8,7 +8,7 @@
                     <q-popover touch-position v-if="actions">
                         <q-list link style="min-width: 100px">
                             <template v-for="(action, idx) in actions">
-                                <q-item :key="idx" @click.native="myFunction(action, props.row.id, props.row.pivot.vendorable_id, props.row.pivot.vendorable_type)" v-close-overlay>
+                                <q-item :key="idx" @click.native="myFunction(action, props.row.pivot.id, props.row.pivot.vendorable_id, props.row.pivot.vendorable_type)" v-close-overlay>
                                     <q-item-main :label="capitalize(action)" />
                                 </q-item>
                             </template>
@@ -28,45 +28,43 @@
 
         </template>
 
-
     </q-table>
     <q-modal v-model="editVendorableModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
         <div style="padding: 30px">
 
             <div class="row">
                 <div class="col-xs-12 col-sm-3">
-                    <q-input v-model="vendorName" float-label="Name" disable />
-                </div>
-                <div class="col-xs-12 col-sm-3">
                     <q-input v-model="vendorType" float-label="Type" disable />
                 </div>
-
                 <div class="col-xs-12 col-sm-3">
-                    <q-input v-model="vendorable.pivot.rank " float-label="Prospect level" clearable />
+                    <q-input v-model="vendorName" float-label="Vendor Name" disable />
                 </div>
                 <div class="col-xs-12 col-sm-3">
-                    <q-input v-model="vendorable.pivot.dis_percentage " float-label="Distribution Percentage" suffix="%" clearable/>
+                    <q-input v-model="vendorable.rank " float-label="Prospect level" clearable />
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <q-input v-model="vendorable.dis_percentage " float-label="Distribution Percentage" suffix="%" clearable />
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <q-datetime v-model="vendorable.pivot.start_date" type="date" float-label="Start Date"/>
+                    <q-datetime v-model="vendorable.start_date" type="date" float-label="Start Date" />
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <q-datetime v-model="vendorable.pivot.end_date" type="date" float-label="End Date"/>
+                    <q-datetime v-model="vendorable.end_date" type="date" float-label="End Date" />
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <input-price label="Price" :value="vendorablPrice" v-model="vendorablePrice"></input-price>
+                    <input-price label="Price/Package" :value="vendorablPrice" v-model="vendorablePrice"></input-price>
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="vendorable.pivot.volume" float-label="Volume" clearable/>
+                    <q-input v-model="vendorable.volume" float-label="Volume" clearable />
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="createdBy" float-label="Created By" clearable disable/>
+                    <q-input v-model="createdBy" float-label="Created By" clearable disable />
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="approvedBy" float-label="Approved By" clearable disable/>
+                    <q-input v-model="approvedBy" float-label="Approved By" clearable disable />
                 </div>
                 <div class="col-xs-12 col-sm-12">
-                    <q-input v-model="vendorable.pivot.remarks" type="textarea" float-label="Remarks" :max-height="100" rows="2" />
+                    <q-input v-model="vendorable.remarks" type="textarea" float-label="Remarks" :max-height="100" rows="2" />
                 </div>
             </div>
             <br />
@@ -75,105 +73,48 @@
 
         </div>
     </q-modal>
-    <!-- <q-modal
-      v-model="vendorableModal"
-      minimized
-      no-esc-dismiss
-      no-backdrop-dismiss
-      :content-css="{minWidth: '80vw', minHeight: '80vh'}"
-    >
-      <div style="padding: 30px">
-        <div class="q-display-1 q-mb-md">{{ item.name }}'s vendor</div>
+    <q-modal v-model="vendorableModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+        <div style="padding: 30px">
+            <div class="q-display-1 q-mb-md">New vendor for {{ item.name }}</div>
 
-        <div class="row">
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.name"
-              float-label="Name"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.sku"
-              float-label="SKU"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.barcode"
-              float-label="Barcode"
-              clearable
-            />
-          </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <q-select v-model="vendorable.vendorable_type" :options="vendorableType" float-label="Vendorable Type" />
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <q-search v-model="terms" :placeholder="placeholderVendorableType" float-label="Vendor Name">
+                        <q-autocomplete :static-data="{field: 'label', list: userEntities }" @selected="selected" />
+                    </q-search>
+                </div>
 
-          <div class="col-xs-12 col-sm-4">
-            <input-price label="Price" :value="item.price" v-model="item.price"></input-price>
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.qty"
-              float-label="In stock"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-select
-              v-model="item.package_id"
-              :options="packages"
-              float-label="Package"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.minimum"
-              float-label="Minimum Stock"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.maximum"
-              float-label="Maximum Stock"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.reorder_level"
-              float-label="Reorder Level"
-              suffix="%"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-12">
-            <q-input
-              v-model="item.desc"
-              type="textarea"
-              float-label="Description"
-              :max-height="100"
-              rows="2"
-            />
-          </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-input v-model="vendorable.rank " float-label="Prospect level" clearable />
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-input v-model="vendorable.dis_percentage " float-label="Distribution Percentage" suffix="%" clearable />
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-input v-model="vendorable.volume" float-label="Volume" clearable />
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <input-price label="Price/Package" :value="vendorablPrice" v-model="vendorablePrice"></input-price>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-datetime v-model="vendorable.start_date" type="date" float-label="Start Date" />
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-datetime v-model="vendorable.end_date" type="date" float-label="End Date" />
+                </div>
+                <div class="col-xs-12 col-sm-12">
+                    <q-input v-model="vendorable.remarks" type="textarea" float-label="Remarks" :max-height="100" rows="2" />
+                </div>
+            </div>
+            <br />
+            <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
+            <q-btn color="primary" @click="store()" label="Submit" class="q-ml-sm" />
+
         </div>
-        <br />
-        <q-btn
-          color="red"
-          v-close-overlay
-          label="Close"
-          @click="hideModal()"
-        />
-        <q-btn
-          color="primary"
-          @click="update()"
-          label="Submit"
-          class="q-ml-sm"
-        />
-
-      </div>
-    </q-modal> -->
+    </q-modal>
 </div>
 </template>
 
@@ -187,6 +128,25 @@ export default {
     data() {
 
         return {
+            vendorableType: [{
+                    value: 'App\\Model\\Logistic',
+                    label: 'Logistic'
+                },
+                {
+                    value: 'App\\Model\\Branch',
+                    label: 'Branch'
+                },
+                {
+                    value: 'App\\Model\\Commissary',
+                    label: 'Commissary'
+                },
+                {
+                    value: 'App\\Model\\OtherVendor',
+                    label: 'Other Vendor'
+                },
+            ],
+            placeholderVendorableType: '',
+            terms: '',
             createdBy: '',
             approvedBy: '',
             vendorType: '',
@@ -215,7 +175,7 @@ export default {
                 },
                 {
                     name: 'rank',
-                    label: 'Rank',
+                    label: 'Prospect Level',
                     field: 'rank',
                     align: 'left'
                 },
@@ -235,7 +195,7 @@ export default {
     },
     computed: {
         ...mapState('items', ['item']),
-         ...mapState('vendorables', ['vendorable', 'vendorableModal']),
+        ...mapState('vendorables', ['vendorable', 'vendorableModal']),
         packages() {
             return this.$store.getters['items/packages'].map(e => {
                 return {
@@ -245,19 +205,31 @@ export default {
             })
         },
         vendorablePrice: {
-            get(){
-                let price = this.vendorable.pivot.price;
+            get() {
+                let price = this.vendorable.price;
                 return parseFloat(price);
             },
-            set(val){
-                 this.$store.dispatch('vendorables/vendorablePivotPrice', val)
+            set(val) {
+                this.$store.dispatch('vendorables/vendorablePivotPrice', val)
             }
 
+        },
+        userEntities() {
+            return this.$store.getters['items/userEntities'].map(e => {
+                return {
+                    label: e.name,
+                    value: e.id
+                }
+            })
         }
     },
     methods: {
+        selected(item) {
+            this.$q.notify(`Selected suggestion "${item.label}"`)
+            this.$store.dispatch('vendorables/vendorablePivotId', item.value)
+        },
         reduceString(string) {
-            return string.substring(10, 20);
+            return string.substring(10);
         },
         vendorables() {
             this.$axios.get(`vendorables?id=${this.$route.params}`)
@@ -268,22 +240,22 @@ export default {
         capitalize(string) {
             return (string.charAt(0).toUpperCase() + string.slice(1).toLowerCase())
         },
-        myFunction(action, itemId, vendorableId, vendorableType) {
+        myFunction(action, pivotId, vendorableId, vendorableType) {
             if (action === 'edit') {
-                this.edit(itemId, vendorableId, vendorableType)
+                this.edit(pivotId, vendorableId, vendorableType)
             } else if (action === 'delete') {
-                this.deleteRow(itemId, vendorableId, vendorableType)
+                this.deleteRow(pivotId, vendorableId, vendorableType)
             }
         },
         store() {
             this.$axios
-                .post(`/other_vendors`, this.otherVendor)
+                .post(`/vendorables`, this.vendorable)
                 .then(res => {
                     this.hideModal()
                     this.$q.notify({
                         color: 'positive',
                         icon: 'check',
-                        message: `${this.otherVendor.name}created successfully`
+                        message: `${this.item.name} created new vendor.`
                     })
                     this.request({
                         pagination: this.serverPagination,
@@ -291,8 +263,8 @@ export default {
                     })
                 })
         },
-        deleteRow(itemId, vendorableId, vendorableType) {
-            this.$axios.get(`vendorables/${itemId}?id=${itemId}&vendorable_id=${vendorableId}&vendorable_type=${vendorableType}`)
+        deleteRow(pivotId, vendorableId, vendorableType) {
+            this.$axios.get(`vendorables/${pivotId}?id=${pivotId}&vendorable_id=${vendorableId}&vendorable_type=${vendorableType}`)
                 .then((res) => {
                     this.$store.dispatch('vendorables/vendorable', res.data.vendorable)
                     this.$q.notify({
@@ -304,12 +276,12 @@ export default {
                             {
                                 label: 'OK',
                                 handler: () => {
-                                    this.$axios.delete(`/items/${this.item.id}?id=${this.item.id}`)
+                                    this.$axios.delete(`/vendorables/${pivotId}?id=${pivotId}&vendorable_id=${vendorableId}&vendorable_type=${vendorableType}`)
                                         .then((res) => {
                                             this.$q.notify({
                                                 color: 'positive',
                                                 icon: 'check',
-                                                message: `${this.item.name} deleted successfully`
+                                                message: `Vendor deleted successfully`
                                             })
                                             this.request({
                                                 pagination: this.serverPagination,
@@ -377,9 +349,9 @@ export default {
                     this.loading = false
                 })
         },
-        edit(itemId, vendorableId, vendorableType) {
+        edit(pivotId, vendorableId, vendorableType) {
 
-            this.$axios.get(`vendorables/${itemId}/edit?id=${itemId}&vendorable_id=${vendorableId}&vendorable_type=${vendorableType}`)
+            this.$axios.get(`vendorables/${pivotId}/edit?id=${pivotId}&vendorable_id=${vendorableId}&vendorable_type=${vendorableType}`)
                 .then(res => {
                     this.showModal()
                     this.vendorName = res.data.vendorName
@@ -404,23 +376,35 @@ export default {
         })
     },
     watch: {
-        'vendorable.pivot.rank'(val) {
+        'vendorable.rank'(val) {
             this.$store.dispatch('vendorables/vendorablePivotRank', val)
         },
-        'vendorable.pivot.dis_percentage'(val) {
+        'vendorable.dis_percentage'(val) {
             this.$store.dispatch('vendorables/vendorablePivotDisPercentage', val)
         },
-        'vendorable.pivot.start_date'(val){
+        'vendorable.start_date'(val) {
             this.$store.dispatch('vendorables/vendorablePivotStartDate', val)
         },
-        'vendorable.pivot.end_date'(val){
+        'vendorable.end_date'(val) {
             this.$store.dispatch('vendorables/vendorablePivotEndDate', val)
         },
-       'vendorable.pivot.volume'(val){
-           this.$store.dispatch('vendorables/vendorablePivotVolume', val)
+        'vendorable.volume'(val) {
+            this.$store.dispatch('vendorables/vendorablePivotVolume', val)
         },
-        'vendorable.pivot.remarks'(val){
+        'vendorable.remarks'(val) {
             this.$store.dispatch('vendorables/vendorablePivotRemarks', val)
+        },
+        'vendorable.vendorable_type'(val) {
+            if (val === undefined || val === '') {
+                return
+            }
+            this.terms = ''
+            this.placeholderVendorableType = 'Search ' +  val.substring(10) + '...'
+            this.$axios.get(`modelable-user-models?modelType=${val}`)
+                .then(res => {
+                    this.$store.dispatch('vendorables/vendorablePivotType', val)
+                    this.$store.dispatch('vendorables/userEntities', res.data.userModels)
+                })
         }
     }
 

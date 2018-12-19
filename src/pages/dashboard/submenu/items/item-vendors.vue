@@ -11,13 +11,29 @@
 
 <script>
 import itemVendors from 'components/data-table/item-vendors.vue'
+import { mapState } from 'vuex'
 export default {
     components: {
         itemVendors
     },
+    computed: {
+        ...mapState('items', ['item'])
+    },
     methods: {
-        showVendorableModal(){
+        showVendorableModal() {
             this.$store.dispatch('vendorables/vendorableModal', true);
+            this.$store.dispatch('vendorables/vendorable', {
+                    item_id:  this.item.id,
+                    dis_percentage: '',
+                    end_date: '',
+                    price: 0,
+                    rank: '',
+                    remarks: '',
+                    start_date: '',
+                    vendorable_id: '',
+                    vendorable_type: '',
+                    volume: ''
+            })
         }
     }
 }

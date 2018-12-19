@@ -1,10 +1,9 @@
 export default {
   vendorables: [],
   vendorable: {
-    pivot: {
-      rank: '',
-      dis_percentage: ''
-    }
+    rank: '',
+    dis_percentage: ''
   },
-  vendorableModal: false
+  vendorableModal: false,
+  userEntities: []
 }

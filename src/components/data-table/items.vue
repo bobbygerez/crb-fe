@@ -45,13 +45,6 @@
 
         </template>
 
-        <div slot="pagination" slot-scope="props" class="row flex-center q-py-sm">
-            <q-btn round dense size="sm" icon="undo" color="secondary" class="q-mr-sm" :disable="props.isFirstPage" @click="props.prevPage" />
-            <div class="q-mr-sm" style="font-size: small">
-                Page {{ props.pagination.page }} / {{ props.pagination.pagesNumber }}
-            </div>
-            <q-btn round dense size="sm" icon="redo" color="secondary" :disable="paginationLast(props.pagination.page)" @click="props.nextPage" />
-        </div>
 
     </q-table>
     <generic-list-data-table :data="holdings" :columns="columns" color="primary" :actions="['edit', 'delete']" @edit="edit" @delete="deleteRow" theme="secondary" />
@@ -106,6 +99,11 @@
                 <div class="col-xs-12 col-sm-6">
                     <q-select v-model="item.itemable_type" :options="itemableType" float-label="Itemable Type" />
                 </div>
+                <div class="col-xs-12 col-sm-6">
+                    <q-search v-model="terms" :placeholder="placeholderItemableType" float-label="Item Owner">
+                        <q-autocomplete :static-data="{field: 'label', list: userEntities }" @selected="selected" />
+                    </q-search>
+                </div>
                 <div class="col-xs-12 col-sm-4">
                     <q-input v-model="item.name" float-label="Name" clearable />
                 </div>
@@ -149,6 +147,7 @@
 
 <script>
 import inputPrice from 'components/inputs/price'
+import { uid, filter } from 'quasar'
 import _ from 'lodash'
 import {
     mapState
@@ -156,7 +155,9 @@ import {
 export default {
     data() {
         return {
+            terms: '',
             itemableId: '',
+            placeholderItemableType:'',
             itemableType: [{
                     value: 'App\\Model\\Logistic',
                     label: 'Logistic'
@@ -231,7 +232,6 @@ export default {
         inputPrice
     },
     computed: {
-        ...mapState('otherVendors', ['otherVendor', 'newOtherVendorModal']),
         ...mapState('items', ['item', 'editItemModal', 'newItemModal']),
 
         packages() {
@@ -241,9 +241,21 @@ export default {
                     value: e.id
                 }
             })
+        },
+        userEntities() {
+            return this.$store.getters['items/userEntities'].map(e => {
+                return {
+                    label: e.name,
+                    value: e.id
+                }
+            })
         }
     },
     methods: {
+        selected(item) {
+            this.$q.notify(`Selected suggestion "${item.label}"`)
+            this.$store.dispatch('items/itemItemableId', item.value)
+        },
         capitalize(string) {
             return (string.charAt(0).toUpperCase() + string.slice(1).toLowerCase())
         },
@@ -267,16 +279,16 @@ export default {
             this.$axios
                 .post(`/items`, this.item)
                 .then(res => {
-                    // this.hideModal()
-                    // this.$q.notify({
-                    //     color: 'positive',
-                    //     icon: 'check',
-                    //     message: `${this.otherVendor.name}created successfully`
-                    // })
-                    // this.request({
-                    //     pagination: this.serverPagination,
-                    //     filter: this.filter
-                    // })
+                    this.hideModal()
+                    this.$q.notify({
+                        color: 'positive',
+                        icon: 'check',
+                        message: `${this.item.name} created successfully`
+                    })
+                    this.request({
+                        pagination: this.serverPagination,
+                        filter: this.filter
+                    })
                 })
         },
         deleteRow(itemId) {
@@ -326,7 +338,7 @@ export default {
                     this.$q.notify({
                         color: 'positive',
                         icon: 'check',
-                        message: `${this.otherVendor.name} update successfully`
+                        message: `${this.item.name} update successfully`
                     })
                     this.request({
                         pagination: this.serverPagination,
@@ -336,12 +348,6 @@ export default {
                 .catch()
         },
 
-        paginationLast(currentPage) {
-            if (this.lastPage > currentPage) {
-                return false
-            }
-            return true
-        },
         request(props) {
             this.loading = true
             this.$axios
@@ -373,6 +379,7 @@ export default {
         },
         hideModal() {
             this.$store.dispatch('items/editItemModal', false)
+            this.$store.dispatch('items/newItemModal', false)
         },
         showModal() {
             this.$store.dispatch('items/editItemModal', true)
@@ -419,23 +426,15 @@ export default {
             if (val === undefined || val === '') {
                 return
             }
+            this.terms = ''
+            this.placeholderItemableType = 'Search ' +  val.substring(10) + '...'
             this.$axios.get(`modelable-user-models?modelType=${val}`)
                 .then(res => {
+                    this.$store.dispatch('items/itemItemableType', val)
                     this.$store.dispatch('items/userEntities', res.data.userModels)
                 })
-        },
-        'item.itemable_id'(val) {
-            if (val === undefined || val === '') {
-                return
-            }
-            let itemableType = this.item.itemable_type
-            this.$axios.get(`modelable-address-business-info?id=${val}&modelType=${itemableType}`)
-                .then(res => {
-                    this.$store.dispatch('itemables/address', res.data.address)
-                    this.$store.dispatch('itemables/businessInfo', res.data.businessInfo)
-                })
-            this.$store.dispatch('itemables/itemItemableId', val)
         }
+        
     }
 
 }

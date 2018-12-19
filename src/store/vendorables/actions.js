@@ -52,8 +52,26 @@ export const vendorablePivotRemarks = ({
   commit('vendorablePivotRemarks', payload)
 }
 
+export const vendorablePivotType = ({
+  commit
+}, payload) => {
+  commit('vendorablePivotType', payload)
+}
+
+export const vendorablePivotId = ({
+  commit
+}, payload) => {
+  commit('vendorablePivotId', payload)
+}
+
 export const vendorableModal = ({
   commit
 }, payload) => {
   commit('vendorableModal', payload)
+}
+
+export const userEntities = ({
+  commit
+}, payload) => {
+  commit('userEntities', payload)
 }

@@ -42,6 +42,14 @@ export const itemReorderLevel = (state, payload) => {
   state.item.reorder_level = payload
 }
 
+export const itemItemableType = (state, payload) => {
+  state.item.itemable_type = payload
+}
+
+export const itemItemableId = (state, payload) => {
+  state.item.itemable_id = payload
+}
+
 export const itemDesc = (state, payload) => {
   state.item.desc = payload
 }

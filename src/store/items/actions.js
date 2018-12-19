@@ -88,6 +88,18 @@ export const userEntities = ({
   commit('userEntities', payload)
 }
 
+export const itemItemableType = ({
+  commit
+}, payload) => {
+  commit('itemItemableType', payload)
+}
+
+export const itemItemableId = ({
+  commit
+}, payload) => {
+  commit('itemItemableId', payload)
+}
+
 export const packages = ({
   commit
 }, payload) => {
