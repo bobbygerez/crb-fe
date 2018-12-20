@@ -125,10 +125,10 @@ export default {
           // this.editHolding = res.data.holding
           // this.editHoldingView = true
           this.$emit('edit-data', res.data)
-          this.request({
-            pagination: this.serverPagination,
-            filter: this.filter
-          })
+          // this.request({
+          //   pagination: this.serverPagination,
+          //   filter: this.filter
+          // })
         })
         .catch(err => {
           this.$q.notify({

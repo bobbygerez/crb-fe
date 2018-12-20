@@ -27,6 +27,9 @@ export default function ({
 
   Router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.needAuth)) {
+      console.log('route from =>', from)
+      console.log('route to =>', to)
+      console.log('route next =>', next)
       if (!store.getters['pattys/getToken']) {
         next({
           path: '/',

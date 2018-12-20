@@ -3,7 +3,7 @@
     <serverside-dynamic-table
       :data="serverData"
       :columns="columns"
-      :actions="['edit', 'delete']"
+      :actions="['edit', 'delete', 'read']"
       :searchField="filter"
       :pagination="serverPagination"
       :innerLoading="loading"
@@ -13,34 +13,6 @@
       @serverside-request="request"
       @search-change="filter = $event"
     />
-    <!-- <serverside-list-table
-      :data="serverData"
-      :columns="columns"
-      :actions="['edit', 'delete']"
-      :searchField="filter"
-      :pagination="serverPagination"
-      :innerLoading="loading"
-      theme="tertiary"
-      @edit="edit"
-      @delete="deleteRow"
-      @serverside-request="request"
-      @search-change="filter = $event"
-      v-show="tableViewSettingsGlobal.mode === 'list'"
-    />
-    <serverside-grid-table
-      :data="serverData"
-      :columns="columns"
-      :actions="['edit', 'delete']"
-      :searchField="filter"
-      :pagination="serverPagination"
-      :innerLoading="loading"
-      theme="tertiary"
-      @edit="edit"
-      @delete="deleteRow"
-      @serverside-request="request"
-      @search-change="filter = $event"
-      v-show="tableViewSettingsGlobal.mode === 'grid'"
-    /> -->
   </div>
 </template>
 

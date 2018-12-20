@@ -181,14 +181,14 @@ export default {
         console.log('Logout cancelled', e.message)
       })
     }
-  },
-  watch: {
-    $route (to, from) {
-      this.pathArray = this.$route.path.split('/')
-
-      console.log(this.pathArray)
-    }
   }
+  // watch: {
+  //   $route (to, from) {
+  //     this.pathArray = this.$route.path.split('/')
+
+  //     console.log(this.pathArray)
+  //   }
+  // }
 }
 </script>
 
