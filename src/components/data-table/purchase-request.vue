@@ -1,12 +1,15 @@
 <template>
 <div>
-    <q-table ref="table" color="primary" title="All Items" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
+    <q-table ref="table" color="primary" title="All Purchase Requests" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
         <template slot="top-right" slot-scope="props">
             <q-search hide-underline v-model="filter" />
         </template>
 
         <template slot="body" slot-scope="props">
             <q-tr :props="props">
+                <q-td key="prepared_by" :props="props">
+                    {{ props.row.prepared_by.firstname }} {{ props.row.prepared_by.middlename }} {{ props.row.prepared_by.lastname }}
+                </q-td>
                 <q-td key="name">
                     {{props.row.name}}
                     <q-popover touch-position v-if="actions">
@@ -19,7 +22,7 @@
                         </q-list>
                     </q-popover>
                 </q-td>
-                <q-td key="price" :props="props">
+                <!-- <q-td key="price" :props="props">
                     {{ props.row.price|currency('₱ ') }}
                 </q-td>
                 <q-td key="qty" :props="props">
@@ -36,19 +39,14 @@
                 </q-td>
                 <q-td key="reorder_level" :props="props">
                     {{ props.row.reorder_level }}
-                </q-td>
-                <q-td key="actions" :props="props">
-                    <q-btn round outline color="positive" icon="edit" class="q-ma-sm" @click="edit(props.row.id)" />
-                    <q-btn round outline color="negative" icon="delete" class="q-ma-sm" @click="deleteRow(props.row.id)" />
-                </q-td>
+                </q-td> -->
+               
             </q-tr>
 
         </template>
 
-
     </q-table>
-    <generic-list-data-table :data="holdings" :columns="columns" color="primary" :actions="['edit', 'delete']" @edit="edit" @delete="deleteRow" theme="secondary" />
-    <q-modal v-model="editItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    <!-- <q-modal v-model="editItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
         <div style="padding: 30px">
             <div class="q-display-1 q-mb-md">Edit {{ item.name }}</div>
 
@@ -141,13 +139,16 @@
             <q-btn color="primary" @click="store()" label="Submit" class="q-ml-sm" />
 
         </div>
-    </q-modal>
+    </q-modal> -->
 </div>
 </template>
 
 <script>
 import inputPrice from 'components/inputs/price'
-import { uid, filter } from 'quasar'
+import {
+    uid,
+    filter
+} from 'quasar'
 import _ from 'lodash'
 import {
     mapState
@@ -157,7 +158,7 @@ export default {
         return {
             terms: '',
             itemableId: '',
-            placeholderItemableType:'',
+            placeholderItemableType: '',
             itemableType: [{
                     value: 'App\\Model\\Logistic',
                     label: 'Logistic'
@@ -186,17 +187,19 @@ export default {
                 rowsPerPage: 10 // specifying this determines pagination is server-side
             },
             columns: [{
+                    name: 'prepared_by',
+                    label: 'Prepared By',
+                    field: 'prepared_by',
+                    align: 'left'
+                },
+                
+                {
                     name: 'name',
                     label: 'Name',
                     field: 'name',
                     align: 'left'
                 },
-                {
-                    name: 'price',
-                    label: 'Price',
-                    field: 'price',
-                    align: 'left'
-                },
+                
                 {
                     name: 'qty',
                     label: 'In stock',
@@ -356,15 +359,15 @@ export default {
             this.loading = true
             this.$axios
                 .get(
-                    `/items?filter=${this.filter}&page=${props.pagination.page}&perPage=${
+                    `/purchases?filter=${this.filter}&page=${props.pagination.page}&perPage=${
             props.pagination.rowsPerPage
           }`
                 )
                 .then(res => {
                     this.serverPagination = props.pagination
-                    this.serverData = _.values(res.data.items.data)
-                    this.serverPagination.rowsNumber = res.data.items.total
-                    this.lastPage = res.data.items.last_page
+                    this.serverData = _.values(res.data.purchases.data)
+                    this.serverPagination.rowsNumber = res.data.purchases.total
+                    this.lastPage = res.data.purchases.last_page
                     this.loading = false
                 })
                 .catch(error => {
@@ -431,14 +434,14 @@ export default {
                 return
             }
             this.terms = ''
-            this.placeholderItemableType = 'Search ' +  val.substring(10) + '...'
+            this.placeholderItemableType = 'Search ' + val.substring(10) + '...'
             this.$axios.get(`modelable-user-models?modelType=${val}`)
                 .then(res => {
                     this.$store.dispatch('items/itemItemableType', val)
                     this.$store.dispatch('items/userEntities', res.data.userModels)
                 })
         }
-        
+
     }
 
 }

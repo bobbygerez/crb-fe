@@ -18,5 +18,6 @@ export default [
   'logistics',
   'commissaries',
   'other-vendors',
-  'items'
+  'items',
+  'purchase-request'
 ]
