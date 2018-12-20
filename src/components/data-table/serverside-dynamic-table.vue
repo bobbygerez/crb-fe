@@ -88,7 +88,7 @@
           @click.native="selected = [{ __index: props.row.__index }]; props.selected = true"
         >
           <q-card-title class="relative-position">
-            {{ props.cols[0].value }}
+            <div class="ellipsis">{{ props.cols[0].value }}</div>
           </q-card-title>
           <q-card-separator />
           <q-card-main class="q-pa-none">
@@ -96,20 +96,23 @@
               no-border
               multiline
             >
-              <q-item
-                v-for="col in props.cols"
-                :key="col.name"
-              >
-                <q-item-side>
-                  <q-item-tile class="text-truncate">{{ col.label }}</q-item-tile>
-                </q-item-side>
-                <q-item-main>
-                  <q-item-tile
-                    label
-                    style="text-align:right;"
-                  >{{ col.value }}</q-item-tile>
-                </q-item-main>
-              </q-item>
+              <template v-for="(col,i) in props.cols">
+                <q-item
+                  v-if="i !== 0"
+                  :key="col.name"
+                >
+                  <q-item-side>
+                    <q-item-tile class="text-truncate">{{ col.label }}</q-item-tile>
+                  </q-item-side>
+                  <q-item-main>
+                    <q-item-tile
+                      label
+                      style="text-align:right;"
+                      class="ellipsis"
+                    >{{ col.value }}</q-item-tile>
+                  </q-item-main>
+                </q-item>
+              </template>
             </q-list>
           </q-card-main>
           <q-popover

@@ -265,7 +265,7 @@ export default {
         .then(res => {
           // this.$router.push(this.$route.path.replace('/add', ''))
           // this.$router.push(this.$route.path.replace('/add', ''))
-          this.$router.push(`..`)
+          this.$router.replace(this.indexRoute)
           this.$q.notify({
             type: 'positive',
             message: `${this.newHolding.name} Successfully added.`

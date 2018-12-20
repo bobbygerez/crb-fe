@@ -52,7 +52,7 @@ export const createHolding = (data) => {
 }
 
 // TODO: refine validation rules
-export const newHoldingFormValidationRule = (required, email, anon) => {
+export const newHoldingFormValidationRule = (required, email, numeric, minLength, maxLength, anon) => {
   return {
     address: {
       country_id: {
@@ -92,6 +92,9 @@ export const newHoldingFormValidationRule = (required, email, anon) => {
       },
       telephone: {
         required,
+        numeric,
+        minLength: minLength(7),
+        maxLength: maxLength(12),
         _$Telephone: anon
       },
       tin: {
@@ -117,7 +120,7 @@ export const newHoldingFormValidationRule = (required, email, anon) => {
 }
 
 // TODO: refine validation rule
-export const editHoldingFormValidationRule = (required, email, anon) => {
+export const editHoldingFormValidationRule = (required, email, numeric, minLength, maxLength, anon) => {
   return {
     address: {
       country_id: {
@@ -157,6 +160,9 @@ export const editHoldingFormValidationRule = (required, email, anon) => {
       },
       telephone: {
         required,
+        numeric,
+        minLength: minLength(7),
+        maxLength: maxLength(12),
         _$Telephone: anon
       },
       tin: {

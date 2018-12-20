@@ -69,7 +69,7 @@ export default {
     doEdit (data) {
       console.log('doEdit', data)
       this.editHolding = data.holding
-      this.$router.push(`${this.currentRoute}/${data.holding.id}/edit`)
+      this.$router.push(`${this.$route.path}/${data.holding.id}/edit`)
     }
   }
 }
