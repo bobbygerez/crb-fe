@@ -372,10 +372,13 @@ export default {
     'editHolding.address.region_id' (val) {
       console.log('getProvinces', this['editHolding'])
       this.getProvinces(val)
+      this.getCities(val)
+      this.getBrgys(val)
     },
     'editHolding.address.province_id' (val) {
       console.log('getCities', this['editHolding'])
       this.getCities(val)
+      this.getBrgys(val)
     },
     'editHolding.address.city_id' (val) {
       console.log('getBrgys', this['editHolding'])

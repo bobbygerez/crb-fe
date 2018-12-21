@@ -262,9 +262,7 @@
               />
             </div>
           </div>
-
         </div>
-
       </div>
     </form>
     <barangay-table
@@ -380,10 +378,13 @@ export default {
     'newHolding.address.region_id' (val) {
       console.log('getProvinces', this['newHolding'])
       this.getProvinces(val)
+      this.getCities(val)
+      this.getBrgys(val)
     },
     'newHolding.address.province_id' (val) {
       console.log('getCities', this['newHolding'])
       this.getCities(val)
+      this.getBrgys(val)
     },
     'newHolding.address.city_id' (val) {
       console.log('getBrgys', this['newHolding'])
