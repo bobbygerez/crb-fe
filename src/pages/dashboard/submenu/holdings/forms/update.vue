@@ -1,177 +1,200 @@
 <template>
-  <q-page class="q-mx-lg row justify-center">
+  <q-page class="q-mx-lg">
     <form>
-      <div
-        class="row gutter-md q-pt-lg justify-center"
-        style="width:600px; max-width:90vw"
-      >
+      <div class="row gutter-md q-pt-lg">
         <!-- <div class="q-display-1 q-mb-md">Edit {{ holding.name }}</div> -->
-        <div class="column col-12 col-lg-12">
-          <!-- <q-card class="q-pa-lg"> -->
-          <!-- <q-card-title> -->
-          <p class="caption">Holding Info</p>
-          <!-- </q-card-title> -->
-          <q-card-separator />
-          <div class="row">
-            <div class="col-12">
-              <f-v-field-validator :val="$v.editHolding.name">
+        <div class="column col-12 col-lg-6">
+          <q-card class="q-pa-lg">
+            <q-card-title>
+              <!-- <p class="caption"> -->
+              Holding Info
+              <!-- </p> -->
+            </q-card-title>
+            <q-card-separator />
+            <div class="row">
+              <div class="col-12">
+                <f-v-field-validator :val="$v.editHolding.name">
+                  <q-input
+                    @blur="$v.editHolding.name.$touch"
+                    :error="$v.editHolding.name.$error"
+                    v-model="editHolding.name"
+                    float-label="Holding name *"
+                    clearable
+                  />
+                </f-v-field-validator>
+              </div>
+              <div class="col-12">
+                <f-v-field-validator :val="$v.editHolding.business_info.business_type_id">
+                  <q-select
+                    @blur="$v.editHolding.business_info.business_type_id.$touch"
+                    :error="$v.editHolding.business_info.business_type_id.$error"
+                    v-model="editHolding.business_info.business_type_id"
+                    :options="bizTypeOptions"
+                    float-label="Business Type *"
+                    clearable
+                  />
+                </f-v-field-validator>
+              </div>
+              <div class="col-12">
+                <f-v-field-validator :val="$v.editHolding.business_info.vat_type_id">
+                  <q-select
+                    @blur="$v.editHolding.business_info.vat_type_id.$touch"
+                    :error="$v.editHolding.business_info.vat_type_id.$error"
+                    v-model="editHolding.business_info.vat_type_id"
+                    :options="vatTypeOptions"
+                    float-label="Vat Type *"
+                    clearable
+                  />
+                </f-v-field-validator>
+              </div>
+              <div class="col-12">
+                <f-v-field-validator :val="$v.editHolding.business_info.telephone">
+                  <q-input
+                    @blur="$v.editHolding.business_info.telephone.$touch"
+                    :error="$v.editHolding.business_info.telephone.$error"
+                    v-model="editHolding.business_info.telephone"
+                    float-label="Telephone *"
+                    type="number"
+                    clearable
+                  />
+                </f-v-field-validator>
+              </div>
+              <div class="col-12">
+                <f-v-field-validator :val="$v.editHolding.business_info.email">
+                  <q-input
+                    @blur="$v.editHolding.business_info.email.$touch"
+                    :error="$v.editHolding.business_info.email.$error"
+                    v-model="editHolding.business_info.email"
+                    float-label="Email"
+                    type="email"
+                    clearable
+                  />
+                </f-v-field-validator>
+              </div>
+              <div class="col-12">
                 <q-input
-                  @blur="$v.editHolding.name.$touch"
-                  :error="$v.editHolding.name.$error"
-                  v-model="editHolding.name"
-                  float-label="Holding name *"
+                  v-model="editHolding.business_info.tin"
+                  float-label="TIN"
                   clearable
                 />
-              </f-v-field-validator>
-            </div>
-            <div class="col-12">
-              <f-v-field-validator :val="$v.editHolding.business_info.business_type_id">
-                <q-select
-                  @blur="$v.editHolding.business_info.business_type_id.$touch"
-                  :error="$v.editHolding.business_info.business_type_id.$error"
-                  v-model="editHolding.business_info.business_type_id"
-                  :options="bizTypeOptions"
-                  float-label="Business Type *"
-                  clearable
-                />
-              </f-v-field-validator>
-            </div>
-            <div class="col-12">
-              <f-v-field-validator :val="$v.editHolding.business_info.vat_type_id">
-                <q-select
-                  @blur="$v.editHolding.business_info.vat_type_id.$touch"
-                  :error="$v.editHolding.business_info.vat_type_id.$error"
-                  v-model="editHolding.business_info.vat_type_id"
-                  :options="vatTypeOptions"
-                  float-label="Vat Type *"
-                  clearable
-                />
-              </f-v-field-validator>
-            </div>
-            <div class="col-12">
-              <f-v-field-validator :val="$v.editHolding.business_info.telephone">
+              </div>
+              <div class="col-12">
                 <q-input
-                  @blur="$v.editHolding.business_info.telephone.$touch"
-                  :error="$v.editHolding.business_info.telephone.$error"
-                  v-model="editHolding.business_info.telephone"
-                  float-label="Telephone *"
-                  type="number"
+                  v-model="editHolding.business_info.website"
+                  float-label="Website"
                   clearable
                 />
-              </f-v-field-validator>
+              </div>
+              <div class="col-12">
+                <f-v-field-validator :val="$v.editHolding.desc">
+                  <q-input
+                    @blur="$v.editHolding.desc.$touch"
+                    :error="$v.editHolding.desc.$error"
+                    v-model="editHolding.desc"
+                    float-label="Description *"
+                    :type="$q.screen.gt.md ? 'textarea' : 'text'"
+                    :max-height="$q.screen.gt.md ? 100 : 0"
+                    :rows="$q.screen.gt.md ? 2 : 1"
+                  />
+                </f-v-field-validator>
+              </div>
             </div>
-            <div class="col-12">
-              <f-v-field-validator :val="$v.editHolding.business_info.email">
-                <q-input
-                  @blur="$v.editHolding.business_info.email.$touch"
-                  :error="$v.editHolding.business_info.email.$error"
-                  v-model="editHolding.business_info.email"
-                  float-label="Email"
-                  type="email"
-                  clearable
-                />
-              </f-v-field-validator>
-            </div>
-            <div class="col-12">
-              <q-input
-                v-model="editHolding.business_info.tin"
-                float-label="TIN"
-                clearable
-              />
-            </div>
-            <div class="col-12">
-              <q-input
-                v-model="editHolding.business_info.website"
-                float-label="Website"
-                clearable
-              />
-            </div>
-            <div class="col-12">
-              <q-input
-                v-model="editHolding.desc"
-                float-label="Description"
-                :type="$q.screen.gt.md ? 'textarea' : 'text'"
-                :max-height="$q.screen.gt.md ? 100 : 0"
-                :rows="$q.screen.gt.md ? 2 : 1"
-              />
-            </div>
-          </div>
-          <!-- </q-card> -->
+          </q-card>
         </div>
-        <div class="column col-12 col-lg-12">
-          <!-- <q-card class="q-pa-lg"> -->
-          <!-- <q-card-title> -->
-          <p class="caption">Address Info</p>
-          <!-- </q-card-title> -->
-          <q-card-separator />
-          <div class="relative-position row gutter-sm">
-            <!-- <div class="row gutter-sm"> -->
-            <div class="col-12">
-              <q-select
-                v-model="editHolding.address.country_id"
-                :options="countryOptions"
-                float-label="Country"
-                clearable
-                filter
-                filter-placeholder="Select Country"
-                autofocus-filter
-              />
-            </div>
-            <div class="col-12">
-              <q-select
-                v-model="editHolding.address.region_id"
-                :options="regionOptions"
-                float-label="Region"
-                clearable
-                filter
-                filter-placeholder="Select Region"
-                autofocus-filter
-              />
-            </div>
-            <!-- </div> -->
-            <!-- <div class="row gutter-sm"> -->
-            <div class="col-12">
-              <q-select
-                v-model="editHolding.address.province_id"
-                :options="provinceOptions"
-                float-label="Province"
-                clearable
-                filter
-                filter-placeholder="Select Province"
-                autofocus-filter
-              />
-            </div>
-            <div class="col-12">
-              <q-select
-                v-model="editHolding.address.city_id"
-                :options="cityOptions"
-                float-label="City"
-                clearable
-                filter
-                filter-placeholder="Select City"
-                autofocus-filter
-                :after="[
-                  {
-                    icon: 'mdi-magnify',
-                    handler () {
-                      addressType = 'present'
-                      $refs.cityTable.show()
-                      // do something
-                    }
-                  }
-                ]"
-              />
-            </div>
-            <div class="col-12">
-              <q-select
-                v-model="editHolding.address.brgy_id"
-                :options="brgyOptions"
-                float-label="Barangay"
-                clearable
-                filter
-                filter-placeholder="Select Barangay"
-                autofocus-filter
-                :after="[
+        <div class="column col-12 col-lg-6">
+          <q-card class="q-pa-lg">
+            <q-card-title>
+              <!-- <p class="caption"> -->
+              Address Info
+              <!-- </p> -->
+            </q-card-title>
+            <q-card-separator />
+            <div class="relative-position row gutter-sm">
+              <!-- <div class="row gutter-sm"> -->
+              <div class="col-12">
+                <f-v-field-validator :val="$v.editHolding.address.country_id">
+                  <q-select
+                    @blur="$v.editHolding.address.country_id.$touch"
+                    :error="$v.editHolding.address.country_id.$error"
+                    v-model="editHolding.address.country_id"
+                    :options="countryOptions"
+                    float-label="Country *"
+                    clearable
+                    filter
+                    filter-placeholder="Select Country"
+                    autofocus-filter
+                  />
+                </f-v-field-validator>
+              </div>
+              <div class="col-12">
+                <f-v-field-validator :val="$v.editHolding.address.region_id">
+                  <q-select
+                    @blur="$v.editHolding.address.region_id.$touch"
+                    :error="$v.editHolding.address.region_id.$error"
+                    v-model="editHolding.address.region_id"
+                    :options="regionOptions"
+                    float-label="Region *"
+                    clearable
+                    filter
+                    filter-placeholder="Select Region"
+                    autofocus-filter
+                  />
+                </f-v-field-validator>
+              </div>
+              <!-- </div> -->
+              <!-- <div class="row gutter-sm"> -->
+              <div class="col-12">
+                <f-v-field-validator :val="$v.editHolding.address.province_id">
+                  <q-select
+                    @blur="$v.editHolding.address.province_id.$touch"
+                    :error="$v.editHolding.address.province_id.$error"
+                    v-model="editHolding.address.province_id"
+                    :options="provinceOptions"
+                    float-label="Province *"
+                    clearable
+                    filter
+                    filter-placeholder="Select Province"
+                    autofocus-filter
+                  />
+                </f-v-field-validator>
+              </div>
+              <div class="col-12">
+                <f-v-field-validator :val="$v.editHolding.address.city_id">
+                  <q-select
+                    @blur="$v.editHolding.address.city_id.$touch"
+                    :error="$v.editHolding.address.city_id.$error"
+                    v-model="editHolding.address.city_id"
+                    :options="cityOptions"
+                    float-label="City *"
+                    clearable
+                    filter
+                    filter-placeholder="Select City"
+                    autofocus-filter
+                    :after="[{
+                        icon: 'mdi-magnify',
+                        handler () {
+                          addressType = 'present'
+                          $refs.cityTable.show()
+                          // do something
+                        }
+                      }
+                    ]"
+                  />
+                </f-v-field-validator>
+              </div>
+              <div class="col-12">
+                <f-v-field-validator :val="$v.editHolding.address.brgy_id">
+                  <q-select
+                    @blur="$v.editHolding.address.brgy_id.$touch"
+                    :error="$v.editHolding.address.brgy_id.$error"
+                    v-model="editHolding.address.brgy_id"
+                    :options="brgyOptions"
+                    float-label="Barangay *"
+                    clearable
+                    filter
+                    filter-placeholder="Select Barangay"
+                    autofocus-filter
+                    :after="[
                   {
                     icon: 'mdi-magnify',
                     handler () {
@@ -181,37 +204,49 @@
                     }
                   }
                 ]"
-              />
+                  />
+                </f-v-field-validator>
+              </div>
+              <!-- </div> -->
+              <q-inner-loading :visible="addressInnerLoading">
+                <component
+                  :is="`q-spinner-${$q.platform.is === 'ios' ? 'ios' : 'mat'}`"
+                  size="30px"
+                  color="secondary"
+                />
+              </q-inner-loading>
+              <div class="col-12">
+                <f-v-field-validator :val="$v.editHolding.address.street_lot_blk">
+                  <q-input
+                    @blur="$v.editHolding.address.street_lot_blk.$touch"
+                    :error="$v.editHolding.address.street_lot_blk.$error"
+                    v-model="editHolding.address.street_lot_blk"
+                    float-label="Block, Lot &amp; Street"
+                    :type="$q.screen.gt.sm ? 'textarea' : 'text'"
+                    :max-height="$q.screen.gt.sm ? 100 : 0"
+                    :rows="$q.screen.gt.sm ? 2 : 1"
+                  />
+                </f-v-field-validator>
+              </div>
             </div>
-            <!-- </div> -->
-            <q-inner-loading :visible="addressInnerLoading">
-              <component
-                :is="`q-spinner-${$q.platform.is === 'ios' ? 'ios' : 'mat'}`"
-                size="30px"
-                color="secondary"
-              />
-            </q-inner-loading>
-            <div class="col-12">
-              <q-input
-                v-model="editHolding.address.street_lot_blk"
-                float-label="Block, Lot &amp; Street"
-                :type="$q.screen.gt.sm ? 'textarea' : 'text'"
-                :max-height="$q.screen.gt.sm ? 100 : 0"
-                :rows="$q.screen.gt.sm ? 2 : 1"
-              />
-            </div>
-          </div>
-          <!-- </q-card> -->
+          </q-card>
         </div>
 
         <div class="row col-12">
           <div class="row col-12 justify-center">
+            <div class="col-12">
+              <f-v-error-summary
+                :valObj="$v"
+                class="q-my-sm"
+              />
+            </div>
             <div class="column">
               <q-btn
                 color="negative"
                 flat
                 v-close-overlay
                 label="Cancel"
+                @click="$router.replace('/dashboard/holdings')"
               />
             </div>
             <div class="column">
@@ -222,12 +257,6 @@
                 class="q-ml-sm"
               />
             </div>
-          </div>
-          <div class="col-12">
-            <f-v-error-summary
-              :valObj="$v"
-              class="q-my-sm"
-            />
           </div>
 
         </div>
@@ -273,7 +302,7 @@ export default {
     }
   },
   computed: {
-    ...mapHoldingFields(['newHolding', 'editHolding', 'editHoldingView'])
+    ...mapHoldingFields(['editHolding', 'editHoldingView'])
   },
   validations () {
     // editHolding: {
@@ -321,16 +350,12 @@ export default {
           website: this.editHolding.business_info.website
         })
         .then(res => {
-          // this.minimizedModal = false
-          this.$router.replace('/dashboard/holdings')
           this.$q.notify({
             color: 'positive',
             icon: 'check',
             message: `${this.editHolding.name} update successfully`
           })
-          // this.setHoldings()
-          this.$emit('updated')
-          this.editHoldingView = false
+          this.$router.replace('/dashboard/holdings')
         })
         .catch()
     }

@@ -328,6 +328,7 @@ export default {
       return v.name
     })
     console.log('mounted', this.data, this.columns)
+    console.log('platform', this.$q.platform.is)
   }
 }
 </script>

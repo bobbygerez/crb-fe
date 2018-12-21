@@ -40,6 +40,7 @@
 
     <q-layout-drawer
       v-model="leftDrawerOpen"
+      :breakpoint="1200"
       :content-class="$q.theme === 'mat' ? 'bg-grey-2' : null"
     >
       <div

@@ -118,7 +118,11 @@ module.exports = function (ctx) {
         'QPageSticky',
         'QModalLayout',
         'QSpinner',
-        'QAjaxBar'
+        'QAjaxBar',
+        'QChip',
+        'QTree',
+        'QDatetime',
+        'QDatetimePicker'
       ],
       directives: [
         'Ripple', 'CloseOverlay', 'BackToTop'
@@ -130,7 +134,8 @@ module.exports = function (ctx) {
         'SessionStorage',
         'Platform',
         'Screen',
-        'LoadingBar'
+        'LoadingBar',
+        'Dialog'
       ],
       // config: {
       //   loadingBar: {

@@ -108,7 +108,8 @@ export const newHoldingFormValidationRule = (required, email, numeric, minLength
       // website = ''
     },
     desc: {
-      required
+      required,
+      _$Holding_description: anon
     },
     //id = null,
     // images = [SomeImage()],
@@ -176,9 +177,13 @@ export const editHoldingFormValidationRule = (required, email, numeric, minLengt
       // website = ''
     },
     desc: {
-      required
+      required,
+      _$Holding_description: anon
     },
-    //id = null,
+    id: {
+      required,
+      _$Holding_id: anon
+    },
     // images = [SomeImage()],
     name: {
       required,
