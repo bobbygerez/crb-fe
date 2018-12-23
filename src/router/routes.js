@@ -23,6 +23,18 @@ const routes = [{
     { path: '', component: () => import('pages/dashboard/submenu/items/item-vendors.vue') },
     { path: '/' }
   ]
+}, {
+  path: '/dashboard/purchase-request/:id/purchase-items',
+  meta: {
+    title: name.endsWith('s') ? name : name.concat('s'),
+    needAuth: true,
+    section: 'index'
+  },
+  component: () => import('layouts/MainLayout.vue'),
+  children: [
+    { path: '', component: () => import('pages/dashboard/submenu/purchase-request/purchase-items.vue') },
+    { path: '/' }
+  ]
 }]
 
 const dashBoardModules = (appModules) => {

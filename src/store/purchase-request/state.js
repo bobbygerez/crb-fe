@@ -1,3 +1,5 @@
 export default {
-  purchaseRequests: []
+  purchaseRequests: [],
+  editPurchaseRequestModal: false,
+  purchaseRequest: {}
 }

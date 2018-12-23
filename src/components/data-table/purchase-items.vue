@@ -1,84 +1,41 @@
 <template>
 <div>
-    <q-table ref="table" color="primary" title="All Purchase Requests" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
-        <template slot="top-right" slot-scope="props">
-            <q-search hide-underline v-model="filter" />
-        </template>
-
+    <q-table ref="table" color="primary" :title="'Purchase Items'" :data="serverData" :columns="columns"  :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
         <template slot="body" slot-scope="props">
             <q-tr :props="props">
-                <q-td key="name">
-                    {{props.row.name}}
-                    <q-popover touch-position v-if="actions">
-                        <q-list link style="min-width: 100px">
-                            <template v-for="(action, idx) in actions">
-                                <q-item :key="idx" @click.native="myFunction(action, props.row.id, props.row.name)" v-close-overlay>
-                                    <q-item-main :label="capitalize(action)" />
-                                </q-item>
-                            </template>
-                        </q-list>
-                    </q-popover>
+                <q-td key="name" :props="props">
+                    {{ props.row.name}}
+                </q-td> 
+                <q-td key="vendorable_type" :props="props">
+                    {{ props.row.pivot.vendorable_type.substring(10) }}
+                </q-td> 
+                <q-td key="item" :props="props">
+                    {{ props.row.items[0].name }}
+                </q-td> 
+                <q-td key="price" :props="props">
+                    {{ props.row.items[0].purchases[0].pivot.price |currency('₱ ') }}
                 </q-td>
-                <q-td key="order_date" :props="props">
-                    {{ props.row.order_date }}
+                <q-td key="qty" :props="props">
+                    {{ props.row.items[0].purchases[0].pivot.qty }}
                 </q-td>
-                <q-td key="prepared_by" :props="props">
-                    {{ props.row.prepared_by.firstname }} 
-                    {{ props.row.prepared_by.middlename }} 
-                    {{ props.row.prepared_by.lastname }} <br />
-                    {{ props.row.created_at }}
-                </q-td>
-                <q-td key="noted_by" :props="props">
-                    <span v-if="props.row.noted_by === null" >
-                        <q-btn flat color="negative" icon="playlist_add_check" @click="notedBy(props.row.id)">
-                            <q-tooltip anchor="bottom middle" self="top middle" :offset="[10, 10]" >
-                                Click to noted by
-                            </q-tooltip>
-                        </q-btn>
-                    </span>
-                    <span v-else>
-                        {{ props.row.noted_by.firstname }}
-                        {{ props.row.noted_by.middlename }}
-                        {{ props.row.noted_by.lastname }}<br />
-                        {{ props.row.noted_date }}
-                    </span>
-                </q-td>
-                <q-td key="approved_by" :props="props">
-                    <span v-if="props.row.approved_by === null">
-                        <q-btn flat color="negative" icon="playlist_add_check"  @click="approvedBy(props.row.id)" >
-                            <q-tooltip anchor="bottom middle" self="top middle" :offset="[10, 10]" >
-                                Click to approved by
-                            </q-tooltip>
-                        </q-btn>
-                    </span>
-                    <span v-else>
-                        {{ props.row.approved_by.firstname }}
-                        {{ props.row.approved_by.middlename }}
-                        {{ props.row.approved_by.lastname }}<br />
-                        {{ props.row.approved_date }}
-                    </span>
-                </q-td>
-                <q-td key="purchase_by" :props="props">
-                    {{ props.row.purchasable.name }}
-                </q-td>
-                <q-td key="purchasable_type" :props="props">
-                    {{ props.row.purchasable_type.substring(10) }}
-                </q-td>
+                <q-td key="package" :props="props">
+                    {{ props.row.items[0].package.name }}
+                </q-td> 
 
             </q-tr>
 
         </template>
 
     </q-table>
-    <q-modal v-model="editPurchaseRequestModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    <!-- <q-modal v-model="editItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
         <div style="padding: 30px">
-            <div class="q-display-1 q-mb-md">Edit {{ purchaseRequest.name }}</div>
+            <div class="q-display-1 q-mb-md">Edit {{ item.name }}</div>
 
             <div class="row">
                 <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="purchaseRequest.name" float-label="Name" clearable />
+                    <q-input v-model="item.name" float-label="Name" clearable />
                 </div>
-                <!-- <div class="col-xs-12 col-sm-4">
+                <div class="col-xs-12 col-sm-4">
                     <q-input v-model="item.sku" float-label="SKU" clearable />
                 </div>
                 <div class="col-xs-12 col-sm-4">
@@ -105,7 +62,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-12">
                     <q-input v-model="item.desc" type="textarea" float-label="Description" :max-height="100" rows="2" />
-                </div> -->
+                </div>
             </div>
             <br />
             <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
@@ -113,7 +70,7 @@
 
         </div>
     </q-modal>
-    <!-- <q-modal v-model="newItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    <q-modal v-model="newItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
         <div style="padding: 30px">
             <div class="q-display-1 q-mb-md">Edit {{ item.name }}</div>
 
@@ -212,47 +169,78 @@ export default {
             },
             columns: [{
                     name: 'name',
-                    label: 'Name',
+                    label: 'Company Name',
                     field: 'name',
                     align: 'left'
                 },
-
                 {
-                    name: 'order_date',
-                    label: 'Order Date',
-                    field: 'order_date',
+                    name: 'vendorable_type',
+                    label: 'Vendor Type',
+                    field: 'vendorable_type',
                     align: 'left'
                 },
                 {
-                    name: 'prepared_by',
-                    label: 'Prepared By',
-                    field: 'prepared_by',
+                    name: 'item',
+                    label: 'Item Name',
+                    field: 'item',
+                    align: 'left'
+                },
+                
+                {
+                    name: 'price',
+                    label: 'Price',
+                    field: 'price',
                     align: 'left'
                 },
                 {
-                    name: 'noted_by',
-                    label: 'Noted By',
-                    field: 'noted_by',
+                    name: 'qty',
+                    label: 'Quantity',
+                    field: 'qty',
                     align: 'left'
                 },
                 {
-                    name: 'approved_by',
-                    label: 'Approved By',
-                    field: 'approved_by',
-                    align: 'left'
-                },
-                {
-                    name: 'purchase_by',
-                    label: 'Purchase By',
-                    field: 'purchase_by',
-                    align: 'left'
-                },
-                {
-                    name: 'purchasable_type',
-                    label: 'Purchase Type',
-                    field: 'purchasable_type',
+                    name: 'package',
+                    label: 'Package',
+                    field: 'package',
                     align: 'left'
                 }
+
+                // {
+                //     name: 'order_date',
+                //     label: 'Order Date',
+                //     field: 'order_date',
+                //     align: 'left'
+                // },
+                // {
+                //     name: 'prepared_by',
+                //     label: 'Prepared By',
+                //     field: 'prepared_by',
+                //     align: 'left'
+                // },
+                // {
+                //     name: 'noted_by',
+                //     label: 'Noted By',
+                //     field: 'noted_by',
+                //     align: 'left'
+                // },
+                // {
+                //     name: 'approved_by',
+                //     label: 'Approved By',
+                //     field: 'approved_by',
+                //     align: 'left'
+                // },
+                // {
+                //     name: 'purchase_by',
+                //     label: 'Purchase By',
+                //     field: 'purchase_by',
+                //     align: 'left'
+                // },
+                // {
+                //     name: 'purchasable_type',
+                //     label: 'Purchase Type',
+                //     field: 'purchasable_type',
+                //     align: 'left'
+                // }
 
             ],
             filter: '',
@@ -264,7 +252,7 @@ export default {
     },
     computed: {
         ...mapState('items', ['item', 'editItemModal', 'newItemModal']),
-        ...mapState('purchaseRequests', ['editPurchaseRequestModal', 'purchaseRequest']),
+
         packages() {
             return this.$store.getters['items/packages'].map(e => {
                 return {
@@ -322,15 +310,13 @@ export default {
         capitalize(string) {
             return (string.charAt(0).toUpperCase() + string.slice(1).toLowerCase())
         },
-        myFunction(action, purchaseId, purchaseName) {
+        myFunction(action, purchaseId) {
             if (action === 'edit') {
-                this.edit(purchaseId)
+                this.edit(itemId)
             } else if (action === 'delete') {
                 this.deleteRow(itemId)
-            } else if (action === 'purchase items') {
-                
+            } else if (action === 'items') {
                 this.$router.push(`purchase-request/${purchaseId}/purchase-items`)
-                
             }
         },
         store() {
@@ -410,15 +396,15 @@ export default {
             this.loading = true
             this.$axios
                 .get(
-                    `/purchases?filter=${this.filter}&page=${props.pagination.page}&perPage=${
+                    `/purchase_items?id=${this.$route.params.id}&filter=${this.filter}&page=${props.pagination.page}&perPage=${
             props.pagination.rowsPerPage
           }`
                 )
                 .then(res => {
                     this.serverPagination = props.pagination
-                    this.serverData = _.values(res.data.purchases.data)
-                    this.serverPagination.rowsNumber = res.data.purchases.total
-                    this.lastPage = res.data.purchases.last_page
+                    this.serverData = _.values(res.data.purchaseItems.data)
+                    this.serverPagination.rowsNumber = res.data.purchaseItems.total
+                    this.lastPage = res.data.purchaseItems.last_page
                     this.loading = false
                 })
                 .catch(error => {
@@ -428,19 +414,19 @@ export default {
                     this.loading = false
                 })
         },
-        edit(purchaseId) {
-            this.$axios.get(`purchases/${purchaseId}/edit?id=${purchaseId}`)
+        edit(itemId) {
+            this.$axios.get(`items/${itemId}/edit?id=${itemId}`)
                 .then(res => {
                     this.showModal()
-                    this.$store.dispatch('purchaseRequests/purchaseRequest', res.data.purchase)
+                    this.$store.dispatch('items/item', res.data.item)
                 })
         },
         hideModal() {
-            this.$store.dispatch('purchaseRequests/editPurchaseRequestModal', false)
+            this.$store.dispatch('items/editItemModal', false)
             this.$store.dispatch('items/newItemModal', false)
         },
         showModal() {
-            this.$store.dispatch('purchaseRequests/editPurchaseRequestModal', true)
+            this.$store.dispatch('items/editItemModal', true)
         }
     },
     mounted() {

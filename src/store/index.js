@@ -17,7 +17,7 @@ import commissaries from './commissaries'
 import otherVendors from './other-vendors'
 import items from './items'
 import vendorables from './vendorables'
-import purchaseRequest from './purchase-request'
+import purchaseRequests from './purchase-request'
 import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
@@ -48,7 +48,7 @@ export default function (/* { ssrContext } */) {
       otherVendors,
       items,
       vendorables,
-      purchaseRequest
+      purchaseRequests
     },
     plugins: [createPersistedState()]
   })
