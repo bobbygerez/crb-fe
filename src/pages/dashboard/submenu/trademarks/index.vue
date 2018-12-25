@@ -18,11 +18,11 @@
 <script type="text/javascript">
 import trademarks from 'components/data-table/trademarks.vue'
 export default {
-  
+
   methods: {
     showNewTrademarkModal () {
       this.$axios.get('user-companies')
-        .then( res =>{
+        .then(res => {
           this.$store.dispatch('trademarks/userCompanies', res.data.userCompanies)
           this.$store.dispatch('trademarks/newTrademarkModal', true)
           this.$store.dispatch('trademarks/trademark', {
@@ -31,7 +31,6 @@ export default {
             desc: ''
           })
         })
-      
     }
   },
   components: {

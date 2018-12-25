@@ -34,7 +34,7 @@ export default {
     ]),
     showNewBranchModal () {
       this.$store.dispatch('branches/newBranchModal', true)
-      
+
       this.$store.dispatch('branches/branch', {
         address: {
           country_id: null,

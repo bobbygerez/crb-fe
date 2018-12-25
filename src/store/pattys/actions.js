@@ -2,31 +2,31 @@ import {
   axios
 } from 'plugins/axios'
 
-export const getBusinessTypes = ({
-  commit,
-  state
-}) => {
-  if (state.businessTypes) {
-    return
-  }
-  axios.get('/business_types')
-    .then(function (res) {
-      commit('SET_BUSINESS_TYPES', res.data.businessTypes)
-    })
-}
+// export const getBusinessTypes = ({
+//   commit,
+//   state
+// }) => {
+//   if (state.businessTypes) {
+//     return
+//   }
+//   axios.get('/business_types')
+//     .then(function (res) {
+//       commit('SET_BUSINESS_TYPES', res.data.businessTypes)
+//     })
+// }
 
-export const getVatTypes = ({
-  commit,
-  state
-}) => {
-  if (state.vatTypes) {
-    return
-  }
-  axios.get('/vat_types')
-    .then(function (res) {
-      commit('SET_VAT_TYPES', res.data.vatTypes)
-    })
-}
+// export const getVatTypes = ({
+//   commit,
+//   state
+// }) => {
+//   if (state.vatTypes) {
+//     return
+//   }
+//   axios.get('/vat_types')
+//     .then(function (res) {
+//       commit('SET_VAT_TYPES', res.data.vatTypes)
+//     })
+// }
 
 export const setNewHoldingModal = ({
   commit
@@ -34,16 +34,16 @@ export const setNewHoldingModal = ({
   commit('SET_NEW_HOLDING_MODAL', payload)
 }
 
-export const setPage = ({
-  commit
-}, payload) => {
-  commit('SET_PAGE', payload)
-}
-export const setPerPage = ({
-  commit
-}, payload) => {
-  commit('SET_PER_PAGE', payload)
-}
+// export const setPage = ({
+//   commit
+// }, payload) => {
+//   commit('SET_PAGE', payload)
+// }
+// export const setPerPage = ({
+//   commit
+// }, payload) => {
+//   commit('SET_PER_PAGE', payload)
+// }
 
 export const setHoldings = ({
   commit

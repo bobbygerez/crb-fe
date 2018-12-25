@@ -1,7 +1,6 @@
 <template>
   <div>
-    <!-- <div v-show="tableViewSettings.mode === 'grid'" class="q-mx-sm q-my-sm"> -->
-    <q-inner-loading :visible="loading">
+    <q-inner-loading :visible="innerLoading">
       <q-spinner
         color="secondary"
         :size="30"
@@ -11,16 +10,20 @@
       class="q-mb-xl"
       grid
       selection="single"
-      :pagination.sync="paginationControl"
       hide-header
       :data="data"
       :columns="columns"
-      :filter="filter"
-      :selected.sync="selected"
-      :visible-columns="visibleColumns"
       row-key="__index"
+      :visible-columns="visibleColumns"
+      :loading="innerLoading"
+      :rows-per-page-options="rowOptions"
+      :pagination.sync="paginationControl"
+      :separator="separator"
+      :filter="filterOpts"
+      :selected.sync="selected"
       v-bind="$attrs"
       :color="theme"
+      @request="$emit('serverside-request', $event)"
     >
       <template
         slot="top-left"
@@ -30,7 +33,7 @@
         <q-search
           hide-underline
           :color="theme"
-          v-model="filter"
+          v-model="filterOpts"
           class="col-6"
           clearable
           placeholder="Search..."
@@ -105,9 +108,10 @@
               style="min-width: 100px"
             >
               <template v-for="(action, idx) in actions">
+                <!-- included props.row beside the id to be emitted data -->
                 <q-item
                   :key="idx"
-                  @click.native="$emit(`${action}`, props.row.id)"
+                  @click.native="$emit(`${action}`, props.row.id, props.row)"
                   v-close-overlay
                 >
                   <q-item-main :label="capitalize(`${action}`)" />
@@ -128,7 +132,6 @@
         </q-card>
       </div>
     </q-table>
-
     <q-page-sticky
       position="bottom-right"
       :offset="[16, 16]"
@@ -157,7 +160,7 @@ export default {
     TableViewModeAction,
     GlobalChangeTableView
   },
-  name: 'generic-list-data-table',
+  name: 'serverside-list-table',
   props: {
     data: {
       type: [Array, Object],
@@ -188,6 +191,31 @@ export default {
           fullscreenToggle: true
         }
       }
+    },
+    pagination: {
+      type: Object,
+      default: () => {
+        return {
+          rowsPerPage: 7,
+          page: 1
+        }
+      }
+    },
+    dark: {
+      type: Boolean,
+      default: () => false
+    },
+    rowOptions: {
+      type: Array,
+      default: () => [3, 5, 7, 10, 15, 25, 50, 0]
+    },
+    innerLoading: {
+      type: Boolean,
+      default: () => false
+    },
+    searchField: {
+      type: String,
+      default: () => ''
     }
   },
   directives: {
@@ -195,14 +223,28 @@ export default {
   inheritAttrs: false,
   data () {
     return {
-      rowsOptions: [3, 5, 7, 10, 15, 25, 50, 0],
-      loading: false,
-      filter: '',
+      // filter: '',
       visibleColumns: [],
       separator: 'horizontal',
-      selected: [],
-      paginationControl: { rowsPerPage: 7, page: 1 },
-      dark: true
+      selected: []
+    }
+  },
+  computed: {
+    paginationControl: {
+      set () {
+
+      },
+      get () {
+        return this.pagination
+      }
+    },
+    filterOpts: {
+      set (val) {
+        this.$emit('search-change', val)
+      },
+      get () {
+        return this.searchField
+      }
     }
   },
   methods: {

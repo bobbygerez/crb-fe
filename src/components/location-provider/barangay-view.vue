@@ -1,9 +1,10 @@
 <template>
   <q-modal
     ref="modalBarangay"
-    :content-css="{minWidth: '80vw', minHeight: '80vh'}"
     @hide="onHideBarangayModal"
+    :content-css="{minWidth: '50vw', minHeight: '50vh'}"
   >
+    <!-- :content-css="{minWidth: '80vw', minHeight: '80vh'}" -->
     <q-modal-layout>
       <q-toolbar slot="header">
         <q-btn
@@ -52,31 +53,34 @@
         </div>
         <q-toolbar-title>
         </q-toolbar-title>
-        <table-view-mode-action @view-change="viewMode = $event"/>
+        <table-view-mode-action @view-change="viewMode = $event" />
       </q-toolbar>
       <!-- conditional rendering, shows table on list or grid view depending on the selected view mode -->
       <!-- <template v-if="tableViewSettings.mode === 'grid'"> -->
-        <div v-show="viewMode === 'grid'" class="q-mx-sm q-my-sm">
-          <q-inner-loading :visible="loading">
-            <q-spinner
-              color="secondary"
-              :size="30"
-            />
-          </q-inner-loading>
-          <q-table
-            grid
-            selection="single"
-            :pagination.sync="pagination"
-            hide-header
-            :data="data"
-            :columns="columns"
-            :filter="filter"
-            :selected.sync="selected"
-            :visible-columns="visibleColumns"
-            row-key="__index"
+      <div
+        v-show="viewMode === 'grid'"
+        class="q-mx-sm q-my-sm"
+      >
+        <q-inner-loading :visible="loading">
+          <q-spinner
             color="secondary"
-          >
-            <!-- <template
+            :size="30"
+          />
+        </q-inner-loading>
+        <q-table
+          grid
+          selection="single"
+          :pagination.sync="pagination"
+          hide-header
+          :data="data"
+          :columns="columns"
+          :filter="filter"
+          :selected.sync="selected"
+          :visible-columns="visibleColumns"
+          row-key="__index"
+          color="secondary"
+        >
+          <!-- <template
               slot="top-left"
               slot-scope="props"
             >
@@ -107,89 +111,92 @@
                 />
               </template>
             </template> -->
-            <div
-              slot="item"
-              slot-scope="props"
-              class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-xl-3 transition-generic"
-              :style="props.selected ? 'transform: scale(0.95);' : ''"
-            >
-              <q-card
-                class="transition-generic cursor-pointer"
-                :class="props.selected ? 'bg-grey-2' : ''"
-                @click.native="setSelected(props.row.__index, props), props.selected = true"
-              >
-                <q-card-title class="relative-position">
-                  {{ props.cols[0].value }}
-                </q-card-title>
-                <q-card-separator />
-                <q-card-main class="q-pa-none">
-                  <q-list
-                    no-border
-                    multiline
-                  >
-                    <q-item
-                      v-for="col in props.cols"
-                      :key="col.name"
-                    >
-                      <q-item-side>
-                        <q-item-tile class="text-truncate">{{ col.label }}</q-item-tile>
-                      </q-item-side>
-                      <q-item-main>
-                        <q-item-tile
-                          label
-                          style="text-align:right;"
-                        >{{ col.value }}</q-item-tile>
-                      </q-item-main>
-                    </q-item>
-                  </q-list>
-                </q-card-main>
-                <q-tooltip
-                  :disable="$q.platform.is.mobile"
-                  :delay="1000"
-                  anchor="bottom middle"
-                  v-close-overlay
-                  self="bottom middle"
-                  :offset="[10, 10]"
-                >
-                  Click to Select.
-                </q-tooltip>
-              </q-card>
-            </div>
-          </q-table>
-          <q-page-sticky
-            position="bottom-right"
-            :offset="[16, 60]"
+          <div
+            slot="item"
+            slot-scope="props"
+            class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-xl-3 transition-generic"
+            :style="props.selected ? 'transform: scale(0.95);' : ''"
           >
-            <q-btn
-              color="primary"
-              fab
-              v-back-to-top.animate="{offset: 500, duration: 200}"
-              class="animate-pop"
+            <q-card
+              class="transition-generic cursor-pointer"
+              :class="props.selected ? 'bg-grey-2' : ''"
+              @click.native="setSelected(props.row.__index, props), props.selected = true"
             >
-              <q-icon name="keyboard_arrow_up" />
-            </q-btn>
-          </q-page-sticky>
-        </div>
+              <q-card-title class="relative-position">
+                {{ props.cols[0].value }}
+              </q-card-title>
+              <q-card-separator />
+              <q-card-main class="q-pa-none">
+                <q-list
+                  no-border
+                  multiline
+                >
+                  <q-item
+                    v-for="col in props.cols"
+                    :key="col.name"
+                  >
+                    <q-item-side>
+                      <q-item-tile class="text-truncate">{{ col.label }}</q-item-tile>
+                    </q-item-side>
+                    <q-item-main>
+                      <q-item-tile
+                        label
+                        style="text-align:right;"
+                      >{{ col.value }}</q-item-tile>
+                    </q-item-main>
+                  </q-item>
+                </q-list>
+              </q-card-main>
+              <q-tooltip
+                :disable="$q.platform.is.mobile"
+                :delay="1000"
+                anchor="bottom middle"
+                v-close-overlay
+                self="bottom middle"
+                :offset="[10, 10]"
+              >
+                Click to Select.
+              </q-tooltip>
+            </q-card>
+          </div>
+        </q-table>
+        <q-page-sticky
+          position="bottom-right"
+          :offset="[16, 60]"
+        >
+          <q-btn
+            color="primary"
+            fab
+            v-back-to-top.animate="{offset: 500, duration: 200}"
+            class="animate-pop"
+          >
+            <q-icon name="keyboard_arrow_up" />
+          </q-btn>
+        </q-page-sticky>
+      </div>
       <!-- </template> -->
       <!-- <template v-else-if="tableViewSettings.mode === 'list'"> -->
-        <div v-show="viewMode === 'list'" class="q-mx-sm q-my-sm">
-          <q-table
-            binary-state-sort
-            ref="listQTable"
-            @request="testRequest"
-            :rows-per-page-options="rowsOptions"
-            :pagination.sync="pagination"
-            :selected.sync="selected"
-            :loading="loading"
-            :data="data"
-            :columns="columns"
-            :filter="filter"
-            :visible-columns="visibleColumns"
-            :separator="separator"
-            row-key="__index"
-            color="secondary"
-          >
-            <!-- <template
+      <div
+        v-show="viewMode === 'list'"
+        class="q-mx-sm q-my-sm"
+      >
+        <q-table
+          binary-state-sort
+          ref="listQTable"
+          @request="testRequest"
+          :rows-per-page-options="rowsOptions"
+          :pagination.sync="pagination"
+          :selected.sync="selected"
+          :loading="loading"
+          :data="data"
+          :columns="columns"
+          :filter="filter"
+          :visible-columns="visibleColumns"
+          :separator="separator"
+          row-key="__index"
+          color="secondary"
+        >
+          <!-- <template
               slot="top-left"
               slot-scope="props"
             >
@@ -250,48 +257,48 @@
                 @click="props.toggleFullscreen"
               />
             </template> -->
-            <q-tr
-              slot="body"
-              slot-scope="props"
-              :props="props"
-              @click.native="props.selected = !props.selected, setSelected(props.row.__index, props)"
-              :class="'cursor-pointer '"
-            >
-              <q-td
-                v-for="(v) in props.cols"
-                :key="v.name"
-                :props="props"
-                class="text-left"
-              >
-                <template>
-                  {{ v.value }}
-                </template>
-              </q-td>
-              <q-tooltip
-                :disable="$q.platform.is.mobile"
-                :delay="1000"
-                anchor="bottom middle"
-                self="bottom middle"
-                :offset="[10, 10]"
-              >
-                Click to Select
-              </q-tooltip>
-            </q-tr>
-          </q-table>
-          <q-page-sticky
-            position="bottom-right"
-            :offset="[18, 60]"
+          <q-tr
+            slot="body"
+            slot-scope="props"
+            :props="props"
+            @click.native="props.selected = !props.selected, setSelected(props.row.__index, props)"
+            :class="'cursor-pointer '"
           >
-            <q-btn
-              color="secondary"
-              fab
-              v-back-to-top.animate="{offset: 500, duration: 200}"
-              class="animate-pop"
+            <q-td
+              v-for="(v) in props.cols"
+              :key="v.name"
+              :props="props"
+              class="text-left"
             >
-              <q-icon name="keyboard_arrow_up" />
-            </q-btn>
-          </q-page-sticky>
-        </div>
+              <template>
+                {{ v.value }}
+              </template>
+            </q-td>
+            <q-tooltip
+              :disable="$q.platform.is.mobile"
+              :delay="1000"
+              anchor="bottom middle"
+              self="bottom middle"
+              :offset="[10, 10]"
+            >
+              Click to Select
+            </q-tooltip>
+          </q-tr>
+        </q-table>
+        <q-page-sticky
+          position="bottom-right"
+          :offset="[18, 60]"
+        >
+          <q-btn
+            color="secondary"
+            fab
+            v-back-to-top.animate="{offset: 500, duration: 200}"
+            class="animate-pop"
+          >
+            <q-icon name="keyboard_arrow_up" />
+          </q-btn>
+        </q-page-sticky>
+      </div>
       <!-- </template> -->
       <q-page-sticky
         position="bottom-right"
