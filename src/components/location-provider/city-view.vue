@@ -3,6 +3,7 @@
     <q-modal
       ref="modalCity"
       @hide="onHideCityModal"
+      :content-css="{minWidth: '50vw', minHeight: '50vh'}"
     >
       <!-- :content-css="{minWidth: '80vw', minHeight: '80vh'}" -->
       <q-modal-layout>

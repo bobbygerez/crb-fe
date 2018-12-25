@@ -13,7 +13,8 @@
             <q-card-separator />
             <div class="row">
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.name">
+                <!-- <f-v-field-validator :val="$v.newHolding.name"> -->
+                <form-field-validator :val="$v.newHolding.name">
                   <q-input
                     @blur="$v.newHolding.name.$touch"
                     :error="$v.newHolding.name.$error"
@@ -21,7 +22,8 @@
                     float-label="Holding name *"
                     clearable
                   />
-                </f-v-field-validator>
+                </form-field-validator>
+                <!-- </f-v-field-validator> -->
               </div>
               <div class="col-12">
                 <f-v-field-validator :val="$v.newHolding.business_info.business_type_id">
@@ -48,7 +50,10 @@
                 </f-v-field-validator>
               </div>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.business_info.telephone">
+                <f-v-field-validator
+                  :val="$v.newHolding.business_info.telephone"
+                  helper="min length 7 max length 12"
+                >
                   <q-input
                     @blur="$v.newHolding.business_info.telephone.$touch"
                     :error="$v.newHolding.business_info.telephone.$error"
@@ -238,12 +243,12 @@
 
         <div class="row col-12">
           <div class="row col-12 justify-center">
-            <div class="col-12">
+            <!-- <div class="col-12">
               <f-v-error-summary
                 :valObj="$v"
                 class="q-my-sm"
               />
-            </div>
+            </div> -->
             <div class="column">
               <q-btn
                 color="negative"
@@ -289,6 +294,7 @@ import LocationMixin from 'components/mixins/location-mixin'
 import CommonsMixin from 'components/mixins/commons-mixin'
 import { mapActions } from 'vuex'
 import { newHoldingFormValidationRule } from 'assets/models/Holding'
+import FormFieldValidator from 'components/form-validations/FormFieldValidator'
 
 export default {
   mixins: [LocationMixin, CommonsMixin],
@@ -296,7 +302,8 @@ export default {
     BarangayTable,
     CityTable,
     FVErrorSummary,
-    FVFieldValidator
+    FVFieldValidator,
+    FormFieldValidator
   },
   data () {
     return {
