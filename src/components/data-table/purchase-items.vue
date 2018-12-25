@@ -1,37 +1,56 @@
 <template>
 <div>
-    <q-table ref="table" color="primary" :title="'Purchase Items'" :data="serverData" :columns="columns"  :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
+    <q-table ref="table" color="primary" :title="`${purchaseRequest.name} order details`" :data="serverData" :columns="columns" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
         <template slot="body" slot-scope="props">
             <q-tr :props="props">
-                <q-td key="name" :props="props">
-                    {{ props.row.name}}
-                </q-td> 
-                <q-td key="vendorable_type" :props="props">
-                    {{ props.row.pivot.vendorable_type.substring(10) }}
-                </q-td> 
                 <q-td key="item" :props="props">
                     {{ props.row.items[0].name }}
-                </q-td> 
+                    <q-popover touch-position v-if="actions">
+                        <q-list link style="min-width: 100px">
+                            <template v-for="(action, idx) in actions">
+                                <q-item :key="idx" @click.native="myFunction(action, props.row.id, props.row.items[0].purchases[0].pivot.approved_by != null)" v-close-overlay >
+                                    <q-item-main :label="capitalize(action)" :disabled="props.row.items[0].purchases[0].pivot.approved_by != null"/>
+                                </q-item>
+                            </template>
+                        </q-list>
+                    </q-popover>
+                </q-td>
+                <q-td key="company_name" :props="props">
+                    {{ props.row.name}}
+                </q-td>
+                <q-td key="vendorable_type" :props="props">
+                    {{ props.row.pivot.vendorable_type.substring(10) }}
+                </q-td>
                 <q-td key="price" :props="props">
                     {{ props.row.items[0].purchases[0].pivot.price |currency('₱ ') }}
                 </q-td>
                 <q-td key="qty" :props="props">
                     {{ props.row.items[0].purchases[0].pivot.qty }}
                 </q-td>
+                <q-td key="freight" :props="props">
+                    {{ props.row.items[0].purchases[0].pivot.freight |currency('₱ ') }}
+                </q-td>
+                <q-td key="date_delivery" :props="props">
+                    {{ props.row.items[0].purchases[0].pivot.date_delivery }}
+                </q-td>
                 <q-td key="package" :props="props">
                     {{ props.row.items[0].package.name }}
-                </q-td> 
+                </q-td>
+                <q-td key="approved_by" :props="props">
+                    {{ props.row.items[0].purchases[0].pivot.approved_by }} <br />
+                    {{ props.row.items[0].purchases[0].pivot.date_approved }}
+                </q-td>
 
             </q-tr>
 
         </template>
 
     </q-table>
-    <!-- <q-modal v-model="editItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    <q-modal v-model="editPurchaseItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
         <div style="padding: 30px">
-            <div class="q-display-1 q-mb-md">Edit {{ item.name }}</div>
+            <!-- <div class="q-display-1 q-mb-md">Edit {{ item.name }}</div> -->
 
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-xs-12 col-sm-4">
                     <q-input v-model="item.name" float-label="Name" clearable />
                 </div>
@@ -63,14 +82,14 @@
                 <div class="col-xs-12 col-sm-12">
                     <q-input v-model="item.desc" type="textarea" float-label="Description" :max-height="100" rows="2" />
                 </div>
-            </div>
+            </div> -->
             <br />
             <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
             <q-btn color="primary" @click="update()" label="Submit" class="q-ml-sm" />
 
         </div>
     </q-modal>
-    <q-modal v-model="newItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    <!-- <q-modal v-model="newItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
         <div style="padding: 30px">
             <div class="q-display-1 q-mb-md">Edit {{ item.name }}</div>
 
@@ -137,28 +156,8 @@ import {
 export default {
     data() {
         return {
-            terms: '',
-            itemableId: '',
-            placeholderItemableType: '',
-            itemableType: [{
-                    value: 'App\\Model\\Logistic',
-                    label: 'Logistic'
-                },
-                {
-                    value: 'App\\Model\\Branch',
-                    label: 'Branch'
-                },
-                {
-                    value: 'App\\Model\\Commissary',
-                    label: 'Commissary'
-                },
-                {
-                    value: 'App\\Model\\OtherVendor',
-                    label: 'Other Vendor'
-                },
-            ],
-            actions: ['edit', 'delete', 'purchase items'],
-            editotherVendorsModal: false,
+            actions: ['edit', 'cancel order'],
+            editPurchaseItemModal: false,
             options: [5, 10, 15, 20],
             lastPage: '',
             serverData: [],
@@ -168,9 +167,15 @@ export default {
                 rowsPerPage: 10 // specifying this determines pagination is server-side
             },
             columns: [{
-                    name: 'name',
+                    name: 'item',
+                    label: 'Item Name',
+                    field: 'item',
+                    align: 'left'
+                },
+                {
+                    name: 'company_name',
                     label: 'Company Name',
-                    field: 'name',
+                    field: 'company_name',
                     align: 'left'
                 },
                 {
@@ -179,13 +184,7 @@ export default {
                     field: 'vendorable_type',
                     align: 'left'
                 },
-                {
-                    name: 'item',
-                    label: 'Item Name',
-                    field: 'item',
-                    align: 'left'
-                },
-                
+
                 {
                     name: 'price',
                     label: 'Price',
@@ -199,9 +198,27 @@ export default {
                     align: 'left'
                 },
                 {
+                    name: 'freight',
+                    label: 'Freight',
+                    field: 'freight',
+                    align: 'left'
+                },
+                {
+                    name: 'date_delivery',
+                    label: 'Delivery date',
+                    field: 'date_delivery',
+                    align: 'left'
+                },
+                {
                     name: 'package',
                     label: 'Package',
                     field: 'package',
+                    align: 'left'
+                },
+                {
+                    name: 'approved_by',
+                    label: 'Approved by',
+                    field: 'approved_by',
                     align: 'left'
                 }
 
@@ -252,7 +269,7 @@ export default {
     },
     computed: {
         ...mapState('items', ['item', 'editItemModal', 'newItemModal']),
-
+        ...mapState('purchaseRequests', ['purchaseRequest']),
         packages() {
             return this.$store.getters['items/packages'].map(e => {
                 return {
@@ -271,36 +288,34 @@ export default {
         }
     },
     methods: {
-        notedBy(purchaseRequestId){
+        notedBy(purchaseRequestId) {
             this.$axios.get(`purchases-noted-by?id=${purchaseRequestId}`)
-            .then( res =>{
-                this.$q.notify({
+                .then(res => {
+                    this.$q.notify({
                         color: 'positive',
                         icon: 'check',
                         message: `Noted by was successfully updated.`
                     })
-                this.request({
-                    pagination: this.serverPagination,
-                    filter: this.filter
+                    this.request({
+                        pagination: this.serverPagination,
+                        filter: this.filter
+                    })
                 })
-            })
-                
 
         },
-        approvedBy(purchaseRequestId){
+        approvedBy(purchaseRequestId) {
             this.$axios.get(`purchases-approved-by?id=${purchaseRequestId}`)
-            .then( res =>{
-                this.$q.notify({
+                .then(res => {
+                    this.$q.notify({
                         color: 'positive',
                         icon: 'check',
                         message: `Approved by was successfully updated.`
                     })
-                this.request({
-                    pagination: this.serverPagination,
-                    filter: this.filter
+                    this.request({
+                        pagination: this.serverPagination,
+                        filter: this.filter
+                    })
                 })
-            })
-                
 
         },
         selected(item) {
@@ -310,13 +325,15 @@ export default {
         capitalize(string) {
             return (string.charAt(0).toUpperCase() + string.slice(1).toLowerCase())
         },
-        myFunction(action, purchaseId) {
+        myFunction(action, pivotId, status) {
             if (action === 'edit') {
-                this.edit(itemId)
-            } else if (action === 'delete') {
-                this.deleteRow(itemId)
-            } else if (action === 'items') {
-                this.$router.push(`purchase-request/${purchaseId}/purchase-items`)
+                if(status === false){
+                    this.edit(pivotId)
+                }
+            } else if (action === 'cancel order') {
+                if(status === false){
+                    this.deleteRow(purchaseId)
+                }
             }
         },
         store() {
@@ -405,6 +422,7 @@ export default {
                     this.serverData = _.values(res.data.purchaseItems.data)
                     this.serverPagination.rowsNumber = res.data.purchaseItems.total
                     this.lastPage = res.data.purchaseItems.last_page
+                    this.$store.dispatch('purchaseRequests/purchaseRequest', res.data.purchase)
                     this.loading = false
                 })
                 .catch(error => {

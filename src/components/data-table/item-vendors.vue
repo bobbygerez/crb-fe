@@ -16,7 +16,16 @@
                     </q-popover>
                 </q-td>
                 <q-td key="type" :props="props">
-                    {{ reduceString(props.row.pivot.vendorable_type) }}
+                    {{ props.row.pivot.vendorable_type.substring(10) }}
+                </q-td>
+                <q-td key="start_date" :props="props">
+                    {{ props.row.pivot.start_date }}
+                </q-td>
+                <q-td key="end_date" :props="props">
+                    {{ props.row.pivot.end_date }}
+                </q-td>
+                <q-td key="volume" :props="props">
+                    {{ props.row.pivot.volume }}
                 </q-td>
                 <q-td key="rank" :props="props">
                     {{ props.row.pivot.rank }}
@@ -171,6 +180,24 @@ export default {
                     name: 'type',
                     label: 'Type',
                     field: 'type',
+                    align: 'left'
+                },
+                {
+                    name: 'start_date',
+                    label: 'Start date',
+                    field: 'start_date',
+                    align: 'left'
+                },
+                {
+                    name: 'end_date',
+                    label: 'End date',
+                    field: 'end_date',
+                    align: 'left'
+                },
+                {
+                    name: 'volume',
+                    label: 'Volume',
+                    field: 'volume',
                     align: 'left'
                 },
                 {
