@@ -24,17 +24,18 @@ module.exports = function (ctx) {
       'material-icons', // optional, you are not bound to it
       // 'ionicons',
       'mdi',
-      'fontawesome'
+      'fontawesome',
+      ctx.theme.ios ? 'ionicons' : null
     ],
     supportIE: true,
     build: {
-      env: ctx.dev
-        ? { // so on dev we'll have
-          API: JSON.stringify('http://localhost:8099/api')
-        }
-        : { // and on build (production):
-          API: JSON.stringify('http://localhost:8099/api')
-        },
+      // env: ctx.dev
+      //   ? { // so on dev we'll have
+      //     API: JSON.stringify('http://localhost:8099/api')
+      //   }
+      //   : { // and on build (production):
+      //     API: JSON.stringify('http://localhost:8099/api')
+      //   },
       scopeHoisting: true,
       vueRouterMode: 'history',
       // vueCompiler: true,
@@ -60,69 +61,90 @@ module.exports = function (ctx) {
     },
     // framework: 'all' --- includes everything; for dev only!
 
-    framework: 'all',
-    // framework: {
-    //   components: [
-    //     'QTooltip',
-    //     'QPopover',
-    //     'QPageSticky',
-    //     'QDatetime',
-    //     'QDatetimePicker',
-    //     'QChip',
-    //     'QToggle',
-    //     'QTree',
-    //     'QChipsInput',
-    //     'QModal',
-    //     'QPopupEdit',
-    //     'QTh',
-    //     'QCheckbox',
-    //     'QTd',
-    //     'QTr',
-    //     'QTable',
-    //     'QTableColumns',
-    //     'QSelect',
-    //     'QAlert',
-    //     'QAutocomplete',
-    //     'QSearch',
-    //     'QCard',
-    //     'QCardTitle',
-    //     'QCardMain',
-    //     'QCardMedia',
-    //     'QCardSeparator',
-    //     'QCardActions',
-    //     'QInput',
-    //     'QDialog',
-    //     'QField',
-    //     'QBtnDropdown',
-    //     'QLayout',
-    //     'QLayoutHeader',
-    //     'QLayoutDrawer',
-    //     'QPageContainer',
-    //     'QPage',
-    //     'QToolbar',
-    //     'QToolbarTitle',
-    //     'QBtn',
-    //     'QIcon',
-    //     'QItemTile',
-    //     'QList',
-    //     'QListHeader',
-    //     'QCollapsible',
-    //     'QItem',
-    //     'QItemMain',
-    //     'QItemSide',
-    //     'QItemSeparator',
-    //     'QRating'
-    //   ],
-    //   directives: [
-    //     'Ripple', 'CloseOverlay'
-    //   ],
-    //   // Quasar plugins
-    //   plugins: [
-    //     'Notify'
-    //   ]
-    //   // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
-    //   // i18n: 'de' // Quasar language
-    // },
+    framework: {
+      // all: true,
+      // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
+      components: [
+        'QModal',
+        'QPopupEdit',
+        'QTh',
+        'QCheckbox',
+        'QTd',
+        'QTr',
+        'QTable',
+        'QTableColumns',
+        'QSelect',
+        'QAlert',
+        'QAutocomplete',
+        'QSearch',
+        'QCard',
+        'QCardTitle',
+        'QCardMain',
+        'QCardMedia',
+        'QCardSeparator',
+        'QCardActions',
+        'QInput',
+        'QDialog',
+        'QField',
+        'QBtnDropdown',
+        'QLayout',
+        'QLayoutHeader',
+        'QLayoutDrawer',
+        'QPageContainer',
+        'QPage',
+        'QToolbar',
+        'QToolbarTitle',
+        'QBtn',
+        'QIcon',
+        'QItemTile',
+        'QList',
+        'QListHeader',
+        'QCollapsible',
+        'QItem',
+        'QItemMain',
+        'QItemSide',
+        'QItemSeparator',
+        'QRating',
+        'QTooltip',
+        'QScrollObservable',
+        'QPopover',
+        'QInnerLoading',
+
+        // ... if using custom spinner, add it too
+        // whatever that is
+        'QSpinnerGears',
+        'QSpinnerMat',
+        'QSpinnerIos',
+        'QPageSticky',
+        'QModalLayout',
+        'QSpinner',
+        'QAjaxBar',
+        'QChip',
+        'QTree',
+        'QDatetime',
+        'QDatetimePicker'
+      ],
+      directives: [
+        'Ripple', 'CloseOverlay', 'BackToTop'
+      ],
+      // Quasar plugins
+      plugins: [
+        'Notify',
+        'LocalStorage',
+        'SessionStorage',
+        'Platform',
+        'Screen',
+        'LoadingBar',
+        'Dialog'
+      ],
+      // config: {
+      //   loadingBar: {
+      //     skipHijack: true
+      //   }
+      // },
+      iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
+      // i18n: 'de' // Quasar language
+    },
 
     // animations: 'all' --- includes all animations
     animations: 'all',

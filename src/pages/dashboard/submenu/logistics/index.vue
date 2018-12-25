@@ -41,26 +41,25 @@ export default {
     ]),
     showNewLogisticModal () {
       this.$store.dispatch('logistics/logistic', {
-            address: {
-                country_id : '',
-                region_id : '',
-                province_id : '',
-                city_id : '',
-                brgy_id : '',
-                street_lot_blk : ''
-            },
-            business_info: {
-                business_type_id: null,
-                vat_type_id: null,
-                email: '',
-                telephone: '',
-                tin: '',
-                vat_type_id: '',
-                website: ''
-            },
-            name: null,
-            desc: null
-        });
+        address: {
+          country_id: '',
+          region_id: '',
+          province_id: '',
+          city_id: '',
+          brgy_id: '',
+          street_lot_blk: ''
+        },
+        business_info: {
+          business_type_id: null,
+          vat_type_id: null,
+          email: '',
+          telephone: '',
+          tin: '',
+          website: ''
+        },
+        name: null,
+        desc: null
+      })
       this.$store.dispatch('logistics/newLogisticModal', true)
     }
   },

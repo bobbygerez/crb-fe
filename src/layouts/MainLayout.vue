@@ -40,6 +40,7 @@
 
     <q-layout-drawer
       v-model="leftDrawerOpen"
+      :breakpoint="1200"
       :content-class="$q.theme === 'mat' ? 'bg-grey-2' : null"
     >
       <div
@@ -97,7 +98,7 @@
             <template v-if="subMenu.all_children.length">
               <q-collapsible
                 :label="subMenu.name"
-                :to="`/dashboard/${subMenu.name}`"
+                :to="`/dashboard/${subMenu.name.toLowerCase()}`"
                 group="sub"
               >
                 <!-- "slug(`/dashboard/submenu/${subMenu.id}/${subMenu.name}`)" -->
@@ -109,7 +110,7 @@
             <template v-else>
               <q-item
                 link
-                :to="`/dashboard/${replaceAll(subMenu.name,' ', '-')}`"
+                :to="`/dashboard/${replaceAll(subMenu.name,' ', '-').toLowerCase()}`"
               >
                 <q-item-side icon="mdi-chevron-right" />
                 <q-item-main :label="subMenu.name" />
@@ -181,14 +182,14 @@ export default {
         console.log('Logout cancelled', e.message)
       })
     }
-  },
-  watch: {
-    $route (to, from) {
-      this.pathArray = this.$route.path.split('/')
-
-      console.log(this.pathArray)
-    }
   }
+  // watch: {
+  //   $route (to, from) {
+  //     this.pathArray = this.$route.path.split('/')
+
+  //     console.log(this.pathArray)
+  //   }
+  // }
 }
 </script>
 

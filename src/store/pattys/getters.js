@@ -2,6 +2,7 @@ export {
   getField
 }
   from 'vuex-map-fields'
+
 export const getNewHoldingModal = (state) => state.newHoldingModal
 
 export const getBusinessTypes = (state) => state.businessTypes

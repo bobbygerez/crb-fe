@@ -1,26 +1,20 @@
 <template>
   <div>
-    <!-- <div v-show="tableViewSettings.mode === 'grid'" class="q-mx-sm q-my-sm"> -->
-    <q-inner-loading :visible="loading">
-      <q-spinner
-        color="secondary"
-        :size="30"
-      />
-    </q-inner-loading>
     <q-table
       class="q-mb-xl"
-      grid
-      selection="single"
-      :pagination.sync="paginationControl"
-      hide-header
       :data="data"
       :columns="columns"
-      :filter="filter"
-      :selected.sync="selected"
-      :visible-columns="visibleColumns"
       row-key="__index"
+      :visible-columns="visibleColumns"
+      :loading="innerLoading"
+      :rows-per-page-options="rowOptions"
+      :pagination.sync="paginationControl"
+      :separator="separator"
+      :filter="filterOpts"
+      :selected.sync="selected"
       v-bind="$attrs"
       :color="theme"
+      @request="$emit('serverside-request', $event)"
     >
       <template
         slot="top-left"
@@ -30,7 +24,7 @@
         <q-search
           hide-underline
           :color="theme"
-          v-model="filter"
+          v-model="filterOpts"
           class="col-6"
           clearable
           placeholder="Search..."
@@ -48,6 +42,18 @@
           :columns="columns"
           v-if="topRightOptions.visibleCols"
         />
+        <q-select
+          :color="theme"
+          v-model="separator"
+          v-if="topRightOptions.cellLines"
+          :options="[
+            { label: 'Horizontal', value: 'horizontal' },
+            { label: 'Vertical', value: 'vertical' },
+            { label: 'Cell', value: 'cell' },
+            { label: 'None', value: 'none' }
+          ]"
+          hide-underline
+        />
         <q-btn
           flat
           round
@@ -59,76 +65,53 @@
         <!-- <table-view-mode-action /> -->
         <global-change-table-view v-show="!props.inFullscreen" />
       </template>
-
-      <div
-        slot="item"
+      <template
+        slot="body"
         slot-scope="props"
-        class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-xl-3 transition-generic"
-        :style="props.selected ? 'transform: scale(0.95);' : ''"
       >
-        <q-card
-          class="transition-generic cursor-pointer"
-          :class="props.selected ? 'bg-grey-2' : ''"
-          @click.native="selected = [{ __index: props.row.__index }]; props.selected = true"
+        <q-tr
+          :props="props"
+          @click.native="selected = [{ __index: props.row.__index }]"
+          :class="'cursor-pointer'"
         >
-          <q-card-title class="relative-position">
-            {{ props.cols[0].value }}
-          </q-card-title>
-          <q-card-separator />
-          <q-card-main class="q-pa-none">
-            <q-list
-              no-border
-              multiline
+          <q-td
+            v-for="col in props.cols"
+            :key="col.name"
+            :props="props"
+          >
+            <template>{{ col.value }}</template>
+            <q-popover
+              touch-position
+              v-if="actions"
             >
-              <q-item
-                v-for="col in props.cols"
-                :key="col.name"
+              <q-list
+                link
+                style="min-width: 100px"
               >
-                <q-item-side>
-                  <q-item-tile class="text-truncate">{{ col.label }}</q-item-tile>
-                </q-item-side>
-                <q-item-main>
-                  <q-item-tile
-                    label
-                    style="text-align:right;"
-                  >{{ col.value }}</q-item-tile>
-                </q-item-main>
-              </q-item>
-            </q-list>
-          </q-card-main>
-          <q-popover
-            touch-position
-            v-if="actions"
-          >
-            <q-list
-              link
-              style="min-width: 100px"
+                <template v-for="(action, idx) in actions">
+                  <q-item
+                    :key="idx"
+                    @click.native="$emit(`${action}`, props.row.id, props.row)"
+                    v-close-overlay
+                  >
+                    <q-item-main :label="capitalize(`${action}`)" />
+                  </q-item>
+                </template>
+              </q-list>
+            </q-popover>
+            <q-tooltip
+              v-if="!$q.platform.is.cordova && actions"
+              :delay="1000"
+              anchor="bottom middle"
+              self="bottom middle"
+              :offset="[10, 10]"
             >
-              <template v-for="(action, idx) in actions">
-                <q-item
-                  :key="idx"
-                  @click.native="$emit(`${action}`, props.row.id)"
-                  v-close-overlay
-                >
-                  <q-item-main :label="capitalize(`${action}`)" />
-                </q-item>
-              </template>
-            </q-list>
-          </q-popover>
-          <q-tooltip
-            :disable="$q.platform.is.mobile"
-            :delay="1000"
-            anchor="bottom middle"
-            v-close-overlay
-            self="bottom middle"
-            :offset="[10, 10]"
-          >
-            Click to Select.
-          </q-tooltip>
-        </q-card>
-      </div>
+              Click to see options.
+            </q-tooltip>
+          </q-td>
+        </q-tr>
+      </template>
     </q-table>
-
     <q-page-sticky
       position="bottom-right"
       :offset="[16, 16]"
@@ -157,7 +140,7 @@ export default {
     TableViewModeAction,
     GlobalChangeTableView
   },
-  name: 'generic-list-data-table',
+  name: 'serverside-list-table',
   props: {
     data: {
       type: [Array, Object],
@@ -188,6 +171,31 @@ export default {
           fullscreenToggle: true
         }
       }
+    },
+    pagination: {
+      type: Object,
+      default: () => {
+        return {
+          rowsPerPage: 7,
+          page: 1
+        }
+      }
+    },
+    dark: {
+      type: Boolean,
+      default: () => false
+    },
+    rowOptions: {
+      type: Array,
+      default: () => [3, 5, 7, 10, 15, 25, 50, 0]
+    },
+    innerLoading: {
+      type: Boolean,
+      default: () => false
+    },
+    searchField: {
+      type: String,
+      default: () => ''
     }
   },
   directives: {
@@ -195,14 +203,28 @@ export default {
   inheritAttrs: false,
   data () {
     return {
-      rowsOptions: [3, 5, 7, 10, 15, 25, 50, 0],
-      loading: false,
-      filter: '',
+      // filter: '',
       visibleColumns: [],
       separator: 'horizontal',
-      selected: [],
-      paginationControl: { rowsPerPage: 7, page: 1 },
-      dark: true
+      selected: []
+    }
+  },
+  computed: {
+    paginationControl: {
+      set () {
+
+      },
+      get () {
+        return this.pagination
+      }
+    },
+    filterOpts: {
+      set (val) {
+        this.$emit('search-change', val)
+      },
+      get () {
+        return this.searchField
+      }
     }
   },
   methods: {

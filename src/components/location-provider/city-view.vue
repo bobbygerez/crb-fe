@@ -2,9 +2,10 @@
   <div>
     <q-modal
       ref="modalCity"
-      :content-css="{minWidth: '80vw', minHeight: '80vh'}"
       @hide="onHideCityModal"
+      :content-css="{minWidth: '50vw', minHeight: '50vh'}"
     >
+      <!-- :content-css="{minWidth: '80vw', minHeight: '80vh'}" -->
       <q-modal-layout>
         <q-toolbar slot="header">
           <q-btn
@@ -55,7 +56,7 @@
           <!-- </q-toolbar-title> -->
           <q-toolbar-title>
           </q-toolbar-title>
-          <table-view-mode-action @view-change="viewMode = $event"/>
+          <table-view-mode-action @view-change="viewMode = $event" />
         </q-toolbar>
         <!-- conditional rendering, shows table on list or grid view depending on the selected view mode -->
         <!-- <template v-if="tableViewSettings.mode === 'grid'"> -->
@@ -112,7 +113,10 @@
                 </q-card-title>
                 <q-card-separator />
                 <q-card-main class="q-pa-none">
-                  <q-list no-border multiline>
+                  <q-list
+                    no-border
+                    multiline
+                  >
                     <q-item
                       v-for="col in props.cols.filter(col => col.name !== 'city')"
                       :key="col.name"
@@ -121,7 +125,10 @@
                         <q-item-tile class="text-truncate">{{ col.label }}</q-item-tile>
                       </q-item-side>
                       <q-item-main>
-                        <q-item-tile label style="text-align:right;">{{ col.value }}</q-item-tile>
+                        <q-item-tile
+                          label
+                          style="text-align:right;"
+                        >{{ col.value }}</q-item-tile>
                       </q-item-main>
                     </q-item>
                   </q-list>

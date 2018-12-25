@@ -70,24 +70,33 @@ const dashBoardModules = (appModules) => {
         section: 'index'
       }
     }
-    // let viewModule = {
-    //   path: p + '/:id/view',
-    //   component: load(p + '/form'),
-    //   meta: {
-    //     title: 'View ' + n.replace('ies', 'y'),
-    //     needAuth: true,
-    //     section: 'view'
-    //   }
-    // }
-    // let updateModule = {
-    //   path: p + '/:id/edit',
-    //   component: load(p + '/form'),
-    //   meta: {
-    //     title: 'Edit ' + n.replace('ies', 'y'),
-    //     needAuth: true,
-    //     section: 'edit'
-    //   }
-    // }
+    let createModule = {
+      path: path + '/add',
+      component: load(path + '/forms/create'),
+      meta: {
+        title: `Add ${name.endsWith('s') ? name.replace(/.$/, '') : name.endsWith('ies') ? name.replace('ies', 'y') : name}`,
+        needAuth: true,
+        section: 'create'
+      }
+    }
+    let readModule = {
+      path: path + '/:id/view',
+      component: load(path + '/forms/read'),
+      meta: {
+        title: `Edit ${name.endsWith('s') ? name.replace(/.$/, '') : name.endsWith('ies') ? name.replace('ies', 'y') : name}`,
+        needAuth: true,
+        section: 'read'
+      }
+    }
+    let updateModule = {
+      path: path + '/:id/edit',
+      component: load(path + '/forms/update'),
+      meta: {
+        title: `Edit ${name.endsWith('s') ? name.replace(/.$/, '') : name.endsWith('ies') ? name.replace('ies', 'y') : name}`,
+        needAuth: true,
+        section: 'update'
+      }
+    }
     // let deleteModule = {
     //   path: p + '/:id/delete',
     //   component: load(p + '/main'),
@@ -97,16 +106,7 @@ const dashBoardModules = (appModules) => {
     //     section: 'remove'
     //   }
     // }
-    // let createModule = {
-    //   path: p + '/add',
-    //   component: load(p + '/form'),
-    //   meta: {
-    //     title: 'Add ' + n.replace('ies', 'y'),
-    //     needAuth: true,
-    //     section: 'add'
-    //   }
-    // }
-    modules.push(indexModule)
+    modules.push(indexModule, createModule, readModule, updateModule)
     // temp.push(mainModule, viewModule, updateModule, deleteModule, createModule)
   })
   // return the module array

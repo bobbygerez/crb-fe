@@ -4,7 +4,7 @@
     :error-label="errMessage"
     v-bind="$attrs"
   >
-    <slot/>
+    <slot />
   </q-field>
 </template>
 <script>
@@ -20,12 +20,14 @@ export default {
       return this.val.$error
     },
     errMessage () {
+      console.log('validate this =>', this.val)
       if (!this.val.$error) return ''
       // check if a prefixed field name exist in the validation object
       let filteredVals = Object.keys(this.val).filter(v => v.startsWith('_$'))
       if (filteredVals.length < 1) {
         // let x = (names) => names.filter((v, i) => names.indexOf(v) === i)
-        return this.errors.includes(`Check required fields for error.`) ? '' : `Check required fields for error.`
+        // return this.errors.includes(`Check required fields for error.`) ? '' : `Check required fields for error.`
+        return ''
       }
 
       let fieldName = replaceAll(filteredVals[0].replace('_$', ''), '_', ' ')
