@@ -47,42 +47,54 @@ export const getRegions = ({
   commit
 }, countryId) => {
   commit('SET_ADDRESS_INNER_LOADING', true)
-  axios.get(`/regions/${countryId}`)
-    .then(function (res) {
-      commit('SET_REGIONS', res.data.regions)
-      commit('SET_ADDRESS_INNER_LOADING', false)
-    })
+  return new Promise((resolve, reject) => {
+    axios.get(`/regions/${countryId}`)
+      .then(function (res) {
+        commit('SET_REGIONS', res.data.regions)
+        commit('SET_ADDRESS_INNER_LOADING', false)
+        resolve(res.data.regions)
+      })
+  })
 }
 export const getProvinces = ({
   commit
 }, regionId) => {
   commit('SET_ADDRESS_INNER_LOADING', true)
-  axios.get(`/provinces/${regionId}`)
-    .then(function (res) {
-      commit('SET_PROVINCES', res.data.provinces)
-      commit('SET_ADDRESS_INNER_LOADING', false)
-    })
+  return new Promise((resolve, reject) => {
+    axios.get(`/provinces/${regionId}`)
+      .then(function (res) {
+        commit('SET_PROVINCES', res.data.provinces)
+        commit('SET_ADDRESS_INNER_LOADING', false)
+        resolve(res.data.provinces)
+      })
+  })
 }
 export const getCities = ({
   commit
 }, provinceId) => {
   commit('SET_ADDRESS_INNER_LOADING', true)
-  axios.get(`/cities/${provinceId}`)
-    .then(function (res) {
-      commit('SET_CITIES', res.data.cities)
-      commit('SET_ADDRESS_INNER_LOADING', false)
-    })
+  return new Promise((resolve, reject) => {
+    axios.get(`/cities/${provinceId}`)
+      .then(function (res) {
+        commit('SET_CITIES', res.data.cities)
+        commit('SET_ADDRESS_INNER_LOADING', false)
+        resolve(res.data.cities)
+      })
+  })
 }
 
 export const getBrgys = ({
   commit
 }, cityId) => {
   commit('SET_ADDRESS_INNER_LOADING', true)
-  axios.get(`/brgys/${cityId}`)
-    .then(function (res) {
-      commit('SET_BRGYS', res.data.brgys)
-      commit('SET_ADDRESS_INNER_LOADING', false)
-    })
+  return new Promise((resolve, reject) => {
+    axios.get(`/brgys/${cityId}`)
+      .then(function (res) {
+        commit('SET_BRGYS', res.data.brgys)
+        commit('SET_ADDRESS_INNER_LOADING', false)
+        resolve(res.data.brgys)
+      })
+  })
 }
 
 export const setMenus = ({

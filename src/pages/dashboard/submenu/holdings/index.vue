@@ -4,7 +4,7 @@
     ref="tableContainer"
   >
     <q-page>
-      <!-- scroll aware for hiding showing fab -->
+      <!-- scroll aware for hiding showing fab action-->
       <q-scroll-observable @scroll="hasScrolled" />
       <!-- the main table that will be displayed -->
       <holdings-table
@@ -13,26 +13,12 @@
       />
       <!-- @edit-data="editHolding = $event.holding; $refs.editModalForm.show()" -->
       <!-- add fab action found at bottom of table -->
+      <!-- Mainly use for adding new record -->
       <add-action-fab
         color="primary"
         :show="showFab"
         @fab-click="$router.push(currentRoute + '/add')"
       />
-      <!-- @fab-click="$refs.addModalForm.show()" -->
-      <!-- new form modal displayed on fab click -->
-      <!-- <generic-modal
-        :title="'New Holding'"
-        ref="addModalForm"
-      >
-        <new-holding-form />
-      </generic-modal>
-
-      <generic-modal
-        :title="'Edit Holding'"
-        ref="editModalForm"
-      >
-        <edit-holding-form @updated="$refs.editModalForm.hide();$refs.holdingTable.refreshData();" />
-      </generic-modal> -->
     </q-page>
   </div>
 </template>

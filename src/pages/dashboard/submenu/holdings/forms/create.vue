@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-mx-lg">
+  <q-page class="q-mx-lg q-pb-lg">
     <form>
       <div class="row gutter-md q-pt-lg">
         <!-- <div class="q-display-1 q-mb-md">Edit {{ holding.name }}</div> -->
@@ -16,7 +16,7 @@
                 <!-- <f-v-field-validator :val="$v.newHolding.name"> -->
                 <form-field-validator :val="$v.newHolding.name">
                   <q-input
-                    @blur="$v.newHolding.name.$touch"
+                    @input="$v.newHolding.name.$touch"
                     :error="$v.newHolding.name.$error"
                     v-model="newHolding.name"
                     float-label="Holding name *"
@@ -28,7 +28,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.newHolding.business_info.business_type_id">
                   <q-select
-                    @blur="$v.newHolding.business_info.business_type_id.$touch"
+                    @input="$v.newHolding.business_info.business_type_id.$touch"
                     :error="$v.newHolding.business_info.business_type_id.$error"
                     v-model="newHolding.business_info.business_type_id"
                     :options="bizTypeOptions"
@@ -40,7 +40,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.newHolding.business_info.vat_type_id">
                   <q-select
-                    @blur="$v.newHolding.business_info.vat_type_id.$touch"
+                    @input="$v.newHolding.business_info.vat_type_id.$touch"
                     :error="$v.newHolding.business_info.vat_type_id.$error"
                     v-model="newHolding.business_info.vat_type_id"
                     :options="vatTypeOptions"
@@ -50,12 +50,9 @@
                 </f-v-field-validator>
               </div>
               <div class="col-12">
-                <f-v-field-validator
-                  :val="$v.newHolding.business_info.telephone"
-                  helper="min length 7 max length 12"
-                >
+                <f-v-field-validator :val="$v.newHolding.business_info.telephone">
                   <q-input
-                    @blur="$v.newHolding.business_info.telephone.$touch"
+                    @input="$v.newHolding.business_info.telephone.$touch"
                     :error="$v.newHolding.business_info.telephone.$error"
                     v-model="newHolding.business_info.telephone"
                     float-label="Telephone *"
@@ -67,7 +64,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.newHolding.business_info.email">
                   <q-input
-                    @blur="$v.newHolding.business_info.email.$touch"
+                    @input="$v.newHolding.business_info.email.$touch"
                     :error="$v.newHolding.business_info.email.$error"
                     v-model="newHolding.business_info.email"
                     float-label="Email *"
@@ -79,7 +76,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.newHolding.business_info.tin">
                   <q-input
-                    @blur="$v.newHolding.business_info.tin.$touch"
+                    @input="$v.newHolding.business_info.tin.$touch"
                     :error="$v.newHolding.business_info.tin.$error"
                     v-model="newHolding.business_info.tin"
                     float-label="TIN *"
@@ -97,7 +94,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.newHolding.desc">
                   <q-input
-                    @blur="$v.newHolding.desc.$touch"
+                    @input="$v.newHolding.desc.$touch"
                     :error="$v.newHolding.desc.$error"
                     v-model="newHolding.desc"
                     float-label="Description *"
@@ -123,7 +120,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.newHolding.address.country_id">
                   <q-select
-                    @blur="$v.newHolding.address.country_id.$touch"
+                    @input="$v.newHolding.address.country_id.$touch"
                     :error="$v.newHolding.address.country_id.$error"
                     v-model="newHolding.address.country_id"
                     :options="countryOptions"
@@ -138,7 +135,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.newHolding.address.region_id">
                   <q-select
-                    @blur="$v.newHolding.address.region_id.$touch"
+                    @input="$v.newHolding.address.region_id.$touch"
                     :error="$v.newHolding.address.region_id.$error"
                     v-model="newHolding.address.region_id"
                     :options="regionOptions"
@@ -155,7 +152,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.newHolding.address.province_id">
                   <q-select
-                    @blur="$v.newHolding.address.province_id.$touch"
+                    @input="$v.newHolding.address.province_id.$touch"
                     :error="$v.newHolding.address.province_id.$error"
                     v-model="newHolding.address.province_id"
                     :options="provinceOptions"
@@ -170,7 +167,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.newHolding.address.city_id">
                   <q-select
-                    @blur="$v.newHolding.address.city_id.$touch"
+                    @input="$v.newHolding.address.city_id.$touch"
                     :error="$v.newHolding.address.city_id.$error"
                     v-model="newHolding.address.city_id"
                     :options="cityOptions"
@@ -194,7 +191,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.newHolding.address.brgy_id">
                   <q-select
-                    @blur="$v.newHolding.address.brgy_id.$touch"
+                    @input="$v.newHolding.address.brgy_id.$touch"
                     :error="$v.newHolding.address.brgy_id.$error"
                     v-model="newHolding.address.brgy_id"
                     :options="brgyOptions"
@@ -227,7 +224,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.newHolding.address.street_lot_blk">
                   <q-input
-                    @blur="$v.newHolding.address.street_lot_blk.$touch"
+                    @input="$v.newHolding.address.street_lot_blk.$touch"
                     :error="$v.newHolding.address.street_lot_blk.$error"
                     v-model="newHolding.address.street_lot_blk"
                     float-label="Block, Lot &amp; Street"
@@ -243,12 +240,12 @@
 
         <div class="row col-12">
           <div class="row col-12 justify-center">
-            <!-- <div class="col-12">
+            <div class="col-12">
               <f-v-error-summary
                 :valObj="$v"
                 class="q-my-sm"
               />
-            </div> -->
+            </div>
             <div class="column">
               <q-btn
                 color="negative"
@@ -314,10 +311,6 @@ export default {
     ...mapHoldingFields(['newHolding', 'newHoldingModal'])
   },
   validations () {
-    // newHolding: {
-    //   name: { required }
-    // }
-    // some condition or whatever
     return {
       newHolding: newHoldingFormValidationRule(required, email, numeric, minLength, maxLength, () => true)
     }
@@ -373,33 +366,11 @@ export default {
         })
     }
   },
-  watch: {
-    'newHolding.address.country_id' (val) {
-      if (val === null || val === undefined) return
-      console.log('getregions', this['newHolding'])
-      this.getRegions(val)
-      this.getProvinces(val)
-      this.getCities(val)
-      this.getBrgys(val)
-    },
-    'newHolding.address.region_id' (val) {
-      console.log('getProvinces', this['newHolding'])
-      this.getProvinces(val)
-      this.getCities(val)
-      this.getBrgys(val)
-    },
-    'newHolding.address.province_id' (val) {
-      console.log('getCities', this['newHolding'])
-      this.getCities(val)
-      this.getBrgys(val)
-    },
-    'newHolding.address.city_id' (val) {
-      console.log('getBrgys', this['newHolding'])
-      this.getBrgys(val)
-    }
-  },
   mounted () {
     console.log('edit route', this.$route)
+    console.log('localModel => ', this.localModel)
+    this.localModel = this.newHolding
+    console.log('localModel set => ', this.localModel)
   }
 }
 </script>
