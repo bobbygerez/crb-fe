@@ -29,5 +29,15 @@ export default {
 
   },
   newPurchaseRequestModal: false,
-  userEntities: []
+  userEntities: [],
+  purchaseItem: {
+    name: '',
+    pivot: {
+      vendorable_type: ''
+    },
+    items: [
+      'purchases'
+    ]
+  },
+  newPurchaseItemModal: false
 }

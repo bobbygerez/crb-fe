@@ -8,8 +8,8 @@
                     <q-popover touch-position v-if="actions">
                         <q-list link style="min-width: 100px">
                             <template v-for="(action, idx) in actions">
-                                <q-item :key="idx" @click.native="myFunction(action, props.row.id, props.row.items[0].purchases[0].pivot.approved_by != null)" v-close-overlay >
-                                    <q-item-main :label="capitalize(action)" :disabled="props.row.items[0].purchases[0].pivot.approved_by != null"/>
+                                <q-item :key="idx" @click.native="myFunction(action, props.row)" v-close-overlay>
+                                    <q-item-main :label="capitalize(action)" :disabled="props.row.items[0].purchases[0].pivot.approved_by != null" />
                                 </q-item>
                             </template>
                         </q-list>
@@ -46,94 +46,38 @@
         </template>
 
     </q-table>
-    <q-modal v-model="editPurchaseItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    <!-- <q-modal v-model="editPurchaseItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
         <div style="padding: 30px">
-            <!-- <div class="q-display-1 q-mb-md">Edit {{ item.name }}</div> -->
-
-            <!-- <div class="row">
-                <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="item.name" float-label="Name" clearable />
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="item.sku" float-label="SKU" clearable />
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="item.barcode" float-label="Barcode" clearable />
-                </div>
-
-                <div class="col-xs-12 col-sm-4">
-                    <input-price label="Price" :value="item.price" v-model="item.price"></input-price>
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="item.qty" float-label="In stock" clearable />
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <q-select v-model="item.package_id" :options="packages" float-label="Package" clearable />
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="item.minimum" float-label="Minimum Stock" clearable />
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="item.maximum" float-label="Maximum Stock" clearable />
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="item.reorder_level" float-label="Reorder Level" suffix="%" clearable />
-                </div>
-                <div class="col-xs-12 col-sm-12">
-                    <q-input v-model="item.desc" type="textarea" float-label="Description" :max-height="100" rows="2" />
-                </div>
-            </div> -->
-            <br />
-            <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
-            <q-btn color="primary" @click="update()" label="Submit" class="q-ml-sm" />
-
-        </div>
-    </q-modal>
-    <!-- <q-modal v-model="newItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
-        <div style="padding: 30px">
-            <div class="q-display-1 q-mb-md">Edit {{ item.name }}</div>
+            <div class="q-display-1 q-mb-md">Order From {{ purchaseItem.name }} </div>
 
             <div class="row">
-                <div class="col-xs-12 col-sm-6">
-                    <q-select v-model="item.itemable_type" :options="itemableType" float-label="Itemable Type" />
-                </div>
-                <div class="col-xs-12 col-sm-6">
-                    <q-search v-model="terms" :placeholder="placeholderItemableType" float-label="Item Owner">
-                        <q-autocomplete :static-data="{field: 'label', list: userEntities }" @selected="selected" />
-                    </q-search>
+                <div class="col-xs-12 col-sm-4">
+                    <q-input :value="`${purchaseItem.items[0].name}`" float-label="Item Name" disable />
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="item.name" float-label="Name" clearable />
+                    <q-input :value="purchaseItem.pivot.vendorable_type.substring(10)" float-label="Vendorable Type" disable />
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="item.sku" float-label="SKU" clearable />
+                    <q-input :value="purchaseItem.name" :float-label="`${purchaseItem.pivot.vendorable_type.substring(10)} Name`" disable/>
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="item.barcode" float-label="Barcode" clearable />
-                </div>
-
-                <div class="col-xs-12 col-sm-4">
-                    <input-price label="Price" :value="item.price" v-model="item.price"></input-price>
+                    <input-price label="Price" :value="pivotPrice" v-model="pivotPrice" ></input-price>
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="item.qty" float-label="In stock" clearable />
+                    <q-input v-model="pivotQty" float-label="Quantity"  />
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <q-select v-model="item.package_id" :options="packages" float-label="Package" clearable />
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="item.minimum" float-label="Minimum Stock" clearable />
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="item.maximum" float-label="Maximum Stock" clearable />
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="item.reorder_level" float-label="Reorder Level" suffix="%" clearable />
-                </div>
-                <div class="col-xs-12 col-sm-12">
-                    <q-input v-model="item.desc" type="textarea" float-label="Description" :max-height="100" rows="2" />
+                    <input-price label="Freight" :value="pivotFreight" v-model="pivotFreight" ></input-price>
                 </div>
             </div>
+            <br />
+            <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
+            <q-btn color="primary" @click="update()" label="Update" class="q-ml-sm" />
+
+        </div>
+    </q-modal> -->
+    <!-- <q-modal v-model="newPurchaseItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+        <div style="padding: 30px">
             <br />
             <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
             <q-btn color="primary" @click="store()" label="Submit" class="q-ml-sm" />
@@ -156,6 +100,7 @@ import {
 export default {
     data() {
         return {
+            pivotPricee: 0,
             actions: ['edit', 'cancel order'],
             editPurchaseItemModal: false,
             options: [5, 10, 15, 20],
@@ -222,43 +167,6 @@ export default {
                     align: 'left'
                 }
 
-                // {
-                //     name: 'order_date',
-                //     label: 'Order Date',
-                //     field: 'order_date',
-                //     align: 'left'
-                // },
-                // {
-                //     name: 'prepared_by',
-                //     label: 'Prepared By',
-                //     field: 'prepared_by',
-                //     align: 'left'
-                // },
-                // {
-                //     name: 'noted_by',
-                //     label: 'Noted By',
-                //     field: 'noted_by',
-                //     align: 'left'
-                // },
-                // {
-                //     name: 'approved_by',
-                //     label: 'Approved By',
-                //     field: 'approved_by',
-                //     align: 'left'
-                // },
-                // {
-                //     name: 'purchase_by',
-                //     label: 'Purchase By',
-                //     field: 'purchase_by',
-                //     align: 'left'
-                // },
-                // {
-                //     name: 'purchasable_type',
-                //     label: 'Purchase Type',
-                //     field: 'purchasable_type',
-                //     align: 'left'
-                // }
-
             ],
             filter: '',
             loading: false
@@ -268,8 +176,7 @@ export default {
         inputPrice
     },
     computed: {
-        ...mapState('items', ['item', 'editItemModal', 'newItemModal']),
-        ...mapState('purchaseRequests', ['purchaseRequest']),
+        ...mapState('purchaseRequests', ['purchaseRequest', 'purchaseItem']),
         packages() {
             return this.$store.getters['items/packages'].map(e => {
                 return {
@@ -285,6 +192,39 @@ export default {
                     value: e.id
                 }
             })
+        },
+        newPurchaseItemModal: {
+            get(){
+               return this.$store.getters['purchaseRequests/newPurchaseItemModal']
+            },
+            set(val){
+                this.$store.dispatch('purchaseRequests/newPurchaseItemModal', val);
+            }
+        },
+        pivotPrice: {
+            get() {
+
+                return parseFloat(this.purchaseItem.items[0].purchases[0].pivot.price)
+            },
+            set(val) {
+                this.$store.dispatch('purchaseRequests/pivotPrice', parseFloat(val))
+            }
+        },
+        pivotQty: {
+            get(){
+                return this.purchaseItem.items[0].purchases[0].pivot.qty
+            },
+            set(val){
+                 this.$store.dispatch('purchaseRequests/pivotQty', val)
+            }
+        },
+        pivotFreight: {
+            get(){
+                return parseFloat(this.purchaseItem.items[0].purchases[0].pivot.freight)
+            },
+            set(val){
+                 this.$store.dispatch('purchaseRequests/pivotFreight', parseFloat(val))
+            }
         }
     },
     methods: {
@@ -325,14 +265,17 @@ export default {
         capitalize(string) {
             return (string.charAt(0).toUpperCase() + string.slice(1).toLowerCase())
         },
-        myFunction(action, pivotId, status) {
+        myFunction(action, propsRow) {
+            let status = propsRow.items[0].purchases[0].pivot.approved_by;
             if (action === 'edit') {
-                if(status === false){
-                    this.edit(pivotId)
+                if (status === null) {
+                    this.$store.dispatch('purchaseRequests/purchaseItem', propsRow)
+                    this.editPurchaseItemModal = true
+
                 }
             } else if (action === 'cancel order') {
-                if(status === false){
-                    this.deleteRow(purchaseId)
+                if (status === null) {
+                    this.deleteRow(propsRow)
                 }
             }
         },
@@ -352,25 +295,25 @@ export default {
                     })
                 })
         },
-        deleteRow(itemId) {
-            this.$axios.get(`/items/${itemId}?id=${itemId}`)
-                .then((res) => {
-                    this.$store.dispatch('items/item', res.data.item)
+        deleteRow(propsRow) {
+            let purchaseId = propsRow.items[0].purchases[0].id
+            let pivotId = propsRow.items[0].purchases[0].pivot.id
+            this.$store.dispatch('purchaseRequests/purchaseItem', propsRow)
                     this.$q.notify({
                         color: 'negative',
                         icon: 'delete',
-                        message: `Delete ${res.data.item.name}?`,
+                        message: `Cancel Order in ${propsRow.items[0].name}?`,
                         actions: [
 
                             {
                                 label: 'OK',
                                 handler: () => {
-                                    this.$axios.delete(`/items/${this.item.id}?id=${this.item.id}`)
+                                    this.$axios.delete(`/purchase_items/${purchaseId}?id=${purchaseId}&pivotId=${pivotId}`)
                                         .then((res) => {
                                             this.$q.notify({
                                                 color: 'positive',
                                                 icon: 'check',
-                                                message: `${this.item.name} deleted successfully`
+                                                message: `${propsRow.items[0].name} deleted successfully`
                                             })
                                             this.request({
                                                 pagination: this.serverPagination,
@@ -389,22 +332,16 @@ export default {
                             }
                         ]
                     })
-                })
-            // .catch()
         },
         update() {
-            this.$axios.put(`/items/${this.item.id}`, this.item)
+            this.$axios.put(`/purchase_items/${this.purchaseItem.id}`, this.purchaseItem)
                 .then((res) => {
-                    this.hideModal()
                     this.$q.notify({
                         color: 'positive',
                         icon: 'check',
-                        message: `${this.item.name} update successfully`
+                        message: `${this.purchaseItem.items[0].name} updated successfully`
                     })
-                    this.request({
-                        pagination: this.serverPagination,
-                        filter: this.filter
-                    })
+                    this.hideModal()
                 })
                 .catch()
         },
@@ -432,16 +369,13 @@ export default {
                     this.loading = false
                 })
         },
-        edit(itemId) {
-            this.$axios.get(`items/${itemId}/edit?id=${itemId}`)
-                .then(res => {
-                    this.showModal()
-                    this.$store.dispatch('items/item', res.data.item)
-                })
-        },
         hideModal() {
-            this.$store.dispatch('items/editItemModal', false)
+            this.editPurchaseItemModal = false
             this.$store.dispatch('items/newItemModal', false)
+            this.request({
+                pagination: this.serverPagination,
+                filter: this.filter
+            })
         },
         showModal() {
             this.$store.dispatch('items/editItemModal', true)

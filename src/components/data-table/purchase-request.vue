@@ -349,7 +349,7 @@ export default {
                     this.$q.notify({
                         color: 'negative',
                         icon: 'delete',
-                        message: `Delete ${res.data.purchase.name}?`,
+                        message: `Cancel request in ${res.data.purchase.name}?`,
                         actions: [
 
                             {
