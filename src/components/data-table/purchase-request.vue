@@ -3,7 +3,7 @@
     <q-table
       ref="table"
       color="primary"
-      title="All Items"
+      title="All Purchase Requests"
       :data="serverData"
       :columns="columns"
       :filter="filter"
@@ -41,7 +41,7 @@
                 <template v-for="(action, idx) in actions">
                   <q-item
                     :key="idx"
-                    @click.native="myFunction(action, props.row.id)"
+                    @click.native="myFunction(action, props.row.id, props.row.name)"
                     v-close-overlay
                   >
                     <q-item-main :label="capitalize(action)" />
@@ -51,153 +51,138 @@
             </q-popover>
           </q-td>
           <q-td
-            key="price"
+            key="order_date"
             :props="props"
           >
-            {{ props.row.price|currency('₱ ') }}
+            {{ props.row.order_date }}
           </q-td>
           <q-td
-            key="qty"
+            key="prepared_by"
             :props="props"
           >
-            {{ props.row.qty }}
+            {{ props.row.prepared_by.firstname }}
+            {{ props.row.prepared_by.middlename }}
+            {{ props.row.prepared_by.lastname }} <br />
+            {{ props.row.created_at }}
           </q-td>
           <q-td
-            key="package"
+            key="noted_by"
             :props="props"
           >
-            {{ props.row.package.name }}
+            <span v-if="props.row.noted_by === null">
+              <q-btn
+                flat
+                color="negative"
+                icon="playlist_add_check"
+                @click="notedBy(props.row.id)"
+              >
+                <q-tooltip
+                  anchor="bottom middle"
+                  self="top middle"
+                  :offset="[10, 10]"
+                >
+                  Click to noted by
+                </q-tooltip>
+              </q-btn>
+            </span>
+            <span v-else>
+              {{ props.row.noted_by.firstname }}
+              {{ props.row.noted_by.middlename }}
+              {{ props.row.noted_by.lastname }}<br />
+              {{ props.row.noted_date }}
+            </span>
           </q-td>
           <q-td
-            key="minimum"
+            key="approved_by"
             :props="props"
           >
-            {{ props.row.minimum }}
+            <span v-if="props.row.approved_by === null">
+              <q-btn
+                flat
+                color="negative"
+                icon="playlist_add_check"
+                @click="approvedBy(props.row.id)"
+              >
+                <q-tooltip
+                  anchor="bottom middle"
+                  self="top middle"
+                  :offset="[10, 10]"
+                >
+                  Click to approved by
+                </q-tooltip>
+              </q-btn>
+            </span>
+            <span v-else>
+              {{ props.row.approved_by.firstname }}
+              {{ props.row.approved_by.middlename }}
+              {{ props.row.approved_by.lastname }}<br />
+              {{ props.row.approved_date }}
+            </span>
           </q-td>
           <q-td
-            key="maximum"
+            key="purchase_by"
             :props="props"
           >
-            {{ props.row.maximum }}
+            {{ props.row.purchasable.name }}
           </q-td>
           <q-td
-            key="reorder_level"
+            key="purchasable_type"
             :props="props"
           >
-            {{ props.row.reorder_level }}
+            {{ props.row.purchasable_type.substring(10) }}
           </q-td>
-          <q-td
-            key="actions"
-            :props="props"
-          >
-            <q-btn
-              round
-              outline
-              color="positive"
-              icon="edit"
-              class="q-ma-sm"
-              @click="edit(props.row.id)"
-            />
-            <q-btn
-              round
-              outline
-              color="negative"
-              icon="delete"
-              class="q-ma-sm"
-              @click="deleteRow(props.row.id)"
-            />
-          </q-td>
+
         </q-tr>
 
       </template>
 
     </q-table>
     <q-modal
-      v-model="editItemModal"
+      v-model="editPurchaseRequestModal"
       minimized
       no-esc-dismiss
       no-backdrop-dismiss
       :content-css="{minWidth: '80vw', minHeight: '80vh'}"
     >
       <div style="padding: 30px">
-        <div class="q-display-1 q-mb-md">Edit {{ item.name }}</div>
+        <div class="q-display-1 q-mb-md">Edit {{ purchaseRequest.name }}</div>
 
         <div class="row">
           <div class="col-xs-12 col-sm-4">
             <q-input
-              v-model="item.name"
+              v-model="purchaseRequest.name"
               float-label="Name"
               clearable
             />
           </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.sku"
-              float-label="SKU"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.barcode"
-              float-label="Barcode"
-              clearable
-            />
-          </div>
+          <!-- <div class="col-xs-12 col-sm-4">
+                    <q-input v-model="item.sku" float-label="SKU" clearable />
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-input v-model="item.barcode" float-label="Barcode" clearable />
+                </div>
 
-          <div class="col-xs-12 col-sm-4">
-            <input-price
-              label="Price"
-              :value="item.price"
-              v-model="item.price"
-            ></input-price>
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.qty"
-              float-label="In stock"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-select
-              v-model="item.package_id"
-              :options="packages"
-              float-label="Package"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.minimum"
-              float-label="Minimum Stock"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.maximum"
-              float-label="Maximum Stock"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.reorder_level"
-              float-label="Reorder Level"
-              suffix="%"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-12">
-            <q-input
-              v-model="item.desc"
-              type="textarea"
-              float-label="Description"
-              :max-height="100"
-              rows="2"
-            />
-          </div>
+                <div class="col-xs-12 col-sm-4">
+                    <input-price label="Price" :value="item.price" v-model="item.price"></input-price>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-input v-model="item.qty" float-label="In stock" clearable />
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-select v-model="item.package_id" :options="packages" float-label="Package" clearable />
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-input v-model="item.minimum" float-label="Minimum Stock" clearable />
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-input v-model="item.maximum" float-label="Maximum Stock" clearable />
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-input v-model="item.reorder_level" float-label="Reorder Level" suffix="%" clearable />
+                </div>
+                <div class="col-xs-12 col-sm-12">
+                    <q-input v-model="item.desc" type="textarea" float-label="Description" :max-height="100" rows="2" />
+                </div> -->
         </div>
         <br />
         <q-btn
@@ -215,134 +200,11 @@
 
       </div>
     </q-modal>
-    <q-modal
-      v-model="newItemModal"
-      minimized
-      no-esc-dismiss
-      no-backdrop-dismiss
-      :content-css="{minWidth: '80vw', minHeight: '80vh'}"
-    >
-      <div style="padding: 30px">
-        <div class="q-display-1 q-mb-md">Edit {{ item.name }}</div>
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-6">
-            <q-select
-              v-model="item.itemable_type"
-              :options="itemableType"
-              float-label="Itemable Type"
-            />
-          </div>
-          <div class="col-xs-12 col-sm-6">
-            <q-search
-              v-model="terms"
-              :placeholder="placeholderItemableType"
-              float-label="Item Owner"
-            >
-              <q-autocomplete
-                :static-data="{field: 'label', list: userEntities }"
-                @selected="selected"
-              />
-            </q-search>
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.name"
-              float-label="Name"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.sku"
-              float-label="SKU"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.barcode"
-              float-label="Barcode"
-              clearable
-            />
-          </div>
-
-          <div class="col-xs-12 col-sm-4">
-            <input-price
-              label="Price"
-              :value="item.price"
-              v-model="item.price"
-            ></input-price>
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.qty"
-              float-label="In stock"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-select
-              v-model="item.package_id"
-              :options="packages"
-              float-label="Package"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.minimum"
-              float-label="Minimum Stock"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.maximum"
-              float-label="Maximum Stock"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-4">
-            <q-input
-              v-model="item.reorder_level"
-              float-label="Reorder Level"
-              suffix="%"
-              clearable
-            />
-          </div>
-          <div class="col-xs-12 col-sm-12">
-            <q-input
-              v-model="item.desc"
-              type="textarea"
-              float-label="Description"
-              :max-height="100"
-              rows="2"
-            />
-          </div>
-        </div>
-        <br />
-        <q-btn
-          color="red"
-          v-close-overlay
-          label="Close"
-          @click="hideModal()"
-        />
-        <q-btn
-          color="primary"
-          @click="store()"
-          label="Submit"
-          class="q-ml-sm"
-        />
-
-      </div>
-    </q-modal>
   </div>
 </template>
 
 <script>
 import inputPrice from 'components/inputs/price'
-// import { uid, filter } from 'quasar'
 import _ from 'lodash'
 import {
   mapState
@@ -370,7 +232,7 @@ export default {
         label: 'Other Vendor'
       }
       ],
-      actions: ['edit', 'delete', 'vendors'],
+      actions: ['edit', 'delete', 'purchase items'],
       editotherVendorsModal: false,
       options: [5, 10, 15, 20],
       lastPage: '',
@@ -386,42 +248,44 @@ export default {
         field: 'name',
         align: 'left'
       },
+
       {
-        name: 'price',
-        label: 'Price',
-        field: 'price',
+        name: 'order_date',
+        label: 'Order Date',
+        field: 'order_date',
         align: 'left'
       },
       {
-        name: 'qty',
-        label: 'In stock',
-        field: 'qty',
+        name: 'prepared_by',
+        label: 'Prepared By',
+        field: 'prepared_by',
         align: 'left'
       },
       {
-        name: 'package',
-        label: 'Package',
-        field: 'package',
+        name: 'noted_by',
+        label: 'Noted By',
+        field: 'noted_by',
         align: 'left'
       },
       {
-        name: 'minimum',
-        label: 'Minimum',
-        field: 'minimum',
+        name: 'approved_by',
+        label: 'Approved By',
+        field: 'approved_by',
         align: 'left'
       },
       {
-        name: 'maximum',
-        label: 'Maximum',
-        field: 'maximum',
+        name: 'purchase_by',
+        label: 'Purchase By',
+        field: 'purchase_by',
         align: 'left'
       },
       {
-        name: 'reorder_level',
-        label: 'Re-order Level',
-        field: 'reorder_level',
+        name: 'purchasable_type',
+        label: 'Purchase Type',
+        field: 'purchasable_type',
         align: 'left'
       }
+
       ],
       filter: '',
       loading: false
@@ -432,7 +296,7 @@ export default {
   },
   computed: {
     ...mapState('items', ['item', 'editItemModal', 'newItemModal']),
-
+    ...mapState('purchaseRequests', ['editPurchaseRequestModal', 'purchaseRequest']),
     packages () {
       return this.$store.getters['items/packages'].map(e => {
         return {
@@ -451,6 +315,34 @@ export default {
     }
   },
   methods: {
+    notedBy (purchaseRequestId) {
+      this.$axios.get(`purchases-noted-by?id=${purchaseRequestId}`)
+        .then(res => {
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `Noted by was successfully updated.`
+          })
+          this.request({
+            pagination: this.serverPagination,
+            filter: this.filter
+          })
+        })
+    },
+    approvedBy (purchaseRequestId) {
+      this.$axios.get(`purchases-approved-by?id=${purchaseRequestId}`)
+        .then(res => {
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `Approved by was successfully updated.`
+          })
+          this.request({
+            pagination: this.serverPagination,
+            filter: this.filter
+          })
+        })
+    },
     selected (item) {
       this.$q.notify(`Selected suggestion "${item.label}"`)
       this.$store.dispatch('items/itemItemableId', item.value)
@@ -458,18 +350,13 @@ export default {
     capitalize (string) {
       return (string.charAt(0).toUpperCase() + string.slice(1).toLowerCase())
     },
-    myFunction (action, itemId) {
+    myFunction (action, purchaseId, purchaseName) {
       if (action === 'edit') {
-        this.edit(itemId)
+        this.edit(purchaseId)
       } else if (action === 'delete') {
-        this.deleteRow(itemId)
-      } else if (action === 'vendors') {
-        this.$axios.get(`items/${itemId}/edit?id=${itemId}`)
-          .then(res => {
-            this.$route.meta.title = res.data.item.name
-            this.$router.push(`items/${itemId}/vendors`)
-            this.$store.dispatch('items/item', res.data.item)
-          })
+        this.deleteRow(purchaseId)
+      } else if (action === 'purchase items') {
+        this.$router.push(`purchase-request/${purchaseId}/purchase-items`)
       }
     },
     store () {
@@ -549,15 +436,15 @@ export default {
       this.loading = true
       this.$axios
         .get(
-          `/items?filter=${this.filter}&page=${props.pagination.page}&perPage=${
+          `/purchases?filter=${this.filter}&page=${props.pagination.page}&perPage=${
             props.pagination.rowsPerPage
           }`
         )
         .then(res => {
           this.serverPagination = props.pagination
-          this.serverData = _.values(res.data.items.data)
-          this.serverPagination.rowsNumber = res.data.items.total
-          this.lastPage = res.data.items.last_page
+          this.serverData = _.values(res.data.purchases.data)
+          this.serverPagination.rowsNumber = res.data.purchases.total
+          this.lastPage = res.data.purchases.last_page
           this.loading = false
         })
         .catch(error => {
@@ -567,19 +454,19 @@ export default {
           this.loading = false
         })
     },
-    edit (itemId) {
-      this.$axios.get(`items/${itemId}/edit?id=${itemId}`)
+    edit (purchaseId) {
+      this.$axios.get(`purchases/${purchaseId}/edit?id=${purchaseId}`)
         .then(res => {
           this.showModal()
-          this.$store.dispatch('items/item', res.data.item)
+          this.$store.dispatch('purchaseRequests/purchaseRequest', res.data.purchase)
         })
     },
     hideModal () {
-      this.$store.dispatch('items/editItemModal', false)
+      this.$store.dispatch('purchaseRequests/editPurchaseRequestModal', false)
       this.$store.dispatch('items/newItemModal', false)
     },
     showModal () {
-      this.$store.dispatch('items/editItemModal', true)
+      this.$store.dispatch('purchaseRequests/editPurchaseRequestModal', true)
     }
   },
   mounted () {

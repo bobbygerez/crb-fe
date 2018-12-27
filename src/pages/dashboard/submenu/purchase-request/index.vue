@@ -5,30 +5,32 @@
     <q-page-sticky
       position="bottom-left"
       :offset="[16, 16]"
-      v-if="purchaseRequest.approved_by == null"
     >
       <q-btn
         color="primary"
-        @click="showNewPurchaseItemModal()"
+        @click="showNewPurchasRequestModal()"
       >
-        <q-icon name="add"></q-icon>New Item
+        <q-icon name="add"></q-icon>New Purchase Request
       </q-btn>
     </q-page-sticky>
   </div>
 </template>
 
 <script>
-import items from 'components/data-table/purchase-items.vue'
-import {
-  mapState
-} from 'vuex'
+import items from 'components/data-table/purchase-request.vue'
 export default {
-  computed: {
-    ...mapState('purchaseRequests', ['purchaseRequest'])
+  created () {
+    this.packages()
   },
   methods: {
-    showNewPurchaseItemModal () {
-      this.$store.dispatch('purchaseRequests/purchaseItem', {
+    packages () {
+      this.$axios.get('packages-all')
+        .then(res => {
+          this.$store.dispatch('items/packages', res.data.packages)
+        })
+    },
+    showNewPurchasRequestModal () {
+      this.$store.dispatch('purchaseRequests/purchaseRequest', {
         name: '',
         purchasable_id: '',
         purchasable_type: '',
@@ -55,7 +57,7 @@ export default {
         approved_date: ''
 
       })
-      this.$store.dispatch('purchaseRequests/newPurchaseItemModal', true)
+      this.$store.dispatch('purchaseRequests/newPurchaseRequestModal', true)
     }
   },
   components: {
