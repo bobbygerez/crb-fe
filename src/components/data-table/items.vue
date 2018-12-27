@@ -112,15 +112,6 @@
       </template>
 
     </q-table>
-    <generic-list-data-table
-      :data="holdings"
-      :columns="columns"
-      color="primary"
-      :actions="['edit', 'delete']"
-      @edit="edit"
-      @delete="deleteRow"
-      theme="secondary"
-    />
     <q-modal
       v-model="editItemModal"
       minimized

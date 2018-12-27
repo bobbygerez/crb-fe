@@ -1,52 +1,9 @@
 <template>
-<<<<<<< HEAD
-<div>
-    <q-table ref="table" color="primary" :title="`${purchaseRequest.name} order details`" :data="serverData" :columns="columns" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
-        <template slot="body" slot-scope="props">
-            <q-tr :props="props">
-                <q-td key="item" :props="props">
-                    {{ props.row.items[0].name }}
-                    <q-popover touch-position v-if="actions">
-                        <q-list link style="min-width: 100px">
-                            <template v-for="(action, idx) in actions">
-                                <q-item :key="idx" @click.native="myFunction(action, props.row)" v-close-overlay>
-                                    <q-item-main :label="capitalize(action)" :disabled="props.row.items[0].purchases[0].pivot.approved_by != null" />
-                                </q-item>
-                            </template>
-                        </q-list>
-                    </q-popover>
-                </q-td>
-                <q-td key="company_name" :props="props">
-                    {{ props.row.name}}
-                </q-td>
-                <q-td key="vendorable_type" :props="props">
-                    {{ props.row.pivot.vendorable_type.substring(10) }}
-                </q-td>
-                <q-td key="price" :props="props">
-                    {{ props.row.items[0].purchases[0].pivot.price |currency('₱ ') }}
-                </q-td>
-                <q-td key="qty" :props="props">
-                    {{ props.row.items[0].purchases[0].pivot.qty }}
-                </q-td>
-                <q-td key="freight" :props="props">
-                    {{ props.row.items[0].purchases[0].pivot.freight |currency('₱ ') }}
-                </q-td>
-                <q-td key="date_delivery" :props="props">
-                    {{ props.row.items[0].purchases[0].pivot.date_delivery }}
-                </q-td>
-                <q-td key="package" :props="props">
-                    {{ props.row.items[0].package.name }}
-                </q-td>
-                <q-td key="approved_by" :props="props">
-                    {{ props.row.items[0].purchases[0].pivot.approved_by }} <br />
-                    {{ props.row.items[0].purchases[0].pivot.date_approved }}
-                </q-td>
-=======
   <div>
     <q-table
       ref="table"
       color="primary"
-      :title="'Purchase Items'"
+      :title="`${purchaseRequest.name} order details`"
       :data="serverData"
       :columns="columns"
       :pagination.sync="serverPagination"
@@ -60,7 +17,35 @@
       >
         <q-tr :props="props">
           <q-td
-            key="name"
+            key="item"
+            :props="props"
+          >
+            {{ props.row.items[0].name }}
+            <q-popover
+              touch-position
+              v-if="actions"
+            >
+              <q-list
+                link
+                style="min-width: 100px"
+              >
+                <template v-for="(action, idx) in actions">
+                  <q-item
+                    :key="idx"
+                    @click.native="myFunction(action, props.row)"
+                    v-close-overlay
+                  >
+                    <q-item-main
+                      :label="capitalize(action)"
+                      :disabled="props.row.items[0].purchases[0].pivot.approved_by != null"
+                    />
+                  </q-item>
+                </template>
+              </q-list>
+            </q-popover>
+          </q-td>
+          <q-td
+            key="company_name"
             :props="props"
           >
             {{ props.row.name}}
@@ -70,12 +55,6 @@
             :props="props"
           >
             {{ props.row.pivot.vendorable_type.substring(10) }}
-          </q-td>
-          <q-td
-            key="item"
-            :props="props"
-          >
-            {{ props.row.items[0].name }}
           </q-td>
           <q-td
             key="price"
@@ -90,12 +69,30 @@
             {{ props.row.items[0].purchases[0].pivot.qty }}
           </q-td>
           <q-td
+            key="freight"
+            :props="props"
+          >
+            {{ props.row.items[0].purchases[0].pivot.freight |currency('₱ ') }}
+          </q-td>
+          <q-td
+            key="date_delivery"
+            :props="props"
+          >
+            {{ props.row.items[0].purchases[0].pivot.date_delivery }}
+          </q-td>
+          <q-td
             key="package"
             :props="props"
           >
             {{ props.row.items[0].package.name }}
           </q-td>
->>>>>>> develop-ren
+          <q-td
+            key="approved_by"
+            :props="props"
+          >
+            {{ props.row.items[0].purchases[0].pivot.approved_by }} <br />
+            {{ props.row.items[0].purchases[0].pivot.date_approved }}
+          </q-td>
 
         </q-tr>
 
@@ -150,104 +147,11 @@ import {
   mapState
 } from 'vuex'
 export default {
-<<<<<<< HEAD
-    data() {
-        return {
-            pivotPricee: 0,
-            actions: ['edit', 'cancel order'],
-            editPurchaseItemModal: false,
-            options: [5, 10, 15, 20],
-            lastPage: '',
-            serverData: [],
-            serverPagination: {
-                page: 1,
-                rowsNumber: 10,
-                rowsPerPage: 10 // specifying this determines pagination is server-side
-            },
-            columns: [{
-                    name: 'item',
-                    label: 'Item Name',
-                    field: 'item',
-                    align: 'left'
-                },
-                {
-                    name: 'company_name',
-                    label: 'Company Name',
-                    field: 'company_name',
-                    align: 'left'
-                },
-                {
-                    name: 'vendorable_type',
-                    label: 'Vendor Type',
-                    field: 'vendorable_type',
-                    align: 'left'
-                },
-
-                {
-                    name: 'price',
-                    label: 'Price',
-                    field: 'price',
-                    align: 'left'
-                },
-                {
-                    name: 'qty',
-                    label: 'Quantity',
-                    field: 'qty',
-                    align: 'left'
-                },
-                {
-                    name: 'freight',
-                    label: 'Freight',
-                    field: 'freight',
-                    align: 'left'
-                },
-                {
-                    name: 'date_delivery',
-                    label: 'Delivery date',
-                    field: 'date_delivery',
-                    align: 'left'
-                },
-                {
-                    name: 'package',
-                    label: 'Package',
-                    field: 'package',
-                    align: 'left'
-                },
-                {
-                    name: 'approved_by',
-                    label: 'Approved by',
-                    field: 'approved_by',
-                    align: 'left'
-                }
-
-            ],
-            filter: '',
-            loading: false
-=======
   data () {
     return {
-      terms: '',
-      itemableId: '',
-      placeholderItemableType: '',
-      itemableType: [{
-        value: 'App\\Model\\Logistic',
-        label: 'Logistic'
-      },
-      {
-        value: 'App\\Model\\Branch',
-        label: 'Branch'
-      },
-      {
-        value: 'App\\Model\\Commissary',
-        label: 'Commissary'
-      },
-      {
-        value: 'App\\Model\\OtherVendor',
-        label: 'Other Vendor'
-      }
-      ],
-      actions: ['edit', 'delete', 'purchase items'],
-      editotherVendorsModal: false,
+      pivotPricee: 0,
+      actions: ['edit', 'cancel order'],
+      editPurchaseItemModal: false,
       options: [5, 10, 15, 20],
       lastPage: '',
       serverData: [],
@@ -257,21 +161,21 @@ export default {
         rowsPerPage: 10 // specifying this determines pagination is server-side
       },
       columns: [{
-        name: 'name',
+        name: 'item',
+        label: 'Item Name',
+        field: 'item',
+        align: 'left'
+      },
+      {
+        name: 'company_name',
         label: 'Company Name',
-        field: 'name',
+        field: 'company_name',
         align: 'left'
       },
       {
         name: 'vendorable_type',
         label: 'Vendor Type',
         field: 'vendorable_type',
-        align: 'left'
-      },
-      {
-        name: 'item',
-        label: 'Item Name',
-        field: 'item',
         align: 'left'
       },
 
@@ -288,48 +192,29 @@ export default {
         align: 'left'
       },
       {
+        name: 'freight',
+        label: 'Freight',
+        field: 'freight',
+        align: 'left'
+      },
+      {
+        name: 'date_delivery',
+        label: 'Delivery date',
+        field: 'date_delivery',
+        align: 'left'
+      },
+      {
         name: 'package',
         label: 'Package',
         field: 'package',
         align: 'left'
+      },
+      {
+        name: 'approved_by',
+        label: 'Approved by',
+        field: 'approved_by',
+        align: 'left'
       }
-
-        // {
-        //     name: 'order_date',
-        //     label: 'Order Date',
-        //     field: 'order_date',
-        //     align: 'left'
-        // },
-        // {
-        //     name: 'prepared_by',
-        //     label: 'Prepared By',
-        //     field: 'prepared_by',
-        //     align: 'left'
-        // },
-        // {
-        //     name: 'noted_by',
-        //     label: 'Noted By',
-        //     field: 'noted_by',
-        //     align: 'left'
-        // },
-        // {
-        //     name: 'approved_by',
-        //     label: 'Approved By',
-        //     field: 'approved_by',
-        //     align: 'left'
-        // },
-        // {
-        //     name: 'purchase_by',
-        //     label: 'Purchase By',
-        //     field: 'purchase_by',
-        //     align: 'left'
-        // },
-        // {
-        //     name: 'purchasable_type',
-        //     label: 'Purchase Type',
-        //     field: 'purchasable_type',
-        //     align: 'left'
-        // }
 
       ],
       filter: '',
@@ -340,80 +225,54 @@ export default {
     inputPrice
   },
   computed: {
-    ...mapState('items', ['item', 'editItemModal', 'newItemModal']),
-
+    ...mapState('purchaseRequests', ['purchaseRequest', 'purchaseItem']),
     packages () {
       return this.$store.getters['items/packages'].map(e => {
         return {
           label: e.name,
           value: e.id
->>>>>>> develop-ren
         }
       })
     },
-<<<<<<< HEAD
-    components: {
-        inputPrice
-    },
-    computed: {
-        ...mapState('purchaseRequests', ['purchaseRequest', 'purchaseItem']),
-        packages() {
-            return this.$store.getters['items/packages'].map(e => {
-                return {
-                    label: e.name,
-                    value: e.id
-                }
-            })
-        },
-        userEntities() {
-            return this.$store.getters['items/userEntities'].map(e => {
-                return {
-                    label: e.name,
-                    value: e.id
-                }
-            })
-        },
-        newPurchaseItemModal: {
-            get(){
-               return this.$store.getters['purchaseRequests/newPurchaseItemModal']
-            },
-            set(val){
-                this.$store.dispatch('purchaseRequests/newPurchaseItemModal', val);
-            }
-        },
-        pivotPrice: {
-            get() {
-
-                return parseFloat(this.purchaseItem.items[0].purchases[0].pivot.price)
-            },
-            set(val) {
-                this.$store.dispatch('purchaseRequests/pivotPrice', parseFloat(val))
-            }
-        },
-        pivotQty: {
-            get(){
-                return this.purchaseItem.items[0].purchases[0].pivot.qty
-            },
-            set(val){
-                 this.$store.dispatch('purchaseRequests/pivotQty', val)
-            }
-        },
-        pivotFreight: {
-            get(){
-                return parseFloat(this.purchaseItem.items[0].purchases[0].pivot.freight)
-            },
-            set(val){
-                 this.$store.dispatch('purchaseRequests/pivotFreight', parseFloat(val))
-            }
-=======
     userEntities () {
       return this.$store.getters['items/userEntities'].map(e => {
         return {
           label: e.name,
           value: e.id
->>>>>>> develop-ren
         }
       })
+    },
+    newPurchaseItemModal: {
+      get () {
+        return this.$store.getters['purchaseRequests/newPurchaseItemModal']
+      },
+      set (val) {
+        this.$store.dispatch('purchaseRequests/newPurchaseItemModal', val)
+      }
+    },
+    pivotPrice: {
+      get () {
+        return parseFloat(this.purchaseItem.items[0].purchases[0].pivot.price)
+      },
+      set (val) {
+        this.$store.dispatch('purchaseRequests/pivotPrice', parseFloat(val))
+      }
+    },
+    pivotQty: {
+      get () {
+        return this.purchaseItem.items[0].purchases[0].pivot.qty
+      },
+      set (val) {
+        this.$store.dispatch('purchaseRequests/pivotQty', val)
+      }
+    },
+    pivotFreight: {
+      get () {
+        return parseFloat(this.purchaseItem.items[0].purchases[0].pivot.freight)
+      },
+      set (val) {
+        this.$store.dispatch('purchaseRequests/pivotFreight', parseFloat(val))
+      }
     }
   },
   methods: {
@@ -431,66 +290,6 @@ export default {
           })
         })
     },
-<<<<<<< HEAD
-    methods: {
-        notedBy(purchaseRequestId) {
-            this.$axios.get(`purchases-noted-by?id=${purchaseRequestId}`)
-                .then(res => {
-                    this.$q.notify({
-                        color: 'positive',
-                        icon: 'check',
-                        message: `Noted by was successfully updated.`
-                    })
-                    this.request({
-                        pagination: this.serverPagination,
-                        filter: this.filter
-                    })
-                })
-
-        },
-        approvedBy(purchaseRequestId) {
-            this.$axios.get(`purchases-approved-by?id=${purchaseRequestId}`)
-                .then(res => {
-                    this.$q.notify({
-                        color: 'positive',
-                        icon: 'check',
-                        message: `Approved by was successfully updated.`
-                    })
-                    this.request({
-                        pagination: this.serverPagination,
-                        filter: this.filter
-                    })
-                })
-
-        },
-        selected(item) {
-            this.$q.notify(`Selected suggestion "${item.label}"`)
-            this.$store.dispatch('items/itemItemableId', item.value)
-        },
-        capitalize(string) {
-            return (string.charAt(0).toUpperCase() + string.slice(1).toLowerCase())
-        },
-        myFunction(action, propsRow) {
-            let status = propsRow.items[0].purchases[0].pivot.approved_by;
-            if (action === 'edit') {
-                if (status === null) {
-                    this.$store.dispatch('purchaseRequests/purchaseItem', propsRow)
-                    this.editPurchaseItemModal = true
-
-                }
-            } else if (action === 'cancel order') {
-                if (status === null) {
-                    this.deleteRow(propsRow)
-                }
-            }
-        },
-        store() {
-            this.$axios
-                .post(`/items`, this.item)
-                .then(res => {
-                    this.hideModal()
-                    this.$q.notify({
-=======
     approvedBy (purchaseRequestId) {
       this.$axios.get(`purchases-approved-by?id=${purchaseRequestId}`)
         .then(res => {
@@ -512,13 +311,17 @@ export default {
     capitalize (string) {
       return (string.charAt(0).toUpperCase() + string.slice(1).toLowerCase())
     },
-    myFunction (action, purchaseId) {
+    myFunction (action, propsRow) {
+      let status = propsRow.items[0].purchases[0].pivot.approved_by
       if (action === 'edit') {
-        this.edit(purchaseId)
-      } else if (action === 'delete') {
-        this.deleteRow(purchaseId)
-      } else if (action === 'items') {
-        this.$router.push(`purchase-request/${purchaseId}/purchase-items`)
+        if (status === null) {
+          this.$store.dispatch('purchaseRequests/purchaseItem', propsRow)
+          this.editPurchaseItemModal = true
+        }
+      } else if (action === 'cancel order') {
+        if (status === null) {
+          this.deleteRow(propsRow)
+        }
       }
     },
     store () {
@@ -529,158 +332,62 @@ export default {
           this.$q.notify({
             color: 'positive',
             icon: 'check',
-            message: `${this.item.name} created successfully`
+            message: `${this.item.name} deleted successfully`
           })
           this.request({
             pagination: this.serverPagination,
             filter: this.filter
           })
+          this.loading = false
         })
     },
-    deleteRow (itemId) {
-      this.$axios.get(`/items/${itemId}?id=${itemId}`)
-        .then((res) => {
-          this.$store.dispatch('items/item', res.data.item)
-          this.$q.notify({
-            color: 'negative',
-            icon: 'delete',
-            message: `Delete ${res.data.item.name}?`,
-            actions: [
+    deleteRow (propsRow) {
+      let purchaseId = propsRow.items[0].purchases[0].id
+      let pivotId = propsRow.items[0].purchases[0].pivot.id
+      this.$store.dispatch('purchaseRequests/purchaseItem', propsRow)
+      this.$q.notify({
+        color: 'negative',
+        icon: 'delete',
+        message: `Cancel Order in ${propsRow.items[0].name}?`,
+        actions: [
 
-              {
-                label: 'OK',
-                handler: () => {
-                  this.$axios.delete(`/items/${this.item.id}?id=${this.item.id}`)
-                    .then((res) => {
-                      this.$q.notify({
->>>>>>> develop-ren
-                        color: 'positive',
-                        icon: 'check',
-                        message: `${this.item.name} deleted successfully`
-                      })
-                      this.request({
-                        pagination: this.serverPagination,
-                        filter: this.filter
-                      })
-                      this.loading = false
-                    })
-<<<<<<< HEAD
-                })
-        },
-        deleteRow(propsRow) {
-            let purchaseId = propsRow.items[0].purchases[0].id
-            let pivotId = propsRow.items[0].purchases[0].pivot.id
-            this.$store.dispatch('purchaseRequests/purchaseItem', propsRow)
-                    this.$q.notify({
-                        color: 'negative',
-                        icon: 'delete',
-                        message: `Cancel Order in ${propsRow.items[0].name}?`,
-                        actions: [
-
-                            {
-                                label: 'OK',
-                                handler: () => {
-                                    this.$axios.delete(`/purchase_items/${purchaseId}?id=${purchaseId}&pivotId=${pivotId}`)
-                                        .then((res) => {
-                                            this.$q.notify({
-                                                color: 'positive',
-                                                icon: 'check',
-                                                message: `${propsRow.items[0].name} deleted successfully`
-                                            })
-                                            this.request({
-                                                pagination: this.serverPagination,
-                                                filter: this.filter
-                                            })
-                                            this.loading = false
-                                        })
-                                        .catch((err) => {
-                                            this.$q.notify({
-                                                color: 'negative',
-                                                icon: 'warning',
-                                                message: `${err.response.data.message}`
-                                            })
-                                        })
-                                }
-                            }
-                        ]
-                    })
-        },
-        update() {
-            this.$axios.put(`/purchase_items/${this.purchaseItem.id}`, this.purchaseItem)
+          {
+            label: 'OK',
+            handler: () => {
+              this.$axios.delete(`/purchase_items/${purchaseId}?id=${purchaseId}&pivotId=${pivotId}`)
                 .then((res) => {
-                    this.$q.notify({
-                        color: 'positive',
-                        icon: 'check',
-                        message: `${this.purchaseItem.items[0].name} updated successfully`
-                    })
-                    this.hideModal()
+                  this.$q.notify({
+                    color: 'positive',
+                    icon: 'check',
+                    message: `${propsRow.items[0].name} deleted successfully`
+                  })
+                  this.request({
+                    pagination: this.serverPagination,
+                    filter: this.filter
+                  })
+                  this.loading = false
                 })
-                .catch()
-        },
-
-        request(props) {
-            this.loading = true
-            this.$axios
-                .get(
-                    `/purchase_items?id=${this.$route.params.id}&filter=${this.filter}&page=${props.pagination.page}&perPage=${
-            props.pagination.rowsPerPage
-          }`
-                )
-                .then(res => {
-                    this.serverPagination = props.pagination
-                    this.serverData = _.values(res.data.purchaseItems.data)
-                    this.serverPagination.rowsNumber = res.data.purchaseItems.total
-                    this.lastPage = res.data.purchaseItems.last_page
-                    this.$store.dispatch('purchaseRequests/purchaseRequest', res.data.purchase)
-                    this.loading = false
+                .catch((err) => {
+                  this.$q.notify({
+                    color: 'negative',
+                    icon: 'warning',
+                    message: `${err.response.data.message}`
+                  })
                 })
-                .catch(error => {
-                    // there's an error... do SOMETHING
-                    console.log(error)
-                    // we tell QTable to exit the "loading" state
-                    this.loading = false
-                })
-        },
-        hideModal() {
-            this.editPurchaseItemModal = false
-            this.$store.dispatch('items/newItemModal', false)
-            this.request({
-                pagination: this.serverPagination,
-                filter: this.filter
-            })
-        },
-        showModal() {
-            this.$store.dispatch('items/editItemModal', true)
-        }
-=======
-                    .catch((err) => {
-                      this.$q.notify({
-                        color: 'negative',
-                        icon: 'warning',
-                        message: `${err.response.data.message}`
-                      })
-                    })
-                }
-              }
-            ]
-          })
-        })
-      // .catch()
->>>>>>> develop-ren
+            }
+          }
+        ]
+      })
     },
     update () {
-      this.$axios.put(`/items/${this.item.id}`, this.item)
+      this.$axios.put(`/purchase_items/${this.purchaseItem.id}`, this.purchaseItem)
         .then((res) => {
-          this.hideModal()
           this.$q.notify({
             color: 'positive',
             icon: 'check',
-            message: `${this.item.name} update successfully`
+            message: `${this.purchaseItem.items[0].name} updated successfully`
           })
-          this.request({
-            pagination: this.serverPagination,
-            filter: this.filter
-          })
+          this.hideModal()
         })
         .catch()
     },
@@ -698,6 +405,7 @@ export default {
           this.serverData = _.values(res.data.purchaseItems.data)
           this.serverPagination.rowsNumber = res.data.purchaseItems.total
           this.lastPage = res.data.purchaseItems.last_page
+          this.$store.dispatch('purchaseRequests/purchaseRequest', res.data.purchase)
           this.loading = false
         })
         .catch(error => {
@@ -707,19 +415,23 @@ export default {
           this.loading = false
         })
     },
+    hideModal () {
+      this.editPurchaseItemModal = false
+      this.$store.dispatch('items/newItemModal', false)
+      this.request({
+        pagination: this.serverPagination,
+        filter: this.filter
+      })
+    },
+    showModal () {
+      this.$store.dispatch('items/editItemModal', true)
+    },
     edit (itemId) {
       this.$axios.get(`items/${itemId}/edit?id=${itemId}`)
         .then(res => {
           this.showModal()
           this.$store.dispatch('items/item', res.data.item)
         })
-    },
-    hideModal () {
-      this.$store.dispatch('items/editItemModal', false)
-      this.$store.dispatch('items/newItemModal', false)
-    },
-    showModal () {
-      this.$store.dispatch('items/editItemModal', true)
     }
   },
   mounted () {
