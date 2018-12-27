@@ -20,7 +20,6 @@ export default {
       return this.val.$error
     },
     errMessage () {
-      console.log('validate this =>', this.val)
       if (!this.val.$error) return ''
       // check if a prefixed field name exist in the validation object
       let filteredVals = Object.keys(this.val).filter(v => v.startsWith('_$'))

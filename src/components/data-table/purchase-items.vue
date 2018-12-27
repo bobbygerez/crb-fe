@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
 <div>
     <q-table ref="table" color="primary" :title="`${purchaseRequest.name} order details`" :data="serverData" :columns="columns" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
         <template slot="body" slot-scope="props">
@@ -40,10 +41,65 @@
                     {{ props.row.items[0].purchases[0].pivot.approved_by }} <br />
                     {{ props.row.items[0].purchases[0].pivot.date_approved }}
                 </q-td>
+=======
+  <div>
+    <q-table
+      ref="table"
+      color="primary"
+      :title="'Purchase Items'"
+      :data="serverData"
+      :columns="columns"
+      :pagination.sync="serverPagination"
+      :rows-per-page-options="options"
+      @request="request"
+      :loading="loading"
+    >
+      <template
+        slot="body"
+        slot-scope="props"
+      >
+        <q-tr :props="props">
+          <q-td
+            key="name"
+            :props="props"
+          >
+            {{ props.row.name}}
+          </q-td>
+          <q-td
+            key="vendorable_type"
+            :props="props"
+          >
+            {{ props.row.pivot.vendorable_type.substring(10) }}
+          </q-td>
+          <q-td
+            key="item"
+            :props="props"
+          >
+            {{ props.row.items[0].name }}
+          </q-td>
+          <q-td
+            key="price"
+            :props="props"
+          >
+            {{ props.row.items[0].purchases[0].pivot.price |currency('₱ ') }}
+          </q-td>
+          <q-td
+            key="qty"
+            :props="props"
+          >
+            {{ props.row.items[0].purchases[0].pivot.qty }}
+          </q-td>
+          <q-td
+            key="package"
+            :props="props"
+          >
+            {{ props.row.items[0].package.name }}
+          </q-td>
+>>>>>>> develop-ren
 
-            </q-tr>
+        </q-tr>
 
-        </template>
+      </template>
 
     </q-table>
     <!-- <q-modal v-model="editPurchaseItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
@@ -84,20 +140,17 @@
 
         </div>
     </q-modal> -->
-</div>
+  </div>
 </template>
 
 <script>
 import inputPrice from 'components/inputs/price'
-import {
-    uid,
-    filter
-} from 'quasar'
 import _ from 'lodash'
 import {
-    mapState
+  mapState
 } from 'vuex'
 export default {
+<<<<<<< HEAD
     data() {
         return {
             pivotPricee: 0,
@@ -170,8 +223,135 @@ export default {
             ],
             filter: '',
             loading: false
+=======
+  data () {
+    return {
+      terms: '',
+      itemableId: '',
+      placeholderItemableType: '',
+      itemableType: [{
+        value: 'App\\Model\\Logistic',
+        label: 'Logistic'
+      },
+      {
+        value: 'App\\Model\\Branch',
+        label: 'Branch'
+      },
+      {
+        value: 'App\\Model\\Commissary',
+        label: 'Commissary'
+      },
+      {
+        value: 'App\\Model\\OtherVendor',
+        label: 'Other Vendor'
+      }
+      ],
+      actions: ['edit', 'delete', 'purchase items'],
+      editotherVendorsModal: false,
+      options: [5, 10, 15, 20],
+      lastPage: '',
+      serverData: [],
+      serverPagination: {
+        page: 1,
+        rowsNumber: 10,
+        rowsPerPage: 10 // specifying this determines pagination is server-side
+      },
+      columns: [{
+        name: 'name',
+        label: 'Company Name',
+        field: 'name',
+        align: 'left'
+      },
+      {
+        name: 'vendorable_type',
+        label: 'Vendor Type',
+        field: 'vendorable_type',
+        align: 'left'
+      },
+      {
+        name: 'item',
+        label: 'Item Name',
+        field: 'item',
+        align: 'left'
+      },
+
+      {
+        name: 'price',
+        label: 'Price',
+        field: 'price',
+        align: 'left'
+      },
+      {
+        name: 'qty',
+        label: 'Quantity',
+        field: 'qty',
+        align: 'left'
+      },
+      {
+        name: 'package',
+        label: 'Package',
+        field: 'package',
+        align: 'left'
+      }
+
+        // {
+        //     name: 'order_date',
+        //     label: 'Order Date',
+        //     field: 'order_date',
+        //     align: 'left'
+        // },
+        // {
+        //     name: 'prepared_by',
+        //     label: 'Prepared By',
+        //     field: 'prepared_by',
+        //     align: 'left'
+        // },
+        // {
+        //     name: 'noted_by',
+        //     label: 'Noted By',
+        //     field: 'noted_by',
+        //     align: 'left'
+        // },
+        // {
+        //     name: 'approved_by',
+        //     label: 'Approved By',
+        //     field: 'approved_by',
+        //     align: 'left'
+        // },
+        // {
+        //     name: 'purchase_by',
+        //     label: 'Purchase By',
+        //     field: 'purchase_by',
+        //     align: 'left'
+        // },
+        // {
+        //     name: 'purchasable_type',
+        //     label: 'Purchase Type',
+        //     field: 'purchasable_type',
+        //     align: 'left'
+        // }
+
+      ],
+      filter: '',
+      loading: false
+    }
+  },
+  components: {
+    inputPrice
+  },
+  computed: {
+    ...mapState('items', ['item', 'editItemModal', 'newItemModal']),
+
+    packages () {
+      return this.$store.getters['items/packages'].map(e => {
+        return {
+          label: e.name,
+          value: e.id
+>>>>>>> develop-ren
         }
+      })
     },
+<<<<<<< HEAD
     components: {
         inputPrice
     },
@@ -225,8 +405,33 @@ export default {
             set(val){
                  this.$store.dispatch('purchaseRequests/pivotFreight', parseFloat(val))
             }
+=======
+    userEntities () {
+      return this.$store.getters['items/userEntities'].map(e => {
+        return {
+          label: e.name,
+          value: e.id
+>>>>>>> develop-ren
         }
+      })
+    }
+  },
+  methods: {
+    notedBy (purchaseRequestId) {
+      this.$axios.get(`purchases-noted-by?id=${purchaseRequestId}`)
+        .then(res => {
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `Noted by was successfully updated.`
+          })
+          this.request({
+            pagination: this.serverPagination,
+            filter: this.filter
+          })
+        })
     },
+<<<<<<< HEAD
     methods: {
         notedBy(purchaseRequestId) {
             this.$axios.get(`purchases-noted-by?id=${purchaseRequestId}`)
@@ -285,14 +490,81 @@ export default {
                 .then(res => {
                     this.hideModal()
                     this.$q.notify({
+=======
+    approvedBy (purchaseRequestId) {
+      this.$axios.get(`purchases-approved-by?id=${purchaseRequestId}`)
+        .then(res => {
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `Approved by was successfully updated.`
+          })
+          this.request({
+            pagination: this.serverPagination,
+            filter: this.filter
+          })
+        })
+    },
+    selected (item) {
+      this.$q.notify(`Selected suggestion "${item.label}"`)
+      this.$store.dispatch('items/itemItemableId', item.value)
+    },
+    capitalize (string) {
+      return (string.charAt(0).toUpperCase() + string.slice(1).toLowerCase())
+    },
+    myFunction (action, purchaseId) {
+      if (action === 'edit') {
+        this.edit(purchaseId)
+      } else if (action === 'delete') {
+        this.deleteRow(purchaseId)
+      } else if (action === 'items') {
+        this.$router.push(`purchase-request/${purchaseId}/purchase-items`)
+      }
+    },
+    store () {
+      this.$axios
+        .post(`/items`, this.item)
+        .then(res => {
+          this.hideModal()
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `${this.item.name} created successfully`
+          })
+          this.request({
+            pagination: this.serverPagination,
+            filter: this.filter
+          })
+        })
+    },
+    deleteRow (itemId) {
+      this.$axios.get(`/items/${itemId}?id=${itemId}`)
+        .then((res) => {
+          this.$store.dispatch('items/item', res.data.item)
+          this.$q.notify({
+            color: 'negative',
+            icon: 'delete',
+            message: `Delete ${res.data.item.name}?`,
+            actions: [
+
+              {
+                label: 'OK',
+                handler: () => {
+                  this.$axios.delete(`/items/${this.item.id}?id=${this.item.id}`)
+                    .then((res) => {
+                      this.$q.notify({
+>>>>>>> develop-ren
                         color: 'positive',
                         icon: 'check',
-                        message: `${this.item.name} created successfully`
-                    })
-                    this.request({
+                        message: `${this.item.name} deleted successfully`
+                      })
+                      this.request({
                         pagination: this.serverPagination,
                         filter: this.filter
+                      })
+                      this.loading = false
                     })
+<<<<<<< HEAD
                 })
         },
         deleteRow(propsRow) {
@@ -380,58 +652,127 @@ export default {
         showModal() {
             this.$store.dispatch('items/editItemModal', true)
         }
+=======
+                    .catch((err) => {
+                      this.$q.notify({
+                        color: 'negative',
+                        icon: 'warning',
+                        message: `${err.response.data.message}`
+                      })
+                    })
+                }
+              }
+            ]
+          })
+        })
+      // .catch()
+>>>>>>> develop-ren
     },
-    mounted() {
-        this.request({
+    update () {
+      this.$axios.put(`/items/${this.item.id}`, this.item)
+        .then((res) => {
+          this.hideModal()
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `${this.item.name} update successfully`
+          })
+          this.request({
             pagination: this.serverPagination,
             filter: this.filter
+          })
+        })
+        .catch()
+    },
+
+    request (props) {
+      this.loading = true
+      this.$axios
+        .get(
+          `/purchase_items?id=${this.$route.params.id}&filter=${this.filter}&page=${props.pagination.page}&perPage=${
+            props.pagination.rowsPerPage
+          }`
+        )
+        .then(res => {
+          this.serverPagination = props.pagination
+          this.serverData = _.values(res.data.purchaseItems.data)
+          this.serverPagination.rowsNumber = res.data.purchaseItems.total
+          this.lastPage = res.data.purchaseItems.last_page
+          this.loading = false
+        })
+        .catch(error => {
+          // there's an error... do SOMETHING
+          console.log(error)
+          // we tell QTable to exit the "loading" state
+          this.loading = false
         })
     },
-    watch: {
-        'item.sku'(val) {
-            this.$store.dispatch('items/itemSKU', val)
-        },
-        'item.barcode'(val) {
-            this.$store.dispatch('items/itemBarcode', val)
-        },
-        'item.name'(val) {
-            this.$store.dispatch('items/itemName', val)
-        },
-        'item.price'(val) {
-            this.$store.dispatch('items/itemPrice', val)
-        },
-        'item.qty'(val) {
-            this.$store.dispatch('items/itemQty', val)
-        },
-        'item.package_id'(val) {
-            this.$store.dispatch('items/itemPackageId', val)
-        },
-        'item.minimum'(val) {
-            this.$store.dispatch('items/itemMinimum', val)
-        },
-        'item.maximum'(val) {
-            this.$store.dispatch('items/itemMaximum', val)
-        },
-        'item.reorder_level'(val) {
-            this.$store.dispatch('items/itemReorderLevel', val)
-        },
-        'item.desc'(val) {
-            this.$store.dispatch('items/itemDesc', val)
-        },
-        'item.itemable_type'(val) {
-            if (val === undefined || val === '') {
-                return
-            }
-            this.terms = ''
-            this.placeholderItemableType = 'Search ' + val.substring(10) + '...'
-            this.$axios.get(`modelable-user-models?modelType=${val}`)
-                .then(res => {
-                    this.$store.dispatch('items/itemItemableType', val)
-                    this.$store.dispatch('items/userEntities', res.data.userModels)
-                })
-        }
-
+    edit (itemId) {
+      this.$axios.get(`items/${itemId}/edit?id=${itemId}`)
+        .then(res => {
+          this.showModal()
+          this.$store.dispatch('items/item', res.data.item)
+        })
+    },
+    hideModal () {
+      this.$store.dispatch('items/editItemModal', false)
+      this.$store.dispatch('items/newItemModal', false)
+    },
+    showModal () {
+      this.$store.dispatch('items/editItemModal', true)
     }
+  },
+  mounted () {
+    this.request({
+      pagination: this.serverPagination,
+      filter: this.filter
+    })
+  },
+  watch: {
+    'item.sku' (val) {
+      this.$store.dispatch('items/itemSKU', val)
+    },
+    'item.barcode' (val) {
+      this.$store.dispatch('items/itemBarcode', val)
+    },
+    'item.name' (val) {
+      this.$store.dispatch('items/itemName', val)
+    },
+    'item.price' (val) {
+      this.$store.dispatch('items/itemPrice', val)
+    },
+    'item.qty' (val) {
+      this.$store.dispatch('items/itemQty', val)
+    },
+    'item.package_id' (val) {
+      this.$store.dispatch('items/itemPackageId', val)
+    },
+    'item.minimum' (val) {
+      this.$store.dispatch('items/itemMinimum', val)
+    },
+    'item.maximum' (val) {
+      this.$store.dispatch('items/itemMaximum', val)
+    },
+    'item.reorder_level' (val) {
+      this.$store.dispatch('items/itemReorderLevel', val)
+    },
+    'item.desc' (val) {
+      this.$store.dispatch('items/itemDesc', val)
+    },
+    'item.itemable_type' (val) {
+      if (val === undefined || val === '') {
+        return
+      }
+      this.terms = ''
+      this.placeholderItemableType = 'Search ' + val.substring(10) + '...'
+      this.$axios.get(`modelable-user-models?modelType=${val}`)
+        .then(res => {
+          this.$store.dispatch('items/itemItemableType', val)
+          this.$store.dispatch('items/userEntities', res.data.userModels)
+        })
+    }
+
+  }
 
 }
 </script>

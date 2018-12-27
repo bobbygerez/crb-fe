@@ -15,7 +15,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.editHolding.name">
                   <q-input
-                    @blur="$v.editHolding.name.$touch"
+                    @input="$v.editHolding.name.$touch"
                     :error="$v.editHolding.name.$error"
                     v-model="editHolding.name"
                     float-label="Holding name *"
@@ -26,7 +26,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.editHolding.business_info.business_type_id">
                   <q-select
-                    @blur="$v.editHolding.business_info.business_type_id.$touch"
+                    @input="$v.editHolding.business_info.business_type_id.$touch"
                     :error="$v.editHolding.business_info.business_type_id.$error"
                     v-model="editHolding.business_info.business_type_id"
                     :options="bizTypeOptions"
@@ -38,7 +38,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.editHolding.business_info.vat_type_id">
                   <q-select
-                    @blur="$v.editHolding.business_info.vat_type_id.$touch"
+                    @input="$v.editHolding.business_info.vat_type_id.$touch"
                     :error="$v.editHolding.business_info.vat_type_id.$error"
                     v-model="editHolding.business_info.vat_type_id"
                     :options="vatTypeOptions"
@@ -50,7 +50,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.editHolding.business_info.telephone">
                   <q-input
-                    @blur="$v.editHolding.business_info.telephone.$touch"
+                    @input="$v.editHolding.business_info.telephone.$touch"
                     :error="$v.editHolding.business_info.telephone.$error"
                     v-model="editHolding.business_info.telephone"
                     float-label="Telephone *"
@@ -62,7 +62,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.editHolding.business_info.email">
                   <q-input
-                    @blur="$v.editHolding.business_info.email.$touch"
+                    @input="$v.editHolding.business_info.email.$touch"
                     :error="$v.editHolding.business_info.email.$error"
                     v-model="editHolding.business_info.email"
                     float-label="Email"
@@ -88,7 +88,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.editHolding.desc">
                   <q-input
-                    @blur="$v.editHolding.desc.$touch"
+                    @input="$v.editHolding.desc.$touch"
                     :error="$v.editHolding.desc.$error"
                     v-model="editHolding.desc"
                     float-label="Description *"
@@ -114,7 +114,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.editHolding.address.country_id">
                   <q-select
-                    @blur="$v.editHolding.address.country_id.$touch"
+                    @input="$v.editHolding.address.country_id.$touch"
                     :error="$v.editHolding.address.country_id.$error"
                     v-model="editHolding.address.country_id"
                     :options="countryOptions"
@@ -129,7 +129,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.editHolding.address.region_id">
                   <q-select
-                    @blur="$v.editHolding.address.region_id.$touch"
+                    @input="$v.editHolding.address.region_id.$touch"
                     :error="$v.editHolding.address.region_id.$error"
                     v-model="editHolding.address.region_id"
                     :options="regionOptions"
@@ -146,7 +146,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.editHolding.address.province_id">
                   <q-select
-                    @blur="$v.editHolding.address.province_id.$touch"
+                    @input="$v.editHolding.address.province_id.$touch"
                     :error="$v.editHolding.address.province_id.$error"
                     v-model="editHolding.address.province_id"
                     :options="provinceOptions"
@@ -161,7 +161,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.editHolding.address.city_id">
                   <q-select
-                    @blur="$v.editHolding.address.city_id.$touch"
+                    @input="$v.editHolding.address.city_id.$touch"
                     :error="$v.editHolding.address.city_id.$error"
                     v-model="editHolding.address.city_id"
                     :options="cityOptions"
@@ -185,7 +185,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.editHolding.address.brgy_id">
                   <q-select
-                    @blur="$v.editHolding.address.brgy_id.$touch"
+                    @input="$v.editHolding.address.brgy_id.$touch"
                     :error="$v.editHolding.address.brgy_id.$error"
                     v-model="editHolding.address.brgy_id"
                     :options="brgyOptions"
@@ -218,7 +218,7 @@
               <div class="col-12">
                 <f-v-field-validator :val="$v.editHolding.address.street_lot_blk">
                   <q-input
-                    @blur="$v.editHolding.address.street_lot_blk.$touch"
+                    @input="$v.editHolding.address.street_lot_blk.$touch"
                     :error="$v.editHolding.address.street_lot_blk.$error"
                     v-model="editHolding.address.street_lot_blk"
                     float-label="Block, Lot &amp; Street"
@@ -360,33 +360,12 @@ export default {
         .catch()
     }
   },
-  watch: {
-    'editHolding.address.country_id' (val) {
-      if (val === null || val === undefined) return
-      console.log('getregions', this['editHolding'])
-      this.getRegions(val)
-      this.getProvinces(val)
-      this.getCities(val)
-      this.getBrgys(val)
-    },
-    'editHolding.address.region_id' (val) {
-      console.log('getProvinces', this['editHolding'])
-      this.getProvinces(val)
-      this.getCities(val)
-      this.getBrgys(val)
-    },
-    'editHolding.address.province_id' (val) {
-      console.log('getCities', this['editHolding'])
-      this.getCities(val)
-      this.getBrgys(val)
-    },
-    'editHolding.address.city_id' (val) {
-      console.log('getBrgys', this['editHolding'])
-      this.getBrgys(val)
-    }
-  },
   mounted () {
     console.log('edit route', this.$route)
+    console.log('localModel => ', this.localModel)
+    // important to set localmodel for the address watchers
+    this.localModel = this.editHolding
+    console.log('localModel set => ', this.localModel)
   }
 }
 </script>

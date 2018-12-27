@@ -5,23 +5,25 @@
       leave-active-class="animated flipOutX"
       appear
     >
-    <q-alert
-      v-if="hasErrors"
-      type="negative"
-    >
-      <div
-        v-for="(error, index) in errors"
-        :key="index"
-      >{{ error }}</div>
-    </q-alert>
+      <q-alert
+        v-if="hasErrors"
+        type="negative"
+      >
+        <div
+          v-for="(error, index) in errors"
+          :key="index"
+        >{{ error }}</div>
+      </q-alert>
     </transition>
   </div>
 </template>
 <script>
-const replaceAll = (str, find, replace) => str.replace(new RegExp(find, 'g'), replace)
+import BaseValidationMixin from 'components/form-validations/BaseValidationMixin'
+// const replaceAll = (str, find, replace) => str.replace(new RegExp(find, 'g'), replace)
 const removeDupe = (names) => names.filter((v, i) => names.indexOf(v) === i)
 export default {
   name: 'FVErrorSummary',
+  mixins: [BaseValidationMixin],
   props: {
     valObj: Object
   },
@@ -73,34 +75,34 @@ export default {
       // console.log('end recursion normally arr=>', arr)
       return arr
     },
-    getErrMessage (val) {
-      if (!val.$error) return ''
-      // check if a prefixed field name exist in the validation object
-      let filteredVals = Object.keys(val).filter(v => v.startsWith('_$'))
-      if (filteredVals.length < 1) {
-        // let x = (names) => names.filter((v, i) => names.indexOf(v) === i)
-        return `Check other required * fields for error.`
-      }
+    // getErrMessage (val) {
+    //   if (!val.$error) return ''
+    //   // check if a prefixed field name exist in the validation object
+    //   let filteredVals = Object.keys(val).filter(v => v.startsWith('_$'))
+    //   if (filteredVals.length < 1) {
+    //     // let x = (names) => names.filter((v, i) => names.indexOf(v) === i)
+    //     return `Other required fields has error.`
+    //   }
 
-      let fieldName = replaceAll(filteredVals[0].replace('_$', ''), '_', ' ')
+    //   let fieldName = replaceAll(filteredVals[0].replace('_$', ''), '_', ' ')
 
-      // validator checks, add other validators whether custom or from vuelidate
-      if (val.hasOwnProperty('required') && !val.required) {
-        return `${fieldName} field is required.`
-      }
-      if (val.hasOwnProperty('maxLength') && !val.maxLength) {
-        return `${fieldName} field exceeds max length of ${val.$params.maxLength.max}.`
-      }
-      if (val.hasOwnProperty('minLength') && !val.minLength) {
-        return `${fieldName} field requires min length of ${val.$params.minLength.min}.`
-      }
-      if (val.hasOwnProperty('email') && !val.email) {
-        return `${fieldName} field is invalid email address.`
-      }
+    //   // validator checks, add other validators whether custom or from vuelidate
+    //   if (val.hasOwnProperty('required') && !val.required) {
+    //     return `${fieldName} field is required.`
+    //   }
+    //   if (val.hasOwnProperty('maxLength') && !val.maxLength) {
+    //     return `${fieldName} field exceeds max length of ${val.$params.maxLength.max}.`
+    //   }
+    //   if (val.hasOwnProperty('minLength') && !val.minLength) {
+    //     return `${fieldName} field requires min length of ${val.$params.minLength.min}.`
+    //   }
+    //   if (val.hasOwnProperty('email') && !val.email) {
+    //     return `${fieldName} field is invalid email address.`
+    //   }
 
-      // default error string if you didn't include validator among the checks
-      return `${fieldName} has invalid value.`
-    },
+    //   // default error string if you didn't include validator among the checks
+    //   return `${fieldName} has invalid value.`
+    // },
     traverse (jsonObj) {
       console.log('jsonObj', jsonObj)
       if (typeof jsonObj === 'object' && jsonObj !== null) {
