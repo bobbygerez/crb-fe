@@ -18,6 +18,12 @@
                 <q-td key="type" :props="props">
                     {{ props.row.pivot.vendorable_type.substring(10) }}
                 </q-td>
+                <q-td key="price" :props="props">
+                    {{ props.row.pivot.price|currency('₱ ') }}
+                </q-td>
+                 <q-td key="price" :props="props">
+                    {{ props.row.pivot.freight|currency('₱ ') }}
+                </q-td>
                 <q-td key="start_date" :props="props">
                     {{ props.row.pivot.start_date }}
                 </q-td>
@@ -180,6 +186,18 @@ export default {
                     name: 'type',
                     label: 'Type',
                     field: 'type',
+                    align: 'left'
+                },
+                {
+                    name: 'price',
+                    label: 'Price',
+                    field: 'price',
+                    align: 'left'
+                },
+                {
+                    name: 'freight',
+                    label: 'Freight',
+                    field: 'freight',
                     align: 'left'
                 },
                 {

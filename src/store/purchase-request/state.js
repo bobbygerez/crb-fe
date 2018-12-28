@@ -35,9 +35,22 @@ export default {
     pivot: {
       vendorable_type: ''
     },
-    items: [
-      'purchases'
-    ]
+    items: [{
+      purchases: [{
+        pivot: {
+          price: 0,
+          qty: 0,
+          freight: 0,
+          date_delivery: ''
+        }
+      }],
+      package: {
+        name: ''
+      },
+      name: ''
+    }]
   },
-  newPurchaseItemModal: false
+  itemLists: [],
+  newPurchaseItemModal: false,
+  item: {}
 }

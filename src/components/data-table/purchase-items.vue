@@ -46,7 +46,7 @@
         </template>
 
     </q-table>
-    <!-- <q-modal v-model="editPurchaseItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    <q-modal v-model="editPurchaseItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
         <div style="padding: 30px">
             <div class="q-display-1 q-mb-md">Order From {{ purchaseItem.name }} </div>
 
@@ -58,16 +58,16 @@
                     <q-input :value="purchaseItem.pivot.vendorable_type.substring(10)" float-label="Vendorable Type" disable />
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <q-input :value="purchaseItem.name" :float-label="`${purchaseItem.pivot.vendorable_type.substring(10)} Name`" disable/>
+                    <q-input :value="purchaseItem.name" :float-label="`${purchaseItem.pivot.vendorable_type.substring(10)} Name`" disable />
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <input-price label="Price" :value="pivotPrice" v-model="pivotPrice" ></input-price>
+                    <input-price label="Price" :value="pivotPrice" v-model="pivotPrice"></input-price>
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="pivotQty" float-label="Quantity"  />
+                    <q-input v-model="pivotQty" float-label="Quantity" />
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <input-price label="Freight" :value="pivotFreight" v-model="pivotFreight" ></input-price>
+                    <input-price label="Freight" :value="pivotFreight" v-model="pivotFreight"></input-price>
                 </div>
             </div>
             <br />
@@ -75,15 +75,27 @@
             <q-btn color="primary" @click="update()" label="Update" class="q-ml-sm" />
 
         </div>
-    </q-modal> -->
-    <!-- <q-modal v-model="newPurchaseItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    </q-modal>
+    <q-modal v-model="newPurchaseItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
         <div style="padding: 30px">
+            <div class="row">
+                
+                <div class="col-xs-12 col-sm-4">
+                    <q-search v-model="itemName" placeholder="Search Item..." float-label="Item Name">
+                        <q-autocomplete :static-data="{field: 'label', list: itemLists }" @selected="selected" />
+                    </q-search>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-input v-model="newItemPivotQty" float-label="Quantity" />
+                </div>
+               
+            </div>
             <br />
             <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
             <q-btn color="primary" @click="store()" label="Submit" class="q-ml-sm" />
 
         </div>
-    </q-modal> -->
+    </q-modal>
 </div>
 </template>
 
@@ -100,6 +112,24 @@ import {
 export default {
     data() {
         return {
+            newItemPivotQty: 0,
+            floatLabel: 'Entity Name',
+            placeholderItemableType: '',
+            itemableTypeSelect: [{
+                    value: 'App\\Model\\Logistic',
+                    label: 'Logistic'
+                },
+                {
+                    value: 'App\\Model\\Branch',
+                    label: 'Branch'
+                },
+                {
+                    value: 'App\\Model\\Commissary',
+                    label: 'Commissary'
+                }
+            ],
+            entityTerms: '',
+            itemName: '',
             pivotPricee: 0,
             actions: ['edit', 'cancel order'],
             editPurchaseItemModal: false,
@@ -119,7 +149,7 @@ export default {
                 },
                 {
                     name: 'company_name',
-                    label: 'Company Name',
+                    label: 'Vendor Name',
                     field: 'company_name',
                     align: 'left'
                 },
@@ -176,7 +206,7 @@ export default {
         inputPrice
     },
     computed: {
-        ...mapState('purchaseRequests', ['purchaseRequest', 'purchaseItem']),
+        ...mapState('purchaseRequests', ['purchaseRequest', 'purchaseItem', 'item']),
         packages() {
             return this.$store.getters['items/packages'].map(e => {
                 return {
@@ -185,8 +215,16 @@ export default {
                 }
             })
         },
-        userEntities() {
-            return this.$store.getters['items/userEntities'].map(e => {
+        vendors() {
+            return this.$store.getters['purchaseRequests/vendors'].map(e => {
+                return {
+                    label: `${e.pivot.rank}.) ${e.name}(${e.pivot.volume})(${e.pivot.dis_percentage}%)`,
+                    value: e.pivot.id
+                }
+            })
+        },
+        itemLists() {
+            return this.$store.getters['purchaseRequests/itemLists'].map(e => {
                 return {
                     label: e.name,
                     value: e.id
@@ -194,10 +232,10 @@ export default {
             })
         },
         newPurchaseItemModal: {
-            get(){
-               return this.$store.getters['purchaseRequests/newPurchaseItemModal']
+            get() {
+                return this.$store.getters['purchaseRequests/newPurchaseItemModal']
             },
-            set(val){
+            set(val) {
                 this.$store.dispatch('purchaseRequests/newPurchaseItemModal', val);
             }
         },
@@ -211,19 +249,19 @@ export default {
             }
         },
         pivotQty: {
-            get(){
+            get() {
                 return this.purchaseItem.items[0].purchases[0].pivot.qty
             },
-            set(val){
-                 this.$store.dispatch('purchaseRequests/pivotQty', val)
+            set(val) {
+                this.$store.dispatch('purchaseRequests/pivotQty', val)
             }
         },
         pivotFreight: {
-            get(){
+            get() {
                 return parseFloat(this.purchaseItem.items[0].purchases[0].pivot.freight)
             },
-            set(val){
-                 this.$store.dispatch('purchaseRequests/pivotFreight', parseFloat(val))
+            set(val) {
+                this.$store.dispatch('purchaseRequests/pivotFreight', parseFloat(val))
             }
         }
     },
@@ -259,8 +297,8 @@ export default {
 
         },
         selected(item) {
+            this.$store.dispatch('purchaseRequests/item', item)
             this.$q.notify(`Selected suggestion "${item.label}"`)
-            this.$store.dispatch('items/itemItemableId', item.value)
         },
         capitalize(string) {
             return (string.charAt(0).toUpperCase() + string.slice(1).toLowerCase())
@@ -281,57 +319,61 @@ export default {
         },
         store() {
             this.$axios
-                .post(`/items`, this.item)
+                .post(`/purchase_items`, {
+                    item: this.item,
+                    qty: this.newItemPivotQty,
+                    purchaseId: this.$route.params.id
+                })
                 .then(res => {
-                    this.hideModal()
-                    this.$q.notify({
-                        color: 'positive',
-                        icon: 'check',
-                        message: `${this.item.name} created successfully`
-                    })
-                    this.request({
-                        pagination: this.serverPagination,
-                        filter: this.filter
-                    })
+                    // this.hideModal()
+                    // this.$q.notify({
+                    //     color: 'positive',
+                    //     icon: 'check',
+                    //     message: `${this.item.name} created successfully`
+                    // })
+                    // this.request({
+                    //     pagination: this.serverPagination,
+                    //     filter: this.filter
+                    // })
                 })
         },
         deleteRow(propsRow) {
             let purchaseId = propsRow.items[0].purchases[0].id
             let pivotId = propsRow.items[0].purchases[0].pivot.id
             this.$store.dispatch('purchaseRequests/purchaseItem', propsRow)
-                    this.$q.notify({
-                        color: 'negative',
-                        icon: 'delete',
-                        message: `Cancel Order in ${propsRow.items[0].name}?`,
-                        actions: [
+            this.$q.notify({
+                color: 'negative',
+                icon: 'delete',
+                message: `Cancel Order in ${propsRow.items[0].name}?`,
+                actions: [
 
-                            {
-                                label: 'OK',
-                                handler: () => {
-                                    this.$axios.delete(`/purchase_items/${purchaseId}?id=${purchaseId}&pivotId=${pivotId}`)
-                                        .then((res) => {
-                                            this.$q.notify({
-                                                color: 'positive',
-                                                icon: 'check',
-                                                message: `${propsRow.items[0].name} deleted successfully`
-                                            })
-                                            this.request({
-                                                pagination: this.serverPagination,
-                                                filter: this.filter
-                                            })
-                                            this.loading = false
-                                        })
-                                        .catch((err) => {
-                                            this.$q.notify({
-                                                color: 'negative',
-                                                icon: 'warning',
-                                                message: `${err.response.data.message}`
-                                            })
-                                        })
-                                }
-                            }
-                        ]
-                    })
+                    {
+                        label: 'OK',
+                        handler: () => {
+                            this.$axios.delete(`/purchase_items/${purchaseId}?id=${purchaseId}&pivotId=${pivotId}`)
+                                .then((res) => {
+                                    this.$q.notify({
+                                        color: 'positive',
+                                        icon: 'check',
+                                        message: `${propsRow.items[0].name} deleted successfully`
+                                    })
+                                    this.request({
+                                        pagination: this.serverPagination,
+                                        filter: this.filter
+                                    })
+                                    this.loading = false
+                                })
+                                .catch((err) => {
+                                    this.$q.notify({
+                                        color: 'negative',
+                                        icon: 'warning',
+                                        message: `${err.response.data.message}`
+                                    })
+                                })
+                        }
+                    }
+                ]
+            })
         },
         update() {
             this.$axios.put(`/purchase_items/${this.purchaseItem.id}`, this.purchaseItem)
@@ -371,14 +413,14 @@ export default {
         },
         hideModal() {
             this.editPurchaseItemModal = false
-            this.$store.dispatch('items/newItemModal', false)
+            this.$store.dispatch('purchaseRequests/newPurchaseItemModal', false)
             this.request({
                 pagination: this.serverPagination,
                 filter: this.filter
             })
         },
         showModal() {
-            this.$store.dispatch('items/editItemModal', true)
+            this.$store.dispatch('purchaseRequests/editPurchaseItemModal', true)
         }
     },
     mounted() {
@@ -386,52 +428,7 @@ export default {
             pagination: this.serverPagination,
             filter: this.filter
         })
-    },
-    watch: {
-        'item.sku'(val) {
-            this.$store.dispatch('items/itemSKU', val)
-        },
-        'item.barcode'(val) {
-            this.$store.dispatch('items/itemBarcode', val)
-        },
-        'item.name'(val) {
-            this.$store.dispatch('items/itemName', val)
-        },
-        'item.price'(val) {
-            this.$store.dispatch('items/itemPrice', val)
-        },
-        'item.qty'(val) {
-            this.$store.dispatch('items/itemQty', val)
-        },
-        'item.package_id'(val) {
-            this.$store.dispatch('items/itemPackageId', val)
-        },
-        'item.minimum'(val) {
-            this.$store.dispatch('items/itemMinimum', val)
-        },
-        'item.maximum'(val) {
-            this.$store.dispatch('items/itemMaximum', val)
-        },
-        'item.reorder_level'(val) {
-            this.$store.dispatch('items/itemReorderLevel', val)
-        },
-        'item.desc'(val) {
-            this.$store.dispatch('items/itemDesc', val)
-        },
-        'item.itemable_type'(val) {
-            if (val === undefined || val === '') {
-                return
-            }
-            this.terms = ''
-            this.placeholderItemableType = 'Search ' + val.substring(10) + '...'
-            this.$axios.get(`modelable-user-models?modelType=${val}`)
-                .then(res => {
-                    this.$store.dispatch('items/itemItemableType', val)
-                    this.$store.dispatch('items/userEntities', res.data.userModels)
-                })
-        }
-
+        this.getItemLists()
     }
-
 }
 </script>

@@ -42,6 +42,14 @@ export const pivotFreight = (state, payload) => {
   state.purchaseItem.items[0].purchases[0].pivot.freight = payload
 }
 
+export const item = (state, payload) => {
+  state.item = payload
+}
+
 export const newPurchaseItemModal = (state, payload) => {
   state.newPurchaseItemModal = payload
+}
+
+export const itemLists = (state, payload) => {
+  state.itemLists = payload
 }
