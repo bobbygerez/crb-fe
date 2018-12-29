@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-mx-lg">
+  <q-page class="q-mx-lg q-pb-lg">
     <form>
       <div class="row gutter-md q-pt-lg">
         <!-- <div class="q-display-1 q-mb-md">Edit {{ holding.name }}</div> -->
@@ -13,79 +13,76 @@
             <q-card-separator />
             <div class="row">
               <div class="col-12">
-                <!-- <f-v-field-validator :val="$v.newHolding.name"> -->
-                <form-field-validator :val="$v.newHolding.name">
+                <!-- <form-field-validator :validate="$v.newHolding.name"> -->
+                <form-field-validator :validate="$v.newHolding.name">
                   <q-input
-                    @blur="$v.newHolding.name.$touch"
+                    @input="$v.newHolding.name.$touch"
                     :error="$v.newHolding.name.$error"
                     v-model="newHolding.name"
                     float-label="Holding name *"
                     clearable
                   />
                 </form-field-validator>
-                <!-- </f-v-field-validator> -->
+                <!-- </form-field-validator> -->
               </div>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.business_info.business_type_id">
+                <form-field-validator :validate="$v.newHolding.business_info.business_type_id">
                   <q-select
-                    @blur="$v.newHolding.business_info.business_type_id.$touch"
+                    @input="$v.newHolding.business_info.business_type_id.$touch"
                     :error="$v.newHolding.business_info.business_type_id.$error"
                     v-model="newHolding.business_info.business_type_id"
                     :options="bizTypeOptions"
                     float-label="Business Type *"
                     clearable
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.business_info.vat_type_id">
+                <form-field-validator :validate="$v.newHolding.business_info.vat_type_id">
                   <q-select
-                    @blur="$v.newHolding.business_info.vat_type_id.$touch"
+                    @input="$v.newHolding.business_info.vat_type_id.$touch"
                     :error="$v.newHolding.business_info.vat_type_id.$error"
                     v-model="newHolding.business_info.vat_type_id"
                     :options="vatTypeOptions"
                     float-label="Vat Type *"
                     clearable
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <div class="col-12">
-                <f-v-field-validator
-                  :val="$v.newHolding.business_info.telephone"
-                  helper="min length 7 max length 12"
-                >
+                <form-field-validator :validate="$v.newHolding.business_info.telephone">
                   <q-input
-                    @blur="$v.newHolding.business_info.telephone.$touch"
+                    @input="$v.newHolding.business_info.telephone.$touch"
                     :error="$v.newHolding.business_info.telephone.$error"
                     v-model="newHolding.business_info.telephone"
                     float-label="Telephone *"
                     type="number"
                     clearable
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.business_info.email">
+                <form-field-validator :validate="$v.newHolding.business_info.email">
                   <q-input
-                    @blur="$v.newHolding.business_info.email.$touch"
+                    @input="$v.newHolding.business_info.email.$touch"
                     :error="$v.newHolding.business_info.email.$error"
                     v-model="newHolding.business_info.email"
                     float-label="Email *"
                     type="email"
                     clearable
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.business_info.tin">
+                <form-field-validator :validate="$v.newHolding.business_info.tin">
                   <q-input
-                    @blur="$v.newHolding.business_info.tin.$touch"
+                    @input="$v.newHolding.business_info.tin.$touch"
                     :error="$v.newHolding.business_info.tin.$error"
                     v-model="newHolding.business_info.tin"
                     float-label="TIN *"
                     clearable
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <div class="col-12">
                 <q-input
@@ -95,9 +92,9 @@
                 />
               </div>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.desc">
+                <form-field-validator :validate="$v.newHolding.desc">
                   <q-input
-                    @blur="$v.newHolding.desc.$touch"
+                    @input="$v.newHolding.desc.$touch"
                     :error="$v.newHolding.desc.$error"
                     v-model="newHolding.desc"
                     float-label="Description *"
@@ -105,7 +102,7 @@
                     :max-height="$q.screen.gt.md ? 100 : 0"
                     :rows="$q.screen.gt.md ? 2 : 1"
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
             </div>
           </q-card>
@@ -121,9 +118,9 @@
             <div class="relative-position row gutter-sm">
               <!-- <div class="row gutter-sm"> -->
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.address.country_id">
+                <form-field-validator :validate="$v.newHolding.address.country_id">
                   <q-select
-                    @blur="$v.newHolding.address.country_id.$touch"
+                    @input="$v.newHolding.address.country_id.$touch"
                     :error="$v.newHolding.address.country_id.$error"
                     v-model="newHolding.address.country_id"
                     :options="countryOptions"
@@ -133,12 +130,12 @@
                     filter-placeholder="Select Country"
                     autofocus-filter
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.address.region_id">
+                <form-field-validator :validate="$v.newHolding.address.region_id">
                   <q-select
-                    @blur="$v.newHolding.address.region_id.$touch"
+                    @input="$v.newHolding.address.region_id.$touch"
                     :error="$v.newHolding.address.region_id.$error"
                     v-model="newHolding.address.region_id"
                     :options="regionOptions"
@@ -148,14 +145,14 @@
                     filter-placeholder="Select Region"
                     autofocus-filter
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <!-- </div> -->
               <!-- <div class="row gutter-sm"> -->
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.address.province_id">
+                <form-field-validator :validate="$v.newHolding.address.province_id">
                   <q-select
-                    @blur="$v.newHolding.address.province_id.$touch"
+                    @input="$v.newHolding.address.province_id.$touch"
                     :error="$v.newHolding.address.province_id.$error"
                     v-model="newHolding.address.province_id"
                     :options="provinceOptions"
@@ -165,12 +162,12 @@
                     filter-placeholder="Select Province"
                     autofocus-filter
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.address.city_id">
+                <form-field-validator :validate="$v.newHolding.address.city_id">
                   <q-select
-                    @blur="$v.newHolding.address.city_id.$touch"
+                    @input="$v.newHolding.address.city_id.$touch"
                     :error="$v.newHolding.address.city_id.$error"
                     v-model="newHolding.address.city_id"
                     :options="cityOptions"
@@ -189,12 +186,12 @@
                       }
                     ]"
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.address.brgy_id">
+                <form-field-validator :validate="$v.newHolding.address.brgy_id">
                   <q-select
-                    @blur="$v.newHolding.address.brgy_id.$touch"
+                    @input="$v.newHolding.address.brgy_id.$touch"
                     :error="$v.newHolding.address.brgy_id.$error"
                     v-model="newHolding.address.brgy_id"
                     :options="brgyOptions"
@@ -214,7 +211,7 @@
                   }
                 ]"
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <!-- </div> -->
               <q-inner-loading :visible="addressInnerLoading">
@@ -225,9 +222,9 @@
                 />
               </q-inner-loading>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.address.street_lot_blk">
+                <form-field-validator :validate="$v.newHolding.address.street_lot_blk">
                   <q-input
-                    @blur="$v.newHolding.address.street_lot_blk.$touch"
+                    @input="$v.newHolding.address.street_lot_blk.$touch"
                     :error="$v.newHolding.address.street_lot_blk.$error"
                     v-model="newHolding.address.street_lot_blk"
                     float-label="Block, Lot &amp; Street"
@@ -235,7 +232,7 @@
                     :max-height="$q.screen.gt.sm ? 100 : 0"
                     :rows="$q.screen.gt.sm ? 2 : 1"
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
             </div>
           </q-card>
@@ -243,12 +240,12 @@
 
         <div class="row col-12">
           <div class="row col-12 justify-center">
-            <!-- <div class="col-12">
-              <f-v-error-summary
-                :valObj="$v"
+            <div class="col-12">
+              <form-validation-summary
+                :validations="$v"
                 class="q-my-sm"
               />
-            </div> -->
+            </div>
             <div class="column">
               <q-btn
                 color="negative"
@@ -285,8 +282,6 @@
 
 <script>
 import { mapHoldingFields } from '../../../../../store/pattys'
-import { required, email, numeric, minLength, maxLength } from 'vuelidate/lib/validators'
-import FVErrorSummary from 'components/form-validations/FVErrorSummary'
 import FVFieldValidator from 'components/form-validations/FVFieldValidator'
 import BarangayTable from 'components/location-provider/barangay-view'
 import CityTable from 'components/location-provider/city-view'
@@ -295,15 +290,16 @@ import CommonsMixin from 'components/mixins/commons-mixin'
 import { mapActions } from 'vuex'
 import { newHoldingFormValidationRule } from 'assets/models/Holding'
 import FormFieldValidator from 'components/form-validations/FormFieldValidator'
+import FormValidationSummary from 'components/form-validations/FormValidationSummary'
 
 export default {
   mixins: [LocationMixin, CommonsMixin],
   components: {
     BarangayTable,
     CityTable,
-    FVErrorSummary,
     FVFieldValidator,
-    FormFieldValidator
+    FormFieldValidator,
+    FormValidationSummary
   },
   data () {
     return {
@@ -314,12 +310,8 @@ export default {
     ...mapHoldingFields(['newHolding', 'newHoldingModal'])
   },
   validations () {
-    // newHolding: {
-    //   name: { required }
-    // }
-    // some condition or whatever
     return {
-      newHolding: newHoldingFormValidationRule(required, email, numeric, minLength, maxLength, () => true)
+      newHolding: newHoldingFormValidationRule()
     }
   },
   methods: {
@@ -373,33 +365,11 @@ export default {
         })
     }
   },
-  watch: {
-    'newHolding.address.country_id' (val) {
-      if (val === null || val === undefined) return
-      console.log('getregions', this['newHolding'])
-      this.getRegions(val)
-      this.getProvinces(val)
-      this.getCities(val)
-      this.getBrgys(val)
-    },
-    'newHolding.address.region_id' (val) {
-      console.log('getProvinces', this['newHolding'])
-      this.getProvinces(val)
-      this.getCities(val)
-      this.getBrgys(val)
-    },
-    'newHolding.address.province_id' (val) {
-      console.log('getCities', this['newHolding'])
-      this.getCities(val)
-      this.getBrgys(val)
-    },
-    'newHolding.address.city_id' (val) {
-      console.log('getBrgys', this['newHolding'])
-      this.getBrgys(val)
-    }
-  },
   mounted () {
     console.log('edit route', this.$route)
+    console.log('localModel => ', this.localModel)
+    this.localModel = this.newHolding
+    console.log('localModel set => ', this.localModel)
   }
 }
 </script>
