@@ -76,6 +76,16 @@
     </q-modal>
     <q-modal v-model="newPurchaseItemModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
         <div style="padding: 30px">
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                        <q-search v-model="terms" placeholder="Search Item..." float-label="Item Name">
+                            <q-autocomplete :static-data="{field: 'label', list: itemLists }" @selected="selected" />
+                        </q-search>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-input v-model="newPivotQty" float-label="Quantity"  />
+                </div>
+            </div>
             <br />
             <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
             <q-btn color="primary" @click="store()" label="Submit" class="q-ml-sm" />
@@ -97,6 +107,8 @@ import {
 export default {
     data() {
         return {
+            newPivotQty: 0,
+            terms: '',
             pivotPricee: 0,
             actions: ['edit', 'cancel order'],
             editPurchaseItemModal: false,
@@ -171,17 +183,9 @@ export default {
         inputPrice
     },
     computed: {
-        ...mapState('purchaseRequests', ['purchaseRequest', 'purchaseItem']),
-        packages() {
-            return this.$store.getters['items/packages'].map(e => {
-                return {
-                    label: e.name,
-                    value: e.id
-                }
-            })
-        },
-        userEntities() {
-            return this.$store.getters['items/userEntities'].map(e => {
+        ...mapState('purchaseRequests', ['purchaseRequest', 'purchaseItem', 'item']),
+        itemLists() {
+            return this.$store.getters['purchaseRequests/itemLists'].map(e => {
                 return {
                     label: e.name,
                     value: e.id
@@ -252,7 +256,7 @@ export default {
         },
         selected(item) {
             this.$q.notify(`Selected suggestion "${item.label}"`)
-            this.$store.dispatch('items/itemItemableId', item.value)
+            this.$store.dispatch('purchaseRequests/item', item)
         },
         capitalize(string) {
             return (string.charAt(0).toUpperCase() + string.slice(1).toLowerCase())
@@ -272,17 +276,17 @@ export default {
         },
         store() {
             this.$axios
-                .post(`/items`, this.item)
+                .post(`/purchase_items`, {
+                    item: this.item,
+                    purchaseId: this.$route.params.id,
+                    qty: this.newPivotQty
+                })
                 .then(res => {
                     this.hideModal()
                     this.$q.notify({
                         color: 'positive',
                         icon: 'check',
-                        message: `${this.item.name} created successfully`
-                    })
-                    this.request({
-                        pagination: this.serverPagination,
-                        filter: this.filter
+                        message: `${this.item.label} created successfully`
                     })
                 })
         },
@@ -360,14 +364,11 @@ export default {
         },
         hideModal() {
             this.editPurchaseItemModal = false
-            this.$store.dispatch('items/newItemModal', false)
+            this.$store.dispatch('purchaseRequests/newPurchaseItemModal', false)
             this.request({
                 pagination: this.serverPagination,
                 filter: this.filter
             })
-        },
-        showModal() {
-            this.$store.dispatch('items/editItemModal', true)
         }
     },
     mounted() {
@@ -375,50 +376,6 @@ export default {
             pagination: this.serverPagination,
             filter: this.filter
         })
-    },
-    watch: {
-        'item.sku'(val) {
-            this.$store.dispatch('items/itemSKU', val)
-        },
-        'item.barcode'(val) {
-            this.$store.dispatch('items/itemBarcode', val)
-        },
-        'item.name'(val) {
-            this.$store.dispatch('items/itemName', val)
-        },
-        'item.price'(val) {
-            this.$store.dispatch('items/itemPrice', val)
-        },
-        'item.qty'(val) {
-            this.$store.dispatch('items/itemQty', val)
-        },
-        'item.package_id'(val) {
-            this.$store.dispatch('items/itemPackageId', val)
-        },
-        'item.minimum'(val) {
-            this.$store.dispatch('items/itemMinimum', val)
-        },
-        'item.maximum'(val) {
-            this.$store.dispatch('items/itemMaximum', val)
-        },
-        'item.reorder_level'(val) {
-            this.$store.dispatch('items/itemReorderLevel', val)
-        },
-        'item.desc'(val) {
-            this.$store.dispatch('items/itemDesc', val)
-        },
-        'item.itemable_type'(val) {
-            if (val === undefined || val === '') {
-                return
-            }
-            this.terms = ''
-            this.placeholderItemableType = 'Search ' + val.substring(10) + '...'
-            this.$axios.get(`modelable-user-models?modelType=${val}`)
-                .then(res => {
-                    this.$store.dispatch('items/itemItemableType', val)
-                    this.$store.dispatch('items/userEntities', res.data.userModels)
-                })
-        }
     }
 }
 </script>
