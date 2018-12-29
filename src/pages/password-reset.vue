@@ -12,7 +12,7 @@
           will show 'go' or submit instead which is a UX blunder since you'll have to click for the proceeding input field or hide the
           keyboard everytime if the other input fields are covered by it-->
           <form>
-            <f-v-field-validator :val="$v.form.email">
+            <form-field-validator :validate="$v.form.email">
               <q-input
                 @blur="$v.form.email.$touch"
                 :error="$v.form.email.$error"
@@ -24,9 +24,9 @@
                 @keyup.enter="reset"
                 disable
               />
-            </f-v-field-validator>
+            </form-field-validator>
             <br>
-            <f-v-field-validator :val="$v.form.password">
+            <form-field-validator :validate="$v.form.password">
               <q-input
                 @blur="$v.form.password.$touch"
                 :error="$v.form.password.$error"
@@ -49,7 +49,7 @@
                 type="password"
                 @keyup.enter="reset"
               />
-            </f-v-field-validator>
+            </form-field-validator>
 
             <br>
             <div>
@@ -66,8 +66,8 @@
               <br>
 
             </div>
-            <f-v-error-summary
-              :valObj="$v"
+            <form-validation-summary
+              :validations="$v"
               class="q-my-sm"
             />
           </form>
@@ -84,17 +84,15 @@
 </template>
 
 <script>
-// import axios from 'axios'
 import { required } from 'vuelidate/lib/validators'
-// import { setAuthHeader } from 'plugins/axios'
-import FVErrorSummary from 'components/form-validations/FVErrorSummary'
-import FVFieldValidator from 'components/form-validations/FVFieldValidator'
+import FormValidationSummary from 'components/form-validations/FormValidationSummary'
+import FormFieldValidator from 'components/form-validations/FormFieldValidator'
 import { mapActions, mapState } from 'vuex'
 
 export default {
   components: {
-    FVErrorSummary,
-    FVFieldValidator
+    FormValidationSummary,
+    FormFieldValidator
   },
   data () {
     return {

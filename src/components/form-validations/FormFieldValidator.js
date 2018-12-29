@@ -1,15 +1,14 @@
 import {
   QField
 } from 'quasar'
-import Vue from 'vue'
 /**
  * Javascript Implementation of the FVFieldValidator component
  * It is specificaly for quasar
  * @author Aldrin Marquez
+ * @note if used as a plugin then you need to export this as Vue.extend()
  */
-// const replaceAll = (str, find, replace) => str.replace(new RegExp(find, 'g'), replace)
 import BaseValidationMixin from 'components/form-validations/BaseValidationMixin'
-export default Vue.extend({
+export default {
   name: 'FormFieldValidator',
   props: {
     validate: Object
@@ -34,4 +33,4 @@ export default Vue.extend({
     },
     this.$slots.default)
   }
-})
+}

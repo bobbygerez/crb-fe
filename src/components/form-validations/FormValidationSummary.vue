@@ -1,11 +1,32 @@
+<template>
+  <div>
+    <transition
+      enter-active-class="animated flipInX"
+      leave-active-class="animated flipOutX"
+      appear
+    >
+      <q-alert
+        v-if="hasErrors"
+        type="negative"
+      >
+        <div
+          v-for="(error, index) in errors"
+          :key="index"
+        >
+          {{ error }}
+        </div>
+      </q-alert>
+    </transition>
+  </div>
+</template>
+<script>
 import BaseValidationMixin from 'components/form-validations/BaseValidationMixin'
-import QAlert from 'quasar'
 const removeDupe = (names) => names.filter((v, i) => names.indexOf(v) === i)
 export default {
-  name: 'FVErrorSummary',
+  name: 'FormValidationSummary',
   mixins: [BaseValidationMixin],
   props: {
-    valObj: Object
+    validations: Object
   },
   data () {
     return {
@@ -20,7 +41,7 @@ export default {
   methods: {
     testForErrors () {
       let arr = []
-      arr = removeDupe(this.getAllErrors(this.valObj, arr))
+      arr = removeDupe(this.getAllErrors(this.validations, arr))
       this.errors = arr
       return arr
     },
@@ -28,9 +49,7 @@ export default {
       if (typeof obj !== 'object' && obj !== null) {
         return arr
       }
-
       let keys = Object.keys(obj.$params)
-
       if (obj.$params[keys[0]] !== null) {
         if (obj.$error) {
           arr.push(this.getErrMessage(obj))
@@ -40,26 +59,8 @@ export default {
       keys.forEach(v => {
         this.getAllErrors(obj[v], arr)
       })
-
       return arr
-    },
-
-    traverse (jsonObj) {
-      console.log('jsonObj', jsonObj)
-      if (typeof jsonObj === 'object' && jsonObj !== null) {
-        Object.entries(jsonObj).forEach(([key, value]) => {
-          // key is either an array index or object key
-          console.log('key=' + key + ',' + 'val=', value)
-          this.traverse(value)
-        })
-      } else {
-        // jsonObj is a number or string
-        console.log(' else jsonObj', jsonObj)
-      }
     }
-
-  },
-  render (h) {
-    return h('div')
   }
 }
+</script>
