@@ -241,7 +241,7 @@
         <div class="row col-12">
           <div class="row col-12 justify-center">
             <div class="col-12">
-              <f-v-error-summary
+              <form-validation-summary
                 :validations="$v"
                 class="q-my-sm"
               />
@@ -282,8 +282,6 @@
 
 <script>
 import { mapHoldingFields } from '../../../../../store/pattys'
-import { required, email, numeric, minLength, maxLength } from 'vuelidate/lib/validators'
-import FVErrorSummary from 'components/form-validations/FVErrorSummary'
 import FVFieldValidator from 'components/form-validations/FVFieldValidator'
 import BarangayTable from 'components/location-provider/barangay-view'
 import CityTable from 'components/location-provider/city-view'
@@ -292,15 +290,16 @@ import CommonsMixin from 'components/mixins/commons-mixin'
 import { mapActions } from 'vuex'
 import { newHoldingFormValidationRule } from 'assets/models/Holding'
 import FormFieldValidator from 'components/form-validations/FormFieldValidator'
+import FormValidationSummary from 'components/form-validations/FormValidationSummary'
 
 export default {
   mixins: [LocationMixin, CommonsMixin],
   components: {
     BarangayTable,
     CityTable,
-    FVErrorSummary,
     FVFieldValidator,
-    FormFieldValidator
+    FormFieldValidator,
+    FormValidationSummary
   },
   data () {
     return {
@@ -312,7 +311,7 @@ export default {
   },
   validations () {
     return {
-      newHolding: newHoldingFormValidationRule(required, email, numeric, minLength, maxLength, () => true)
+      newHolding: newHoldingFormValidationRule()
     }
   },
   methods: {

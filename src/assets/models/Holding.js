@@ -15,6 +15,14 @@ import {
   createCompany
 } from './Company'
 
+import {
+  required,
+  email,
+  numeric,
+  minLength,
+  maxLength
+} from 'vuelidate/lib/validators'
+
 /* eslint-disable */
 export const Holding = ({
   address = Address(),
@@ -52,7 +60,8 @@ export const createHolding = (data) => {
 }
 
 // TODO: refine validation rules
-export const newHoldingFormValidationRule = (required, email, numeric, minLength, maxLength, anon) => {
+const anon = () => true
+export const newHoldingFormValidationRule = () => {
   return {
     address: {
       country_id: {
@@ -121,7 +130,7 @@ export const newHoldingFormValidationRule = (required, email, numeric, minLength
 }
 
 // TODO: refine validation rule
-export const editHoldingFormValidationRule = (required, email, numeric, minLength, maxLength, anon) => {
+export const editHoldingFormValidationRule = () => {
   return {
     address: {
       country_id: {

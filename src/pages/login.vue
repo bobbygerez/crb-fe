@@ -12,7 +12,7 @@
           will show 'go' or submit instead which is a UX blunder since you'll have to click for the proceeding input field or hide the
           keyboard everytime if the other input fields are covered by it-->
           <form>
-            <f-v-field-validator :val="$v.form.email">
+            <form-field-validator :validate="$v.form.email">
               <q-input
                 @blur="$v.form.email.$touch"
                 :error="$v.form.email.$error"
@@ -23,9 +23,9 @@
                 :dark="dark"
                 @keyup.enter="login"
               />
-            </f-v-field-validator>
+            </form-field-validator>
             <br>
-            <f-v-field-validator :val="$v.form.password">
+            <form-field-validator :validate="$v.form.password">
               <q-input
                 @blur="$v.form.password.$touch"
                 :error="$v.form.password.$error"
@@ -37,7 +37,7 @@
                 type="password"
                 @keyup.enter="login"
               />
-            </f-v-field-validator>
+            </form-field-validator>
             <br>
             <div>
               <br>
@@ -85,8 +85,8 @@
                 >Cancel</q-btn>
               </q-modal>
             </div>
-            <f-v-error-summary
-              :valObj="$v"
+            <form-validation-summary
+              :validations="$v"
               class="q-my-sm"
             />
           </form>
@@ -97,17 +97,16 @@
 </template>
 
 <script>
-// import axios from 'axios'
 import { required } from 'vuelidate/lib/validators'
 import { setAuthHeader } from 'plugins/axios'
-import FVErrorSummary from 'components/form-validations/FVErrorSummary'
-import FVFieldValidator from 'components/form-validations/FVFieldValidator'
+import FormValidationSummary from 'components/form-validations/FormValidationSummary'
+import FormFieldValidator from 'components/form-validations/FormFieldValidator'
 import { mapActions, mapState } from 'vuex'
 
 export default {
   components: {
-    FVErrorSummary,
-    FVFieldValidator
+    FormValidationSummary,
+    FormFieldValidator
   },
   data () {
     return {
@@ -116,7 +115,6 @@ export default {
       message: '',
       form: {
         email: '',
-        // username: '',
         password: ''
       },
       dark: true,
@@ -168,19 +166,17 @@ export default {
           this.$q.notify({ type: 'negative', message: error.message })
         })
     },
-    resetLink(){
-      this.$axios.post(`password/create`,{
+    resetLink () {
+      this.$axios.post(`password/create`, {
         email: this.email
       }).then(res => {
         this.$refs.minimizedModal.hide()
         this.$q.notify({ type: 'positive', message: res.data.message })
-      }) .catch(error => {
-          this.loading = false
-          let err = error.response.data.message
-          this.$q.notify({ type: 'negative', message: err })
-        })
-
-       
+      }).catch(error => {
+        this.loading = false
+        let err = error.response.data.message
+        this.$q.notify({ type: 'negative', message: err })
+      })
     }
   }
 }
