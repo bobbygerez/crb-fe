@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
 <div>
     <q-table ref="table" color="primary" :title="`${item.name} vendors`" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
         <template slot="body" slot-scope="props">
@@ -41,86 +40,6 @@
                     {{ `${props.row.pivot.dis_percentage}%`  }}
                 </q-td>
             </q-tr>
-=======
-  <div>
-    <q-table
-      ref="table"
-      color="primary"
-      :title="`${item.name} vendors`"
-      :data="serverData"
-      :columns="columns"
-      :filter="filter"
-      row-key="name"
-      :pagination.sync="serverPagination"
-      :rows-per-page-options="options"
-      @request="request"
-      :loading="loading"
-    >
-      <template
-        slot="body"
-        slot-scope="props"
-      >
-        <q-tr :props="props">
-          <q-td key="name">
-            {{props.row.name}}
-            <q-popover
-              touch-position
-              v-if="actions"
-            >
-              <q-list
-                link
-                style="min-width: 100px"
-              >
-                <template v-for="(action, idx) in actions">
-                  <q-item
-                    :key="idx"
-                    @click.native="myFunction(action, props.row.pivot.id, props.row.pivot.vendorable_id, props.row.pivot.vendorable_type)"
-                    v-close-overlay
-                  >
-                    <q-item-main :label="capitalize(action)" />
-                  </q-item>
-                </template>
-              </q-list>
-            </q-popover>
-          </q-td>
-          <q-td
-            key="type"
-            :props="props"
-          >
-            {{ props.row.pivot.vendorable_type.substring(10) }}
-          </q-td>
-          <q-td
-            key="start_date"
-            :props="props"
-          >
-            {{ props.row.pivot.start_date }}
-          </q-td>
-          <q-td
-            key="end_date"
-            :props="props"
-          >
-            {{ props.row.pivot.end_date }}
-          </q-td>
-          <q-td
-            key="volume"
-            :props="props"
-          >
-            {{ props.row.pivot.volume }}
-          </q-td>
-          <q-td
-            key="rank"
-            :props="props"
-          >
-            {{ props.row.pivot.rank }}
-          </q-td>
-          <q-td
-            key="dis_percentage"
-            :props="props"
-          >
-            {{ `${props.row.pivot.dis_percentage}%` }}
-          </q-td>
-        </q-tr>
->>>>>>> 14e47c2b5be66e21829e43c9737681c9d4ca698d
 
       </template>
 
@@ -453,7 +372,6 @@ export default {
     userEntities () {
       return this.$store.getters['items/userEntities'].map(e => {
         return {
-<<<<<<< HEAD
             vendorableType: [{
                     value: 'App\\Model\\Logistic',
                     label: 'Logistic'
@@ -544,10 +462,6 @@ export default {
             ],
             filter: '',
             loading: false
-=======
-          label: e.name,
-          value: e.id
->>>>>>> 14e47c2b5be66e21829e43c9737681c9d4ca698d
         }
       })
     }
