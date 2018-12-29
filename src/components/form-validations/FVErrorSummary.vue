@@ -25,7 +25,7 @@ export default {
   name: 'FVErrorSummary',
   mixins: [BaseValidationMixin],
   props: {
-    valObj: Object
+    validations: Object
   },
   data () {
     return {
@@ -40,7 +40,7 @@ export default {
   methods: {
     testForErrors () {
       let arr = []
-      arr = removeDupe(this.getAllErrors(this.valObj, arr))
+      arr = removeDupe(this.getAllErrors(this.validations, arr))
       this.errors = arr
       return arr
     },

@@ -13,8 +13,8 @@
             <q-card-separator />
             <div class="row">
               <div class="col-12">
-                <!-- <f-v-field-validator :val="$v.newHolding.name"> -->
-                <form-field-validator :val="$v.newHolding.name">
+                <!-- <form-field-validator :validate="$v.newHolding.name"> -->
+                <form-field-validator :validate="$v.newHolding.name">
                   <q-input
                     @input="$v.newHolding.name.$touch"
                     :error="$v.newHolding.name.$error"
@@ -23,10 +23,10 @@
                     clearable
                   />
                 </form-field-validator>
-                <!-- </f-v-field-validator> -->
+                <!-- </form-field-validator> -->
               </div>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.business_info.business_type_id">
+                <form-field-validator :validate="$v.newHolding.business_info.business_type_id">
                   <q-select
                     @input="$v.newHolding.business_info.business_type_id.$touch"
                     :error="$v.newHolding.business_info.business_type_id.$error"
@@ -35,10 +35,10 @@
                     float-label="Business Type *"
                     clearable
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.business_info.vat_type_id">
+                <form-field-validator :validate="$v.newHolding.business_info.vat_type_id">
                   <q-select
                     @input="$v.newHolding.business_info.vat_type_id.$touch"
                     :error="$v.newHolding.business_info.vat_type_id.$error"
@@ -47,10 +47,10 @@
                     float-label="Vat Type *"
                     clearable
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.business_info.telephone">
+                <form-field-validator :validate="$v.newHolding.business_info.telephone">
                   <q-input
                     @input="$v.newHolding.business_info.telephone.$touch"
                     :error="$v.newHolding.business_info.telephone.$error"
@@ -59,10 +59,10 @@
                     type="number"
                     clearable
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.business_info.email">
+                <form-field-validator :validate="$v.newHolding.business_info.email">
                   <q-input
                     @input="$v.newHolding.business_info.email.$touch"
                     :error="$v.newHolding.business_info.email.$error"
@@ -71,10 +71,10 @@
                     type="email"
                     clearable
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.business_info.tin">
+                <form-field-validator :validate="$v.newHolding.business_info.tin">
                   <q-input
                     @input="$v.newHolding.business_info.tin.$touch"
                     :error="$v.newHolding.business_info.tin.$error"
@@ -82,7 +82,7 @@
                     float-label="TIN *"
                     clearable
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <div class="col-12">
                 <q-input
@@ -92,7 +92,7 @@
                 />
               </div>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.desc">
+                <form-field-validator :validate="$v.newHolding.desc">
                   <q-input
                     @input="$v.newHolding.desc.$touch"
                     :error="$v.newHolding.desc.$error"
@@ -102,7 +102,7 @@
                     :max-height="$q.screen.gt.md ? 100 : 0"
                     :rows="$q.screen.gt.md ? 2 : 1"
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
             </div>
           </q-card>
@@ -118,7 +118,7 @@
             <div class="relative-position row gutter-sm">
               <!-- <div class="row gutter-sm"> -->
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.address.country_id">
+                <form-field-validator :validate="$v.newHolding.address.country_id">
                   <q-select
                     @input="$v.newHolding.address.country_id.$touch"
                     :error="$v.newHolding.address.country_id.$error"
@@ -130,10 +130,10 @@
                     filter-placeholder="Select Country"
                     autofocus-filter
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.address.region_id">
+                <form-field-validator :validate="$v.newHolding.address.region_id">
                   <q-select
                     @input="$v.newHolding.address.region_id.$touch"
                     :error="$v.newHolding.address.region_id.$error"
@@ -145,12 +145,12 @@
                     filter-placeholder="Select Region"
                     autofocus-filter
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <!-- </div> -->
               <!-- <div class="row gutter-sm"> -->
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.address.province_id">
+                <form-field-validator :validate="$v.newHolding.address.province_id">
                   <q-select
                     @input="$v.newHolding.address.province_id.$touch"
                     :error="$v.newHolding.address.province_id.$error"
@@ -162,10 +162,10 @@
                     filter-placeholder="Select Province"
                     autofocus-filter
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.address.city_id">
+                <form-field-validator :validate="$v.newHolding.address.city_id">
                   <q-select
                     @input="$v.newHolding.address.city_id.$touch"
                     :error="$v.newHolding.address.city_id.$error"
@@ -186,10 +186,10 @@
                       }
                     ]"
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.address.brgy_id">
+                <form-field-validator :validate="$v.newHolding.address.brgy_id">
                   <q-select
                     @input="$v.newHolding.address.brgy_id.$touch"
                     :error="$v.newHolding.address.brgy_id.$error"
@@ -211,7 +211,7 @@
                   }
                 ]"
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
               <!-- </div> -->
               <q-inner-loading :visible="addressInnerLoading">
@@ -222,7 +222,7 @@
                 />
               </q-inner-loading>
               <div class="col-12">
-                <f-v-field-validator :val="$v.newHolding.address.street_lot_blk">
+                <form-field-validator :validate="$v.newHolding.address.street_lot_blk">
                   <q-input
                     @input="$v.newHolding.address.street_lot_blk.$touch"
                     :error="$v.newHolding.address.street_lot_blk.$error"
@@ -232,7 +232,7 @@
                     :max-height="$q.screen.gt.sm ? 100 : 0"
                     :rows="$q.screen.gt.sm ? 2 : 1"
                   />
-                </f-v-field-validator>
+                </form-field-validator>
               </div>
             </div>
           </q-card>
@@ -242,7 +242,7 @@
           <div class="row col-12 justify-center">
             <div class="col-12">
               <f-v-error-summary
-                :valObj="$v"
+                :validations="$v"
                 class="q-my-sm"
               />
             </div>
