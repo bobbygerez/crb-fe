@@ -57,16 +57,16 @@
                     <q-input :value="purchaseItem.pivot.vendorable_type.substring(10)" float-label="Vendorable Type" disable />
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <q-input :value="purchaseItem.name" :float-label="`${purchaseItem.pivot.vendorable_type.substring(10)} Name`" disable/>
+                    <q-input :value="purchaseItem.name" :float-label="`${purchaseItem.pivot.vendorable_type.substring(10)} Name`" disable />
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <input-price label="Price" :value="pivotPrice" v-model="pivotPrice" ></input-price>
+                    <input-price label="Price" :value="pivotPrice" v-model="pivotPrice"></input-price>
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="pivotQty" float-label="Quantity"  />
+                    <q-input v-model="pivotQty" float-label="Quantity" />
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <input-price label="Freight" :value="pivotFreight" v-model="pivotFreight" ></input-price>
+                    <input-price label="Freight" :value="pivotFreight" v-model="pivotFreight"></input-price>
                 </div>
             </div>
             <br />
@@ -78,12 +78,12 @@
         <div style="padding: 30px">
             <div class="row">
                 <div class="col-xs-12 col-sm-4">
-                        <q-search v-model="terms" placeholder="Search Item..." float-label="Item Name">
-                            <q-autocomplete :static-data="{field: 'label', list: itemLists }" @selected="selected" />
-                        </q-search>
+                    <q-search v-model="terms" placeholder="Search Item..." float-label="Item Name">
+                        <q-autocomplete :static-data="{field: 'label', list: itemLists }" @selected="selected" />
+                    </q-search>
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="newPivotQty" float-label="Quantity"  />
+                    <q-input v-model="newPivotQty" float-label="Quantity" />
                 </div>
             </div>
             <br />
@@ -193,10 +193,10 @@ export default {
             })
         },
         newPurchaseItemModal: {
-            get(){
-               return this.$store.getters['purchaseRequests/newPurchaseItemModal']
+            get() {
+                return this.$store.getters['purchaseRequests/newPurchaseItemModal']
             },
-            set(val){
+            set(val) {
                 this.$store.dispatch('purchaseRequests/newPurchaseItemModal', val);
             }
         },
@@ -209,19 +209,19 @@ export default {
             }
         },
         pivotQty: {
-            get(){
+            get() {
                 return this.purchaseItem.items[0].purchases[0].pivot.qty
             },
-            set(val){
-                 this.$store.dispatch('purchaseRequests/pivotQty', val)
+            set(val) {
+                this.$store.dispatch('purchaseRequests/pivotQty', val)
             }
         },
         pivotFreight: {
-            get(){
+            get() {
                 return parseFloat(this.purchaseItem.items[0].purchases[0].pivot.freight)
             },
-            set(val){
-                 this.$store.dispatch('purchaseRequests/pivotFreight', parseFloat(val))
+            set(val) {
+                this.$store.dispatch('purchaseRequests/pivotFreight', parseFloat(val))
             }
         }
     },
@@ -294,38 +294,36 @@ export default {
             let purchaseId = propsRow.items[0].purchases[0].id
             let pivotId = propsRow.items[0].purchases[0].pivot.id
             this.$store.dispatch('purchaseRequests/purchaseItem', propsRow)
-                    this.$q.notify({
-                        color: 'negative',
-                        icon: 'delete',
-                        message: `Cancel Order in ${propsRow.items[0].name}?`,
-                        actions: [
-                            {
-                                label: 'OK',
-                                handler: () => {
-                                    this.$axios.delete(`/purchase_items/${purchaseId}?id=${purchaseId}&pivotId=${pivotId}`)
-                                        .then((res) => {
-                                            this.$q.notify({
-                                                color: 'positive',
-                                                icon: 'check',
-                                                message: `${propsRow.items[0].name} deleted successfully`
-                                            })
-                                            this.request({
-                                                pagination: this.serverPagination,
-                                                filter: this.filter
-                                            })
-                                            this.loading = false
-                                        })
-                                        .catch((err) => {
-                                            this.$q.notify({
-                                                color: 'negative',
-                                                icon: 'warning',
-                                                message: `${err.response.data.message}`
-                                            })
-                                        })
-                                }
-                            }
-                        ]
-                    })
+            this.$q.notify({
+                color: 'negative',
+                icon: 'delete',
+                message: `Cancel Order in ${propsRow.items[0].name}?`,
+                actions: [{
+                    label: 'OK',
+                    handler: () => {
+                        this.$axios.delete(`/purchase_items/${purchaseId}?id=${purchaseId}&pivotId=${pivotId}`)
+                            .then((res) => {
+                                this.$q.notify({
+                                    color: 'positive',
+                                    icon: 'check',
+                                    message: `${propsRow.items[0].name} deleted successfully`
+                                })
+                                this.request({
+                                    pagination: this.serverPagination,
+                                    filter: this.filter
+                                })
+                                this.loading = false
+                            })
+                            .catch((err) => {
+                                this.$q.notify({
+                                    color: 'negative',
+                                    icon: 'warning',
+                                    message: `${err.response.data.message}`
+                                })
+                            })
+                    }
+                }]
+            })
         },
         update() {
             this.$axios.put(`/purchase_items/${this.purchaseItem.id}`, this.purchaseItem)

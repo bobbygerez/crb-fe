@@ -13,8 +13,8 @@
                         <q-list link style="min-width: 100px">
                             <template v-for="(action, idx) in actions">
                                 <q-item :key="idx" @click.native="myFunction(action, props.row.id, props.row.approved_by != null)" v-close-overlay>
-                                    <q-item-main :label="capitalize(action)" :disabled="props.row.approved_by != null" v-if="action === 'cancel request'"/>
-                                    <q-item-main :label="capitalize(action)" v-else/>
+                                    <q-item-main :label="capitalize(action)" :disabled="props.row.approved_by != null" v-if="action === 'cancel request'" />
+                                    <q-item-main :label="capitalize(action)" v-else />
                                 </q-item>
                             </template>
                         </q-list>
@@ -24,8 +24,8 @@
                     {{ props.row.order_date }}
                 </q-td>
                 <q-td key="prepared_by" :props="props">
-                    {{ props.row.prepared_by.firstname }} 
-                    {{ props.row.prepared_by.middlename }} 
+                    {{ props.row.prepared_by.firstname }}
+                    {{ props.row.prepared_by.middlename }}
                     {{ props.row.prepared_by.lastname }} <br />
                     {{ props.row.created_at }}
                 </q-td>
@@ -76,7 +76,7 @@
             <div class="q-display-1 q-mb-md">Edit {{ purchaseRequest.name }}</div>
 
             <div class="row">
-                
+
                 <div class="col-xs-12 col-sm-4">
                     <q-input v-model="purchaseRequest.name" float-label="Name" clearable />
                 </div>
@@ -86,7 +86,7 @@
                 <div class="col-xs-12 col-sm-4">
                     <q-input v-model="purchaseRequest.purchasable.name" float-label="Purchase by" disable />
                 </div>
-                
+
                 <div class="col-xs-12 col-sm-3">
                     <q-input v-model="purchaseRequest.created_at" float-label="Prepared date" disable />
                 </div>
@@ -118,7 +118,7 @@
             <div class="q-display-1 q-mb-md">New Purchase Request</div>
 
             <div class="row">
-                
+
                 <div class="col-xs-12 col-sm-4">
                     <q-input v-model="purchaseRequest.name" float-label="Name" clearable />
                 </div>
@@ -231,27 +231,27 @@ export default {
     computed: {
         ...mapState('purchaseRequests', ['editPurchaseRequestModal', 'purchaseRequest']),
         newPurchaseRequestModal: {
-            get(){
+            get() {
                 return this.$store.getters['purchaseRequests/newPurchaseRequestModal'];
             },
-            set(val){
+            set(val) {
                 this.$store.dispatch('purchaseRequests/newPurchaseRequestModal', val)
             }
         },
-        purchasableType(){
+        purchasableType() {
             return this.purchaseRequest.purchasable_type.substring(10)
         },
-        aapprovedBy(){
+        aapprovedBy() {
             let n = this.purchaseRequest.approved_by
-            if(n === null ) return null
+            if (n === null) return null
             return `${n.firstname} ${n.middlename} ${n.lastname}`
         },
-        nnotedBy(){
+        nnotedBy() {
             let n = this.purchaseRequest.noted_by
-            if(n === null ) return null
+            if (n === null) return null
             return `${n.firstname} ${n.middlename} ${n.lastname}`
         },
-        preparedBy(){
+        preparedBy() {
             let n = this.purchaseRequest.prepared_by
             return `${n.firstname} ${n.middlename} ${n.lastname}`
         },
@@ -265,42 +265,42 @@ export default {
         }
     },
     methods: {
-        notedBy(purchaseRequestId){
+        notedBy(purchaseRequestId) {
             this.$axios.get(`purchases-noted-by?id=${purchaseRequestId}`)
-            .then( res =>{
-                this.$q.notify({
+                .then(res => {
+                    this.$q.notify({
                         color: 'positive',
                         icon: 'check',
                         message: `Noted by was successfully updated.`
                     })
-                this.request({
-                    pagination: this.serverPagination,
-                    filter: this.filter
+                    this.request({
+                        pagination: this.serverPagination,
+                        filter: this.filter
+                    })
                 })
-            })
-                
+
         },
-        approvedBy(purchaseRequestId){
+        approvedBy(purchaseRequestId) {
             this.$axios.get(`purchases-approved-by?id=${purchaseRequestId}`)
-            .then( res =>{
-                this.$q.notify({
+                .then(res => {
+                    this.$q.notify({
                         color: 'positive',
                         icon: 'check',
                         message: `Approved by was successfully updated.`
                     })
-                this.request({
-                    pagination: this.serverPagination,
-                    filter: this.filter
+                    this.request({
+                        pagination: this.serverPagination,
+                        filter: this.filter
+                    })
                 })
-            })
-            .catch(err => {
-                 this.$q.notify({
+                .catch(err => {
+                    this.$q.notify({
                         color: 'negative',
                         icon: 'warning',
                         message: `${err.response.data.message}`
                     })
-            })
-                
+                })
+
         },
         selected(item) {
             this.$q.notify(`Selected suggestion "${item.label}"`)
@@ -313,13 +313,13 @@ export default {
             if (action === 'edit') {
                 this.edit(purchaseId)
             } else if (action === 'cancel request') {
-                if(status === false){
-                     this.deleteRow(purchaseId)
+                if (status === false) {
+                    this.deleteRow(purchaseId)
                 }
             } else if (action === 'order details') {
-                
+
                 this.$router.push(`purchase-request/${purchaseId}/purchase-items`)
-                
+
             }
         },
         store() {
@@ -346,33 +346,31 @@ export default {
                         color: 'negative',
                         icon: 'delete',
                         message: `Cancel request in ${res.data.purchase.name}?`,
-                        actions: [
-                            {
-                                label: 'OK',
-                                handler: () => {
-                                    this.$axios.delete(`/purchases/${this.purchaseRequest.id}?id=${this.purchaseRequest.id}`)
-                                        .then((res) => {
-                                            this.$q.notify({
-                                                color: 'positive',
-                                                icon: 'check',
-                                                message: `${this.purchaseRequest.name} deleted successfully`
-                                            })
-                                            this.request({
-                                                pagination: this.serverPagination,
-                                                filter: this.filter
-                                            })
-                                            this.loading = false
+                        actions: [{
+                            label: 'OK',
+                            handler: () => {
+                                this.$axios.delete(`/purchases/${this.purchaseRequest.id}?id=${this.purchaseRequest.id}`)
+                                    .then((res) => {
+                                        this.$q.notify({
+                                            color: 'positive',
+                                            icon: 'check',
+                                            message: `${this.purchaseRequest.name} deleted successfully`
                                         })
-                                        .catch((err) => {
-                                            this.$q.notify({
-                                                color: 'negative',
-                                                icon: 'warning',
-                                                message: `${err.response.data.message}`
-                                            })
+                                        this.request({
+                                            pagination: this.serverPagination,
+                                            filter: this.filter
                                         })
-                                }
+                                        this.loading = false
+                                    })
+                                    .catch((err) => {
+                                        this.$q.notify({
+                                            color: 'negative',
+                                            icon: 'warning',
+                                            message: `${err.response.data.message}`
+                                        })
+                                    })
                             }
-                        ]
+                        }]
                     })
                 })
             // .catch()
@@ -445,7 +443,7 @@ export default {
                 return
             }
             this.terms = ''
-            this.placeholderPurchasableType = 'Search ' +  val.substring(10) + '...'
+            this.placeholderPurchasableType = 'Search ' + val.substring(10) + '...'
             this.$axios.get(`modelable-user-models?modelType=${val}`)
                 .then(res => {
                     this.$store.dispatch('purchaseRequests/purchasableType', val)
