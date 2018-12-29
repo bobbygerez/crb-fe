@@ -2,7 +2,7 @@ const replaceAll = (str, find, replace) => str.replace(new RegExp(find, 'g'), re
 export default {
   props: {
     fieldName: String,
-    localMessage: Object,
+    localMessages: Object,
     errorMessages: {
       type: Object,
       default: () => {
@@ -25,7 +25,7 @@ export default {
         return ''
       }
       const fieldname = this.fieldName || replaceAll(filteredVals[0].replace('_$', ''), '_', ' ')
-      const message = this.localMessage || this.errorMessages
+      const message = this.localMessages || this.errorMessages
       if (val.hasOwnProperty('required') && !val.required) {
         return `${fieldname} ${message.required}`
       }

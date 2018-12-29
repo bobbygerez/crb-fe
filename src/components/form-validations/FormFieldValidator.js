@@ -12,16 +12,16 @@ import BaseValidationMixin from 'components/form-validations/BaseValidationMixin
 export default Vue.extend({
   name: 'FormFieldValidator',
   props: {
-    val: Object
+    validate: Object
   },
   mixins: [BaseValidationMixin],
   inheritAttrs: false,
   computed: {
     hasErrors () {
-      return this.val.$error
+      return this.validate.$error
     },
     errMessage () {
-      return this.getErrMessage(this.val)
+      return this.getErrMessage(this.validate)
     }
   },
   render (h) {
