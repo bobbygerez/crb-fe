@@ -4,9 +4,9 @@
       :data="serverData"
       :columns="columns"
       :actions="['edit', 'delete', 'read']"
-      :searchField="filter"
+      :search-field="filter"
       :pagination="serverPagination"
-      :innerLoading="loading"
+      :inner-loading="loading"
       theme="secondary"
       @edit="edit"
       @delete="deleteRow"
@@ -17,23 +17,17 @@
 </template>
 
 <script>
-import { mapHoldingFields } from '../../../../../store/pattys'
-import { mapGlobalFields } from '../../../../../store/globals'
-import ServersideListTable from 'components/data-table/serverside-list-table'
-import ServersideGridTable from 'components/data-table/serverside-grid-table'
 import ServersideDynamicTable from 'components/data-table/serverside-dynamic-table'
-import TableMixin from 'components/mixins/table-mixin.js'
+import TableMixin from 'components/mixins/serverside-table-mixin.js'
 
 export default {
+  // check the mixin for other setup abstracted in this component
   mixins: [TableMixin],
   components: {
-    ServersideListTable,
-    ServersideGridTable,
     ServersideDynamicTable
   },
   data () {
     return {
-      moduleName: 'holdings',
       columns: [
         {
           name: 'name',
@@ -55,15 +49,12 @@ export default {
       options: [5, 10, 15, 20]
     }
   },
-  computed: {
-    ...mapHoldingFields(['newHoldingModal', 'holding', 'holdings', 'editHoldingView', 'editHolding']),
-    ...mapGlobalFields(['tableViewSettingsGlobal'])
-  },
   created () {
-    // merge array of table columns
-    let cols = this.columns.slice(0, 1).concat(this.addressColumns.concat(this.columns.slice(1)))
+    // merge array of table columns if you want to show the address fields also which is defined in the table-mixin
+    const cols = this.columns.slice(0, 1).concat(this.addressColumns.concat(this.columns.slice(1)))
     this.columns = cols
-    console.log('columns', this.columns)
+    // set the module name for api calls in the actions
+    this.moduleName = 'holdings'
   }
 }
 </script>

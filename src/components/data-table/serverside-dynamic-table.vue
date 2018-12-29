@@ -1,5 +1,6 @@
 <template>
   <div class="q-mb-xl">
+    <!-- inner loading animation for grid table view -->
     <q-inner-loading :visible="innerLoading && tableViewSettingsGlobal.mode === 'grid'">
       <q-spinner
         color="secondary"
@@ -44,6 +45,7 @@
         v-if="topRightOptions"
       >
         <q-table-columns
+          label="Fields"
           :color="theme"
           class="q-mr-sm"
           v-model="visibleColumns"
@@ -71,10 +73,11 @@
           @click="props.toggleFullscreen"
           v-show="topRightOptions.fullscreenToggle"
         />
-        <!-- <table-view-mode-action /> -->
+        <!-- toggle table view mode to grid or list -->
         <global-change-table-view :color="theme" />
       </template>
 
+      <!-- For Grid View -->
       <div
         v-show="tableViewSettingsGlobal.mode === 'grid'"
         slot="item"
@@ -115,6 +118,7 @@
               </template>
             </q-list>
           </q-card-main>
+          <!-- Shows a menu of actions passed in the table -->
           <q-popover
             touch-position
             v-show="actions"
@@ -136,7 +140,7 @@
             </q-list>
           </q-popover>
           <q-tooltip
-            :disable="$q.platform.is.mobile"
+            :disable="$q.platform.is.mobile && actions"
             :delay="1000"
             anchor="bottom middle"
             v-close-overlay
@@ -147,9 +151,8 @@
           </q-tooltip>
         </q-card>
       </div>
-      <!-- <template
 
-      > -->
+      <!-- For List Table View -->
       <q-tr
         slot="body"
         slot-scope="props"
@@ -214,6 +217,12 @@
 </template>
 
 <script>
+/**
+ * @description A Custom DataTable implementation for the purpose of uniform table look and feel.
+ * This is has a server side functionality which calls the index function of your API
+ * for Filtering results
+ * @author Aldrin Marquez
+ */
 import { mapGlobalFields } from '../../store/globals'
 import GlobalChangeTableView from 'components/actions-generic/table-view-mode-global-action'
 
@@ -225,26 +234,36 @@ export default {
   },
   name: 'serverside-dynamic-table',
   props: {
+    // the table data
     data: {
       type: [Array, Object],
       default: null
     },
+    // column definition
     columns: {
       type: [Array, Object],
       default: null
     },
+    // actions shown when user right clicks on row or onto a table item
+    // pass an array of strings pertaining to the actions that are available
+    // for the current table, action name will be emitted
+    // ie. if you pass :actions="['edit']" edit event will be emitted when you click on the Edit action
     actions: {
       type: [Array, Object],
       default: null
     },
+    // color theme
     theme: {
       type: String,
       default: 'primary'
     },
+    // pass a false if search is disabled
     search: {
       Boolean,
       default: true
     },
+    // pass this prop if you want to limit the options
+    // on the table. props are shown in the default
     topRightOptions: {
       type: Object,
       default: () => {
@@ -255,6 +274,7 @@ export default {
         }
       }
     },
+    // current pagination settings of the table
     pagination: {
       type: Object,
       default: () => {
@@ -272,10 +292,12 @@ export default {
       type: Array,
       default: () => [3, 5, 7, 10, 15, 25, 50, 0]
     },
+    // pass a boolean model if you want to show a loading animation
     innerLoading: {
       type: Boolean,
       default: () => false
     },
+    // the filter model of your table
     searchField: {
       type: String,
       default: () => ''
@@ -286,7 +308,6 @@ export default {
   inheritAttrs: false,
   data () {
     return {
-      // filter: '',
       visibleColumns: [],
       separator: 'horizontal',
       selected: []
@@ -327,8 +348,6 @@ export default {
       }
       return v.name
     })
-    console.log('mounted', this.data, this.columns)
-    console.log('platform', this.$q.platform.is)
   }
 }
 </script>
