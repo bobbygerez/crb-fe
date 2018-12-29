@@ -31,14 +31,14 @@
                     {{ props.row.items[0].purchases[0].pivot.freight |currency('₱ ') }}
                 </q-td>
                 <q-td key="date_delivery" :props="props">
-                    {{ props.row.items[0].purchases[0].pivot.date_delivery }}
+                    {{ props.row.items[0].pivot_date_delivery }}
                 </q-td>
                 <q-td key="package" :props="props">
                     {{ props.row.items[0].package.name }}
                 </q-td>
                 <q-td key="approved_by" :props="props">
                     {{ props.row.items[0].purchases[0].pivot.approved_by }} <br />
-                    {{ props.row.items[0].purchases[0].pivot.date_approved }}
+                    {{ props.row.items[0].pivot_date_approved }}
                 </q-td>
 
             </q-tr>
@@ -325,16 +325,16 @@ export default {
                     purchaseId: this.$route.params.id
                 })
                 .then(res => {
-                    // this.hideModal()
-                    // this.$q.notify({
-                    //     color: 'positive',
-                    //     icon: 'check',
-                    //     message: `${this.item.name} created successfully`
-                    // })
-                    // this.request({
-                    //     pagination: this.serverPagination,
-                    //     filter: this.filter
-                    // })
+                    this.hideModal()
+                    this.$q.notify({
+                        color: 'positive',
+                        icon: 'check',
+                        message: `${this.item.name} created successfully`
+                    })
+                    this.request({
+                        pagination: this.serverPagination,
+                        filter: this.filter
+                    })
                 })
         },
         deleteRow(propsRow) {

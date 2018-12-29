@@ -1,22 +1,28 @@
 <template>
 <div class="q-pa-sm">
-    <purchase-request></purchase-request>
+    <ingredients></ingredients>
 
     <q-page-sticky position="bottom-left" :offset="[16, 16]">
         <q-btn color="primary" @click="showNewPurchasRequestModal()">
-            <q-icon name="add"></q-icon>New Purchase Request
+            <q-icon name="add"></q-icon>New Ingredients
         </q-btn>
     </q-page-sticky>
 </div>
 </template>
 
 <script>
-import purchaseRequest from 'components/data-table/purchase-request.vue'
+import ingredients from 'components/data-table/ingredients.vue'
 export default {
     created() {
         this.packages()
     },
     methods: {
+        packages() {
+            this.$axios.get('packages-all')
+                .then(res => {
+                    this.$store.dispatch('items/packages', res.data.packages)
+                });
+        },
         showNewPurchasRequestModal() {
             this.$store.dispatch('purchaseRequests/purchaseRequest', {
                 name: '',
@@ -49,7 +55,7 @@ export default {
         }
     },
     components: {
-        purchaseRequest
+        ingredients
     }
 }
 </script>

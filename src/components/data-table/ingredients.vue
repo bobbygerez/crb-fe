@@ -1,13 +1,35 @@
 <template>
 <div>
-    <q-table ref="table" color="primary" title="All Purchase Requests" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
+    <q-table ref="table" color="primary" title="All Ingredients" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
         <template slot="top-right" slot-scope="props">
             <q-search hide-underline v-model="filter" />
         </template>
 
         <template slot="body" slot-scope="props">
             <q-tr :props="props">
-                <q-td key="name">
+                <q-td key="company" :props="props">
+                    {{ props.row.company.name }}
+                </q-td>
+                <q-td key="name" :props="props">
+                    {{ props.row.name }}
+                    <q-popover touch-position v-if="actions">
+                        <q-list link style="min-width: 100px">
+                            <template v-for="(action, idx) in actions">
+                                <q-item :key="idx" @click.native="myFunction(action, props.row.id)" v-close-overlay>
+                                    <q-item-main :label="capitalize(action)"/>
+                                </q-item>
+                            </template>
+                        </q-list>
+                    </q-popover>
+                </q-td>
+                <q-td key="pcs" :props="props">
+                    {{ props.row.pcs }}
+                </q-td>
+                <q-td key="created_at" :props="props">
+                    {{ props.row.created_at }}
+                </q-td>
+                
+                <!-- <q-td key="name">
                     {{props.row.name}}
                     <q-popover touch-position v-if="actions">
                         <q-list link style="min-width: 100px">
@@ -64,14 +86,14 @@
                 </q-td>
                 <q-td key="purchasable_type" :props="props">
                     {{ props.row.purchasable_type.substring(10) }}
-                </q-td>
+                </q-td> -->
 
             </q-tr>
 
         </template>
 
     </q-table>
-    <q-modal v-model="editPurchaseRequestModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    <!-- <q-modal v-model="editPurchaseRequestModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
         <div style="padding: 30px">
             <div class="q-display-1 q-mb-md">Edit {{ purchaseRequest.name }}</div>
 
@@ -112,8 +134,8 @@
             <q-btn color="primary" @click="update()" label="Submit" class="q-ml-sm" />
 
         </div>
-    </q-modal>
-    <q-modal v-model="newPurchaseRequestModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    </q-modal> -->
+    <!-- <q-modal v-model="newPurchaseRequestModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
         <div style="padding: 30px">
             <div class="q-display-1 q-mb-md">New Purchase Request</div>
 
@@ -136,7 +158,7 @@
             <q-btn color="primary" @click="store()" label="Submit" class="q-ml-sm" />
 
         </div>
-    </q-modal>
+    </q-modal> -->
 </div>
 </template>
 
@@ -169,7 +191,7 @@ export default {
                     label: 'Commissary'
                 }
             ],
-            actions: ['edit', 'cancel request', 'order details'],
+            actions: ['edit', 'delete', 'view items'],
             options: [5, 10, 15, 20],
             lastPage: '',
             serverData: [],
@@ -178,50 +200,32 @@ export default {
                 rowsNumber: 10,
                 rowsPerPage: 10 // specifying this determines pagination is server-side
             },
-            columns: [{
+            columns: [
+                {
+                    name: 'company',
+                    label: 'Company',
+                    field: 'company',
+                    align: 'left'
+                },
+                {
                     name: 'name',
                     label: 'Name',
                     field: 'name',
                     align: 'left'
                 },
-
+                
                 {
-                    name: 'order_date',
-                    label: 'Order Date',
-                    field: 'order_date',
+                    name: 'pcs',
+                    label: 'Pcs',
+                    field: 'pcs',
                     align: 'left'
                 },
                 {
-                    name: 'prepared_by',
-                    label: 'Prepared By',
-                    field: 'prepared_by',
-                    align: 'left'
-                },
-                {
-                    name: 'noted_by',
-                    label: 'Noted By',
-                    field: 'noted_by',
-                    align: 'left'
-                },
-                {
-                    name: 'approved_by',
-                    label: 'Approved By',
-                    field: 'approved_by',
-                    align: 'left'
-                },
-                {
-                    name: 'purchase_by',
-                    label: 'Purchase By',
-                    field: 'purchase_by',
-                    align: 'left'
-                },
-                {
-                    name: 'purchasable_type',
-                    label: 'Purchase Type',
-                    field: 'purchasable_type',
+                    name: 'created_at',
+                    label: 'Created At',
+                    field: 'created_at',
                     align: 'left'
                 }
-
             ],
             filter: '',
             loading: false
@@ -313,34 +317,34 @@ export default {
         capitalize(string) {
             return (string.charAt(0).toUpperCase() + string.slice(1).toLowerCase())
         },
-        myFunction(action, purchaseId, status) {
+        myFunction(action, ingredientId) {
             if (action === 'edit') {
-                this.edit(purchaseId)
-            } else if (action === 'cancel request') {
+                this.edit(ingredientId)
+            } else if (action === 'delete') {
                 if(status === false){
-                     this.deleteRow(purchaseId)
+                     this.deleteRow(ingredientId)
                 }
-            } else if (action === 'order details') {
+            } else if (action === 'view items') {
                 
-                this.$router.push(`purchase-request/${purchaseId}/purchase-items`)
+                // this.$router.push(`purchase-request/${ingredientId}/purchase-items`)
                 
             }
         },
         store() {
-            // this.$axios
-            //     .post(`/items`, this.item)
-            //     .then(res => {
-            //         this.hideModal()
-            //         this.$q.notify({
-            //             color: 'positive',
-            //             icon: 'check',
-            //             message: `${this.item.name} created successfully`
-            //         })
-            //         this.request({
-            //             pagination: this.serverPagination,
-            //             filter: this.filter
-            //         })
-            //     })
+            this.$axios
+                .post(`/items`, this.item)
+                .then(res => {
+                    this.hideModal()
+                    this.$q.notify({
+                        color: 'positive',
+                        icon: 'check',
+                        message: `${this.item.name} created successfully`
+                    })
+                    this.request({
+                        pagination: this.serverPagination,
+                        filter: this.filter
+                    })
+                })
         },
         deleteRow(purchaseId) {
             this.$axios.get(`/purchases/${purchaseId}?id=${purchaseId}`)
@@ -403,15 +407,15 @@ export default {
             this.loading = true
             this.$axios
                 .get(
-                    `/purchases?filter=${this.filter}&page=${props.pagination.page}&perPage=${
+                    `/ingredients?filter=${this.filter}&page=${props.pagination.page}&perPage=${
             props.pagination.rowsPerPage
           }`
                 )
                 .then(res => {
                     this.serverPagination = props.pagination
-                    this.serverData = _.values(res.data.purchases.data)
-                    this.serverPagination.rowsNumber = res.data.purchases.total
-                    this.lastPage = res.data.purchases.last_page
+                    this.serverData = _.values(res.data.ingredients.data)
+                    this.serverPagination.rowsNumber = res.data.ingredients.total
+                    this.lastPage = res.data.ingredients.last_page
                     this.loading = false
                 })
                 .catch(error => {
@@ -421,11 +425,11 @@ export default {
                     this.loading = false
                 })
         },
-        edit(purchaseId) {
-            this.$axios.get(`purchases/${purchaseId}/edit?id=${purchaseId}`)
+        edit(ingredientId) {
+            this.$axios.get(`ingredients/${ingredientId}/edit?id=${ingredientId}`)
                 .then(res => {
-                    this.showModal()
-                    this.$store.dispatch('purchaseRequests/purchaseRequest', res.data.purchase)
+                    // this.showModal()
+                    // this.$store.dispatch('purchaseRequests/purchaseRequest', res.data.purchase)
                 })
         },
         hideModal() {

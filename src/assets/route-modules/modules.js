@@ -19,5 +19,6 @@ export default [
   'commissaries',
   'other-vendors',
   'items',
-  'purchase-request'
+  'purchase-request',
+  'ingredients'
 ]
