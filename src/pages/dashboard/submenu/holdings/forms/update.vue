@@ -2,13 +2,10 @@
   <q-page class="q-mx-lg">
     <form>
       <div class="row gutter-md q-pt-lg">
-        <!-- <div class="q-display-1 q-mb-md">Edit {{ holding.name }}</div> -->
         <div class="column col-12 col-lg-6">
           <q-card class="q-pa-lg">
             <q-card-title>
-              <!-- <p class="caption"> -->
               Holding Info
-              <!-- </p> -->
             </q-card-title>
             <q-card-separator />
             <div class="row">

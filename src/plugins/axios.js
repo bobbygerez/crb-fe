@@ -1,4 +1,6 @@
-import { Platform } from 'quasar'
+import {
+  Platform
+} from 'quasar'
 import axios from 'axios'
 
 /**
@@ -83,6 +85,9 @@ export const setAuthHeader = (token) => {
 export const unSetAuthHeader = () => {
   axios.defaults.headers.common['Authorization'] = null
 }
+// import this instance for use in other files other than vue
+// in the case that you have no access of the Vue.prototype version this.$axios
+// it is so you are using the same axios instance accross your code
 export {
   axios
 }
