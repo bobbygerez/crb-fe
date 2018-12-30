@@ -1,5 +1,6 @@
-
-import { mapActions } from 'vuex'
+import {
+  mapActions
+} from 'vuex'
 import GenericModal from 'components/modals/generic-modal'
 export default {
   components: {
@@ -11,8 +12,7 @@ export default {
 
     }
   },
-  computed: {
-  },
+  computed: {},
   created () {
     this.getCountries()
     this.getBusinessTypes()
@@ -29,8 +29,8 @@ export default {
       // }
       let diff =
         scroll.direction === 'down'
-          ? scroll.inflexionPosition + scroll.position
-          : scroll.inflexionPosition - scroll.position
+        ? scroll.inflexionPosition + scroll.position
+        : scroll.inflexionPosition - scroll.position
       if (diff >= 300 && scroll.direction === 'up') {
         this.showFab = false
       } else {
