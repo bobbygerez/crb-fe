@@ -35,6 +35,18 @@ const routes = [{
     { path: '', component: () => import('pages/dashboard/submenu/purchase-request/purchase-items.vue') },
     { path: '/' }
   ]
+}, {
+  path: '/dashboard/ingredients/:id/view-ingredients',
+  meta: {
+    title: name.endsWith('s') ? name : name.concat('s'),
+    needAuth: true,
+    section: 'index'
+  },
+  component: () => import('layouts/MainLayout.vue'),
+  children: [
+    { path: '', component: () => import('pages/dashboard/submenu/ingredients/ingredients-view.vue') },
+    { path: '/' }
+  ]
 }]
 
 const dashBoardModules = (appModules) => {

@@ -1,17 +1,17 @@
 <template>
 <div class="q-pa-sm">
-    <ingredients></ingredients>
+    <ingredients-view></ingredients-view>
 
     <q-page-sticky position="bottom-left" :offset="[16, 16]">
         <q-btn color="primary" @click="showNewPurchasRequestModal()">
-            <q-icon name="add"></q-icon>New Ingredients
+            <q-icon name="add"></q-icon>New Ingredient
         </q-btn>
     </q-page-sticky>
 </div>
 </template>
 
 <script>
-import ingredients from 'components/data-table/ingredients.vue'
+import ingredientsView from 'components/data-table/ingredients-view.vue'
 export default {
     created() {
         this.getIngredients()
@@ -55,7 +55,7 @@ export default {
         }
     },
     components: {
-        ingredients
+        ingredientsView
     }
 }
 </script>

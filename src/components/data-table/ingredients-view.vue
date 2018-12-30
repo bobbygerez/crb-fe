@@ -1,13 +1,17 @@
 <template>
 <div>
-    <q-table ref="table" color="primary" title="All Ingredients" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
+    <q-table ref="table" color="primary" :title="`${ingredient.name} ingredients`" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
         <template slot="top-right" slot-scope="props">
             <q-search hide-underline v-model="filter" />
         </template>
 
         <template slot="body" slot-scope="props">
+           
             <q-tr :props="props">
-                <q-td key="company" :props="props">
+                 <q-td key="name" :props="props">
+                    {{ props.row.name }}
+                </q-td>
+                <!-- <q-td key="company" :props="props">
                     {{ props.row.company.name }}
                 </q-td>
                 <q-td key="name" :props="props">
@@ -15,7 +19,7 @@
                     <q-popover touch-position v-if="actions">
                         <q-list link style="min-width: 100px">
                             <template v-for="(action, idx) in actions">
-                                <q-item :key="idx" @click.native="myFunction(action, props.row.id, props.row.name)" v-close-overlay>
+                                <q-item :key="idx" @click.native="myFunction(action, props.row.id)" v-close-overlay>
                                     <q-item-main :label="capitalize(action)"/>
                                 </q-item>
                             </template>
@@ -27,14 +31,14 @@
                 </q-td>
                 <q-td key="created_at" :props="props">
                     {{ props.row.created_at }}
-                </q-td>
+                </q-td> -->
 
             </q-tr>
 
         </template>
 
     </q-table>
-    <q-modal v-model="editIngredientModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    <!-- <q-modal v-model="editIngredientModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
         <div style="padding: 30px">
             <div class="q-display-1 q-mb-md">Edit {{ ingredient.name }}</div>
 
@@ -64,7 +68,7 @@
             <q-btn color="primary" @click="update()" label="Update" class="q-ml-sm" />
 
         </div>
-    </q-modal>
+    </q-modal> -->
     <!-- <q-modal v-model="newPurchaseRequestModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
         <div style="padding: 30px">
             <div class="q-display-1 q-mb-md">New Purchase Request</div>
@@ -132,12 +136,6 @@ export default {
             },
             columns: [
                 {
-                    name: 'company',
-                    label: 'Company',
-                    field: 'company',
-                    align: 'left'
-                },
-                {
                     name: 'name',
                     label: 'Name',
                     field: 'name',
@@ -145,9 +143,9 @@ export default {
                 },
                 
                 {
-                    name: 'pcs',
-                    label: 'Pcs',
-                    field: 'pcs',
+                    name: 'qty',
+                    label: 'Qty',
+                    field: 'qty',
                     align: 'left'
                 },
                 {
@@ -250,7 +248,7 @@ export default {
         capitalize(string) {
             return (string.charAt(0).toUpperCase() + string.slice(1).toLowerCase())
         },
-        myFunction(action, ingredientId, ingredientName) {
+        myFunction(action, ingredientId) {
             if (action === 'edit') {
                 this.edit(ingredientId)
             } else if (action === 'delete') {
@@ -258,7 +256,6 @@ export default {
             } else if (action === 'view ingredients') {
                 
                 this.$router.push(`ingredients/${ingredientId}/view-ingredients`)
-                this.$store.dispatch('ingredients/ingredientName', ingredientName)
                 
             }
         },
@@ -339,15 +336,15 @@ export default {
             this.loading = true
             this.$axios
                 .get(
-                    `/ingredients?filter=${this.filter}&page=${props.pagination.page}&perPage=${
+                    `/ingredient_items?id=${this.$route.params.id}&filter=${this.filter}&page=${props.pagination.page}&perPage=${
             props.pagination.rowsPerPage
           }`
                 )
                 .then(res => {
                     this.serverPagination = props.pagination
-                    this.serverData = _.values(res.data.ingredients.data)
-                    this.serverPagination.rowsNumber = res.data.ingredients.total
-                    this.lastPage = res.data.ingredients.last_page
+                    this.serverData = _.values(res.data.ingredientItems.data)
+                    this.serverPagination.rowsNumber = res.data.ingredientItems.total
+                    this.lastPage = res.data.ingredientItems.last_page
                     this.loading = false
                 })
                 .catch(error => {
