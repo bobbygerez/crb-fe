@@ -18,6 +18,14 @@ export const ingredientName = (state, payload) => {
   state.ingredient.name = payload
 }
 
+export const ingredientPcs = (state, payload) => {
+  state.ingredient.pcs = payload
+}
+
+export const ingredientMethods = (state, payload) => {
+  state.ingredient.methods = payload
+}
+
 export const selectedCompany = (state, payload) => {
   state.selectedCompany = payload
 }

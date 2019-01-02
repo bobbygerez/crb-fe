@@ -25,118 +25,41 @@
                 <q-td key="pcs" :props="props">
                     {{ props.row.pcs }}
                 </q-td>
+                <q-td key="methods" :props="props">
+                    {{ props.row.methods }}
+                </q-td>
                 <q-td key="created_at" :props="props">
                     {{ props.row.created_at }}
                 </q-td>
-
-                <!-- <q-td key="name">
-                    {{props.row.name}}
-                    <q-popover touch-position v-if="actions">
-                        <q-list link style="min-width: 100px">
-                            <template v-for="(action, idx) in actions">
-                                <q-item :key="idx" @click.native="myFunction(action, props.row.id, props.row.approved_by != null)" v-close-overlay>
-                                    <q-item-main :label="capitalize(action)" :disabled="props.row.approved_by != null" v-if="action === 'cancel request'"/>
-                                    <q-item-main :label="capitalize(action)" v-else/>
-                                </q-item>
-                            </template>
-                        </q-list>
-                    </q-popover>
-                </q-td>
-                <q-td key="order_date" :props="props">
-                    {{ props.row.order_date }}
-                </q-td>
-                <q-td key="prepared_by" :props="props">
-                    {{ props.row.prepared_by.firstname }} 
-                    {{ props.row.prepared_by.middlename }} 
-                    {{ props.row.prepared_by.lastname }} <br />
-                    {{ props.row.created_at }}
-                </q-td>
-                <q-td key="noted_by" :props="props">
-                    <span v-if="props.row.noted_by === null" >
-                        <q-btn flat color="negative" icon="playlist_add_check" @click="notedBy(props.row.id)">
-                            <q-tooltip anchor="bottom middle" self="top middle" :offset="[10, 10]" >
-                                Click to noted by
-                            </q-tooltip>
-                        </q-btn>
-                    </span>
-                    <span v-else>
-                        {{ props.row.noted_by.firstname }}
-                        {{ props.row.noted_by.middlename }}
-                        {{ props.row.noted_by.lastname }}<br />
-                        {{ props.row.noted_date }}
-                    </span>
-                </q-td>
-                <q-td key="approved_by" :props="props">
-                    <span v-if="props.row.approved_by === null">
-                        <q-btn flat color="negative" icon="playlist_add_check"  @click="approvedBy(props.row.id)" >
-                            <q-tooltip anchor="bottom middle" self="top middle" :offset="[10, 10]" >
-                                Click to approved by
-                            </q-tooltip>
-                        </q-btn>
-                    </span>
-                    <span v-else>
-                        {{ props.row.approved_by.firstname }}
-                        {{ props.row.approved_by.middlename }}
-                        {{ props.row.approved_by.lastname }}<br />
-                        {{ props.row.approved_date }}
-                    </span>
-                </q-td>
-                <q-td key="purchase_by" :props="props">
-                    {{ props.row.purchasable.name }}
-                </q-td>
-                <q-td key="purchasable_type" :props="props">
-                    {{ props.row.purchasable_type.substring(10) }}
-                </q-td> -->
 
             </q-tr>
 
         </template>
 
     </q-table>
-    <!-- <q-modal v-model="editPurchaseRequestModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+    <q-modal v-model="editIngredientModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
         <div style="padding: 30px">
-            <div class="q-display-1 q-mb-md">Edit {{ purchaseRequest.name }}</div>
+            <div class="q-display-1 q-mb-md">Edit {{ ingredient.name }}</div>
             <div class="row">
-
-                <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="purchaseRequest.name" float-label="Name" clearable />
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="purchasableType" float-label="Purchase type" disable />
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <q-input v-model="purchaseRequest.purchasable.name" float-label="Purchase by" disable />
-                </div>
-
-                <div class="col-xs-12 col-sm-3">
-                    <q-input v-model="purchaseRequest.created_at" float-label="Prepared date" disable />
-                </div>
-                <div class="col-xs-12 col-sm-3">
-                    <q-input v-model="preparedBy" float-label="Prepared by" disable />
-                </div>
-                <div class="col-xs-12 col-sm-3">
-                    <q-input v-model="purchaseRequest.noted_date" float-label="Noted date" disable />
-                </div>
-                <div class="col-xs-12 col-sm-3">
-                    <q-input v-model="nnotedBy" float-label="Noted by" disable />
+                <div class="col-xs-12 col-sm-6">
+                    <q-input v-model="ingredient.name" float-label="Name" clearable />
                 </div>
                 <div class="col-xs-12 col-sm-6">
-                    <q-input v-model="purchaseRequest.approved_date" float-label="Approved date" disable />
+                    <q-input v-model="ingredient.pcs" float-label="PCS" />
                 </div>
-                <div class="col-xs-12 col-sm-6">
-                    <q-input v-model="aapprovedBy" float-label="Approved by" disable />
+                <div class="col-xs-12 col-sm-12">
+                    <q-input v-model="ingredient.methods" type="textarea" float-label="Methods" :max-height="100" rows="2" />
                 </div>
             </div>
             <br />
             <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
             <q-btn color="primary" @click="update()" label="Submit" class="q-ml-sm" />
         </div>
-    </q-modal> -->
+    </q-modal>
     <!-- <q-modal v-model="newPurchaseRequestModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
         <div style="padding: 30px">
             <div class="q-display-1 q-mb-md">New Purchase Request</div>
             <div class="row">
-
                 <div class="col-xs-12 col-sm-4">
                     <q-input v-model="purchaseRequest.name" float-label="Name" clearable />
                 </div>
@@ -173,6 +96,7 @@ export default {
             terms: '',
             purchasableId: '',
             placeholderPurchasableType: '',
+            editIngredientModal: false,
             purchasableTypeSelect: [{
                     value: 'App\\Model\\Logistic',
                     label: 'Logistic'
@@ -186,7 +110,7 @@ export default {
                     label: 'Commissary'
                 }
             ],
-            actions: ['edit', 'delete', 'view items'],
+            actions: ['edit', 'delete', 'view ingredients'],
             options: [5, 10, 15, 20],
             lastPage: '',
             serverData: [],
@@ -207,11 +131,16 @@ export default {
                     field: 'name',
                     align: 'left'
                 },
-
                 {
                     name: 'pcs',
                     label: 'Pcs',
                     field: 'pcs',
+                    align: 'left'
+                },
+                {
+                    name: 'methods',
+                    label: 'Methods',
+                    field: 'methods',
                     align: 'left'
                 },
                 {
@@ -230,6 +159,7 @@ export default {
     },
     computed: {
         ...mapState('purchaseRequests', ['editPurchaseRequestModal', 'purchaseRequest']),
+        ...mapState('ingredients', ['ingredient']),
         newPurchaseRequestModal: {
             get() {
                 return this.$store.getters['purchaseRequests/newPurchaseRequestModal'];
@@ -278,7 +208,6 @@ export default {
                         filter: this.filter
                     })
                 })
-
         },
         approvedBy(purchaseRequestId) {
             this.$axios.get(`purchases-approved-by?id=${purchaseRequestId}`)
@@ -300,7 +229,6 @@ export default {
                         message: `${err.response.data.message}`
                     })
                 })
-
         },
         selected(item) {
             this.$q.notify(`Selected suggestion "${item.label}"`)
@@ -316,10 +244,8 @@ export default {
                 if (status === false) {
                     this.deleteRow(ingredientId)
                 }
-            } else if (action === 'view items') {
-
-                // this.$router.push(`purchase-request/${ingredientId}/purchase-items`)
-
+            } else if (action === 'view ingredients') {
+                this.$router.push(`ingredients/${ingredientId}/view-ingredients`)
             }
         },
         store() {
@@ -376,7 +302,7 @@ export default {
             // .catch()
         },
         update() {
-            this.$axios.put(`/purchases/${this.purchaseRequest.id}`, this.purchaseRequest)
+            this.$axios.put(`/ingredients/${this.ingredient.id}`, this.ingredient)
                 .then((res) => {
                     this.hideModal()
                     this.$q.notify({
@@ -416,16 +342,16 @@ export default {
         edit(ingredientId) {
             this.$axios.get(`ingredients/${ingredientId}/edit?id=${ingredientId}`)
                 .then(res => {
-                    // this.showModal()
-                    // this.$store.dispatch('purchaseRequests/purchaseRequest', res.data.purchase)
+                    this.showModal()
+                    this.$store.dispatch('ingredients/ingredient', res.data.ingredient)
                 })
         },
         hideModal() {
-            this.$store.dispatch('purchaseRequests/editPurchaseRequestModal', false)
-            this.$store.dispatch('purchaseRequests/newPurchaseRequestModal', false)
+            this.editIngredientModal = false
+            this.$store.dispatch('ingredients/newIngredientModal', false)
         },
         showModal() {
-            this.$store.dispatch('purchaseRequests/editPurchaseRequestModal', true)
+            this.editIngredientModal = true
         }
     },
     mounted() {
@@ -435,8 +361,11 @@ export default {
         })
     },
     watch: {
-        'purchaseRequest.name'(val) {
-            this.$store.dispatch('purchaseRequests/purchaseRequestName', val)
+        'ingredient.name'(val) {
+            this.$store.dispatch('ingredients/ingredientName', val)
+        },
+        'ingredient.pcs'(val) {
+            this.$store.dispatch('ingredients/ingredientPcs', val)
         },
         'purchaseRequest.purchasable_type'(val) {
             if (val === undefined || val === '') {

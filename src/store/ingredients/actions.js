@@ -22,6 +22,18 @@ export const ingredientName = ({
   commit('ingredientName', payload)
 }
 
+export const ingredientPcs = ({
+  commit
+}, payload) => {
+  commit('ingredientPcs', payload)
+}
+
+export const ingredientMethods = ({
+  commit
+}, payload) => {
+  commit('ingredientMethods', payload)
+}
+
 export const ingredientCompanyName = ({
   commit
 }, payload) => {

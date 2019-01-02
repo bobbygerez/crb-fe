@@ -1,20 +1,11 @@
 <template>
 <div>
     <q-table ref="table" color="primary" :title="`${ingredient.name} ingredients`" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
-        <template slot="top-right" slot-scope="props">
-            <q-search hide-underline v-model="filter" />
-        </template>
 
         <template slot="body" slot-scope="props">
            
             <q-tr :props="props">
                  <q-td key="name" :props="props">
-                    {{ props.row.name }}
-                </q-td>
-                <!-- <q-td key="company" :props="props">
-                    {{ props.row.company.name }}
-                </q-td>
-                <q-td key="name" :props="props">
                     {{ props.row.name }}
                     <q-popover touch-position v-if="actions">
                         <q-list link style="min-width: 100px">
@@ -26,13 +17,9 @@
                         </q-list>
                     </q-popover>
                 </q-td>
-                <q-td key="pcs" :props="props">
-                    {{ props.row.pcs }}
+                 <q-td key="qty" :props="props">
+                    {{ props.row.qty }} / {{ props.row.package.name}}
                 </q-td>
-                <q-td key="created_at" :props="props">
-                    {{ props.row.created_at }}
-                </q-td> -->
-
             </q-tr>
 
         </template>
@@ -125,7 +112,7 @@ export default {
                     label: 'Commissary'
                 }
             ],
-            actions: ['edit', 'delete', 'view ingredients'],
+            actions: ['edit', 'delete'],
             options: [5, 10, 15, 20],
             lastPage: '',
             serverData: [],
@@ -146,12 +133,6 @@ export default {
                     name: 'qty',
                     label: 'Qty',
                     field: 'qty',
-                    align: 'left'
-                },
-                {
-                    name: 'created_at',
-                    label: 'Created At',
-                    field: 'created_at',
                     align: 'left'
                 }
             ],
