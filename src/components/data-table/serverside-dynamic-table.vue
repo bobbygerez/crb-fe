@@ -209,9 +209,8 @@
         fab
         v-back-to-top.animate="{offset: 400, duration: 200}"
         class="animate-pop"
-      >
-        <q-icon name="mdi-chevron-up" />
-      </q-btn>
+        icon="mdi-chevron-up"
+      />
     </q-page-sticky>
   </div>
 </template>
