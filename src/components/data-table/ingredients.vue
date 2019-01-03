@@ -82,303 +82,299 @@
 
 <script>
 import inputPrice from 'components/inputs/price'
-import {
-    uid,
-    filter
-} from 'quasar'
 import _ from 'lodash'
 import {
-    mapState
+  mapState
 } from 'vuex'
 export default {
-    data() {
+  data () {
+    return {
+      terms: '',
+      purchasableId: '',
+      placeholderPurchasableType: '',
+      editIngredientModal: false,
+      purchasableTypeSelect: [{
+        value: 'App\\Model\\Logistic',
+        label: 'Logistic'
+      },
+      {
+        value: 'App\\Model\\Branch',
+        label: 'Branch'
+      },
+      {
+        value: 'App\\Model\\Commissary',
+        label: 'Commissary'
+      }
+      ],
+      actions: ['edit', 'delete', 'view ingredients'],
+      options: [5, 10, 15, 20],
+      lastPage: '',
+      serverData: [],
+      serverPagination: {
+        page: 1,
+        rowsNumber: 10,
+        rowsPerPage: 10 // specifying this determines pagination is server-side
+      },
+      columns: [{
+        name: 'company',
+        label: 'Company',
+        field: 'company',
+        align: 'left'
+      },
+      {
+        name: 'name',
+        label: 'Name',
+        field: 'name',
+        align: 'left'
+      },
+      {
+        name: 'pcs',
+        label: 'Pcs',
+        field: 'pcs',
+        align: 'left'
+      },
+      {
+        name: 'methods',
+        label: 'Methods',
+        field: 'methods',
+        align: 'left'
+      },
+      {
+        name: 'created_at',
+        label: 'Created At',
+        field: 'created_at',
+        align: 'left'
+      }
+      ],
+      filter: '',
+      loading: false
+    }
+  },
+  components: {
+    inputPrice
+  },
+  computed: {
+    ...mapState('purchaseRequests', ['editPurchaseRequestModal', 'purchaseRequest']),
+    ...mapState('ingredients', ['ingredient']),
+    newPurchaseRequestModal: {
+      get () {
+        return this.$store.getters['purchaseRequests/newPurchaseRequestModal']
+            },
+      set (val) {
+        this.$store.dispatch('purchaseRequests/newPurchaseRequestModal', val)
+      }
+    },
+    purchasableType () {
+      return this.purchaseRequest.purchasable_type.substring(10)
+    },
+    aapprovedBy () {
+      let n = this.purchaseRequest.approved_by
+      if (n === null) return null
+      return `${n.firstname} ${n.middlename} ${n.lastname}`
+    },
+    nnotedBy () {
+      let n = this.purchaseRequest.noted_by
+      if (n === null) return null
+      return `${n.firstname} ${n.middlename} ${n.lastname}`
+    },
+    preparedBy () {
+      let n = this.purchaseRequest.prepared_by
+      return `${n.firstname} ${n.middlename} ${n.lastname}`
+    },
+    userEntities () {
+      return this.$store.getters['purchaseRequests/userEntities'].map(e => {
         return {
-            terms: '',
-            purchasableId: '',
-            placeholderPurchasableType: '',
-            editIngredientModal: false,
-            purchasableTypeSelect: [{
-                    value: 'App\\Model\\Logistic',
-                    label: 'Logistic'
-                },
-                {
-                    value: 'App\\Model\\Branch',
-                    label: 'Branch'
-                },
-                {
-                    value: 'App\\Model\\Commissary',
-                    label: 'Commissary'
-                }
-            ],
-            actions: ['edit', 'delete', 'view ingredients'],
-            options: [5, 10, 15, 20],
-            lastPage: '',
-            serverData: [],
-            serverPagination: {
-                page: 1,
-                rowsNumber: 10,
-                rowsPerPage: 10 // specifying this determines pagination is server-side
-            },
-            columns: [{
-                    name: 'company',
-                    label: 'Company',
-                    field: 'company',
-                    align: 'left'
-                },
-                {
-                    name: 'name',
-                    label: 'Name',
-                    field: 'name',
-                    align: 'left'
-                },
-                {
-                    name: 'pcs',
-                    label: 'Pcs',
-                    field: 'pcs',
-                    align: 'left'
-                },
-                {
-                    name: 'methods',
-                    label: 'Methods',
-                    field: 'methods',
-                    align: 'left'
-                },
-                {
-                    name: 'created_at',
-                    label: 'Created At',
-                    field: 'created_at',
-                    align: 'left'
-                }
-            ],
-            filter: '',
-            loading: false
+          label: e.name,
+          value: e.id
         }
-    },
-    components: {
-        inputPrice
-    },
-    computed: {
-        ...mapState('purchaseRequests', ['editPurchaseRequestModal', 'purchaseRequest']),
-        ...mapState('ingredients', ['ingredient']),
-        newPurchaseRequestModal: {
-            get() {
-                return this.$store.getters['purchaseRequests/newPurchaseRequestModal'];
-            },
-            set(val) {
-                this.$store.dispatch('purchaseRequests/newPurchaseRequestModal', val)
-            }
-        },
-        purchasableType() {
-            return this.purchaseRequest.purchasable_type.substring(10)
-        },
-        aapprovedBy() {
-            let n = this.purchaseRequest.approved_by
-            if (n === null) return null
-            return `${n.firstname} ${n.middlename} ${n.lastname}`
-        },
-        nnotedBy() {
-            let n = this.purchaseRequest.noted_by
-            if (n === null) return null
-            return `${n.firstname} ${n.middlename} ${n.lastname}`
-        },
-        preparedBy() {
-            let n = this.purchaseRequest.prepared_by
-            return `${n.firstname} ${n.middlename} ${n.lastname}`
-        },
-        userEntities() {
-            return this.$store.getters['purchaseRequests/userEntities'].map(e => {
-                return {
-                    label: e.name,
-                    value: e.id
-                }
-            })
-        }
-    },
-    methods: {
-        notedBy(purchaseRequestId) {
-            this.$axios.get(`purchases-noted-by?id=${purchaseRequestId}`)
-                .then(res => {
-                    this.$q.notify({
-                        color: 'positive',
-                        icon: 'check',
-                        message: `Noted by was successfully updated.`
-                    })
-                    this.request({
-                        pagination: this.serverPagination,
-                        filter: this.filter
-                    })
-                })
-        },
-        approvedBy(purchaseRequestId) {
-            this.$axios.get(`purchases-approved-by?id=${purchaseRequestId}`)
-                .then(res => {
-                    this.$q.notify({
-                        color: 'positive',
-                        icon: 'check',
-                        message: `Approved by was successfully updated.`
-                    })
-                    this.request({
-                        pagination: this.serverPagination,
-                        filter: this.filter
-                    })
-                })
-                .catch(err => {
-                    this.$q.notify({
-                        color: 'negative',
-                        icon: 'warning',
-                        message: `${err.response.data.message}`
-                    })
-                })
-        },
-        selected(item) {
-            this.$q.notify(`Selected suggestion "${item.label}"`)
-            this.$store.dispatch('items/itemItemableId', item.value)
-        },
-        capitalize(string) {
-            return (string.charAt(0).toUpperCase() + string.slice(1).toLowerCase())
-        },
-        myFunction(action, ingredientId) {
-            if (action === 'edit') {
-                this.edit(ingredientId)
-            } else if (action === 'delete') {
-                if (status === false) {
-                    this.deleteRow(ingredientId)
-                }
-            } else if (action === 'view ingredients') {
-                this.$router.push(`ingredients/${ingredientId}/view-ingredients`)
-            }
-        },
-        store() {
-            this.$axios
-                .post(`/items`, this.item)
-                .then(res => {
-                    this.hideModal()
-                    this.$q.notify({
-                        color: 'positive',
-                        icon: 'check',
-                        message: `${this.item.name} created successfully`
-                    })
-                    this.request({
-                        pagination: this.serverPagination,
-                        filter: this.filter
-                    })
-                })
-        },
-        deleteRow(purchaseId) {
-            this.$axios.get(`/purchases/${purchaseId}?id=${purchaseId}`)
-                .then((res) => {
-                    this.$store.dispatch('purchaseRequests/purchaseRequest', res.data.purchase)
-                    this.$q.notify({
-                        color: 'negative',
-                        icon: 'delete',
-                        message: `Cancel request in ${res.data.purchase.name}?`,
-                        actions: [{
-                            label: 'OK',
-                            handler: () => {
-                                this.$axios.delete(`/purchases/${this.purchaseRequest.id}?id=${this.purchaseRequest.id}`)
-                                    .then((res) => {
-                                        this.$q.notify({
-                                            color: 'positive',
-                                            icon: 'check',
-                                            message: `${this.purchaseRequest.name} deleted successfully`
-                                        })
-                                        this.request({
-                                            pagination: this.serverPagination,
-                                            filter: this.filter
-                                        })
-                                        this.loading = false
-                                    })
-                                    .catch((err) => {
-                                        this.$q.notify({
-                                            color: 'negative',
-                                            icon: 'warning',
-                                            message: `${err.response.data.message}`
-                                        })
-                                    })
-                            }
-                        }]
-                    })
-                })
-            // .catch()
-        },
-        update() {
-            this.$axios.put(`/ingredients/${this.ingredient.id}`, this.ingredient)
-                .then((res) => {
-                    this.hideModal()
-                    this.$q.notify({
-                        color: 'positive',
-                        icon: 'check',
-                        message: `${this.item.name} update successfully`
-                    })
-                    this.request({
-                        pagination: this.serverPagination,
-                        filter: this.filter
-                    })
-                })
-                .catch()
-        },
-        request(props) {
-            this.loading = true
-            this.$axios
-                .get(
-                    `/ingredients?filter=${this.filter}&page=${props.pagination.page}&perPage=${
-            props.pagination.rowsPerPage
-          }`
-                )
-                .then(res => {
-                    this.serverPagination = props.pagination
-                    this.serverData = _.values(res.data.ingredients.data)
-                    this.serverPagination.rowsNumber = res.data.ingredients.total
-                    this.lastPage = res.data.ingredients.last_page
-                    this.loading = false
-                })
-                .catch(error => {
-                    // there's an error... do SOMETHING
-                    console.log(error)
-                    // we tell QTable to exit the "loading" state
-                    this.loading = false
-                })
-        },
-        edit(ingredientId) {
-            this.$axios.get(`ingredients/${ingredientId}/edit?id=${ingredientId}`)
-                .then(res => {
-                    this.showModal()
-                    this.$store.dispatch('ingredients/ingredient', res.data.ingredient)
-                })
-        },
-        hideModal() {
-            this.editIngredientModal = false
-            this.$store.dispatch('ingredients/newIngredientModal', false)
-        },
-        showModal() {
-            this.editIngredientModal = true
-        }
-    },
-    mounted() {
-        this.request({
+      })
+    }
+  },
+  methods: {
+    notedBy (purchaseRequestId) {
+      this.$axios.get(`purchases-noted-by?id=${purchaseRequestId}`)
+        .then(res => {
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `Noted by was successfully updated.`
+          })
+          this.request({
             pagination: this.serverPagination,
             filter: this.filter
+          })
         })
     },
-    watch: {
-        'ingredient.name'(val) {
-            this.$store.dispatch('ingredients/ingredientName', val)
-        },
-        'ingredient.pcs'(val) {
-            this.$store.dispatch('ingredients/ingredientPcs', val)
-        },
-        'purchaseRequest.purchasable_type'(val) {
-            if (val === undefined || val === '') {
-                return
-            }
-            this.terms = ''
-            this.placeholderPurchasableType = 'Search ' + val.substring(10) + '...'
-            this.$axios.get(`modelable-user-models?modelType=${val}`)
-                .then(res => {
-                    this.$store.dispatch('purchaseRequests/purchasableType', val)
-                    this.$store.dispatch('purchaseRequests/userEntities', res.data.userModels)
-                })
+    approvedBy (purchaseRequestId) {
+      this.$axios.get(`purchases-approved-by?id=${purchaseRequestId}`)
+        .then(res => {
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `Approved by was successfully updated.`
+          })
+          this.request({
+            pagination: this.serverPagination,
+            filter: this.filter
+          })
+        })
+        .catch(err => {
+          this.$q.notify({
+            color: 'negative',
+            icon: 'warning',
+            message: `${err.response.data.message}`
+          })
+        })
+    },
+    selected (item) {
+      this.$q.notify(`Selected suggestion "${item.label}"`)
+      this.$store.dispatch('items/itemItemableId', item.value)
+    },
+    capitalize (string) {
+      return (string.charAt(0).toUpperCase() + string.slice(1).toLowerCase())
+    },
+    myFunction (action, ingredientId) {
+      if (action === 'edit') {
+        this.edit(ingredientId)
+      } else if (action === 'delete') {
+        if (status === false) {
+          this.deleteRow(ingredientId)
         }
+      } else if (action === 'view ingredients') {
+        this.$router.push(`ingredients/${ingredientId}/view-ingredients`)
+      }
+    },
+    store () {
+      this.$axios
+        .post(`/items`, this.item)
+        .then(res => {
+          this.hideModal()
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `${this.item.name} created successfully`
+          })
+          this.request({
+            pagination: this.serverPagination,
+            filter: this.filter
+          })
+        })
+    },
+    deleteRow (purchaseId) {
+      this.$axios.get(`/purchases/${purchaseId}?id=${purchaseId}`)
+        .then((res) => {
+          this.$store.dispatch('purchaseRequests/purchaseRequest', res.data.purchase)
+          this.$q.notify({
+            color: 'negative',
+            icon: 'delete',
+            message: `Cancel request in ${res.data.purchase.name}?`,
+            actions: [{
+              label: 'OK',
+              handler: () => {
+                this.$axios.delete(`/purchases/${this.purchaseRequest.id}?id=${this.purchaseRequest.id}`)
+                  .then((res) => {
+                    this.$q.notify({
+                      color: 'positive',
+                      icon: 'check',
+                      message: `${this.purchaseRequest.name} deleted successfully`
+                    })
+                    this.request({
+                      pagination: this.serverPagination,
+                      filter: this.filter
+                    })
+                    this.loading = false
+                  })
+                  .catch((err) => {
+                    this.$q.notify({
+                      color: 'negative',
+                      icon: 'warning',
+                      message: `${err.response.data.message}`
+                    })
+                  })
+              }
+            }]
+          })
+        })
+      // .catch()
+    },
+    update () {
+      this.$axios.put(`/ingredients/${this.ingredient.id}`, this.ingredient)
+        .then((res) => {
+          this.hideModal()
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `${this.item.name} update successfully`
+          })
+          this.request({
+            pagination: this.serverPagination,
+            filter: this.filter
+          })
+        })
+        .catch()
+    },
+    request (props) {
+      this.loading = true
+      this.$axios
+        .get(
+          `/ingredients?filter=${this.filter}&page=${props.pagination.page}&perPage=${
+            props.pagination.rowsPerPage
+          }`
+        )
+        .then(res => {
+          this.serverPagination = props.pagination
+          this.serverData = _.values(res.data.ingredients.data)
+          this.serverPagination.rowsNumber = res.data.ingredients.total
+          this.lastPage = res.data.ingredients.last_page
+          this.loading = false
+        })
+        .catch(error => {
+          // there's an error... do SOMETHING
+          console.log(error)
+          // we tell QTable to exit the "loading" state
+          this.loading = false
+        })
+    },
+    edit (ingredientId) {
+      this.$axios.get(`ingredients/${ingredientId}/edit?id=${ingredientId}`)
+        .then(res => {
+          this.showModal()
+          this.$store.dispatch('ingredients/ingredient', res.data.ingredient)
+        })
+    },
+    hideModal () {
+      this.editIngredientModal = false
+      this.$store.dispatch('ingredients/newIngredientModal', false)
+    },
+    showModal () {
+      this.editIngredientModal = true
     }
+  },
+  mounted () {
+    this.request({
+      pagination: this.serverPagination,
+      filter: this.filter
+    })
+  },
+  watch: {
+    'ingredient.name' (val) {
+      this.$store.dispatch('ingredients/ingredientName', val)
+    },
+    'ingredient.pcs' (val) {
+      this.$store.dispatch('ingredients/ingredientPcs', val)
+    },
+    'purchaseRequest.purchasable_type' (val) {
+      if (val === undefined || val === '') {
+        return
+      }
+      this.terms = ''
+      this.placeholderPurchasableType = 'Search ' + val.substring(10) + '...'
+      this.$axios.get(`modelable-user-models?modelType=${val}`)
+        .then(res => {
+          this.$store.dispatch('purchaseRequests/purchasableType', val)
+          this.$store.dispatch('purchaseRequests/userEntities', res.data.userModels)
+        })
+    }
+  }
 }
 </script>
