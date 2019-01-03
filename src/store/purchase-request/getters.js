@@ -15,3 +15,6 @@ export const newPurchaseItemModal = (state) => state.newPurchaseItemModal
 export const itemLists = (state) => state.itemLists
 
 export const item = (state) => state.item
+
+export const purchasableItems = (state) => state.purchasableItems
+
