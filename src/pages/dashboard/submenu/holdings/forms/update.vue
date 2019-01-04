@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-mx-lg">
+  <q-page class="q-mx-lg  q-pb-lg">
     <form>
       <div class="row gutter-md q-pt-lg">
         <div class="column col-12 col-lg-6">
@@ -232,10 +232,10 @@
         <div class="row col-12">
           <div class="row col-12 justify-center">
             <div class="col-12">
-              <form-validation-summary
+              <!-- <form-validation-summary
                 :validations="$v"
                 class="q-my-sm"
-              />
+              /> -->
             </div>
             <div class="column">
               <q-btn
@@ -275,22 +275,19 @@
 
 <script>
 import { mapHoldingFields } from '../../../../../store/pattys'
-import FVFieldValidator from 'components/form-validations/FVFieldValidator'
 import FormFieldValidator from 'components/form-validations/FormFieldValidator'
 import FormValidationSummary from 'components/form-validations/FormValidationSummary'
 import BarangayTable from 'components/location-provider/barangay-view'
 import CityTable from 'components/location-provider/city-view'
 import LocationMixin from 'components/mixins/location-mixin'
 import CommonsMixin from 'components/mixins/commons-mixin'
-import { mapActions } from 'vuex'
-import { editHoldingFormValidationRule } from 'assets/models/Holding'
+import { editHoldingFormValidationRule } from '../model/Holding'
 
 export default {
   mixins: [LocationMixin, CommonsMixin],
   components: {
     BarangayTable,
     CityTable,
-    FVFieldValidator,
     FormFieldValidator,
     FormValidationSummary
   },
@@ -312,7 +309,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions('pattys', ['setHoldings']),
     locationSelected (loc, where) {
       if (loc) {
         this.editHolding.address.country_id = loc.region.country.id

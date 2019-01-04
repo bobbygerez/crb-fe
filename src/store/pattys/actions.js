@@ -139,11 +139,7 @@ export const setHoldingRegion = ({
 }, payload) => {
   commit('SET_HOLDING_REGION', payload)
 }
-export const setToken = ({
-  commit
-}, payload) => {
-  commit('SET_TOKEN', payload)
-}
+
 export const setUserLogin = ({
   commit
 }, payload) => {

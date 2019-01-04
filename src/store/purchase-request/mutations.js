@@ -26,6 +26,10 @@ export const purchasableType = (state, payload) => {
   state.purchaseRequest.purchasable_type = payload
 }
 
+export const purchasableId = (state, payload) => {
+  state.purchaseRequest.purchasable_id = payload
+}
+
 export const purchaseItem = (state, payload) => {
   state.purchaseItem = payload
 }
@@ -52,4 +56,8 @@ export const newPurchaseItemModal = (state, payload) => {
 
 export const itemLists = (state, payload) => {
   state.itemLists = payload
+}
+
+export const purchasableItems = (state, payload) => {
+  state.purchasableItems = payload
 }

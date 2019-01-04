@@ -3,6 +3,10 @@ export {
 }
   from 'vuex-map-fields'
 
+export const SET_TOKEN = (state, payload) => {
+  state.token = payload
+}
+
 export const SET_BRGYS = (state, payload) => {
   state.brgys = payload
 }

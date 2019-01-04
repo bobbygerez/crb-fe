@@ -2,6 +2,12 @@ import {
   axios
 } from 'plugins/axios'
 
+export const setToken = ({
+  commit
+}, payload) => {
+  commit('SET_TOKEN', payload)
+}
+
 export const getBusinessTypes = ({
   commit,
   state

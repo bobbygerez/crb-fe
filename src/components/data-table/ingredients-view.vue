@@ -1,6 +1,18 @@
 <template>
-<div>
-    <q-table ref="table" color="primary" :title="`${ingredient.name} ingredients`" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
+  <div>
+    <q-table
+      ref="table"
+      color="primary"
+      :title="`${ingredient.name} ingredients`"
+      :data="serverData"
+      :columns="columns"
+      :filter="filter"
+      row-key="name"
+      :pagination.sync="serverPagination"
+      :rows-per-page-options="options"
+      @request="request"
+      :loading="loading"
+    >
 
         <template slot="body" slot-scope="props">
 
@@ -22,7 +34,41 @@
                 </q-td>
             </q-tr>
 
-        </template>
+        <q-tr :props="props">
+          <q-td
+            key="name"
+            :props="props"
+          >
+            {{ props.row.name }}
+            <q-popover
+              touch-position
+              v-if="actions"
+            >
+              <q-list
+                link
+                style="min-width: 100px"
+              >
+                <template v-for="(action, idx) in actions">
+                  <q-item
+                    :key="idx"
+                    @click.native="myFunction(action, props.row.id)"
+                    v-close-overlay
+                  >
+                    <q-item-main :label="capitalize(action)" />
+                  </q-item>
+                </template>
+              </q-list>
+            </q-popover>
+          </q-td>
+          <q-td
+            key="qty"
+            :props="props"
+          >
+            {{ props.row.qty }} / {{ props.row.package.name}}
+          </q-td>
+        </q-tr>
+
+      </template>
 
     </q-table>
     <!-- <q-modal v-model="editIngredientModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
@@ -80,7 +126,7 @@
 
         </div>
     </q-modal> -->
-</div>
+  </div>
 </template>
 
 <script>
@@ -145,7 +191,7 @@ export default {
     newPurchaseRequestModal: {
       get () {
         return this.$store.getters['purchaseRequests/newPurchaseRequestModal']
-            },
+      },
       set (val) {
         this.$store.dispatch('purchaseRequests/newPurchaseRequestModal', val)
       }

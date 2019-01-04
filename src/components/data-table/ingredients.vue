@@ -1,60 +1,135 @@
 <template>
-<div>
-    <q-table ref="table" color="primary" title="All Ingredients" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
-        <template slot="top-right" slot-scope="props">
-            <q-search hide-underline v-model="filter" />
-        </template>
+  <div>
+    <q-table
+      ref="table"
+      color="primary"
+      title="All Ingredients"
+      :data="serverData"
+      :columns="columns"
+      :filter="filter"
+      row-key="name"
+      :pagination.sync="serverPagination"
+      :rows-per-page-options="options"
+      @request="request"
+      :loading="loading"
+    >
+      <template
+        slot="top-right"
+        slot-scope="props"
+      >
+        <q-search
+          hide-underline
+          v-model="filter"
+        />
+      </template>
 
-        <template slot="body" slot-scope="props">
-            <q-tr :props="props">
-                <q-td key="company" :props="props">
-                    {{ props.row.company.name }}
-                </q-td>
-                <q-td key="name" :props="props">
-                    {{ props.row.name }}
-                    <q-popover touch-position v-if="actions">
-                        <q-list link style="min-width: 100px">
-                            <template v-for="(action, idx) in actions">
-                                <q-item :key="idx" @click.native="myFunction(action, props.row.id)" v-close-overlay>
-                                    <q-item-main :label="capitalize(action)" />
-                                </q-item>
-                            </template>
-                        </q-list>
-                    </q-popover>
-                </q-td>
-                <q-td key="pcs" :props="props">
-                    {{ props.row.pcs }}
-                </q-td>
-                <q-td key="methods" :props="props">
-                    {{ props.row.methods }}
-                </q-td>
-                <q-td key="created_at" :props="props">
-                    {{ props.row.created_at }}
-                </q-td>
+      <template
+        slot="body"
+        slot-scope="props"
+      >
+        <q-tr :props="props">
+          <q-td
+            key="company"
+            :props="props"
+          >
+            {{ props.row.company.name }}
+          </q-td>
+          <q-td
+            key="name"
+            :props="props"
+          >
+            {{ props.row.name }}
+            <q-popover
+              touch-position
+              v-if="actions"
+            >
+              <q-list
+                link
+                style="min-width: 100px"
+              >
+                <template v-for="(action, idx) in actions">
+                  <q-item
+                    :key="idx"
+                    @click.native="myFunction(action, props.row.id)"
+                    v-close-overlay
+                  >
+                    <q-item-main :label="capitalize(action)" />
+                  </q-item>
+                </template>
+              </q-list>
+            </q-popover>
+          </q-td>
+          <q-td
+            key="pcs"
+            :props="props"
+          >
+            {{ props.row.pcs }}
+          </q-td>
+          <q-td
+            key="methods"
+            :props="props"
+          >
+            {{ props.row.methods }}
+          </q-td>
+          <q-td
+            key="created_at"
+            :props="props"
+          >
+            {{ props.row.created_at }}
+          </q-td>
 
-            </q-tr>
+        </q-tr>
 
-        </template>
+      </template>
 
     </q-table>
-    <q-modal v-model="editIngredientModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
-        <div style="padding: 30px">
-            <div class="q-display-1 q-mb-md">Edit {{ ingredient.name }}</div>
-            <div class="row">
-                <div class="col-xs-12 col-sm-6">
-                    <q-input v-model="ingredient.name" float-label="Name" clearable />
-                </div>
-                <div class="col-xs-12 col-sm-6">
-                    <q-input v-model="ingredient.pcs" float-label="PCS" />
-                </div>
-                <div class="col-xs-12 col-sm-12">
-                    <q-input v-model="ingredient.methods" type="textarea" float-label="Methods" :max-height="100" rows="2" />
-                </div>
-            </div>
-            <br />
-            <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
-            <q-btn color="primary" @click="update()" label="Submit" class="q-ml-sm" />
+    <q-modal
+      v-model="editIngredientModal"
+      minimized
+      no-esc-dismiss
+      no-backdrop-dismiss
+      :content-css="{minWidth: '80vw', minHeight: '80vh'}"
+    >
+      <div style="padding: 30px">
+        <div class="q-display-1 q-mb-md">Edit {{ ingredient.name }}</div>
+        <div class="row">
+          <div class="col-xs-12 col-sm-6">
+            <q-input
+              v-model="ingredient.name"
+              float-label="Name"
+              clearable
+            />
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <q-input
+              v-model="ingredient.pcs"
+              float-label="PCS"
+            />
+          </div>
+          <div class="col-xs-12 col-sm-12">
+            <q-input
+              v-model="ingredient.methods"
+              type="textarea"
+              float-label="Methods"
+              :max-height="100"
+              rows="2"
+            />
+          </div>
         </div>
+        <br />
+        <q-btn
+          color="red"
+          v-close-overlay
+          label="Close"
+          @click="hideModal()"
+        />
+        <q-btn
+          color="primary"
+          @click="update()"
+          label="Submit"
+          class="q-ml-sm"
+        />
+      </div>
     </q-modal>
     <!-- <q-modal v-model="newPurchaseRequestModal" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
         <div style="padding: 30px">
@@ -77,7 +152,7 @@
             <q-btn color="primary" @click="store()" label="Submit" class="q-ml-sm" />
         </div>
     </q-modal> -->
-</div>
+  </div>
 </template>
 
 <script>
@@ -159,7 +234,7 @@ export default {
     newPurchaseRequestModal: {
       get () {
         return this.$store.getters['purchaseRequests/newPurchaseRequestModal']
-            },
+      },
       set (val) {
         this.$store.dispatch('purchaseRequests/newPurchaseRequestModal', val)
       }
