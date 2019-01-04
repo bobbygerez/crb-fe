@@ -82,10 +82,6 @@ export const SET_HOLDINGS = (state, payload) => {
   state.holdings = payload
 }
 
-export const SET_TOKEN = (state, payload) => {
-  state.token = payload
-}
-
 export const SET_USER = (state, payload) => {
   state.user = payload
 }

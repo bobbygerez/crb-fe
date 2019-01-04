@@ -86,7 +86,7 @@ const dashBoardModules = (appModules) => {
       path: path + '/add',
       component: load(path + '/forms/create'),
       meta: {
-        title: `Add ${name.endsWith('s') ? name.replace(/.$/, '') : name.endsWith('ies') ? name.replace('ies', 'y') : name}`,
+        title: `Add ${name.endsWith('ies') ? name.replace('ies', 'y') : name.endsWith('s') ? name.replace(/.$/, '') : name}`,
         needAuth: true,
         section: 'create'
       }
@@ -95,7 +95,7 @@ const dashBoardModules = (appModules) => {
       path: path + '/:id/view',
       component: load(path + '/forms/read'),
       meta: {
-        title: `Edit ${name.endsWith('s') ? name.replace(/.$/, '') : name.endsWith('ies') ? name.replace('ies', 'y') : name}`,
+        title: `View ${name.endsWith('ies') ? name.replace('ies', 'y') : name.endsWith('s') ? name.replace(/.$/, '') : name}`,
         needAuth: true,
         section: 'read'
       }
@@ -104,7 +104,7 @@ const dashBoardModules = (appModules) => {
       path: path + '/:id/edit',
       component: load(path + '/forms/update'),
       meta: {
-        title: `Edit ${name.endsWith('s') ? name.replace(/.$/, '') : name.endsWith('ies') ? name.replace('ies', 'y') : name}`,
+        title: `Edit ${name.endsWith('ies') ? name.replace('ies', 'y') : name.endsWith('s') ? name.replace(/.$/, '') : name}`,
         needAuth: true,
         section: 'update'
       }

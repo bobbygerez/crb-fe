@@ -17,32 +17,32 @@ export default {
       addressColumns: [{
         name: 'address',
         label: 'Address',
-        field: row => row.address.street_lot_blk,
+        field: row => { return row.address !== null ? row.address.street_lot_blk : '' },
         align: 'left'
       },
       {
         name: 'brgy',
         label: 'Barangay',
-        field: row => row.address.brgy.description,
+        field: row => { return row.address !== null ? row.address.brgy.description : '' },
         align: 'left',
         hideonload: true
       },
       {
         name: 'city',
         label: 'City',
-        field: row => row.address.city.description,
+        field: row => { return row.address !== null ? row.address.city.description : '' },
         align: 'left'
       },
       {
         name: 'province',
         label: 'Province',
-        field: row => row.address.province.description,
+        field: row => { return row.address !== null ? row.address.province.description : '' },
         align: 'left'
       },
       {
         name: 'region',
         label: 'Region',
-        field: row => row.address.region.description,
+        field: row => { return row.address !== null ? row.address.region.description : '' },
         align: 'left',
         hideonload: true
       }

@@ -8,14 +8,37 @@ import {
 export default {
   data () {
     return {
+      /**
+       * @note
+       * Set this at mounted of the extending component
+       * of this mixin in order to watch for changes
+       * in the address dropdowns
+       * @example
+       * mounted () {
+       *  this.localModel = this.myModel
+       * }
+       */
       localModel: null
     }
   },
   methods: {
+    /**
+     * @note
+     * globals store actions of getting address fields
+     */
     ...mapActions('globals', ['getRegions', 'getProvinces', 'getCities', 'getBrgys'])
   },
   computed: {
     ...mapGlobalFields(['countries', 'regions', 'provinces', 'cities', 'brgys', 'countryList', 'addressInnerLoading']),
+    /**
+     * @start
+     * @note
+     * Address select/dropdown options
+     * @usage
+     * Use it in the options prop of a dropdown
+     * @example
+     * <q-select :options="countryOptions" />
+     */
     countryOptions () {
       return this.countries.map(v => {
         return {
@@ -60,8 +83,14 @@ export default {
         }
       })
     }
+    /** @end */
   },
   watch: {
+    /**
+     * @start
+     * @usage
+     * Address field watchers
+     */
     'localModel.address.country_id' (val) {
       if (val === null || val === undefined) {
         this.localModel.address.region_id = null
@@ -90,7 +119,6 @@ export default {
         })
     },
     'localModel.address.province_id' (val) {
-      console.log('getCities', val)
       if (val === null || val === undefined) {
         this.localModel.address.city_id = null
         this.cities = []
@@ -105,7 +133,6 @@ export default {
         })
     },
     'localModel.address.city_id' (val) {
-      console.log('getBrgys', val)
       if (val === null || val === undefined) {
         this.localModel.address.brgy_id = null
         this.brgys = []
@@ -119,5 +146,6 @@ export default {
           }
         })
     }
+    /** @end */
   }
 }

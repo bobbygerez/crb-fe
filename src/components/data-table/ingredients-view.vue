@@ -14,10 +14,25 @@
       :loading="loading"
     >
 
-      <template
-        slot="body"
-        slot-scope="props"
-      >
+        <template slot="body" slot-scope="props">
+
+            <q-tr :props="props">
+                 <q-td key="name" :props="props">
+                    {{ props.row.name }}
+                    <q-popover touch-position v-if="actions">
+                        <q-list link style="min-width: 100px">
+                            <template v-for="(action, idx) in actions">
+                                <q-item :key="idx" @click.native="myFunction(action, props.row.id)" v-close-overlay>
+                                    <q-item-main :label="capitalize(action)"/>
+                                </q-item>
+                            </template>
+                        </q-list>
+                    </q-popover>
+                </q-td>
+                 <q-td key="qty" :props="props">
+                    {{ props.row.qty }} / {{ props.row.package.name}}
+                </q-td>
+            </q-tr>
 
         <q-tr :props="props">
           <q-td

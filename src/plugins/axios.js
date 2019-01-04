@@ -67,7 +67,7 @@ export default ({
   axios.defaults.headers.post['Content-Type'] = 'application/json'
 
   intercept(true)
-  const token = store.getters['pattys/getToken']
+  const token = store.getters['globals/getToken']
   if (token) {
     setAuthHeader(token)
   }

@@ -37,7 +37,7 @@ export default function ({
       // console.log('route from =>', from)
       // console.log('route to =>', to)
       // console.log('route next =>', next)
-      if (!store.getters['pattys/getToken']) {
+      if (!store.getters['globals/getToken']) {
         Notify.create({
           type: 'negative',
           message: 'You need to login.'

@@ -128,11 +128,11 @@ export default {
     }
   },
   computed: {
-    ...mapState('pattys', ['token'])
+    ...mapState('globals', ['token'])
   },
   methods: {
-    ...mapActions('pattys', ['setToken', 'setUser', 'setUserLogin']),
-    ...mapActions('globals', ['setMenus']),
+    ...mapActions('pattys', ['setUser', 'setUserLogin']),
+    ...mapActions('globals', ['setMenus', 'setToken']),
     login () {
       this.$v.form.$touch()
       if (this.$v.form.$error) {
@@ -156,6 +156,7 @@ export default {
           this.setMenus(res.data.menus)
           this.$router.push('/dashboard')
           setAuthHeader(this.token)
+          this.loading = false
         })
         .catch(error => {
           this.loading = false

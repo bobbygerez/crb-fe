@@ -2,35 +2,42 @@
   <q-page class="q-mx-lg q-pb-lg">
     <form>
       <div class="row gutter-md q-pt-lg">
-        <!-- <div class="q-display-1 q-mb-md">Edit {{ holding.name }}</div> -->
         <div class="column col-12 col-lg-6">
           <q-card class="q-pa-lg">
             <q-card-title>
-              <!-- <p class="caption"> -->
-              Holding Info
-              <!-- </p> -->
+              Company Info
             </q-card-title>
             <q-card-separator />
             <div class="row">
               <div class="col-12">
-                <!-- <form-field-validator :validate="$v.newHolding.name"> -->
-                <form-field-validator :validate="$v.newHolding.name">
+                <form-field-validator :validate="$v.newCompany.name">
                   <q-input
-                    @input="$v.newHolding.name.$touch"
-                    :error="$v.newHolding.name.$error"
-                    v-model="newHolding.name"
-                    float-label="Holding name *"
+                    @input="$v.newCompany.name.$touch"
+                    :error="$v.newCompany.name.$error"
+                    v-model="newCompany.name"
+                    float-label="Company name *"
                     clearable
                   />
                 </form-field-validator>
-                <!-- </form-field-validator> -->
               </div>
               <div class="col-12">
-                <form-field-validator :validate="$v.newHolding.business_info.business_type_id">
+                <form-field-validator :validate="$v.newCompany.holding_id">
                   <q-select
-                    @input="$v.newHolding.business_info.business_type_id.$touch"
-                    :error="$v.newHolding.business_info.business_type_id.$error"
-                    v-model="newHolding.business_info.business_type_id"
+                    @input="$v.newCompany.holding_id.$touch"
+                    :error="$v.newCompany.holding_id.$error"
+                    v-model="newCompany.holding_id"
+                    :options="holdingOptions"
+                    float-label="Holdings"
+                    clearable
+                  />
+                </form-field-validator>
+              </div>
+              <div class="col-12">
+                <form-field-validator :validate="$v.newCompany.business_info.business_type_id">
+                  <q-select
+                    @input="$v.newCompany.business_info.business_type_id.$touch"
+                    :error="$v.newCompany.business_info.business_type_id.$error"
+                    v-model="newCompany.business_info.business_type_id"
                     :options="bizTypeOptions"
                     float-label="Business Type *"
                     clearable
@@ -38,11 +45,11 @@
                 </form-field-validator>
               </div>
               <div class="col-12">
-                <form-field-validator :validate="$v.newHolding.business_info.vat_type_id">
+                <form-field-validator :validate="$v.newCompany.business_info.vat_type_id">
                   <q-select
-                    @input="$v.newHolding.business_info.vat_type_id.$touch"
-                    :error="$v.newHolding.business_info.vat_type_id.$error"
-                    v-model="newHolding.business_info.vat_type_id"
+                    @input="$v.newCompany.business_info.vat_type_id.$touch"
+                    :error="$v.newCompany.business_info.vat_type_id.$error"
+                    v-model="newCompany.business_info.vat_type_id"
                     :options="vatTypeOptions"
                     float-label="Vat Type *"
                     clearable
@@ -50,11 +57,11 @@
                 </form-field-validator>
               </div>
               <div class="col-12">
-                <form-field-validator :validate="$v.newHolding.business_info.telephone">
+                <form-field-validator :validate="$v.newCompany.business_info.telephone">
                   <q-input
-                    @input="$v.newHolding.business_info.telephone.$touch"
-                    :error="$v.newHolding.business_info.telephone.$error"
-                    v-model="newHolding.business_info.telephone"
+                    @input="$v.newCompany.business_info.telephone.$touch"
+                    :error="$v.newCompany.business_info.telephone.$error"
+                    v-model="newCompany.business_info.telephone"
                     float-label="Telephone *"
                     type="number"
                     clearable
@@ -62,11 +69,11 @@
                 </form-field-validator>
               </div>
               <div class="col-12">
-                <form-field-validator :validate="$v.newHolding.business_info.email">
+                <form-field-validator :validate="$v.newCompany.business_info.email">
                   <q-input
-                    @input="$v.newHolding.business_info.email.$touch"
-                    :error="$v.newHolding.business_info.email.$error"
-                    v-model="newHolding.business_info.email"
+                    @input="$v.newCompany.business_info.email.$touch"
+                    :error="$v.newCompany.business_info.email.$error"
+                    v-model="newCompany.business_info.email"
                     float-label="Email *"
                     type="email"
                     clearable
@@ -74,11 +81,11 @@
                 </form-field-validator>
               </div>
               <div class="col-12">
-                <form-field-validator :validate="$v.newHolding.business_info.tin">
+                <form-field-validator :validate="$v.newCompany.business_info.tin">
                   <q-input
-                    @input="$v.newHolding.business_info.tin.$touch"
-                    :error="$v.newHolding.business_info.tin.$error"
-                    v-model="newHolding.business_info.tin"
+                    @input="$v.newCompany.business_info.tin.$touch"
+                    :error="$v.newCompany.business_info.tin.$error"
+                    v-model="newCompany.business_info.tin"
                     float-label="TIN *"
                     clearable
                   />
@@ -86,17 +93,17 @@
               </div>
               <div class="col-12">
                 <q-input
-                  v-model="newHolding.business_info.website"
+                  v-model="newCompany.business_info.website"
                   float-label="Website"
                   clearable
                 />
               </div>
               <div class="col-12">
-                <form-field-validator :validate="$v.newHolding.desc">
+                <form-field-validator :validate="$v.newCompany.desc">
                   <q-input
-                    @input="$v.newHolding.desc.$touch"
-                    :error="$v.newHolding.desc.$error"
-                    v-model="newHolding.desc"
+                    @input="$v.newCompany.desc.$touch"
+                    :error="$v.newCompany.desc.$error"
+                    v-model="newCompany.desc"
                     float-label="Description *"
                     :type="$q.screen.gt.md ? 'textarea' : 'text'"
                     :max-height="$q.screen.gt.md ? 100 : 0"
@@ -118,11 +125,11 @@
             <div class="relative-position row gutter-sm">
               <!-- <div class="row gutter-sm"> -->
               <div class="col-12">
-                <form-field-validator :validate="$v.newHolding.address.country_id">
+                <form-field-validator :validate="$v.newCompany.address.country_id">
                   <q-select
-                    @input="$v.newHolding.address.country_id.$touch"
-                    :error="$v.newHolding.address.country_id.$error"
-                    v-model="newHolding.address.country_id"
+                    @input="$v.newCompany.address.country_id.$touch"
+                    :error="$v.newCompany.address.country_id.$error"
+                    v-model="newCompany.address.country_id"
                     :options="countryOptions"
                     float-label="Country *"
                     clearable
@@ -133,11 +140,11 @@
                 </form-field-validator>
               </div>
               <div class="col-12">
-                <form-field-validator :validate="$v.newHolding.address.region_id">
+                <form-field-validator :validate="$v.newCompany.address.region_id">
                   <q-select
-                    @input="$v.newHolding.address.region_id.$touch"
-                    :error="$v.newHolding.address.region_id.$error"
-                    v-model="newHolding.address.region_id"
+                    @input="$v.newCompany.address.region_id.$touch"
+                    :error="$v.newCompany.address.region_id.$error"
+                    v-model="newCompany.address.region_id"
                     :options="regionOptions"
                     float-label="Region *"
                     clearable
@@ -150,11 +157,11 @@
               <!-- </div> -->
               <!-- <div class="row gutter-sm"> -->
               <div class="col-12">
-                <form-field-validator :validate="$v.newHolding.address.province_id">
+                <form-field-validator :validate="$v.newCompany.address.province_id">
                   <q-select
-                    @input="$v.newHolding.address.province_id.$touch"
-                    :error="$v.newHolding.address.province_id.$error"
-                    v-model="newHolding.address.province_id"
+                    @input="$v.newCompany.address.province_id.$touch"
+                    :error="$v.newCompany.address.province_id.$error"
+                    v-model="newCompany.address.province_id"
                     :options="provinceOptions"
                     float-label="Province *"
                     clearable
@@ -165,11 +172,11 @@
                 </form-field-validator>
               </div>
               <div class="col-12">
-                <form-field-validator :validate="$v.newHolding.address.city_id">
+                <form-field-validator :validate="$v.newCompany.address.city_id">
                   <q-select
-                    @input="$v.newHolding.address.city_id.$touch"
-                    :error="$v.newHolding.address.city_id.$error"
-                    v-model="newHolding.address.city_id"
+                    @input="$v.newCompany.address.city_id.$touch"
+                    :error="$v.newCompany.address.city_id.$error"
+                    v-model="newCompany.address.city_id"
                     :options="cityOptions"
                     float-label="City *"
                     clearable
@@ -189,11 +196,11 @@
                 </form-field-validator>
               </div>
               <div class="col-12">
-                <form-field-validator :validate="$v.newHolding.address.brgy_id">
+                <form-field-validator :validate="$v.newCompany.address.brgy_id">
                   <q-select
-                    @input="$v.newHolding.address.brgy_id.$touch"
-                    :error="$v.newHolding.address.brgy_id.$error"
-                    v-model="newHolding.address.brgy_id"
+                    @input="$v.newCompany.address.brgy_id.$touch"
+                    :error="$v.newCompany.address.brgy_id.$error"
+                    v-model="newCompany.address.brgy_id"
                     :options="brgyOptions"
                     float-label="Barangay *"
                     clearable
@@ -222,11 +229,11 @@
                 />
               </q-inner-loading>
               <div class="col-12">
-                <form-field-validator :validate="$v.newHolding.address.street_lot_blk">
+                <form-field-validator :validate="$v.newCompany.address.street_lot_blk">
                   <q-input
-                    @input="$v.newHolding.address.street_lot_blk.$touch"
-                    :error="$v.newHolding.address.street_lot_blk.$error"
-                    v-model="newHolding.address.street_lot_blk"
+                    @input="$v.newCompany.address.street_lot_blk.$touch"
+                    :error="$v.newCompany.address.street_lot_blk.$error"
+                    v-model="newCompany.address.street_lot_blk"
                     float-label="Block, Lot &amp; Street"
                     :type="$q.screen.gt.sm ? 'textarea' : 'text'"
                     :max-height="$q.screen.gt.sm ? 100 : 0"
@@ -237,9 +244,8 @@
             </div>
           </q-card>
         </div>
-
         <div class="row col-12">
-          <div class="row col-12 justify-center q-pb-md">
+          <div class="row col-12 justify-center">
             <div class="col-12">
               <!-- <form-validation-summary
                 :validations="$v"
@@ -281,12 +287,13 @@
 </template>
 
 <script>
-import { mapHoldingFields } from '../../../../../store/pattys'
+import { mapCompanyFields } from '../../../../../store/companies'
 import BarangayTable from 'components/location-provider/barangay-view'
 import CityTable from 'components/location-provider/city-view'
 import LocationMixin from 'components/mixins/location-mixin'
 import CommonsMixin from 'components/mixins/commons-mixin'
-import { newHoldingFormValidationRule } from '../model/Holding'
+import { mapActions } from 'vuex'
+import { Company, newCompanyValidationRules } from '../model/Company'
 import FormFieldValidator from 'components/form-validations/FormFieldValidator'
 import FormValidationSummary from 'components/form-validations/FormValidationSummary'
 
@@ -304,54 +311,70 @@ export default {
     }
   },
   computed: {
-    ...mapHoldingFields(['newHolding', 'newHoldingModal'])
+    ...mapCompanyFields(['company', 'holdings', 'newCompany']),
+    holdingOptions () {
+      if (!this.holdings) return []
+      return this.holdings.map(e => {
+        if (!e) {
+          return {
+            label: '',
+            value: ''
+          }
+        }
+        return {
+          label: e.name,
+          value: e.id
+        }
+      })
+    }
   },
   validations () {
     return {
-      newHolding: newHoldingFormValidationRule()
+      newCompany: newCompanyValidationRules()
     }
   },
   methods: {
+    ...mapActions('pattys', ['setHoldings']),
     locationSelected (loc, where) {
       if (loc) {
-        this.newHolding.address.country_id = loc.region.country.id
-        this.newHolding.address.region_id = loc.region.id
-        this.newHolding.address.province_id = loc.province.id
-        this.newHolding.address.city_id = loc.city.id
-        this.newHolding.address.brgy_id = loc.id
-        this.newHolding.address.street_lot_blk = this.newHolding.address.street_lot_blk
+        this.newCompany.address.country_id = loc.region.country.id
+        this.newCompany.address.region_id = loc.region.id
+        this.newCompany.address.province_id = loc.province.id
+        this.newCompany.address.city_id = loc.city.id
+        this.newCompany.address.brgy_id = loc.id
+        this.newCompany.address.street_lot_blk = this.newCompany.address.street_lot_blk
       }
     },
     create () {
-      this.$v.newHolding.$touch()
-      if (this.$v.newHolding.$error) {
+      this.$v.newCompany.$touch()
+      if (this.$v.newCompany.$error) {
         return
       }
       console.log('validations', this.$v)
       this.$axios
-        .post(`/holdings`, {
-          id: this.newHolding.id,
-          name: this.newHolding.name,
-          desc: this.newHolding.desc,
-          country_id: this.newHolding.address.country_id,
-          region_id: this.newHolding.address.region_id,
-          province_id: this.newHolding.address.province_id,
-          city_id: this.newHolding.address.city_id,
-          brgy_id: this.newHolding.address.brgy_id,
-          street_lot_blk: this.newHolding.address.street_lot_blk,
-          business_type_id: this.newHolding.business_info.business_type_id,
-          vat_type_id: this.newHolding.business_info.vat_type_id,
-          telephone: this.newHolding.business_info.telephone,
-          tin: this.newHolding.business_info.tin,
-          email: this.newHolding.business_info.email,
-          website: this.newHolding.business_info.website
+        .post(`/companies`, {
+          holding_id: this.newCompany.holding_id,
+          name: this.newCompany.name,
+          desc: this.newCompany.desc,
+          country_id: this.newCompany.address.country_id,
+          region_id: this.newCompany.address.region_id,
+          province_id: this.newCompany.address.province_id,
+          city_id: this.newCompany.address.city_id,
+          brgy_id: this.newCompany.address.brgy_id,
+          street_lot_blk: this.newCompany.address.street_lot_blk,
+          business_type_id: this.newCompany.business_info.business_type_id,
+          vat_type_id: this.newCompany.business_info.vat_type_id,
+          telephone: this.newCompany.business_info.telephone,
+          tin: this.newCompany.business_info.tin,
+          email: this.newCompany.business_info.email,
+          website: this.newCompany.business_info.website
         })
         .then(res => {
           this.$q.notify({
             type: 'positive',
-            message: `${this.newHolding.name} Successfully added.`
+            message: `${this.newCompany.name} Successfully added.`
           })
-          this.$router.replace('/dashboard/holdings')
+          this.$router.replace('/dashboard/companies')
         })
         .catch(e => {
           this.$q.notify({
@@ -362,9 +385,8 @@ export default {
     }
   },
   mounted () {
-    console.log('validations rules', newHoldingFormValidationRule())
-    // set localmodel that will be used by mixins
-    this.localModel = this.newHolding
+    this.newCompany = Company()
+    this.localModel = this.newCompany
   }
 }
 </script>

@@ -1,15 +1,11 @@
 import {
   mapActions
 } from 'vuex'
-import GenericModal from 'components/modals/generic-modal'
+
 export default {
-  components: {
-    GenericModal
-  },
   data () {
     return {
       showFab: false
-
     }
   },
   computed: {},

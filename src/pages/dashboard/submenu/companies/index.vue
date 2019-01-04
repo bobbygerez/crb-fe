@@ -1,24 +1,32 @@
 <template>
-  <div class="q-pa-sm">
-    <q-btn
-      color="positive"
-      label="New Company"
-      class="q-mb-md"
-      @click="showNewHoldingModal()"
-    />
-    <!-- <companies></companies> -->
-    <company-table />
+  <div class="q-pa-md" ref="tableContainer">
+    <q-page>
+      <q-scroll-observable @scroll="hasScrolled" />
+      <company-table
+        ref="holdingTable"
+        @edit-data="doEdit"
+      />
+      <rounded-action-fab
+        @fab-click="$router.push(currentRoute + '/add')"
+        label="New Company"
+        :show="showFab"
+      />
+    </q-page>
   </div>
-
 </template>
 
-<script type="text/javascript">
-import companies from 'components/data-table/companies.vue'
-import CompanyTable from 'pages/dashboard/submenu/companies/tables/companies'
-import { mapActions, mapState } from 'vuex'
+<script>
+// import companies from 'components/data-table/companies.vue'
+import CompanyTable from './tables/companies'
+import IndexMixin from 'components/mixins/index-mixin'
+import RoundedActionFab from 'components/actions-generic/rounded-action-fab'
+
 export default {
-  computed: {
-    ...mapState('pattys', ['page', 'perPage'])
+  mixins: [IndexMixin],
+  data () {
+    return {
+      currentRoute: this.$route.path.replace('/dashboard', '.')
+    }
   },
   created () {
     this.getCountries()
@@ -26,22 +34,12 @@ export default {
     this.getVatTypes()
   },
   methods: {
-    ...mapActions('globals', [
-      'getBusinessTypes',
-      'getVatTypes',
-      'getCountries',
-      'getRegions',
-      'getProvinces',
-      'getCities',
-      'getBrgys'
-    ]),
-    showNewHoldingModal () {
-      this.$store.dispatch('setNewHoldingModal', true)
+    doEdit () {
     }
   },
   components: {
-    companies,
-    CompanyTable
+    CompanyTable,
+    RoundedActionFab
   }
 }
 </script>
