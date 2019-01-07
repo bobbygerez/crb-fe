@@ -1,15 +1,11 @@
 import {
   mapActions
 } from 'vuex'
-import GenericModal from 'components/modals/generic-modal'
+
 export default {
-  components: {
-    GenericModal
-  },
   data () {
     return {
       showFab: false
-
     }
   },
   computed: {},
@@ -27,10 +23,7 @@ export default {
       //   directionChanged: false, // has direction changed since this handler was called?
       //   inflexionPosition: 56 // last scroll position where user changed scroll direction
       // }
-      let diff =
-        scroll.direction === 'down'
-        ? scroll.inflexionPosition + scroll.position
-        : scroll.inflexionPosition - scroll.position
+      let diff = scroll.direction === 'down' ? scroll.inflexionPosition + scroll.position : scroll.inflexionPosition - scroll.position
       if (diff >= 300 && scroll.direction === 'up') {
         this.showFab = false
       } else {

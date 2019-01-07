@@ -1,24 +1,26 @@
 <template>
-  <div class="q-pa-sm">
-    <items></items>
-
-    <q-page-sticky
-      position="bottom-left"
-      :offset="[16, 16]"
-    >
-      <q-btn
-        color="primary"
-        @click="showItemModal()"
-      >
-        <q-icon name="add"></q-icon>New Item
-      </q-btn>
-    </q-page-sticky>
+  <div
+    class="q-pa-md"
+    ref="tableContainer"
+  >
+    <q-page>
+      <q-scroll-observable @scroll="hasScrolled" />
+      <items></items>
+      <rounded-action-fab
+        @fab-click="showItemModal()"
+        label="New Item"
+        :show="showFab"
+      />
+    </q-page>
   </div>
 </template>
 
 <script>
 import items from 'components/data-table/items.vue'
+import IndexMixin from 'components/mixins/index-mixin'
+import RoundedActionFab from 'components/actions-generic/rounded-action-fab'
 export default {
+  mixins: [IndexMixin],
   created () {
     this.packages()
   },
@@ -30,6 +32,7 @@ export default {
         })
     },
     showItemModal () {
+      console.log('called')
       this.$store.dispatch('items/item', {
         name: '',
         sku: '',
@@ -46,7 +49,9 @@ export default {
     }
   },
   components: {
-    items
+    items,
+    RoundedActionFab
+
   }
 }
 </script>

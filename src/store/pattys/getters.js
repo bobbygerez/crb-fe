@@ -28,8 +28,6 @@ export const getUser = (state) => state.user
 
 export const getUserLogin = (state) => state.userLogin
 
-export const getToken = (state) => state.token
-
 export const getStores = (state) => state.stores
 
 export const getItems = (state) => state.items

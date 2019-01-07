@@ -4,33 +4,23 @@
     ref="tableContainer"
   >
     <q-page>
-      <!-- scroll aware for hiding showing fab action-->
       <q-scroll-observable @scroll="hasScrolled" />
-      <!-- the main table that will be displayed -->
       <holdings-table
-        ref="holdingTable"
-        @edit-data="doEdit"
+      @edit-data="doEdit"
       />
-      <!-- @edit-data="editHolding = $event.holding; $refs.editModalForm.show()" -->
-      <!-- add fab action found at bottom of table -->
-      <!-- Mainly use for adding new record -->
-      <add-action-fab
-        color="primary"
-        :show="showFab"
+      <rounded-action-fab
         @fab-click="$router.push(currentRoute + '/add')"
+        label="New Holding"
+        :show="showFab"
       />
     </q-page>
   </div>
 </template>
 
-<script type="text/javascript">
-import { mapActions } from 'vuex'
-// import HoldingApi from './scripts/api'
+<script>
 import HoldingsTable from './tables/holdings.vue'
-import NewHoldingForm from './forms/create'
-import EditHoldingForm from './forms/update'
 import IndexMixin from 'components/mixins/index-mixin'
-import AddActionFab from 'components/actions-generic/add-action-fab'
+import RoundedActionFab from 'components/actions-generic/rounded-action-fab'
 import { mapHoldingFields } from '../../../../store/pattys'
 
 export default {
@@ -42,16 +32,13 @@ export default {
     }
   },
   components: {
-    NewHoldingForm,
     HoldingsTable,
-    EditHoldingForm,
-    AddActionFab
+    RoundedActionFab
   },
   computed: {
     ...mapHoldingFields(['editHolding'])
   },
   methods: {
-    ...mapActions('pattys', ['setHoldings']),
     doEdit (data) {
       console.log('doEdit', data)
       this.editHolding = data.holding

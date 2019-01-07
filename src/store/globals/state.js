@@ -4,19 +4,12 @@
 export default {
   menus: [],
   vatTypes: [],
-  // vatTypes: [new VatType()],
   businessTypes: [],
-  // businessTypes: [new BusinessType()],
   brgys: [],
   cities: [],
   provinces: [],
   regions: [],
   countries: [],
-  // brgys: [new Barangay()],
-  // cities: [new City()],
-  // provinces: [new Province()],
-  // regions: [new Region()],
-  // countries: [new Country()],
   pageMeta: {},
   tableViewSettings: {
     mode: 'list',
@@ -36,5 +29,6 @@ export default {
     cityView: false,
     location: null
   }, // for getting addresses
-  addressInnerLoading: false
+  addressInnerLoading: false,
+  token: null
 }
