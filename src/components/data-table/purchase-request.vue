@@ -209,6 +209,26 @@ export default {
                 label: 'Name',
                 field: 'label',
                 align: 'left'
+            },{
+                name: 'qty',
+                label: 'Qty',
+                field: 'qty',
+                align: 'left'
+            },{
+                name: 'minimum',
+                label: 'Minimum',
+                field: 'minimum',
+                align: 'left'
+            },{
+                name: 'maximum',
+                label: 'Maximum',
+                field: 'maximum',
+                align: 'left'
+            },{
+                name: 'reorder_level',
+                label: 'Reorder Level',
+                field: 'reorder_level',
+                align: 'left'
             }],
             columns: [{
                     name: 'name',
@@ -299,6 +319,10 @@ export default {
             return this.$store.getters['purchaseRequests/purchasableItems'].map(e => {
                 return {
                     label: e.name,
+                    qty: e.qty,
+                    minimum: e.minimum,
+                    maximum: e.maximum,
+                    reorder_level:`${e.reorder_level}%` ,
                     value: e.id
                 }
             })
