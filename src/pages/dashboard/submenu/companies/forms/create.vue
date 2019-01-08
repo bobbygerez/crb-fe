@@ -21,15 +21,30 @@
                 </form-field-validator>
               </div>
               <div class="col-12">
+                <!-- <q-search v-model="terms" placeholder="Start typing a country name">
+                  <q-autocomplete @search="searchHoldings" @selected="selected" />
+                </q-search> -->
                 <form-field-validator :validate="$v.newCompany.holding_id">
-                  <q-select
+                  <!-- <q-select
                     @input="$v.newCompany.holding_id.$touch"
                     :error="$v.newCompany.holding_id.$error"
                     v-model="newCompany.holding_id"
                     :options="holdingOptions"
                     float-label="Holdings"
                     clearable
-                  />
+                  /> -->
+                  <q-search
+                    @input="$v.newCompany.holding_id.$touch"
+                    :error="$v.newCompany.holding_id.$error"
+                    v-model="newCompany.holding_id"
+                    float-label="Holding"
+                    clearable
+                    placeholder="Start typing a holding name"
+                  >
+                    <q-autocomplete
+                      @search="searchHoldings"
+                    />
+                  </q-search>
                 </form-field-validator>
               </div>
               <div class="col-12">
@@ -334,6 +349,14 @@ export default {
     }
   },
   methods: {
+    searchHoldings (terms, done) {
+      done([])
+      // make an AJAX call
+      // then call done(Array results)
+
+      // DO NOT forget to call done! When no results or an error occurred,
+      // just call with empty array as param. Example: done([])
+    },
     ...mapActions('pattys', ['setHoldings']),
     locationSelected (loc, where) {
       if (loc) {

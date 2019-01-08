@@ -40,7 +40,8 @@ export default {
         )
         .then(res => {
           this.serverPagination = props.pagination
-          this.serverData = res.data[`${this.moduleName}`].data
+          const obj = res.data[`${this.moduleName}`].data
+          this.serverData = Object.keys(obj).map(v => obj[v])
           this.serverPagination.rowsNumber = res.data[`${this.moduleName}`].total
           this.loading = false
         })
