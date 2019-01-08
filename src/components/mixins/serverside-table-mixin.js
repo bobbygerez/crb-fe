@@ -1,6 +1,19 @@
+/**
+ * @usage
+ * Include this mixin for the common setup for the
+ * dynamic serverside table setup
+ */
 export default {
   data () {
     return {
+      /**
+       * @field moduleName
+       * !important you set this up at your created hook
+       * for the api module
+       * ie. holdings / companies / branches etc..
+       * so that the request serverside function will
+       * call the appropriate api on your backend
+       */
       moduleName: '',
       rowOptions: [5, 10, 15, 20],
       serverData: [],
@@ -13,40 +26,7 @@ export default {
         totalPages: null
       },
       filter: '',
-      loading: false,
-      addressColumns: [{
-        name: 'address',
-        label: 'Address',
-        field: row => { return row.address !== null ? row.address.street_lot_blk : '' },
-        align: 'left'
-      },
-      {
-        name: 'brgy',
-        label: 'Barangay',
-        field: row => { return row.address !== null ? row.address.brgy.description : '' },
-        align: 'left',
-        hideonload: true
-      },
-      {
-        name: 'city',
-        label: 'City',
-        field: row => { return row.address !== null ? row.address.city.description : '' },
-        align: 'left'
-      },
-      {
-        name: 'province',
-        label: 'Province',
-        field: row => { return row.address !== null ? row.address.province.description : '' },
-        align: 'left'
-      },
-      {
-        name: 'region',
-        label: 'Region',
-        field: row => { return row.address !== null ? row.address.region.description : '' },
-        align: 'left',
-        hideonload: true
-      }
-      ]
+      loading: false
     }
   },
   methods: {

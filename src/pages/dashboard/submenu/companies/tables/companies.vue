@@ -19,8 +19,9 @@
 <script>
 import ServersideDynamicTable from 'components/data-table/serverside-dynamic-table'
 import TableMixin from 'components/mixins/serverside-table-mixin.js'
+import AddressColumnMixin from 'components/mixins/table-address-columns-mixin.js'
 export default {
-  mixins: [TableMixin],
+  mixins: [TableMixin, AddressColumnMixin],
   components: {
     ServersideDynamicTable
   },
@@ -42,37 +43,6 @@ export default {
           align: 'left',
           field: row => { return row.holding === null ? '' : row.holding.name }
         },
-        // { name: 'address', label: 'Address', field: row => row.address.street_lot_blk, align: 'left' },
-        // {
-        //   name: 'brgy',
-        //   label: 'Barangay',
-        //   field: row => row.address.brgy.description,
-        //   align: 'left',
-        //   sortable: true,
-        //   hideonload: true
-        // },
-        // {
-        //   name: 'city',
-        //   label: 'City',
-        //   field: row => row.address.city.description,
-        //   align: 'left',
-        //   sortable: true
-        // },
-        // {
-        //   name: 'province',
-        //   label: 'Province',
-        //   field: row => row.address.province.description,
-        //   align: 'left',
-        //   sortable: true
-        // },
-        // {
-        //   name: 'region',
-        //   label: 'Region',
-        //   field: row => row.address.region.description,
-        //   align: 'left',
-        //   sortable: true,
-        //   hideonload: true
-        // },
         {
           name: 'created_at',
           label: 'Created At',

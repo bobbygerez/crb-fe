@@ -19,10 +19,11 @@
 <script>
 import ServersideDynamicTable from 'components/data-table/serverside-dynamic-table'
 import TableMixin from 'components/mixins/serverside-table-mixin.js'
+import AddressColumnMixin from 'components/mixins/table-address-columns-mixin.js'
 
 export default {
   // check the mixin for other setup abstracted in this component
-  mixins: [TableMixin],
+  mixins: [TableMixin, AddressColumnMixin],
   components: {
     ServersideDynamicTable
   },
