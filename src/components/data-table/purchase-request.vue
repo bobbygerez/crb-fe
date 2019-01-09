@@ -1,7 +1,7 @@
 <template>
 <div>
     <q-table ref="table" color="primary" title="All Purchase Requests" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
-        <template slot="top-right" slot-scope="props">
+        <template slot="top-right">
             <q-search hide-underline v-model="filter" />
         </template>
 

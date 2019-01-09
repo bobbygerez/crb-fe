@@ -15,7 +15,6 @@
     >
       <template
         slot="top-right"
-        slot-scope="props"
       >
         <q-search
           hide-underline

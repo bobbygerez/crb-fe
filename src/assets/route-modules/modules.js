@@ -20,5 +20,6 @@ export default [
   'other-vendors',
   'items',
   'purchase-request',
-  'ingredients'
+  'ingredients',
+  'accounting-standards'
 ]

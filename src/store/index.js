@@ -19,6 +19,7 @@ import items from './items'
 import vendorables from './vendorables'
 import purchaseRequests from './purchase-request'
 import ingredients from './ingredients'
+import accountingStandards from './accounting-standards'
 import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
@@ -50,7 +51,8 @@ export default function (/* { ssrContext } */) {
       items,
       vendorables,
       purchaseRequests,
-      ingredients
+      ingredients,
+      accountingStandards
     },
     plugins: [createPersistedState()]
   })
