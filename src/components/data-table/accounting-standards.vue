@@ -63,7 +63,6 @@
 </template>
 
 <script>
-// import tableData from 'assets/table-data'
 import _ from 'lodash'
 import {
     mapState
@@ -73,10 +72,6 @@ export default {
         return {
             editAccountingStandardModal: false,
             actions: ['edit', 'delete'],
-            model: '2016-10-24T10:40:14.674Z',
-            superior: '',
-            selectedRoles: [],
-            editFranchiseeModal: false,
             options: [5, 10, 15, 20],
             lastPage: '',
             serverData: [],
@@ -109,91 +104,8 @@ export default {
         }
     },
     computed: {
-        ...mapState('branches', ['branch']),
-        ...mapState('franchisees', ['franchisee']),
-        ...mapState('accountingStandards', ['accountingStandard', 'newAccountingStandard']),
-        franchisees() {
-            return this.$store.getters['franchisees/franchisees'].map(e => {
-                return {
-                    label: e.name,
-                    value: e.id
-                }
-            })
-        },
-        userCompanies() {
-            return this.$store.getters['franchisees/userCompanies'].map(e => {
-                return {
-                    label: e.name,
-                    value: e.id
-                }
-            })
-        },
-        newBranchModal: {
-            get() {
-                return this.$store.getters['branches/newBranchModal']
-            },
-            set() {
-
-            }
-        },
-        countries() {
-            return this.$store.getters['globals/getCountries'].map(e => {
-                return {
-                    label: e.description,
-                    value: e.id
-                }
-            })
-        },
-        regions() {
-            let regions = this.$store.getters['globals/getRegions']
-            if (regions === null) return []
-            return regions.map(e => {
-                return {
-                    label: e.description,
-                    value: e.id
-                }
-            })
-        },
-        provinces() {
-            return this.$store.getters['globals/getProvinces'].map(e => {
-                return {
-                    label: e.description,
-                    value: e.id
-                }
-            })
-        },
-        cities() {
-            return this.$store.getters['globals/getCities'].map(e => {
-                return {
-                    label: e.description,
-                    value: e.id
-                }
-            })
-        },
-        brgys() {
-            return this.$store.getters['globals/getBrgys'].map(e => {
-                return {
-                    label: e.description,
-                    value: e.id
-                }
-            })
-        },
-        vatTypes() {
-            return this.$store.getters['globals/getVatTypes'].map(e => {
-                return {
-                    label: e.name,
-                    value: e.id
-                }
-            })
-        },
-        businessTypes() {
-            return this.$store.getters['globals/getBusinessTypes'].map(e => {
-                return {
-                    label: e.name,
-                    value: e.id
-                }
-            })
-        }
+        ...mapState('accountingStandards', ['accountingStandard', 'newAccountingStandard'])
+       
     },
     methods: {
         store() {

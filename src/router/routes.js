@@ -47,6 +47,18 @@ const routes = [{
     { path: '', component: () => import('pages/dashboard/submenu/ingredients/ingredients-view.vue') },
     { path: '/' }
   ]
+}, {
+  path: '/dashboard/chart-of-accounts/company/:id',
+  meta: {
+    title: name.endsWith('s') ? name : name.concat('s'),
+    needAuth: true,
+    section: 'index'
+  },
+  component: () => import('layouts/MainLayout.vue'),
+  children: [
+    { path: '', component: () => import('pages/dashboard/submenu/chart-of-accounts/chart-of-accounts.vue') },
+    { path: '/' }
+  ]
 }]
 
 const dashBoardModules = (appModules) => {
