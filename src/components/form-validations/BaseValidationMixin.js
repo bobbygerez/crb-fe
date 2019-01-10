@@ -38,6 +38,12 @@ export default {
       if (val.hasOwnProperty('email') && !val.email) {
         return `${fieldname} ${message.email}`
       }
+      // if validator not covered on what described above
+      // just extract all the message
+      if (Object.keys(message).length) {
+        return Object.keys(message).map(v => message[v]).join(' ')
+      }
+      // else return an anoymous error message
       return `${fieldname} has invalid value.`
     }
   },

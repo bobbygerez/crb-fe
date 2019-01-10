@@ -20,8 +20,11 @@ import {
   email,
   numeric,
   minLength,
-  maxLength
+  maxLength,
+  helpers
 } from 'vuelidate/lib/validators'
+
+import { axios } from 'plugins/axios'
 
 /* eslint-disable */
 export const Holding = ({
@@ -59,8 +62,32 @@ export const createHolding = (data) => {
   }))
 }
 
+const contains = (param) =>
+  helpers.withParams(
+    { type: 'contains', value: param },
+    (value) => !helpers.req(value) || value.indexOf(param) >= 0
+  )
+
 // TODO: refine validation rules
 const anon = () => true
+// check for uniqueness of input
+const isUnique = value => {
+  // standalone validator ideally should not assume a field is required
+  if (value === '') return true
+
+  // simulate async call, fail for all logins with even length
+  return new Promise((resolve, reject) => {
+    // setTimeout(() => {
+    //   resolve(typeof value === 'string' && value.length % 2 !== 0)
+    // }, 350 + Math.random() * 300)
+    axios.get(`/holdings/async-holding-validation/${field}/${value}`)
+    .then(res => {
+      console.log('async result =>', res)
+      resolve(res.data.success === 1)
+    })
+
+  })
+}
 const commons = {
   address: {
     country_id: {
@@ -123,7 +150,8 @@ const commons = {
   // images = [SomeImage()],
   name: {
     required,
-    _$Holding_name: anon
+    _$Holding_name: anon,
+    isUnique
   }
 }
 export const newHoldingFormValidationRule = () => {

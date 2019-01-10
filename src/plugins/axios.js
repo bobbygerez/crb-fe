@@ -25,7 +25,7 @@ const intercept = (isIntercept) => {
     return config
   }, error => {
     // Do something with request error
-    console.log('%c[REQUEST] error -> ' + error.config.url, 'color: red; font-weight: bold;', error)
+    console.log('%c[REQUEST] error -> ' + error.config.url, 'color: red; font-weight: bold;', error.message || error)
     return Promise.reject(error)
   })
   // Add a response interceptor
@@ -35,7 +35,12 @@ const intercept = (isIntercept) => {
     return response
   }, error => {
     // Do something with response error
-    console.log('%c[RESPONSE] error ->' + error.config.url, 'color: red; font-weight: bold;', error.response)
+    /**
+     * @error object
+     * @response only exist if the server responded with an error     *
+     */
+    console.log('%c[RESPONSE] error ->' + error.config.url, 'color: red; font-weight: bold;', error.response || error.message)
+    // return the error object
     return Promise.reject(error)
   })
 }

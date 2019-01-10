@@ -327,10 +327,10 @@ export default {
       if (this.$v.newHolding.$error) {
         return
       }
-      console.log('validations', this.$v)
+      console.log('validations =>', this.$v.newHolding)
       this.$axios
         .post(`/holdings`, {
-          id: this.newHolding.id,
+          // id: this.newHolding.id,
           name: this.newHolding.name,
           desc: this.newHolding.desc,
           country_id: this.newHolding.address.country_id,
@@ -349,14 +349,16 @@ export default {
         .then(res => {
           this.$q.notify({
             type: 'positive',
-            message: `${this.newHolding.name} Successfully added.`
+            message: res.data.message // `${this.newHolding.name} Successfully added.`
           })
           this.$router.replace('/dashboard/holdings')
         })
-        .catch(e => {
+        .catch(err => {
           this.$q.notify({
             type: 'negative',
-            message: 'Some error occured.'
+            message: err.response
+              ? Object.keys(err.response.data.message).map(v => err.response.data.message[v]).join(' ')
+              : err.message
           })
         })
     }
