@@ -14,7 +14,11 @@
             <div class="row">
               <div class="col-12">
                 <!-- <form-field-validator :validate="$v.newHolding.name"> -->
-                <form-field-validator :validate="$v.newHolding.name">
+                <form-field-validator
+                  :field-name="'Holding name'"
+                  :local-messages="{ isUnique: 'Name is taken.' }"
+
+                :validate="$v.newHolding.name">
                   <q-input
                     @input="$v.newHolding.name.$touch"
                     :error="$v.newHolding.name.$error"
@@ -26,7 +30,8 @@
                 <!-- </form-field-validator> -->
               </div>
               <div class="col-12">
-                <form-field-validator :validate="$v.newHolding.business_info.business_type_id">
+                <form-field-validator
+                  :validate="$v.newHolding.business_info.business_type_id">
                   <q-select
                     @input="$v.newHolding.business_info.business_type_id.$touch"
                     :error="$v.newHolding.business_info.business_type_id.$error"
@@ -289,6 +294,8 @@ import CommonsMixin from 'components/mixins/commons-mixin'
 import { newHoldingFormValidationRule } from '../model/Holding'
 import FormFieldValidator from 'components/form-validations/FormFieldValidator'
 import FormValidationSummary from 'components/form-validations/FormValidationSummary'
+import { debounce } from 'quasar'
+// import { debounce } from 'lodash'
 
 export default {
   mixins: [LocationMixin, CommonsMixin],
@@ -312,6 +319,10 @@ export default {
     }
   },
   methods: {
+    debouncedFunction: debounce(function (value) {
+      console.log('debounce', value)
+      this.$v.newHolding.name.$model = value
+    }, 500),
     locationSelected (loc, where) {
       if (loc) {
         this.newHolding.address.country_id = loc.region.country.id
@@ -367,6 +378,15 @@ export default {
     console.log('validations rules', newHoldingFormValidationRule())
     // set localmodel that will be used by mixins
     this.localModel = this.newHolding
+  },
+  created () {
+    this.debouncedFunction2 = debounce((value) => {
+      // this.loading = true
+      // this.getBarangays()
+      console.log('debounce called')
+      // this.$v.newHolding.name.$touch()
+      this.$v.newHolding.name.$model = value
+    }, 500)
   }
 }
 </script>

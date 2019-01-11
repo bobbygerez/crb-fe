@@ -25,7 +25,7 @@ export default {
 
         newChartAccount() {
 
-           
+
             this.$store.dispatch('chartAccounts/chartAccount', {
                 name: '',
                 account_display: ''
@@ -44,7 +44,7 @@ export default {
                 this.$axios
                 .get(`chart_account/${this.parentAccount.id}?id=${this.parentAccount.id}`)
                 .then(res => {
-                    if (res.data.chartAccount != null) {
+                    if (res.data.chartAccount !== null) {
                         this.$store.dispatch('chartAccounts/parentAccount', res.data.chartAccount)
                     } else {
                         this.$store.dispatch('chartAccounts/parentAccount', {
@@ -67,7 +67,7 @@ export default {
                 })
             } else {
                 let warningMsg = `Delete ${this.parentAccount.name}`
-                if (this.parentAccount.parent_id != 0) {
+                if (this.parentAccount.parent_id !== 0) {
                     warningMsg = warningMsg + ' and sub-chart of account?'
                 }
                 this.$q.notify({
@@ -97,7 +97,7 @@ export default {
                                         account_display: '',
                                         remarks: ''
                                     })
-                                   
+
                                 })
                                 .catch(err => {
                                     this.$q.notify({

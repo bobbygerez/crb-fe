@@ -40,6 +40,7 @@ export default {
       }
       // if validator not covered on what described above
       // just extract all the message
+      console.log('validation ===', Object.keys(message))
       if (Object.keys(message).length) {
         return Object.keys(message).map(v => message[v]).join(' ')
       }
