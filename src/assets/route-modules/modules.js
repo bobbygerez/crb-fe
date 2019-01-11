@@ -22,5 +22,6 @@ export default [
   'purchase-request',
   'ingredients',
   'accounting-standards',
-  'chart-of-accounts'
+  'chart-of-accounts',
+  'transaction-types'
 ]

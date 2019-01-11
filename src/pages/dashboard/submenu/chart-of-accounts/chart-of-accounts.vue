@@ -28,7 +28,9 @@ export default {
            
             this.$store.dispatch('chartAccounts/chartAccount', {
                 name: '',
-                account_display: ''
+                account_display: '',
+                remarks: '',
+                taccount_id: ''
             });
             this.$store.dispatch('chartAccounts/newChartAccount', true)
 
@@ -50,7 +52,8 @@ export default {
                         this.$store.dispatch('chartAccounts/parentAccount', {
                             name: '',
                             account_display: '',
-                            remarks: ''
+                            remarks: '',
+                            taccount_id
                         })
                     }
                 })

@@ -1,7 +1,7 @@
 <template>
 <div>
 
-    <q-table ref="table" color="primary" title="Company's Chart of Accounts" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
+    <q-table ref="table" color="primary" title="Company's Transaction Types" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
         <template slot="top-right" slot-scope="props">
             <q-search hide-underline v-model="filter" />
         </template>
@@ -46,7 +46,7 @@ import {
 export default {
     data() {
         return {
-           actions: ['Chart of Accounts'],
+           actions: ['Transaction Types'],
             selectedChartAccount: '',
             columns: [{
                     name: 'name',
@@ -107,7 +107,7 @@ export default {
             filter: this.filter
         })
 
-        this.$on('Chart of Accounts',(obj) => {
+        this.$on('chart of accounts',(obj) => {
           this.$router.push({ path: `/dashboard/chart-of-accounts/company/${obj.id}` })
           this.$store.dispatch('chartAccounts/company', obj);
         })

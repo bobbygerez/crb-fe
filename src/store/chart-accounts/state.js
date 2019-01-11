@@ -3,7 +3,8 @@ export default {
   chartAccount: {
     name: '',
     account_display: '',
-    remarks: ''
+    remarks: '',
+    taccount_id: ''
   },
   companies: [],
   companyId: '',
@@ -15,7 +16,9 @@ export default {
   parentAccount: {
     name: '',
     account_display: '',
-    remarks: ''
+    remarks: '',
+    taccount_id: ''
   },
-  editChartAccount: false
+  editChartAccount: false,
+  tAccounts: []
 }
