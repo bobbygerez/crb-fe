@@ -1,9 +1,0 @@
-<template>
-  <span>Chart of Accounts</span>
-</template>
-
-<script type="text/javascript">
-export default {
-  created () { }
-}
-</script>
