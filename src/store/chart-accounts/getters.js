@@ -13,3 +13,5 @@ export const parentAccount = (state) => state.parentAccount
 export const editChartAccount = (state) => state.editChartAccount
 
 export const parentAccountName = (state) => state.parentAccountName
+
+export const tAccounts = (state) => state.tAccounts

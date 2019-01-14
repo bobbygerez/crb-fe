@@ -5,7 +5,7 @@
     <q-tree :nodes="chartAccounts" color="secondary" :selected.sync="selectedChartAccount" node-key="id" label-key="label" default-expand-all>
         <div slot="default-body" slot-scope="prop">
             <div class="text-weight-thin">Account display: {{ prop.node.account_display }}</div>
-            <div class="text-weight-thin">Remarks: {{ prop.node.remarks }}</div>
+            <div class="text-weight-thin">T-Account: {{ prop.node.taccount }}</div>
         </div>
 
     </q-tree>
@@ -21,11 +21,19 @@
                 <div class="col-xs-12 col-sm-6">
                     <q-input v-model="company.companyName" float-label="Company Name" clearable disable />
                 </div>
-                <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-12 col-sm-4">
                     <q-input v-model="chartAccount.name" float-label="Chart of Account Name" clearable />
                 </div>
-                <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-12 col-sm-4">
                     <q-input v-model="chartAccount.account_display" float-label="Account Display" clearable />
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-select
+                        v-model="chartAccount.taccount_id"
+                        :options="tAccounts"
+                        float-label="T-Account"
+                        clearable
+                        />
                 </div>
                  <div class="col-xs-12 col-sm-12">
                     <q-input v-model="chartAccount.remarks" float-label="Remarks" type="textarea" :max-height="100" rows="2" clearable />
@@ -45,11 +53,19 @@
                 <div class="col-xs-12 col-sm-12">
                     <q-input v-model="company.companyName" float-label="Company Name" clearable disable />
                 </div>
-                <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-12 col-sm-4">
                     <q-input v-model="parentAccount.name" float-label="Chart of Account Name" clearable />
                 </div>
-                <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-12 col-sm-4">
                     <q-input v-model="parentAccount.account_display" float-label="Account Display" clearable />
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <q-select
+                        v-model="parentAccount.taccount_id"
+                        :options="tAccounts"
+                        float-label="T-Account"
+                        clearable
+                        />
                 </div>
                 <div class="col-xs-12 col-sm-12">
                     <q-input v-model="parentAccount.remarks" float-label="Remarks" type="textarea" :max-height="100" rows="2" clearable />
@@ -113,58 +129,71 @@ export default {
       }
     }
   },
-  computed: {
-    ...mapState('chartAccounts', ['company', 'companyId', 'newChartAccount', 'chartAccount', 'parentAccount', 'editChartAccount']),
-    companies () {
-      return this.$store.getters['chartAccounts/companies'].map(e => {
-        return {
-          label: e.name,
-          value: e.id
-        }
-      })
-    },
-    chartAccounts () {
-      let chartAccounts = _.values(this.$store.getters['chartAccounts/chartAccounts'])
-      const map = e => ({
-          id: e.id,
-          label: e.name,
-          remarks: e.remarks,
-          account_display: e.account_display,
-          children: e.all_children.map(map) // recursive call
-        }),
-        tree = chartAccounts.map(map)
+
+    computed: {
+        ...mapState('chartAccounts', ['company', 'companyId', 'newChartAccount', 'chartAccount', 'parentAccount', 'editChartAccount']),
+        companies() {
+            return this.$store.getters['chartAccounts/companies'].map(e => {
+                return {
+                    label: e.name,
+                    value: e.id
+                }
+            })
+        },
+        tAccounts(){
+            return this.$store.getters['chartAccounts/tAccounts'].map(e => {
+                return {
+                    label: e.name,
+                    value: e.id
+                }
+            })
+        },
+        chartAccounts() {
+            let chartAccounts = _.values(this.$store.getters['chartAccounts/chartAccounts'])
+            const map = e => ({
+                    id: e.id,
+                    label: e.name,
+                    remarks: e.remarks,
+                    taccount: e.t_account.name,
+                    account_display: e.account_display,
+                    children: e.all_children.map(map) // recursive call
+                }),
+                tree = chartAccounts.map(map)
 
       return tree
     }
   },
-  methods: {
+  
+    methods: {
+       
+        store() {
+            this.$axios
+                .post(`/chart_account`, {
+                    name: this.chartAccount.name,
+                    account_display: this.chartAccount.account_display,
+                    company_id: this.company.id,
+                    parent_id: this.selectedChartAccount,
+                    taccount_id: this.chartAccount.taccount_id,
+                    remarks: this.chartAccount.remarks
+                })
+                .then(res => {
+                    this.hideModal()
+                    this.$q.notify({
+                        color: 'positive',
+                        icon: 'check',
+                        message: `${this.chartAccount.name} created successfully`
+                    })
+                    this.request({
+                        pagination: this.serverPagination,
+                        filter: this.filter
+                    })
+                })
 
-    store () {
-      this.$axios
-        .post(`/chart_account`, {
-          name: this.chartAccount.name,
-          account_display: this.chartAccount.account_display,
-          company_id: this.company.id,
-          parent_id: this.selectedChartAccount,
-          remarks: this.chartAccount.remarks
-        })
-        .then(res => {
-          this.hideModal()
-          this.$q.notify({
-            color: 'positive',
-            icon: 'check',
-            message: `${this.chartAccount.name} created successfully`
-          })
-          this.request({
-            pagination: this.serverPagination,
-            filter: this.filter
-          })
-        })
-    },
-    hideModal () {
-      this.$store.dispatch('chartAccounts/newChartAccount', false)
-      this.$store.dispatch('chartAccounts/editChartAccount', false)
-    },
+        },
+        hideModal() {
+            this.$store.dispatch('chartAccounts/newChartAccount', false)
+            this.$store.dispatch('chartAccounts/editChartAccount', false)
+        },
 
     update () {
       this.$axios
@@ -205,49 +234,57 @@ export default {
   mounted () {
     this.index()
   },
-  watch: {
-
-    'filter' (val) {
-      this.$axios
-        .get(`/chart-account-search?filter=${this.filter}&companyId=${this.$route.params.id}`)
-        .then(res => {
-          this.$store.dispatch('chartAccounts/chartAccounts', res.data.chartAccounts)
-        })
-    },
-    'chartAccount.name' (val) {
-      this.$store.dispatch('chartAccounts/chartAccountName', val)
-    },
-    'chartAccount.company_id' (val) {
-      this.$store.dispatch('chartAccounts/chartAccountCompanyId', val)
-    },
-    'chartAccount.account_display' (val) {
-      this.$store.dispatch('chartAccounts/chartAccountDisplay', val)
-    },
-    'chartAccount.remarks' (val) {
-      this.$store.dispatch('chartAccounts/chartAccountRemarks', val)
-    },
-    'selectedChartAccount' (val) {
-      this.$axios
-        .get(`chart_account/${val}?id=${val}`)
-        .then(res => {
-          if (res.data.chartAccount != null) {
-            this.$store.dispatch('chartAccounts/parentAccount', res.data.chartAccount)
-          } else {
-            this.$store.dispatch('chartAccounts/parentAccount', {
-              name: '',
-              account_display: ''
-            })
-          }
-        })
-    },
-    'parentAccount.name' (val) {
-      this.$store.dispatch('chartAccounts/parentAccountName', val)
-    },
-    'parentAccount.account_display' (val) {
-      this.$store.dispatch('chartAccounts/parentAccountDisplay', val)
-    },
-    'parentAccount.remarks' (val) {
-      this.$store.dispatch('chartAccounts/parentAccountRemarks', val)
+  
+    watch: {
+        
+        'filter'(val) {
+            this.$axios
+                .get(`/chart-account-search?filter=${this.filter}&companyId=${this.$route.params.id}`)
+                .then(res => {
+                    this.$store.dispatch('chartAccounts/chartAccounts', res.data.chartAccounts)
+                })
+        },
+        'chartAccount.name'(val) {
+            this.$store.dispatch('chartAccounts/chartAccountName', val);
+        },
+        'chartAccount.company_id'(val) {
+            this.$store.dispatch('chartAccounts/chartAccountCompanyId', val);
+        },
+        'chartAccount.account_display'(val) {
+            this.$store.dispatch('chartAccounts/chartAccountDisplay', val);
+        },
+        'chartAccount.taccount_id'(val){
+            this.$store.dispatch('chartAccounts/chartAccountTAccountId', val);
+        },
+        'chartAccount.remarks'(val){
+            this.$store.dispatch('chartAccounts/chartAccountRemarks', val);
+        },
+        'selectedChartAccount'(val) {
+            this.$axios
+                .get(`chart_account/${val}?id=${val}`)
+                .then(res => {
+                    if (res.data.chartAccount != null) {
+                        this.$store.dispatch('chartAccounts/parentAccount', res.data.chartAccount)
+                    } else {
+                        this.$store.dispatch('chartAccounts/parentAccount', {
+                            name: '',
+                            account_display: ''
+                        })
+                    }
+                })
+        },
+        'parentAccount.name'(val) {
+            this.$store.dispatch('chartAccounts/parentAccountName', val);
+        },
+        'parentAccount.account_display'(val) {
+            this.$store.dispatch('chartAccounts/parentAccountDisplay', val);
+        },
+        'parentAccount.remarks'(val){
+            this.$store.dispatch('chartAccounts/parentAccountRemarks', val);
+        },
+        'parentAccount.taccount_id'(val){
+             this.$store.dispatch('chartAccounts/parentAccountTAccountId', val);
+        }
     }
   }
 }

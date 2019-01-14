@@ -22,6 +22,10 @@ export const chartAccountRemarks = (state, payload) => {
   state.chartAccount.remarks = payload
 }
 
+export const chartAccountTAccountId = (state, payload) => {
+  state.chartAccount.taccount_id = payload
+}
+
 export const companies = (state, payload) => {
   state.companies = payload
 }
@@ -52,4 +56,12 @@ export const parentAccountDisplay = (state, payload) => {
 
 export const parentAccountRemarks = (state, payload) => {
   state.parentAccount.remarks = payload
+}
+
+export const parentAccountTAccountId = (state, payload) => {
+  state.parentAccount.taccount_id = payload
+}
+
+export const tAccounts = (state, payload) => {
+  state.tAccounts = payload
 }

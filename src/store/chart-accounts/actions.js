@@ -34,6 +34,12 @@ export const chartAccountRemarks = ({
   commit('chartAccountRemarks', payload)
 }
 
+export const chartAccountTAccountId = ({
+  commit
+}, payload) => {
+  commit('chartAccountTAccountId', payload)
+}
+
 export const companies = ({
   commit
 }, payload) => {
@@ -80,4 +86,16 @@ export const parentAccountRemarks = ({
   commit
 }, payload) => {
   commit('parentAccountRemarks', payload)
+}
+
+export const parentAccountTAccountId = ({
+  commit
+}, payload) => {
+  commit('parentAccountTAccountId', payload)
+}
+
+export const tAccounts = ({
+  commit
+}, payload) => {
+  commit('tAccounts', payload)
 }

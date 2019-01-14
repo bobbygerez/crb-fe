@@ -1,51 +1,52 @@
 <template>
-  <div>
-    <q-table
-      ref="table"
-      color="primary"
-      title="Companies Chart of Account"
-      :data="serverData"
-      :columns="columns"
-      :filter="filter"
-      row-key="name"
-      :pagination.sync="serverPagination"
-      :rows-per-page-options="options"
-      @request="request"
-      :loading="loading"
-    >
-      <template
-        slot="top-right"
-        slot-scope="props"
-      >
-        <q-search
-          hide-underline
-          v-model="filter"
-        />
-      </template>
+<div>
 
-
-    <q-table ref="table" color="primary" title="Company's Chart of Accounts" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
+    <q-table ref="table" color="primary" title="Company's Transaction Types" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
         <template slot="top-right" slot-scope="props">
             <q-search hide-underline v-model="filter" />
         </template>
 
-        </q-tr>
+        <template slot="body" slot-scope="props">
+            <q-tr :props="props">
+                <q-td key="name">
+                    {{props.row.name}}
+                    <q-popover touch-position v-if="actions">
+                        <q-list link style="min-width: 100px">
+                            <template v-for="(action, idx) in actions">
+                                <q-item :key="idx" @click.native="$emit(action, { id: props.row.id, companyName: props.row.name })" v-close-overlay>
+                                    <q-item-main :label="action" />
+                                </q-item>
+                            </template>
+                        </q-list>
+                    </q-popover>
+                </q-td>
+                <q-td key="desc">
+                    {{props.row.desc}}
+                </q-td>
+                <q-td key="created" :props="props">
+                    {{props.row.created_at}}
+                </q-td>
 
-      </template>
+            </q-tr>
+
+        </template>
 
     </q-table>
-
-  </div>
+    
+</div>
 </template>
 
 <script>
 // import tableData from 'assets/table-data'
-import _ from 'lodash'
+import _ from 'lodash';
+import {
+    mapState
+} from 'vuex'
 
 export default {
     data() {
         return {
-           actions: ['Chart of Accounts'],
+           actions: ['Transaction Types'],
             selectedChartAccount: '',
             columns: [{
                     name: 'name',
@@ -106,23 +107,10 @@ export default {
             filter: this.filter
         })
 
-        this.$on('Chart of Accounts',(obj) => {
+        this.$on('chart of accounts',(obj) => {
           this.$router.push({ path: `/dashboard/chart-of-accounts/company/${obj.id}` })
           this.$store.dispatch('chartAccounts/company', obj);
         })
     }
-
-  },
-  mounted () {
-    this.request({
-      pagination: this.serverPagination,
-      filter: this.filter
-    })
-
-    this.$on('chart of accounts', (obj) => {
-      this.$router.push({ path: `/dashboard/chart-of-accounts/company/${obj.id}` })
-      this.$store.dispatch('chartAccounts/company', obj)
-    })
-  }
 }
 </script>
