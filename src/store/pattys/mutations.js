@@ -101,3 +101,7 @@ export const SET_ITEMS = (state, payload) => {
 export const SET_CATEGORIES = (state, payload) => {
   state.categories = payload
 }
+
+export const SET_SERVER_MESSAGE = (state, payload) => {
+  state.serverResponseMessage = payload
+}

@@ -13,7 +13,7 @@ export const load = (component) => () => import(`pages/dashboard/submenu/${compo
 export const debounceAsyncValidator = (validator, delay) => {
   let currentTimer = null
   let currentPromiseReject = null
-  console.log('debounce', delay)
+  // console.log('debounce', delay)
 
   function debounce () {
     return new Promise((resolve, reject) => {

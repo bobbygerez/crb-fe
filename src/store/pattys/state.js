@@ -23,5 +23,6 @@ export default {
   stores: [],
   categories: [],
   items: [],
-  vatTypes: []
+  vatTypes: [],
+  serverResponseMessage: null
 }

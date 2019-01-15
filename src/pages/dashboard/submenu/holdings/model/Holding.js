@@ -31,6 +31,8 @@ import {
   debounceAsyncValidator
 } from 'assets/utils/app-utils'
 
+// import store from '../../../../../store'
+
 /* eslint-disable */
 export const Holding = ({
   address = Address(),
@@ -67,6 +69,17 @@ export const createHolding = (data) => {
   }))
 }
 
+export var errMessage = {
+  str: '',
+  get message() {
+    return this.str
+  },
+  set message(msg) {
+    this.str = msg
+  }
+}
+
+export const getMessage = errMessage => errMessage
 const contains = (param) =>
   helpers.withParams({
       type: 'contains',
@@ -187,6 +200,13 @@ const commons = {
         })
         .catch(error => {
           console.log('error =>', error)
+          if(error.response) {
+            // console.log('store=>', store)
+            console.log('error =>', error.response.message)
+            errMessage = error.response.data.message
+            console.log('err', getMessage())
+            // store.dispatch('pattys/setServerResponseMessage', error.response.message)
+          }
           return false
         })
     }, 500)

@@ -69,7 +69,7 @@ export default {
                 name: '',
                 account_display: '',
                 remarks: '',
-                taccount_id
+                taccount_id: ''
               })
             }
           })

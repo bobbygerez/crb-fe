@@ -192,7 +192,7 @@ import {
 export default {
   data () {
     return {
-      companyId: '',
+      // companyId: '',
       name: '',
       actions: ['chart of accounts'],
       selectedChartAccount: 0,

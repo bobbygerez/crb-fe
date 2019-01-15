@@ -13,7 +13,9 @@ module.exports = function (ctx) {
       // 'i18n',
       'vue2-filters',
       'axios',
-      'vuelidate'
+      'vuelidate',
+      'app-validation-rules'
+      // 'holding_validation'
       // 'vue-signature-pad'
     ],
     css: [

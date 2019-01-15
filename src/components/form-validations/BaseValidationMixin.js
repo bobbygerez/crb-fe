@@ -3,6 +3,11 @@ export default {
   props: {
     fieldName: String,
     localMessages: Object,
+    asyncErrorMessage: String,
+    // {
+    //   type: String,
+    //   default: null
+    // },
     errorMessages: {
       type: Object,
       default: () => {
@@ -19,6 +24,10 @@ export default {
     replaceAll,
     getErrMessage (val) {
       if (!val.$error) return ''
+      console.log('async message', this.asyncErrorMessage)
+      if (this.asyncErrorMessage !== null || this.asyncErrorMessage !== '') {
+        return this.asyncErrorMessage
+      }
 
       const filteredVals = this.fieldName || Object.keys(val).filter(v => v.startsWith('_$'))
       if (filteredVals.length < 1) {

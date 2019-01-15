@@ -16,7 +16,8 @@
                 <!-- <form-field-validator :validate="$v.newHolding.name"> -->
                 <form-field-validator
                   :field-name="'Holding name'"
-                  :local-messages="{ isUnique: 'Name is taken.' }"
+                  :async-error-message="serverResponseMessage"
+                  :local-messages="{ isUnique: '`serverResponseMessage`' }"
 
                 :validate="$v.newHolding.name">
                   <q-input
@@ -291,7 +292,7 @@ import BarangayTable from 'components/location-provider/barangay-view'
 import CityTable from 'components/location-provider/city-view'
 import LocationMixin from 'components/mixins/location-mixin'
 import CommonsMixin from 'components/mixins/commons-mixin'
-import { newHoldingFormValidationRule } from '../model/Holding'
+// import newHoldingFormValidationRule from 'plugins/app-validation-rules'
 import FormFieldValidator from 'components/form-validations/FormFieldValidator'
 import FormValidationSummary from 'components/form-validations/FormValidationSummary'
 import { debounce } from 'quasar'
@@ -307,15 +308,16 @@ export default {
   },
   data () {
     return {
-      addressType: 'home'
+      addressType: 'home',
+      errorMessage: ''
     }
   },
   computed: {
-    ...mapHoldingFields(['newHolding', 'newHoldingModal'])
+    ...mapHoldingFields(['newHolding', 'newHoldingModal', 'serverResponseMessage'])
   },
   validations () {
     return {
-      newHolding: newHoldingFormValidationRule()
+      newHolding: this.$holdingRule
     }
   },
   methods: {
@@ -375,11 +377,12 @@ export default {
     }
   },
   mounted () {
-    console.log('validations rules', newHoldingFormValidationRule())
+    console.log('validations rules', this.$holdingRule)
     // set localmodel that will be used by mixins
     this.localModel = this.newHolding
   },
   created () {
+    // console.log('validations rules', newHoldingFormValidationRule.newHoldingFormValidationRule())
     this.debouncedFunction2 = debounce((value) => {
       // this.loading = true
       // this.getBarangays()
