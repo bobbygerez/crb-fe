@@ -82,7 +82,7 @@ export default {
         request(props) {
             this.loading = true
             this.$axios
-                .get(`/chart-account-companies?filter=${this.filter}&page=${props.pagination.page}&perPage=${
+                .get(`/transaction-type-companies?filter=${this.filter}&page=${props.pagination.page}&perPage=${
             props.pagination.rowsPerPage
           }`)
                 .then(res => {
@@ -107,9 +107,9 @@ export default {
             filter: this.filter
         })
 
-        this.$on('chart of accounts',(obj) => {
-          this.$router.push({ path: `/dashboard/chart-of-accounts/company/${obj.id}` })
-          this.$store.dispatch('chartAccounts/company', obj);
+        this.$on('Transaction Types',(obj) => {
+          this.$router.push({ path: `/dashboard/transaction-types/company/${obj.id}` })
+        //   this.$store.dispatch('chartAccounts/company', obj);
         })
     }
 }

@@ -21,6 +21,7 @@ import purchaseRequests from './purchase-request'
 import ingredients from './ingredients'
 import accountingStandards from './accounting-standards'
 import chartAccounts from './chart-accounts'
+import transactionTypes from './transaction-types'
 import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
@@ -54,7 +55,8 @@ export default function (/* { ssrContext } */) {
       purchaseRequests,
       ingredients,
       accountingStandards,
-      chartAccounts
+      chartAccounts,
+      transactionTypes
     },
     plugins: [createPersistedState()]
   })
