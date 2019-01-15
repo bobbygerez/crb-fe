@@ -76,7 +76,7 @@ import _ from 'lodash'
 export default {
   data () {
     return {
-      actions: ['chart of accounts'],
+      actions: ['Chart of Accounts'],
       selectedChartAccount: '',
       columns: [{
         name: 'name',
@@ -112,7 +112,9 @@ export default {
     request (props) {
       this.loading = true
       this.$axios
-        .get(`/chart-account-companies?filter=${this.filter}&page=${props.pagination.page}&perPage=${props.pagination.rowsPerPage}`)
+        .get(`/chart-account-companies?filter=${this.filter}&page=${props.pagination.page}&perPage=${
+          props.pagination.rowsPerPage
+        }`)
         .then(res => {
           this.serverPagination = props.pagination
           this.serverData = _.values(res.data.companies.data)
@@ -135,7 +137,7 @@ export default {
       filter: this.filter
     })
 
-    this.$on('chart of accounts', (obj) => {
+    this.$on('Chart of Accounts', (obj) => {
       this.$router.push({ path: `/dashboard/chart-of-accounts/company/${obj.id}` })
       this.$store.dispatch('chartAccounts/company', obj)
     })

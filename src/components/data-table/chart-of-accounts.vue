@@ -1,66 +1,174 @@
 <template>
-<div>
+  <div>
     <div>{{ company.companyName }}</div>
-    <q-input v-model="filter" stack-label="Filter" clearable class="q-mb-sm" />
-    <q-tree :nodes="chartAccounts" color="secondary" :selected.sync="selectedChartAccount" node-key="id" label-key="label" default-expand-all>
-        <div slot="default-body" slot-scope="prop">
-            <div class="text-weight-thin">Account display: {{ prop.node.account_display }}</div>
-            <div class="text-weight-thin">Remarks: {{ prop.node.remarks }}</div>
-        </div>
+    <q-input
+      v-model="filter"
+      stack-label="Filter"
+      clearable
+      class="q-mb-sm"
+    />
+    <q-tree
+      :nodes="chartAccounts"
+      color="secondary"
+      :selected.sync="selectedChartAccount"
+      node-key="id"
+      label-key="label"
+      default-expand-all
+    >
+      <div
+        slot="default-body"
+        slot-scope="prop"
+      >
+        <div class="text-weight-thin">Account display: {{ prop.node.account_display }}</div>
+        <div class="text-weight-thin">T-Account: {{ prop.node.taccount }}</div>
+      </div>
 
     </q-tree>
-    <q-modal v-model="newChartAccount" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
-        <div style="padding: 30px">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="q-display-1 q-mb-md">New Chart Of Account</div>
-                </div>
-                <div class="col-xs-12 col-sm-6">
-                    <q-input :value="parentAccount.name" float-label="Parent Account" clearable disable />
-                </div>
-                <div class="col-xs-12 col-sm-6">
-                    <q-input v-model="company.companyName" float-label="Company Name" clearable disable />
-                </div>
-                <div class="col-xs-12 col-sm-6">
-                    <q-input v-model="chartAccount.name" float-label="Chart of Account Name" clearable />
-                </div>
-                <div class="col-xs-12 col-sm-6">
-                    <q-input v-model="chartAccount.account_display" float-label="Account Display" clearable />
-                </div>
-                 <div class="col-xs-12 col-sm-12">
-                    <q-input v-model="chartAccount.remarks" float-label="Remarks" type="textarea" :max-height="100" rows="2" clearable />
-                </div>
-            </div>
-            <br>
-            <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
-            <q-btn color="primary" @click="store()" label="Submit" class="q-ml-sm" />
+    <q-modal
+      v-model="newChartAccount"
+      minimized
+      no-esc-dismiss
+      no-backdrop-dismiss
+      :content-css="{minWidth: '80vw', minHeight: '80vh'}"
+    >
+      <div style="padding: 30px">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="q-display-1 q-mb-md">New Chart Of Account</div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <q-input
+              :value="parentAccount.name"
+              float-label="Parent Account"
+              clearable
+              disable
+            />
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <q-input
+              v-model="company.companyName"
+              float-label="Company Name"
+              clearable
+              disable
+            />
+          </div>
+          <div class="col-xs-12 col-sm-4">
+            <q-input
+              v-model="chartAccount.name"
+              float-label="Chart of Account Name"
+              clearable
+            />
+          </div>
+          <div class="col-xs-12 col-sm-4">
+            <q-input
+              v-model="chartAccount.account_display"
+              float-label="Account Display"
+              clearable
+            />
+          </div>
+          <div class="col-xs-12 col-sm-4">
+            <q-select
+              v-model="chartAccount.taccount_id"
+              :options="tAccounts"
+              float-label="T-Account"
+              clearable
+            />
+          </div>
+          <div class="col-xs-12 col-sm-12">
+            <q-input
+              v-model="chartAccount.remarks"
+              float-label="Remarks"
+              type="textarea"
+              :max-height="100"
+              rows="2"
+              clearable
+            />
+          </div>
         </div>
+        <br>
+        <q-btn
+          color="red"
+          v-close-overlay
+          label="Close"
+          @click="hideModal()"
+        />
+        <q-btn
+          color="primary"
+          @click="store()"
+          label="Submit"
+          class="q-ml-sm"
+        />
+      </div>
     </q-modal>
-    <q-modal v-model="editChartAccount" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
-        <div style="padding: 30px">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="q-display-1 q-mb-md">Edit {{ parentAccount.name }}</div>
-                </div>
-                <div class="col-xs-12 col-sm-12">
-                    <q-input v-model="company.companyName" float-label="Company Name" clearable disable />
-                </div>
-                <div class="col-xs-12 col-sm-6">
-                    <q-input v-model="parentAccount.name" float-label="Chart of Account Name" clearable />
-                </div>
-                <div class="col-xs-12 col-sm-6">
-                    <q-input v-model="parentAccount.account_display" float-label="Account Display" clearable />
-                </div>
-                <div class="col-xs-12 col-sm-12">
-                    <q-input v-model="parentAccount.remarks" float-label="Remarks" type="textarea" :max-height="100" rows="2" clearable />
-                </div>
-            </div>
-            <br />
-            <q-btn color="red" v-close-overlay label="Close" @click="hideModal()" />
-            <q-btn color="primary" @click="update()" label="Update" class="q-ml-sm" />
+    <q-modal
+      v-model="editChartAccount"
+      minimized
+      no-esc-dismiss
+      no-backdrop-dismiss
+      :content-css="{minWidth: '80vw', minHeight: '80vh'}"
+    >
+      <div style="padding: 30px">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="q-display-1 q-mb-md">Edit {{ parentAccount.name }}</div>
+          </div>
+          <div class="col-xs-12 col-sm-12">
+            <q-input
+              v-model="company.companyName"
+              float-label="Company Name"
+              clearable
+              disable
+            />
+          </div>
+          <div class="col-xs-12 col-sm-4">
+            <q-input
+              v-model="parentAccount.name"
+              float-label="Chart of Account Name"
+              clearable
+            />
+          </div>
+          <div class="col-xs-12 col-sm-4">
+            <q-input
+              v-model="parentAccount.account_display"
+              float-label="Account Display"
+              clearable
+            />
+          </div>
+          <div class="col-xs-12 col-sm-4">
+            <q-select
+              v-model="parentAccount.taccount_id"
+              :options="tAccounts"
+              float-label="T-Account"
+              clearable
+            />
+          </div>
+          <div class="col-xs-12 col-sm-12">
+            <q-input
+              v-model="parentAccount.remarks"
+              float-label="Remarks"
+              type="textarea"
+              :max-height="100"
+              rows="2"
+              clearable
+            />
+          </div>
         </div>
+        <br />
+        <q-btn
+          color="red"
+          v-close-overlay
+          label="Close"
+          @click="hideModal()"
+        />
+        <q-btn
+          color="primary"
+          @click="update()"
+          label="Update"
+          class="q-ml-sm"
+        />
+      </div>
     </q-modal>
-</div>
+  </div>
 </template>
 
 <script>
@@ -123,12 +231,21 @@ export default {
         }
       })
     },
+    tAccounts () {
+      return this.$store.getters['chartAccounts/tAccounts'].map(e => {
+        return {
+          label: e.name,
+          value: e.id
+        }
+      })
+    },
     chartAccounts () {
       let chartAccounts = _.values(this.$store.getters['chartAccounts/chartAccounts'])
       const map = e => ({
           id: e.id,
           label: e.name,
           remarks: e.remarks,
+          taccount: e.t_account.name,
           account_display: e.account_display,
           children: e.all_children.map(map) // recursive call
         }),
@@ -138,7 +255,6 @@ export default {
     }
   },
   methods: {
-
     store () {
       this.$axios
         .post(`/chart_account`, {
@@ -146,6 +262,7 @@ export default {
           account_display: this.chartAccount.account_display,
           company_id: this.company.id,
           parent_id: this.selectedChartAccount,
+          taccount_id: this.chartAccount.taccount_id,
           remarks: this.chartAccount.remarks
         })
         .then(res => {
@@ -165,7 +282,6 @@ export default {
       this.$store.dispatch('chartAccounts/newChartAccount', false)
       this.$store.dispatch('chartAccounts/editChartAccount', false)
     },
-
     update () {
       this.$axios
         .put(`/chart_account/${this.parentAccount.id}?id=${this.parentAccount.id}`, this.parentAccount)
@@ -190,7 +306,6 @@ export default {
           this.$store.dispatch('chartAccounts/chartAccounts', res.data.chartAccounts)
         })
     },
-
     /***
          * Do not delete parent component is using the index
          */
@@ -199,14 +314,20 @@ export default {
         pagination: this.serverPagination,
         filter: this.filter
       })
+    },
+    getTAccounts () {
+      this.$axios
+        .get(`/taccounts`)
+        .then(res => {
+          this.$store.dispatch('chartAccounts/tAccounts', res.data.tAccounts)
+        })
     }
   },
-
   mounted () {
     this.index()
+    this.getTAccounts()
   },
   watch: {
-
     'filter' (val) {
       this.$axios
         .get(`/chart-account-search?filter=${this.filter}&companyId=${this.$route.params.id}`)
@@ -222,6 +343,9 @@ export default {
     },
     'chartAccount.account_display' (val) {
       this.$store.dispatch('chartAccounts/chartAccountDisplay', val)
+    },
+    'chartAccount.taccount_id' (val) {
+      this.$store.dispatch('chartAccounts/chartAccountTAccountId', val)
     },
     'chartAccount.remarks' (val) {
       this.$store.dispatch('chartAccounts/chartAccountRemarks', val)
@@ -248,6 +372,9 @@ export default {
     },
     'parentAccount.remarks' (val) {
       this.$store.dispatch('chartAccounts/parentAccountRemarks', val)
+    },
+    'parentAccount.taccount_id' (val) {
+      this.$store.dispatch('chartAccounts/parentAccountTAccountId', val)
     }
   }
 }
