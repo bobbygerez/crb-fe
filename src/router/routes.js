@@ -71,6 +71,30 @@ const routes = [{
     { path: '', component: () => import('pages/dashboard/submenu/transaction-types/transaction-types.vue') },
     { path: '/' }
   ]
+}, {
+  path: '/dashboard/transactions/:companyName/:companyId',
+  meta: {
+    title: name.endsWith('s') ? name : name.concat('s'),
+    needAuth: true,
+    section: 'index'
+  },
+  component: () => import('layouts/MainLayout.vue'),
+  children: [
+    { path: '', component: () => import('pages/dashboard/submenu/transactions/branches-transactions.vue') },
+    { path: '/' }
+  ]
+}, {
+  path: '/dashboard/transactions/:companyName/:branchName/:branchId',
+  meta: {
+    title: name.endsWith('s') ? name : name.concat('s'),
+    needAuth: true,
+    section: 'index'
+  },
+  component: () => import('layouts/MainLayout.vue'),
+  children: [
+    { path: '', component: () => import('pages/dashboard/submenu/transactions/transactions.vue') },
+    { path: '/' }
+  ]
 }]
 
 const dashBoardModules = (appModules) => {

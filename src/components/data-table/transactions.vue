@@ -166,15 +166,15 @@ export default {
             this.loading = true
             this.$axios
                 .get(
-                    `/transaction_types?companyId=${this.$route.params.id}&filter=${this.filter}&page=${props.pagination.page}&perPage=${props.pagination.rowsPerPage}`
+                    `/transactions?branchId=${this.$route.params.branchId}&filter=${this.filter}&page=${props.pagination.page}&perPage=${props.pagination.rowsPerPage}`
                 )
                 .then(res => {
-                    this.serverPagination = props.pagination
-                    this.serverData = _.values(res.data.transactionTypes.data)
-                    this.serverPagination.rowsNumber = res.data.transactionTypes.total
-                    this.lastPage = res.data.transactionTypes.last_page
-                    this.loading = false
-                    this.$store.dispatch('transactionTypes/company', res.data.company)
+                    // this.serverPagination = props.pagination
+                    // this.serverData = _.values(res.data.transactionTypes.data)
+                    // this.serverPagination.rowsNumber = res.data.transactionTypes.total
+                    // this.lastPage = res.data.transactionTypes.last_page
+                    // this.loading = false
+                    // this.$store.dispatch('transactionTypes/company', res.data.company)
 
                 })
                 .catch(error => {

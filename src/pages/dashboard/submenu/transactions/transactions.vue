@@ -1,6 +1,6 @@
 <template>
 <div class="q-pa-sm">
-    <transaction-types ref="transType"></transaction-types>
+    <transactions ref="transType"></transactions>
     <q-page-sticky position="bottom" :offset="[16, 16]">
         <q-btn color="primary" rounded fab glossy icon="add" size="lg" @click="newTransactionType" />
     </q-page-sticky>
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import transactionTypes from 'components/data-table/transaction-types.vue'
+import transactions from 'components/data-table/transactions.vue'
 import {
     mapState
 } from 'vuex'
@@ -30,7 +30,7 @@ export default {
         }
     },
     components: {
-        transactionTypes
+        transactions
     }
 }
 </script>
