@@ -30,5 +30,6 @@ export default {
     location: null
   }, // for getting addresses
   addressInnerLoading: false,
-  token: null
+  token: null,
+  serverErrorResponse: null
 }

@@ -71,7 +71,31 @@ export default ({
   axios.defaults.baseURL = appMode('test')
   axios.defaults.headers.post['Content-Type'] = 'application/json'
 
-  intercept(true)
+  intercept(false)
+
+  // request interceptor
+  axios.interceptors.request.use(config => {
+    console.log('%c[REQUEST] sent -> ' + config.url, 'color: blue; font-weight: bold;', config)
+    return config
+  }, error => {
+    console.log('%c[REQUEST] error -> ' + error.config.url, 'color: red; font-weight: bold;', error.message || error)
+    return Promise.reject(error)
+  })
+  // Add a response interceptor
+  axios.interceptors.response.use(response => {
+    console.log('%c[RESPONSE] received -> ' + response.config.url, 'color: green; font-weight: bold;', response)
+    store.dispatch('globals/setServerErrorResponse', null)
+    return response
+  }, error => {
+    console.log('%c[RESPONSE] error ->' + error.config.url, 'color: red; font-weight: bold;', error.response || error.message)
+    if (error.response) {
+      // if has response save to store
+      console.log('server error response =>', error.response.data)
+      store.dispatch('globals/setServerErrorResponse', error.response.data.message)
+    }
+    return Promise.reject(error)
+  })
+
   const token = store.getters['globals/getToken']
   if (token) {
     setAuthHeader(token)

@@ -31,8 +31,6 @@ import {
   debounceAsyncValidator
 } from 'assets/utils/app-utils'
 
-// import store from '../../../../../store'
-
 /* eslint-disable */
 export const Holding = ({
   address = Address(),
@@ -69,64 +67,31 @@ export const createHolding = (data) => {
   }))
 }
 
-export var errMessage = {
-  str: '',
-  get message() {
-    return this.str
-  },
-  set message(msg) {
-    this.str = msg
-  }
-}
-
-export const getMessage = errMessage => errMessage
-const contains = (param) =>
+const asyncValidator = (param) =>
   helpers.withParams({
-      type: 'contains',
-      value: param
+      type: 'asyncValidator'
     },
-    (value) => !helpers.req(value) || value.indexOf(param) >= 0
+    debounceAsyncValidator((value, debounce) => {
+      if (value === '') return true
+      return debounce()
+        .then(() => axios.get(`/async-holding-validation/${param}/${value}`))
+        .then(result => {
+          console.log('debounce res=>', result)
+          return result.data.success === 1
+        })
+        .catch(error => {
+          console.log('error =>', error.message)
+          if (error.response) {
+            console.log('error =>', error.response.data.message)
+          }
+          return false
+        })
+    }, 500)
   )
 
 // TODO: refine validation rules
 const anon = () => true
-// check for uniqueness of input
-const customValidator = (fieldName) => value => {
-  // standalone validator ideally should not assume a field is required
-  if (value === '') return true
 
-  return debounce()
-    .then(() => {
-      axios.get(`/async-holding-validation/${fieldName}/${value}`)
-      // .then(res => {
-      //   console.log('async result =>', res)
-      //   resolve(res.data.success === 1)
-      // }).catch(err => {
-      //   console.log('async error result =>', err.response.data)
-      //   reject(err)
-      // })
-    })
-    .then(res => {
-      // const isUnique = !user || user.id === userId
-      return res.data.success === 1
-    })
-    .catch(() => {
-      // could be caused by either rest api failure or by debounce
-      return false
-    })
-  // }, 500)
-
-  // return new Promise((resolve, reject) => {
-  //   axios.get(`/async-holding-validation/${fieldName}/${value}`)
-  //     .then(res => {
-  //       console.log('async result =>', res)
-  //       resolve(res.data.success === 1)
-  //     }).catch(err => {
-  //       console.log('async error result =>', err.response.data)
-  //       reject(err)
-  //     })
-  // }, 500)
-}
 const commons = {
   address: {
     country_id: {
@@ -190,35 +155,16 @@ const commons = {
   name: {
     required,
     _$Holding_name: anon,
-    isUnique: debounceAsyncValidator((value, debounce) => {
-      if (value === '') return true
-      return debounce()
-        .then(() => axios.get(`/async-holding-validation/name/${value}`))
-        .then(result => {
-          console.log('debounce res=>', result)
-          return result.data.success === 1
-        })
-        .catch(error => {
-          console.log('error =>', error)
-          if(error.response) {
-            // console.log('store=>', store)
-            console.log('error =>', error.response.message)
-            errMessage = error.response.data.message
-            console.log('err', getMessage())
-            // store.dispatch('pattys/setServerResponseMessage', error.response.message)
-          }
-          return false
-        })
-    }, 500)
+    asyncValidate: asyncValidator('name')
   }
 }
-export const newHoldingFormValidationRule = () => {
-  return { ...commons
+export const newHoldingFormValidationRule = (asyncValidation) => {
+  return {
+    ...commons
   }
 }
 
 // TODO: refine validation rule
-
 export const editHoldingFormValidationRule = () => {
   return {
     ...commons,

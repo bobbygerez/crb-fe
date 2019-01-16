@@ -16,10 +16,9 @@
                 <!-- <form-field-validator :validate="$v.newHolding.name"> -->
                 <form-field-validator
                   :field-name="'Holding name'"
-                  :async-error-message="serverResponseMessage"
-                  :local-messages="{ isUnique: '`serverResponseMessage`' }"
-
-                :validate="$v.newHolding.name">
+                  :async-error-message="serverErrorResponse ? serverErrorResponse.name.map(v=>v).join(' ') : ''"
+                  :validate="$v.newHolding.name"
+                >
                   <q-input
                     @input="$v.newHolding.name.$touch"
                     :error="$v.newHolding.name.$error"
@@ -31,8 +30,7 @@
                 <!-- </form-field-validator> -->
               </div>
               <div class="col-12">
-                <form-field-validator
-                  :validate="$v.newHolding.business_info.business_type_id">
+                <form-field-validator :validate="$v.newHolding.business_info.business_type_id">
                   <q-select
                     @input="$v.newHolding.business_info.business_type_id.$touch"
                     :error="$v.newHolding.business_info.business_type_id.$error"
@@ -247,10 +245,11 @@
         <div class="row col-12">
           <div class="row col-12 justify-center q-pb-md">
             <div class="col-12">
-              <!-- <form-validation-summary
+              <form-validation-summary
+                :async-error-message="serverErrorResponse ? Object.keys(serverErrorResponse).map(v=> serverErrorResponse[v]).join(' ') : ''"
                 :validations="$v"
                 class="q-my-sm"
-              /> -->
+              />
             </div>
             <div class="column">
               <q-btn
@@ -292,11 +291,11 @@ import BarangayTable from 'components/location-provider/barangay-view'
 import CityTable from 'components/location-provider/city-view'
 import LocationMixin from 'components/mixins/location-mixin'
 import CommonsMixin from 'components/mixins/commons-mixin'
-// import newHoldingFormValidationRule from 'plugins/app-validation-rules'
+import { newHoldingFormValidationRule } from '../model/Holding'
 import FormFieldValidator from 'components/form-validations/FormFieldValidator'
 import FormValidationSummary from 'components/form-validations/FormValidationSummary'
 import { debounce } from 'quasar'
-// import { debounce } from 'lodash'
+import { mapState } from 'vuex'
 
 export default {
   mixins: [LocationMixin, CommonsMixin],
@@ -308,16 +307,16 @@ export default {
   },
   data () {
     return {
-      addressType: 'home',
-      errorMessage: ''
+      addressType: 'home'
     }
   },
   computed: {
-    ...mapHoldingFields(['newHolding', 'newHoldingModal', 'serverResponseMessage'])
+    ...mapHoldingFields(['newHolding', 'newHoldingModal', 'serverResponseMessage']),
+    ...mapState('globals', ['serverErrorResponse'])
   },
   validations () {
     return {
-      newHolding: this.$holdingRule
+      newHolding: newHoldingFormValidationRule()
     }
   },
   methods: {
@@ -378,6 +377,7 @@ export default {
   },
   mounted () {
     console.log('validations rules', this.$holdingRule)
+    console.log('validations rules', this.newHolding)
     // set localmodel that will be used by mixins
     this.localModel = this.newHolding
   },

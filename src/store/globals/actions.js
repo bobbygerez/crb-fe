@@ -114,3 +114,7 @@ export const setPageMeta = ({
 }, payload) => {
   commit('SET_PAGE_META', payload)
 }
+
+export const setServerErrorResponse = ({commit}, payload) => {
+  commit('SET_SERVER__ERROR_RESPONSE', payload)
+}

@@ -13,7 +13,6 @@ export const load = (component) => () => import(`pages/dashboard/submenu/${compo
 export const debounceAsyncValidator = (validator, delay) => {
   let currentTimer = null
   let currentPromiseReject = null
-  // console.log('debounce', delay)
 
   function debounce () {
     return new Promise((resolve, reject) => {
@@ -28,7 +27,7 @@ export const debounceAsyncValidator = (validator, delay) => {
 
   return function (value) {
     if (currentTimer) {
-      currentPromiseReject(new Error('replaced'))
+      currentPromiseReject(new Error('replaced or stil editing'))
       clearTimeout(currentTimer)
       currentTimer = null
     }

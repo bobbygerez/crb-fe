@@ -3,11 +3,10 @@ export default {
   props: {
     fieldName: String,
     localMessages: Object,
-    asyncErrorMessage: String,
-    // {
-    //   type: String,
-    //   default: null
-    // },
+    asyncErrorMessage: {
+      type: String,
+      default: null
+    },
     errorMessages: {
       type: Object,
       default: () => {
@@ -24,10 +23,7 @@ export default {
     replaceAll,
     getErrMessage (val) {
       if (!val.$error) return ''
-      console.log('async message', this.asyncErrorMessage)
-      if (this.asyncErrorMessage !== null || this.asyncErrorMessage !== '') {
-        return this.asyncErrorMessage
-      }
+      // console.log('async message', this.asyncErrorMessage)
 
       const filteredVals = this.fieldName || Object.keys(val).filter(v => v.startsWith('_$'))
       if (filteredVals.length < 1) {
@@ -47,11 +43,24 @@ export default {
       if (val.hasOwnProperty('email') && !val.email) {
         return `${fieldname} ${message.email}`
       }
+
+      console.log('validating =>', val)
+      if (this.asyncErrorMessage !== null && this.asyncErrorMessage !== '' && !val.$pending) {
+        return this.asyncErrorMessage
+      }
       // if validator not covered on what described above
       // just extract all the message
       console.log('validation ===', Object.keys(message))
+      console.log('validation ===', message)
+      // get validator params
       if (Object.keys(message).length) {
-        return Object.keys(message).map(v => message[v]).join(' ')
+        return Object.keys(message).map(v => val[v] ? message[v] : ''
+        // {
+        //   console.log('map v =>', v)
+        //   if (!val[v])
+        //   return message[v]
+        // }
+        ).join(' ')
       }
       // else return an anoymous error message
       return `${fieldname} has invalid value.`

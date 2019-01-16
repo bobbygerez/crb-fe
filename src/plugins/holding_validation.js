@@ -11,7 +11,7 @@ import {
 // TODO: refine validation rules
 // const anon = () => true
 // leave the export, even if you don't use it
-export default ({ app, router, Vue, store }) => {
+export default ({ app, router, Vue, store }) =s> {
   // something to do
   // Vue.use({
   //   address: {
