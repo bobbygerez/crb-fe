@@ -37,7 +37,7 @@
                   >
                     <q-item-main
                       :label="capitalize(action)"
-                      :disabled="props.row.items[0].purchases[0].pivot.approved_by != null"
+                      :disabled="disabled(props)"
                     />
                   </q-item>
                 </template>
@@ -56,18 +56,18 @@
           >
             {{ props.row.pivot.vendorable_type.substring(10) }}
           </q-td>
-          <q-td
+          <!-- <q-td
             key="price"
             :props="props"
           >
-            {{ props.row.items[0].purchases[0].pivot.price |currency('₱ ') }}
+            {{ price(props) |currency('₱ ') }}
           </q-td>
           <q-td
             key="qty"
             :props="props"
           >
-            {{ props.row.items[0].purchases[0].pivot.qty }}
-          </q-td>
+            {{ price(props) }}
+          </q-td> -->
           <q-td
             key="freight"
             :props="props"
@@ -99,7 +99,7 @@
       </template>
 
     </q-table>
-    <q-modal
+    <!-- <q-modal
       v-model="editPurchaseItemModal"
       minimized
       no-esc-dismiss
@@ -208,7 +208,7 @@
           class="q-ml-sm"
         />
       </div>
-    </q-modal>
+    </q-modal> -->
   </div>
 </template>
 
@@ -297,6 +297,7 @@ export default {
     inputPrice
   },
   computed: {
+    
     ...mapState('purchaseRequests', ['purchaseRequest', 'purchaseItem', 'item']),
     itemLists () {
       return this.$store.getters['purchaseRequests/itemLists'].map(e => {
@@ -340,6 +341,22 @@ export default {
     }
   },
   methods: {
+    disabled(props){
+      let items = props.row.items;
+       if (props.row.items.length > 0){
+         if (items[0].purchases.length > 0){
+           return items[0].purchases[0].pivot.approved_by != null
+         }
+       }
+       return true;
+    },
+    price(props){
+      let items = props.row;
+      if (props.row.items.length > 0){
+          return parseFloat(items[0].purchases[0].pivot.price)
+       }
+      return 0;
+    },
     notedBy (purchaseRequestId) {
       this.$axios.get(`purchases-noted-by?id=${purchaseRequestId}`)
         .then(res => {
