@@ -31,5 +31,6 @@ export default {
   }, // for getting addresses
   addressInnerLoading: false,
   token: null,
-  serverErrorResponse: null
+  serverErrorResponse: null,
+  handleAsyncValidation: false
 }
