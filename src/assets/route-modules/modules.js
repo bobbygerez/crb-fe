@@ -23,5 +23,6 @@ export default [
   'ingredients',
   'accounting-standards',
   'chart-of-accounts',
-  'transaction-types'
+  'transaction-types',
+  'transactions'
 ]

@@ -14,16 +14,8 @@ export const transactionType = (state, payload) => {
   state.transactionType = payload
 }
 
-export const chartAccounts = (state, payload) => {
-  state.chartAccounts = payload
-}
-
 export const transactionTypeName = (state, payload) => {
   state.transactionType.name = payload
-}
-
-export const transactionTypeChartAccountId = (state, payload) => {
-  state.transactionType.chart_account_id = payload
 }
 
 export const transactionTypeDesc = (state, payload) => {

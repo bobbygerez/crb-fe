@@ -71,6 +71,42 @@ const routes = [{
     { path: '', component: () => import('pages/dashboard/submenu/transaction-types/transaction-types.vue') },
     { path: '/' }
   ]
+}, {
+  path: '/dashboard/transactions/:companyName',
+  meta: {
+    title: name.endsWith('s') ? name : name.concat('s'),
+    needAuth: true,
+    section: 'index'
+  },
+  component: () => import('layouts/MainLayout.vue'),
+  children: [
+    { path: '', component: () => import('pages/dashboard/submenu/transactions/entities-transactions.vue') },
+    { path: '/' }
+  ]
+}, {
+  path: '/dashboard/transactions/:companyName/:branchName',
+  meta: {
+    title: name.endsWith('s') ? name : name.concat('s'),
+    needAuth: true,
+    section: 'index'
+  },
+  component: () => import('layouts/MainLayout.vue'),
+  children: [
+    { path: '', component: () => import('pages/dashboard/submenu/transactions/transactions.vue') },
+    { path: '/' }
+  ]
+}, {
+  path: '/dashboard/transactions/:companyName/:branchName/:transaction/edit',
+  meta: {
+    title: name.endsWith('s') ? name : name.concat('s'),
+    needAuth: true,
+    section: 'index'
+  },
+  component: () => import('layouts/MainLayout.vue'),
+  children: [
+    { path: '', component: () => import('pages/dashboard/submenu/transactions/edit.vue') },
+    { path: '/' }
+  ]
 }]
 
 const dashBoardModules = (appModules) => {

@@ -34,12 +34,6 @@ export const transactionTypeName = ({
   commit('transactionTypeName', payload)
 }
 
-export const transactionTypeChartAccountId = ({
-  commit
-}, payload) => {
-  commit('transactionTypeChartAccountId', payload)
-}
-
 export const transactionTypeDesc = ({
   commit
 }, payload) => {
