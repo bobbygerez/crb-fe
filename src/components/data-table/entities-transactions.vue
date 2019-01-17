@@ -1,6 +1,6 @@
 <template>
 <div>
-    <q-table ref="table" color="primary" :title="`${company.companyName}'s Branches`" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
+    <q-table ref="table" color="primary" :title="`${company.companyName}'s Entities`" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
         <template slot="top-right" slot-scope="props">
             <q-search hide-underline v-model="filter" />
         </template>
@@ -19,6 +19,7 @@
                     </q-popover>
 
                 </q-td>
+                <q-td key="desc">{{props.row.entity.substring(10) }}</q-td>
                 <q-td key="desc">{{props.row.desc }}</q-td>
                 <q-td key="created_at">{{props.row.created_at }}</q-td>
             </q-tr>
@@ -51,6 +52,12 @@ export default {
                     align: 'left'
                 },
                 {
+                    name: 'entity',
+                    label: 'Entity',
+                    align: 'left',
+                    field: 'entity'
+                },
+                {
                     name: 'desc',
                     label: 'Description',
                     align: 'left',
@@ -81,11 +88,10 @@ export default {
     methods: {
 
         request(props) {
-
             this.loading = true
             this.$axios
                 .get(
-                    `/transactions-branches?companyId=${this.$route.params.companyId}&filter=${this.filter}&page=${props.pagination.page}&perPage=${props.pagination.rowsPerPage}`
+                    `/transactions-branches?companyId=${this.company.id}&filter=${this.filter}&page=${props.pagination.page}&perPage=${props.pagination.rowsPerPage}`
                 )
                 .then(res => {
                     this.serverPagination = props.pagination
@@ -111,8 +117,9 @@ export default {
 
             this.$on('Transactions', (obj) => {
                 this.$router.push({
-                    path: `/dashboard/transactions/${this.slug(this.company.companyName)}/${this.slug(obj.name)}/${obj.id}`
+                    path: `/dashboard/transactions/${this.slug(this.company.companyName)}/${this.slug(obj.name)}`
                 })
+                this.$store.dispatch('transactions/entity', obj)
             })
 
     }

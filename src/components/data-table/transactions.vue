@@ -1,25 +1,27 @@
 <template>
 <div>
-    <q-table ref="table" color="primary" :title="`${company.name} Transaction Types`" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
+    <q-table ref="table" color="primary" :title="`${entity.name} Transactions`" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
         <template slot="top-right" slot-scope="props">
             <q-search hide-underline v-model="filter" />
         </template>
 
         <template slot="body" slot-scope="props">
             <q-tr :props="props">
-                <q-td key="name">{{props.row.name }}
+                
+                <q-td key="chartAccount">{{props.row.chart_account.name }}
                     <q-popover touch-position v-if="actions">
                         <q-list link style="min-width: 100px">
                             <template v-for="(action, idx) in actions">
-                                <q-item :key="idx" @click.native="$emit(action, props.row.id)" v-close-overlay>
+                                <q-item :key="idx" @click.native="$emit(action, props.row)" v-close-overlay>
                                     <q-item-main :label="action" />
                                 </q-item>
                             </template>
                         </q-list>
                     </q-popover>
-
                 </q-td>
-                <q-td key="desc">{{props.row.desc }}</q-td>
+                <q-td key="transactionType">{{props.row.transaction_type.name }}</q-td>
+                <q-td key="total_amount">{{props.row.total_amount |currency('₱ ') }}</q-td>
+                <q-td key="remarks">{{props.row.remarks }}</q-td>
                 <q-td key="created_at">{{props.row.created_at }}</q-td>
             </q-tr>
         </template>
@@ -67,30 +69,44 @@
 </template>
 
 <script>
-// import tableData from 'assets/table-data'
+import slug from 'components/mixins/slug'
 import _ from 'lodash';
 import {
     mapState
 } from 'vuex'
 
 export default {
+    mixins: [slug],
     data() {
         return {
             companyId: '',
             name: '',
             actions: ['edit', 'delete'],
             selectedChartAccount: 0,
-            columns: [{
-                    name: 'name',
-                    label: 'Name',
-                    field: 'name',
+            columns: [
+                 {
+                    name: 'chartAccount',
+                    label: 'Chart of Account',
+                    align: 'left',
+                    field: 'chartAccount'
+                },
+                {
+                    name: 'transactionType',
+                    label: 'Transaction Type',
+                    field: 'transactionType',
                     align: 'left'
                 },
                 {
-                    name: 'desc',
-                    label: 'Description',
+                    name: 'total_amount',
+                    label: 'Total Amount',
                     align: 'left',
-                    field: 'desc'
+                    field: 'total_amount'
+                },
+                 {
+                    name: 'remarks',
+                    label: 'Remarks',
+                    align: 'left',
+                    field: 'remarks'
                 },
                 {
                     name: 'created_at',
@@ -112,7 +128,8 @@ export default {
         }
     },
     computed: {
-        ...mapState('transactionTypes', ['company', 'editTransactionType', 'transactionType', 'newTransactionType']),
+        ...mapState('transactionTypes', ['editTransactionType', 'transactionType', 'newTransactionType']),
+        ...mapState('transactions', ['entity', 'company'])
       
     },
     methods: {
@@ -166,15 +183,14 @@ export default {
             this.loading = true
             this.$axios
                 .get(
-                    `/transactions?branchId=${this.$route.params.branchId}&filter=${this.filter}&page=${props.pagination.page}&perPage=${props.pagination.rowsPerPage}`
+                    `/transactions?entity=${this.entity.entity}&id=${this.entity.id}&filter=${this.filter}&page=${props.pagination.page}&perPage=${props.pagination.rowsPerPage}`
                 )
                 .then(res => {
-                    // this.serverPagination = props.pagination
-                    // this.serverData = _.values(res.data.transactionTypes.data)
-                    // this.serverPagination.rowsNumber = res.data.transactionTypes.total
-                    // this.lastPage = res.data.transactionTypes.last_page
-                    // this.loading = false
-                    // this.$store.dispatch('transactionTypes/company', res.data.company)
+                    this.serverPagination = props.pagination
+                    this.serverData = _.values(res.data.transactions.data)
+                    this.serverPagination.rowsNumber = res.data.transactions.total
+                    this.lastPage = res.data.transactions.last_page
+                    this.loading = false
 
                 })
                 .catch(error => {
@@ -196,50 +212,11 @@ export default {
 
     mounted() {
         this.index()
-
-        this.$on('edit', function (transTypeId) {
-            this.$axios.get(`transaction_types/${transTypeId}/edit?id=${transTypeId}`)
-                .then(res => {
-                    this.$store.dispatch('transactionTypes/transactionType', res.data.transactionType)
-                    this.showModal()
+        this.$on('edit', function (obj) {
+            this.$router.push({
+                    path: `/dashboard/transactions/${this.slug(this.company.companyName)}/${this.slug(this.entity.name)}/${this.slug(obj.chart_account.name)}/edit`
                 })
-        })
-        this.$on('delete', function (transTypeId) {
-            this.$axios.get(`transaction_types/${transTypeId}?id=${transTypeId}`)
-                .then(res => {
-                    this.$store.dispatch('transactionTypes/transactionType', res.data.transactionType)
-                    this.$q.notify({
-                        color: 'negative',
-                        icon: 'delete',
-                        message: `Delete ${res.data.transactionType.name} ?`,
-                        actions: [{
-                            label: 'Ok',
-                            handler: () => {
-                                this.$axios
-                                    .delete(`/transaction_types/${this.transactionType.id}?id=${this.transactionType.id}`)
-                                    .then(res => {
-                                        this.$q.notify({
-                                            color: 'positive',
-                                            icon: 'check',
-                                            message: `${this.transactionType.name} deleted successfully`
-                                        })
-                                        this.request({
-                                            pagination: this.serverPagination,
-                                            filter: this.filter
-                                        })
-                                        this.hideModal()
-                                    })
-                                    .catch(err => {
-                                        this.$q.notify({
-                                            color: 'negative',
-                                            icon: 'warning',
-                                            message: `${err.response.data.message}`
-                                        })
-                                    })
-                            }
-                        }]
-                    })
-                })
+            this.$store.dispatch('transactions/transaction', obj)
         })
 
     },

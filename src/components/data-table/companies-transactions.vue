@@ -47,7 +47,7 @@ export default {
     mixins: [slug], 
     data() {
         return {
-           actions: ['Branches'],
+           actions: ['Entity Transactions'],
             columns: [{
                     name: 'name',
                     label: 'Company Name',
@@ -102,8 +102,10 @@ export default {
             filter: this.filter
         })
 
-        this.$on('Branches',(obj) => {
-          this.$router.push({ path: `/dashboard/transactions/${this.slug(obj.companyName)}/${obj.id}` })
+        this.$on('Entity Transactions',(obj) => {
+          this.$router.push({ 
+              path: `/dashboard/transactions/${this.slug(obj.companyName)}`
+          })
           this.$store.dispatch('transactions/company', obj)
         })
     }
