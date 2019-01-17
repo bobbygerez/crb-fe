@@ -294,11 +294,11 @@ import CommonsMixin from 'components/mixins/commons-mixin'
 import { newHoldingFormValidationRule } from '../model/Holding'
 import FormFieldValidator from 'components/form-validations/FormFieldValidator'
 import FormValidationSummary from 'components/form-validations/FormValidationSummary'
+import AsyncValidationMixin from 'components/mixins/async-validation-mixin'
 import { debounce } from 'quasar'
-import { mapState } from 'vuex'
 
 export default {
-  mixins: [LocationMixin, CommonsMixin],
+  mixins: [LocationMixin, CommonsMixin, AsyncValidationMixin],
   components: {
     BarangayTable,
     CityTable,
@@ -311,8 +311,7 @@ export default {
     }
   },
   computed: {
-    ...mapHoldingFields(['newHolding', 'newHoldingModal', 'serverResponseMessage']),
-    ...mapState('globals', ['serverErrorResponse'])
+    ...mapHoldingFields(['newHolding', 'newHoldingModal', 'serverResponseMessage'])
   },
   validations () {
     return {
@@ -380,16 +379,6 @@ export default {
     console.log('validations rules', this.newHolding)
     // set localmodel that will be used by mixins
     this.localModel = this.newHolding
-  },
-  created () {
-    // console.log('validations rules', newHoldingFormValidationRule.newHoldingFormValidationRule())
-    this.debouncedFunction2 = debounce((value) => {
-      // this.loading = true
-      // this.getBarangays()
-      console.log('debounce called')
-      // this.$v.newHolding.name.$touch()
-      this.$v.newHolding.name.$model = value
-    }, 500)
   }
 }
 </script>

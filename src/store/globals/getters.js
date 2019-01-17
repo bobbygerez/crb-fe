@@ -26,3 +26,5 @@ export const countryList = (state) => state.countries.map(v => {
     value: v.id
   }
 })
+
+export const getHandleAsyncValidation = (state) => state.handleAsyncValidation

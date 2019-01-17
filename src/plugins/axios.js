@@ -84,15 +84,19 @@ export default ({
   // Add a response interceptor
   axios.interceptors.response.use(response => {
     console.log('%c[RESPONSE] received -> ' + response.config.url, 'color: green; font-weight: bold;', response)
-    store.dispatch('globals/setServerErrorResponse', null)
+    if (store.getters['globals/getHandleAsyncValidation']) {
+      store.dispatch('globals/setServerErrorResponse', null)
+    }
     return response
   }, error => {
     console.log('%c[RESPONSE] error ->' + error.config.url, 'color: red; font-weight: bold;', error.response || error.message)
-    if (error.response) {
-      // if has response save to store
-      console.log('server error response =>', error.response.data)
+    // if (error.response) {
+    // if has response save to store
+    console.log('server error response =>', error.response.data)
+    if (store.getters['globals/getHandleAsyncValidation'] && error.response) {
       store.dispatch('globals/setServerErrorResponse', error.response.data.message)
     }
+    // }
     return Promise.reject(error)
   })
 

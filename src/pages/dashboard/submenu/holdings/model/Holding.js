@@ -67,14 +67,17 @@ export const createHolding = (data) => {
   }))
 }
 
-const asyncValidator = (param) =>
+const asyncValidator = (param, api) =>
   helpers.withParams({
       type: 'asyncValidator'
     },
     debounceAsyncValidator((value, debounce) => {
       if (value === '') return true
       return debounce()
-        .then(() => axios.get(`/async-holding-validation/${param}/${value}`))
+        .then(() => {
+          console.log('param', param)
+          return api(param,value)
+        })
         .then(result => {
           console.log('debounce res=>', result)
           return result.data.success === 1
@@ -88,6 +91,9 @@ const asyncValidator = (param) =>
         })
     }, 500)
   )
+
+const createApi = (param, value) => axios.get(`/async-holding-validation-create/${param.field}/${value}`)
+const updateApi = (param, value) => axios.get(`/async-holding-validation-update/${param.field}/${value}/${param.id}`)
 
 // TODO: refine validation rules
 const anon = () => true
@@ -155,7 +161,7 @@ const commons = {
   name: {
     required,
     _$Holding_name: anon,
-    asyncValidate: asyncValidator('name')
+    asyncValidate: asyncValidator({ field: 'name' }, createApi)
   }
 }
 export const newHoldingFormValidationRule = (asyncValidation) => {

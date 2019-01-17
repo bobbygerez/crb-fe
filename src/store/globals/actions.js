@@ -118,3 +118,7 @@ export const setPageMeta = ({
 export const setServerErrorResponse = ({commit}, payload) => {
   commit('SET_SERVER__ERROR_RESPONSE', payload)
 }
+
+export const setHandleAsyncValidation = ({commit}, payload) => {
+  commit('SET_HANDLE_ASYNC_VALIDATION', payload)
+}
