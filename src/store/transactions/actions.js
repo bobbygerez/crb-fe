@@ -27,3 +27,39 @@ export const chartAccounts = ({
 }, payload) => {
   commit('chartAccounts', payload)
 }
+
+export const userEntities = ({
+  commit
+}, payload) => {
+  commit('userEntities', payload)
+}
+
+export const titleTransaction = ({
+  commit
+}, payload) => {
+  commit('titleTransaction', payload)
+}
+
+export const selectedUserEntity = ({
+  commit
+}, payload) => {
+  commit('selectedUserEntity', payload)
+}
+
+export const selectedEntity = ({
+  commit
+}, payload) => {
+  commit('selectedEntity', payload)
+}
+
+export const entities = ({
+  commit
+}, payload) => {
+  commit('entities', payload)
+}
+
+export const payee = ({
+  commit
+}, payload) => {
+  commit('payee', payload)
+}

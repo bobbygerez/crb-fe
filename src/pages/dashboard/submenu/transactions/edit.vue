@@ -5,19 +5,25 @@
             <div class="q-title q-mb-md">Edit Transaction </div>
         </div>
         <div class="col-xs-6">
+            <q-select v-model="transaction.transaction_type_id" :options="transactionTypes" float-label="Transaction Type" clearable />
+            <q-select v-model="transaction.chart_account_id" filter :options="chartAccounts" float-label="GL account" clearable />
+            <q-input v-model="createdBy" float-label="Created By" disable />
             
         </div>
         <div class="col-xs-6">
-            <q-select v-model="transaction.transaction_type_id" :options="transactionTypes" float-label="Transaction Type" clearable />
-            <q-select v-model="transaction.transaction_type_id" :options="[]" float-label="Cash Account" clearable />
-            <q-tree :nodes="chartAccounts" color="secondary" :selected.sync="transaction.chart_account_id" node-key="id" label-key="label" >
-            </q-tree>
+            <q-input v-model="payee.name" float-label="Pay to" disable />
             <input-price
               label="Price"
               :value="transaction.total_amount"
               v-model="transaction.total_amount"
-              :disabled="true"
             ></input-price>
+            <q-input
+              v-model="transaction.remarks"
+              type="textarea"
+              float-label="Remarks"
+              :max-height="100"
+              rows="2"
+            />
         </div>
         
         
@@ -50,7 +56,7 @@ export default {
         }
     },
     computed: {
-        ...mapState('transactions', ['company', 'transaction']),
+        ...mapState('transactions', ['company', 'transaction', 'selectedEntity', 'selectedUserEntity', 'payee']),
         transactionTypes() {
             return this.$store.getters['transactions/transactionTypes'].map(e => {
                 return {
@@ -61,28 +67,34 @@ export default {
         },
         chartAccounts() {
             let chartAccounts = _.values(this.$store.getters['transactions/chartAccounts'])
-            const map = e => ({
-                    id: e.id,
-                    label: e.name,
-                    children: e.all_children.map(map) // recursive call
-                }),
-                tree = chartAccounts.map(map)
+            
+            let res = []
+            const cb = (e) => {
+                res.push({
+                    value: e.id,
+                    label: `(${e.account_code})  ${e.name}`,
+                });
+                e.all_children && e.all_children.forEach(cb);
+            }
+            chartAccounts.forEach(cb);
+            return res
 
-                console.log(tree)
-             return tree
+        },
+        createdBy(){
+            return `${this.transaction.created_by.firstname} ${this.transaction.created_by.lastname}`
         }
     },
     methods: {
         getTransactionTypes() {
-            this.$axios.get(`transactions-transaction-types?companyId=${this.company.id}`)
+            this.$axios.get(`transactions/${this.$route.params.id}/edit?id=${this.$route.params.id}&modelType=${this.selectedEntity}&modelId=${this.selectedUserEntity}`)
                 .then(res => {
                     this.$store.dispatch('transactions/transactionTypes', res.data.transactionTypes)
+                    this.$store.dispatch('transactions/transaction', res.data.transaction)
+                    this.$store.dispatch('transactions/chartAccounts', res.data.chartAccounts)
+                    this.$store.dispatch('transactions/payee', res.data.payee)
                 })
 
-            this.$axios.get(`transactions-chart-accounts?companyId=${this.company.id}`)
-                .then(res => {
-                    this.$store.dispatch('transactions/chartAccounts', res.data.chartAccounts)
-                })
+           
         }
     },
     created() {
