@@ -21,3 +21,8 @@ export const transactionTypeName = (state, payload) => {
 export const transactionTypeDesc = (state, payload) => {
   state.transactionType.desc = payload
 }
+
+
+export const chartAccounts = (state, payload) => {
+  state.chartAccounts= payload
+}

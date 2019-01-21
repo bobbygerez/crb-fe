@@ -9,5 +9,6 @@ export default {
     desc: ''
   },
   editTransactionType: false,
-  newTransactionType: false
+  newTransactionType: false,
+  chartAccounts: []
 }

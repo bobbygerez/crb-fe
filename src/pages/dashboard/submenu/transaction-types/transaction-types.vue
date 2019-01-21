@@ -22,7 +22,6 @@
 <script>
 import transactionTypes from 'components/data-table/transaction-types.vue'
 export default {
-<<<<<<< HEAD
   methods: {
     newTransactionType () {
       this.$store.dispatch('transactionTypes/transactionType', {
@@ -32,24 +31,6 @@ export default {
         desc: ''
       })
       this.$store.dispatch('transactionTypes/newTransactionType', true)
-=======
-
-    methods: {
-
-        newTransactionType() {
-
-            this.$store.dispatch('transactionTypes/transactionType', {
-                name: '',
-                company_id: this.$route.params.id,
-                desc: ''
-            });
-            this.$store.dispatch('transactionTypes/newTransactionType', true)
-
-        }
-    },
-    components: {
-        transactionTypes
->>>>>>> ccfde33ba39514f6f0cf09bba0891972344471ac
     }
   },
   components: {

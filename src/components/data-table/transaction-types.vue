@@ -49,9 +49,8 @@
               </q-list>
             </q-popover>
 
-<<<<<<< HEAD
           </q-td>
-          <q-td key="chartAccount">{{props.row.chart_account.name }}</q-td>
+          <!-- <q-td key="chartAccount">{{props.row.chart_account.name }}</q-td> -->
           <q-td key="created_at">{{props.row.created_at }}</q-td>
         </q-tr>
       </template>
@@ -78,29 +77,6 @@
           </div>
 
           <div class="col-xs-12 col-sm-12">
-=======
-                </q-td>
-                <q-td key="desc">{{props.row.desc }}</q-td>
-                <q-td key="created_at">{{props.row.created_at }}</q-td>
-            </q-tr>
-        </template>
-
-    </q-table>
-    <q-modal v-model="newTransactionType" minimized no-esc-dismiss no-backdrop-dismiss :content-css="{minWidth: '80vw', minHeight: '80vh'}">
-        <div style="padding: 30px">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="q-display-1 q-mb-md">New Transaction Type</div>
-                </div>
-                <div class="col-xs-12 col-sm-12">
-                    <q-input v-model="transactionType.name" float-label="Transaction Type" clearable />
-                </div>
-
-                <div class="col-xs-12 col-sm-12">
-                    <q-input v-model="transactionType.desc" float-label="Description" type="textarea" :max-height="100" rows="2" clearable />
-                </div>
-            </div>
->>>>>>> ccfde33ba39514f6f0cf09bba0891972344471ac
             <br />
             <p class="caption">Select Chart of Account:</p>
             <q-tree
@@ -166,14 +142,7 @@
             />
           </div>
 
-<<<<<<< HEAD
           <div class="col-xs-12 col-sm-12">
-=======
-                <div class="col-xs-12 col-sm-12">
-                    <q-input v-model="transactionType.desc" float-label="Description" type="textarea" :max-height="100" rows="2" clearable />
-                </div>
-            </div>
->>>>>>> ccfde33ba39514f6f0cf09bba0891972344471ac
             <br />
             <p class="caption">Select Chart of Account:</p>
             <q-tree
@@ -232,7 +201,6 @@ import {
 export default {
   data () {
     return {
-      companyId: '',
       name: '',
       actions: ['edit', 'delete'],
       selectedChartAccount: 0,
@@ -273,48 +241,11 @@ export default {
     companies () {
       return this.$store.getters['chartAccounts/companies'].map(e => {
         return {
-<<<<<<< HEAD
           label: e.name,
           value: e.id
-=======
-            companyId: '',
-            name: '',
-            actions: ['edit', 'delete'],
-            selectedChartAccount: 0,
-            columns: [{
-                    name: 'name',
-                    label: 'Name',
-                    field: 'name',
-                    align: 'left'
-                },
-                {
-                    name: 'desc',
-                    label: 'Description',
-                    align: 'left',
-                    field: 'desc'
-                },
-                {
-                    name: 'created_at',
-                    label: 'Created At',
-                    align: 'left',
-                    field: 'created_at'
-                }
-            ],
-            filter: '',
-            loading: false,
-            options: [5, 10, 15, 20],
-            lastPage: '',
-            serverData: [],
-            serverPagination: {
-                page: 1,
-                rowsNumber: 10,
-                rowsPerPage: 10 // specifying this determines pagination is server-side
-            }
->>>>>>> ccfde33ba39514f6f0cf09bba0891972344471ac
         }
       })
     },
-<<<<<<< HEAD
     tAccounts () {
       return this.$store.getters['chartAccounts/tAccounts'].map(e => {
         return {
@@ -322,11 +253,6 @@ export default {
           value: e.id
         }
       })
-=======
-    computed: {
-        ...mapState('transactionTypes', ['company', 'editTransactionType', 'transactionType', 'newTransactionType']),
-      
->>>>>>> ccfde33ba39514f6f0cf09bba0891972344471ac
     },
     chartAccounts () {
       let chartAccounts = _.values(this.$store.getters['transactionTypes/chartAccounts'])
@@ -341,78 +267,10 @@ export default {
         }),
         tree = chartAccounts.map(map)
 
-<<<<<<< HEAD
       return tree
     }
   },
   methods: {
-=======
-            this.$axios
-                    .post(`/transaction_types`, this.transactionType)
-                    .then(res => {
-                        this.hideModal()
-                        this.$q.notify({
-                            color: 'positive',
-                            icon: 'check',
-                            message: `${this.transactionType.name} created successfully`
-                        })
-                        this.request({
-                            pagination: this.serverPagination,
-                            filter: this.filter
-                        })
-                    })
-
-        },
-        hideModal() {
-            this.$store.dispatch('transactionTypes/newTransactionType', false)
-            this.$store.dispatch('transactionTypes/editTransactionType', false)
-        },
-        showModal() {
-            this.$store.dispatch('transactionTypes/editTransactionType', true)
-        },
-        update() {
-
-             this.$axios
-                .put(`/transaction_types/${this.transactionType.id}?id=${this.transactionType.id}`, this.transactionType)
-                .then(res => {
-                    this.hideModal()
-                    this.$q.notify({
-                        color: 'positive',
-                        icon: 'check',
-                        message: `${this.transactionType.name} update successfully`
-                    })
-                    this.request({
-                        pagination: this.serverPagination,
-                        filter: this.filter
-                    })
-                })
-                .catch()
-           
-        },
-        request(props) {
-
-            this.loading = true
-            this.$axios
-                .get(
-                    `/transaction_types?companyId=${this.$route.params.id}&filter=${this.filter}&page=${props.pagination.page}&perPage=${props.pagination.rowsPerPage}`
-                )
-                .then(res => {
-                    this.serverPagination = props.pagination
-                    this.serverData = _.values(res.data.transactionTypes.data)
-                    this.serverPagination.rowsNumber = res.data.transactionTypes.total
-                    this.lastPage = res.data.transactionTypes.last_page
-                    this.loading = false
-                    this.$store.dispatch('transactionTypes/company', res.data.company)
-
-                })
-                .catch(error => {
-                    // there's an error... do SOMETHING
-                    // we tell QTable to exit the "loading" state
-                    this.loading = false
-                })
-
-        },
->>>>>>> ccfde33ba39514f6f0cf09bba0891972344471ac
 
     store () {
       if (this.transactionType.chart_account_id !== '') {
@@ -482,7 +340,6 @@ export default {
         })
     },
 
-<<<<<<< HEAD
     index () {
       this.request({
         pagination: this.serverPagination,
@@ -494,9 +351,6 @@ export default {
         .then(res => {
           this.$store.dispatch('transactionTypes/chartAccounts', res.data.chartAccounts)
         })
-=======
-        }
->>>>>>> ccfde33ba39514f6f0cf09bba0891972344471ac
     },
     getTAccounts () {
       this.$axios
@@ -559,21 +413,11 @@ export default {
     'transactionType.name' (val) {
       this.$store.dispatch('transactionTypes/transactionTypeName', val)
     },
-<<<<<<< HEAD
     'transactionType.chart_account_id' (val) {
       this.$store.dispatch('transactionTypes/transactionTypeChartAccountId', val)
     },
     'transactionType.desc' (val) {
       this.$store.dispatch('transactionTypes/transactionTypeDesc', val)
-=======
-    watch: {
-        'transactionType.name'(val) {
-            this.$store.dispatch('transactionTypes/transactionTypeName', val)
-        },
-        'transactionType.desc'(val) {
-            this.$store.dispatch('transactionTypes/transactionTypeDesc', val)
-        }
->>>>>>> ccfde33ba39514f6f0cf09bba0891972344471ac
     }
   }
 }
