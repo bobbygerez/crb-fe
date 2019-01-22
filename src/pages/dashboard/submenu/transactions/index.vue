@@ -87,194 +87,184 @@
 
 <script>
 import slug from 'components/mixins/slug'
-import _ from 'lodash';
+import _ from 'lodash'
 import {
-    mapState, mapActions
+  mapState
 } from 'vuex'
 
 export default {
-    mixins: [slug],
-    data() {
+  mixins: [slug],
+  data () {
+    return {
+      companyId: '',
+      name: '',
+      actions: ['edit', 'delete'],
+      selectedChartAccount: 0,
+      columns: [{
+        name: 'chartAccount',
+        label: 'Chart of Account',
+        align: 'left',
+        field: 'chartAccount'
+      },
+      {
+        name: 'transactionType',
+        label: 'Transaction Type',
+        field: 'transactionType',
+        align: 'left'
+      },
+      {
+        name: 'total_amount',
+        label: 'Total Amount',
+        align: 'left',
+        field: 'total_amount'
+      },
+      {
+        name: 'remarks',
+        label: 'Remarks',
+        align: 'left',
+        field: 'remarks'
+      },
+      {
+        name: 'created_at',
+        label: 'Created At',
+        align: 'left',
+        field: 'created_at'
+      }
+      ],
+      filter: '',
+      loading: false,
+      options: [5, 10, 15, 20],
+      lastPage: '',
+      serverData: [],
+      serverPagination: {
+        page: 1,
+        rowsNumber: 10,
+        rowsPerPage: 10 // specifying this determines pagination is server-side
+      }
+    }
+  },
+  computed: {
+    ...mapState('transactionTypes', ['editTransactionType', 'transactionType', 'newTransactionType']),
+    ...mapState('transactions', ['entity', 'company', 'transaction', 'titleTransaction', 'entities']),
+    userEntities () {
+      return this.$store.getters['transactions/userEntities'].map(e => {
         return {
-            companyId: '',
-            name: '',
-            actions: ['edit', 'delete'],
-            selectedChartAccount: 0,
-            columns: [{
-                    name: 'chartAccount',
-                    label: 'Chart of Account',
-                    align: 'left',
-                    field: 'chartAccount'
-                },
-                {
-                    name: 'transactionType',
-                    label: 'Transaction Type',
-                    field: 'transactionType',
-                    align: 'left'
-                },
-                {
-                    name: 'total_amount',
-                    label: 'Total Amount',
-                    align: 'left',
-                    field: 'total_amount'
-                },
-                {
-                    name: 'remarks',
-                    label: 'Remarks',
-                    align: 'left',
-                    field: 'remarks'
-                },
-                {
-                    name: 'created_at',
-                    label: 'Created At',
-                    align: 'left',
-                    field: 'created_at'
-                }
-            ],
-            filter: '',
-            loading: false,
-            options: [5, 10, 15, 20],
-            lastPage: '',
-            serverData: [],
-            serverPagination: {
-                page: 1,
-                rowsNumber: 10,
-                rowsPerPage: 10 // specifying this determines pagination is server-side
-            }
+          label: e.name,
+          value: e.id
         }
+      })
     },
-    computed: {
-        ...mapState('transactionTypes', ['editTransactionType', 'transactionType', 'newTransactionType']),
-        ...mapState('transactions', ['entity', 'company', 'transaction', 'titleTransaction', 'entities']),
-        userEntities() {
-            return this.$store.getters['transactions/userEntities'].map(e => {
-                return {
-                    label: e.name,
-                    value: e.id
-                }
-            })
-        },
-        selectedEntity: {
-          get(){
-            return this.$store.getters['transactions/selectedEntity']
-          },
-          set(val){
-            this.$store.dispatch('transactions/selectedEntity', val)
-          }
-        },
-        selectedUserEntity: {
-          get(){
-             return this.$store.getters['transactions/selectedUserEntity']
-          },
-          set(val){
-              this.$store.dispatch('transactions/selectedUserEntity', val)
-          }
-        }
-
+    selectedEntity: {
+      get () {
+        return this.$store.getters['transactions/selectedEntity']
+      },
+      set (val) {
+        this.$store.dispatch('transactions/selectedEntity', val)
+      }
     },
-    methods: {
-        store() {
+    selectedUserEntity: {
+      get () {
+        return this.$store.getters['transactions/selectedUserEntity']
+      },
+      set (val) {
+        this.$store.dispatch('transactions/selectedUserEntity', val)
+      }
+    }
 
-            this.$axios
-                .post(`/transaction_types`, this.transactionType)
-                .then(res => {
-                    this.hideModal()
-                    this.$q.notify({
-                        color: 'positive',
-                        icon: 'check',
-                        message: `${this.transactionType.name} created successfully`
-                    })
-                    this.request({
-                        pagination: this.serverPagination,
-                        filter: this.filter
-                    })
-                })
-
-        },
-        hideModal() {
-            this.$store.dispatch('transactionTypes/newTransactionType', false)
-            this.$store.dispatch('transactionTypes/editTransactionType', false)
-        },
-        showModal() {
-            this.$store.dispatch('transactionTypes/editTransactionType', true)
-        },
-        update() {
-
-            this.$axios
-                .put(`/transaction_types/${this.transactionType.id}?id=${this.transactionType.id}`, this.transactionType)
-                .then(res => {
-                    this.hideModal()
-                    this.$q.notify({
-                        color: 'positive',
-                        icon: 'check',
-                        message: `${this.transactionType.name} update successfully`
-                    })
-                    this.request({
-                        pagination: this.serverPagination,
-                        filter: this.filter
-                    })
-                })
-                .catch()
-
-        },
-        request(props) {
-
-            this.loading = true
-            this.$axios.get(`transactions-transactable?modelType=${this.selectedEntity}&id=${this.selectedUserEntity}&filter=${this.filter}&page=${props.pagination.page}&perPage=${props.pagination.rowsPerPage}`)
-                .then(res => {
-                    this.serverPagination = props.pagination
-                    this.serverData = _.values(res.data.transactions.data)
-                    this.serverPagination.rowsNumber = res.data.transactions.total
-                    this.lastPage = res.data.transactions.last_page
-                    this.loading = false
-                    this.$store.dispatch('transactions/titleTransaction', res.data.entity) 
-                })
-                .catch(error => {
-                    this.serverData = []
-                    this.loading = false
-                })
-
-        }
-
-        
-    },
-
-    mounted() {
-      if(this.selectedEntity !== '' && this.selectedUserEntity !== ''){
-        this.request({
+  },
+  methods: {
+    store () {
+      this.$axios
+        .post(`/transaction_types`, this.transactionType)
+        .then(res => {
+          this.hideModal()
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `${this.transactionType.name} created successfully`
+          })
+          this.request({
             pagination: this.serverPagination,
             filter: this.filter
+          })
+        })
+    },
+    hideModal () {
+      this.$store.dispatch('transactionTypes/newTransactionType', false)
+      this.$store.dispatch('transactionTypes/editTransactionType', false)
+    },
+    showModal () {
+      this.$store.dispatch('transactionTypes/editTransactionType', true)
+    },
+    update () {
+      this.$axios
+        .put(`/transaction_types/${this.transactionType.id}?id=${this.transactionType.id}`, this.transactionType)
+        .then(res => {
+          this.hideModal()
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `${this.transactionType.name} update successfully`
+          })
+          this.request({
+            pagination: this.serverPagination,
+            filter: this.filter
+          })
+        })
+        .catch()
+    },
+    request (props) {
+      this.loading = true
+      this.$axios.get(`transactions-transactable?modelType=${this.selectedEntity}&id=${this.selectedUserEntity}&filter=${this.filter}&page=${props.pagination.page}&perPage=${props.pagination.rowsPerPage}`)
+        .then(res => {
+          this.serverPagination = props.pagination
+          this.serverData = _.values(res.data.transactions.data)
+          this.serverPagination.rowsNumber = res.data.transactions.total
+          this.lastPage = res.data.transactions.last_page
+          this.loading = false
+          this.$store.dispatch('transactions/titleTransaction', res.data.entity)
+        })
+        .catch(() => {
+          this.serverData = []
+          this.loading = false
+        })
+    }
+
+  },
+
+  mounted () {
+    if (this.selectedEntity !== '' && this.selectedUserEntity !== '') {
+      this.request({
+        pagination: this.serverPagination,
+        filter: this.filter
+      })
+    }
+
+    this.$on('edit', function (obj) {
+      this.$router.push(`/dashboard/transactions/${obj.id}/edit`)
+    })
+  },
+  watch: {
+    'selectedUserEntity' (val) {
+      if (val !== '') {
+        this.request({
+          pagination: this.serverPagination,
+          filter: this.filter
         })
       }
-        
-        this.$on('edit', function (obj) {
-            this.$router.push(`/dashboard/transactions/${obj.id}/edit`)
-        })
-
     },
-    watch: {
-        'selectedUserEntity'(val) {
-            if (val !== '') {
-                this.request({
-                    pagination: this.serverPagination,
-                    filter: this.filter
-                })
-            }
-        },
-        'selectedEntity'(val) {
-
-            if (val !== '') {
-                this.$axios
-                    .get(
-                        `/transactions-entities?modelType=${val}`
-                    )
-                    .then(res => {
-                        this.$store.dispatch('transactions/userEntities', res.data.userEntities)
-                        this.$store.dispatch('transactions/selectedUserEntity', '')
-                    })
-            }
-
-        }
+    'selectedEntity' (val) {
+      if (val !== '') {
+        this.$axios
+          .get(
+            `/transactions-entities?modelType=${val}`
+          )
+          .then(res => {
+            this.$store.dispatch('transactions/userEntities', res.data.userEntities)
+            this.$store.dispatch('transactions/selectedUserEntity', '')
+          })
+      }
     }
+  }
 }
 </script>

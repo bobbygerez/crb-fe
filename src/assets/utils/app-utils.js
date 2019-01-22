@@ -31,7 +31,9 @@ export const debounceAsyncValidator = (validator, delay) => {
       clearTimeout(currentTimer)
       currentTimer = null
     }
-
+    console.log('validator', validator)
+    console.log('value', value)
+    console.log('this', this)
     return validator.call(this, value, debounce)
   }
 }

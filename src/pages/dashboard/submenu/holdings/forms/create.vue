@@ -295,7 +295,6 @@ import { newHoldingFormValidationRule } from '../model/Holding'
 import FormFieldValidator from 'components/form-validations/FormFieldValidator'
 import FormValidationSummary from 'components/form-validations/FormValidationSummary'
 import AsyncValidationMixin from 'components/mixins/async-validation-mixin'
-import { debounce } from 'quasar'
 
 export default {
   mixins: [LocationMixin, CommonsMixin, AsyncValidationMixin],
@@ -319,10 +318,6 @@ export default {
     }
   },
   methods: {
-    debouncedFunction: debounce(function (value) {
-      console.log('debounce', value)
-      this.$v.newHolding.name.$model = value
-    }, 500),
     locationSelected (loc, where) {
       if (loc) {
         this.newHolding.address.country_id = loc.region.country.id
@@ -360,6 +355,7 @@ export default {
         .then(res => {
           this.$q.notify({
             type: 'positive',
+            icon: 'mdi-check',
             message: res.data.message // `${this.newHolding.name} Successfully added.`
           })
           this.$router.replace('/dashboard/holdings')
