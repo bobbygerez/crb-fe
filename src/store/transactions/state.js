@@ -31,6 +31,9 @@ export default {
     total_amount: 0
   },
   transactionTypes: [],
+  transactionType: {
+    taccount_id: 0
+  },
   chartAccounts: [],
   userEntities: [],
   payee: {

@@ -19,3 +19,6 @@ export const selectedEntity = (state) => state.selectedEntity
 export const entities = (state) => state.entities
 
 export const payee = (state) => state.payee
+
+export const transactionType = (state) => state.transactionType
+

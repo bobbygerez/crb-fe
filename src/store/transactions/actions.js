@@ -64,6 +64,24 @@ export const payee = ({
   commit('payee', payload)
 }
 
+export const transactionTypeId = ({
+  commit
+}, payload) => {
+  commit('transactionTypeId', payload)
+}
+
+export const transactionType = ({
+  commit
+}, payload) => {
+  commit('transactionType', payload)
+}
+
+export const transactionTotalAmount = ({
+  commit
+}, payload) => {
+  commit('transactionTotalAmount', payload)
+}
+
 
 
 

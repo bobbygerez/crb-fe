@@ -42,6 +42,18 @@ export const payee = (state, payload) => {
   state.payee = payload
 }
 
+export const transactionTypeId = (state, payload) => {
+  state.transaction.transaction_type_id = payload
+}
+
+export const transactionType = (state, payload) => {
+  state.transactionType = payload
+}
+
+export const transactionTotalAmount = (state, payload) => {
+  state.transaction.total_amount = payload
+}
+
 
 
 

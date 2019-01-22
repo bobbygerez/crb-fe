@@ -21,9 +21,8 @@
 
         <template slot="body" slot-scope="props">
             <q-tr :props="props">
-
-                <q-td key="chartAccount">{{props.row.chart_account.name }}
-                    <q-popover touch-position v-if="actions">
+                <q-td key="transactionType">{{props.row.transaction_type.name }}
+                     <q-popover touch-position v-if="actions">
                         <q-list link style="min-width: 100px">
                             <template v-for="(action, idx) in actions">
                                 <q-item :key="idx" @click.native="$emit(action, props.row)" v-close-overlay>
@@ -33,7 +32,8 @@
                         </q-list>
                     </q-popover>
                 </q-td>
-                <q-td key="transactionType">{{props.row.transaction_type.name }}</q-td>
+
+                <q-td key="chartAccount">{{props.row.chart_account.name }}</q-td>
                 <q-td key="total_amount">{{props.row.total_amount |currency('₱ ') }}</q-td>
                 <q-td key="remarks">{{props.row.remarks }}</q-td>
                 <q-td key="created_at">{{props.row.created_at }}</q-td>
@@ -100,17 +100,18 @@ export default {
             name: '',
             actions: ['edit', 'delete'],
             selectedChartAccount: 0,
-            columns: [{
-                    name: 'chartAccount',
-                    label: 'Chart of Account',
-                    align: 'left',
-                    field: 'chartAccount'
-                },
+            columns: [
                 {
                     name: 'transactionType',
                     label: 'Transaction Type',
                     field: 'transactionType',
                     align: 'left'
+                },
+                {
+                    name: 'chartAccount',
+                    label: 'Chart of Account',
+                    align: 'left',
+                    field: 'chartAccount'
                 },
                 {
                     name: 'total_amount',

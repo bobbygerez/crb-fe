@@ -15,7 +15,7 @@
         </div>
         <div class="col-xs-3">
             <q-input v-model="payee.name" float-label="Pay to" disable />
-            <input-price label="Price" :value="transaction.total_amount" v-model="transaction.total_amount"></input-price>
+            <input-price label="Total Amount" :value="transaction.total_amount" v-model="transaction.total_amount"></input-price>
             <q-input v-model="transaction.remarks" type="textarea" float-label="Remarks" :max-height="100" rows="2" hide-underline />
         </div>
 
@@ -30,35 +30,29 @@
     </div>
     <div class="row" v-for="(gl, index) in generalLedgers" :key="index">
         <div class="col-xs-4">
-            
+
             <q-input v-model="gl.particulars" float-label="Particulars" />
         </div>
         <div class="col-xs-3">
             <q-select v-model="gl.chart_account_id" filter :options="chartAccounts" float-label="GL account" clearable />
         </div>
-        <div class="col-xs-2">
-            <input-price label="Debit Amount" :value="gl.debit_amount" v-model="gl.debit_amount"></input-price>
-        </div>
         <div class="col-xs-1">
-           <input-price label="Tax" :value="gl.tax" v-model="gl.tax"></input-price>
+            <input-price label="Tax" :value="gl.tax" v-model="gl.tax"></input-price>
         </div>
-        <div class="col-xs-2">
-            <q-btn
-                color="primary"
-                size="sm"
-                icon="close"
-                flat
-                round
-                class="float-right"
-                @click="removeGl(index)"
-            />
+        <div class="col-xs-2" v-if="transactionType.taccount_id === 2 || transactionType.taccount_id === 3">
+            <q-btn color="primary" size="sm" icon="close" flat round class="float-right" @click="removeGl(index)" v-if="transactionType.taccount_id === 2" />
+            <negative-price label="Debit Amount" :value="gl.debit_amount" v-model="gl.debit_amount"></negative-price>
+        </div>
+        <div class="col-xs-2" v-if="transactionType.taccount_id === 1 || transactionType.taccount_id === 3">
+            <q-btn color="primary" size="sm" icon="close" flat round class="float-right" @click="removeGl(index)" />
             <negative-price label="Credit Amount" :value="gl.credit_amount" v-model="gl.credit_amount"></negative-price>
         </div>
+
     </div>
     <br />
     <q-btn color="primary" label="Update" class="float-left" @click="update" />
-    <q-btn color="primary" flat class="float-right" @click="addGl" >
-         <q-icon name="more_vert"></q-icon> More
+    <q-btn color="primary" flat class="float-right" @click="addGl">
+        <q-icon name="more_vert"></q-icon> More
     </q-btn>
     <br />
     <br />
@@ -76,18 +70,22 @@ import {
 export default {
     data() {
         return {
+            debit_amount: 0,
+            credit_amount: 0,
+            tax: 0,
             generalLedgers: [{
-                particulars: '',
-                chart_account_id: '',
-                debit_amount: 0,
-                tax: 0,
-                credit_amount: 0
-            }],
+                    particulars: '',
+                    chart_account_id: '',
+                    debit_amount: 0,
+                    tax: 0,
+                    credit_amount: 0
+                }
+            ],
             selectedChartAccount: 0
         }
     },
     computed: {
-        ...mapState('transactions', ['company', 'transaction', 'selectedEntity', 'selectedUserEntity', 'payee']),
+        ...mapState('transactions', ['company', 'transaction', 'selectedEntity', 'selectedUserEntity', 'payee', 'transactionType']),
 
         transactionTypes() {
             return this.$store.getters['transactions/transactionTypes'].map(e => {
@@ -117,11 +115,46 @@ export default {
         }
     },
     methods: {
-        removeGl(index){
-            this.generalLedgers.splice(index, 1)
+        removeGl(index) {
+            if (this.generalLedgers[index].id != '') {
+                this.$q.notify({
+                    color: 'negative',
+                    icon: 'delete',
+                    message: `Delete ${this.generalLedgers[index].particulars}?`,
+                    actions: [
+
+                        {
+                            label: 'OK',
+                            handler: () => {
+                                var generalLedger = _.head(this.generalLedgers.splice(index, 1))
+                                this.$axios.delete(`/general_ledgers/${generalLedger.id}?id=${generalLedger.id}`)
+                                    .then((res) => {
+                                        this.$q.notify({
+                                            color: 'positive',
+                                            icon: 'check',
+                                            message: `${generalLedger.particulars} deleted successfully`
+                                        })
+
+                                    })
+                                    .catch((err) => {
+                                        this.$q.notify({
+                                            color: 'negative',
+                                            icon: 'warning',
+                                            message: `${err.response.data.message}`
+                                        })
+                                    })
+                            }
+                        }
+                    ]
+                })
+            } else {
+                this.generalLedgers.splice(index, 1)
+            }
+
         },
         addGl() {
             this.generalLedgers.push({
+                id: '',
                 particulars: '',
                 chart_account_id: '',
                 debit_amount: 0,
@@ -140,32 +173,111 @@ export default {
                 })
 
         },
-        update(){
-             this.$axios
-                .put(`/transactions/${this.transaction.id}?id=${this.transaction.id}`, {
+        update() {
+            if (this.transactionType.taccount_id === 3) {
+                if (this.debit_amount != this.credit_amount) {
+                    this.$q.notify({
+                        color: 'negative',
+                        icon: 'warning',
+                        message: `Debit and Credit amount should be equal`
+                    })
+                } else {
+                    this.updateTransaction()
+                }
+            } else {
+                this.updateTransaction()
+            }
 
+        },
+        updateTransaction() {
+            this.$axios
+                .put(`/transactions/${this.transaction.id}?id=${this.transaction.id}`, {
+                    transaction: {
+                        transactable_id: this.transaction.transactable_id,
+                        transactable_type: this.transaction.transactable_type,
+                        transaction_type_id: this.transaction.transaction_type_id,
+                        chart_account_id: this.transaction.chart_account_id,
+                        total_amount: this.transaction.total_amount,
+                        remarks: this.transaction.remarks
+                    },
+                    generalLedgers: this.generalLedgers
                 })
                 .then(res => {
-                this.hideModal()
-                this.$q.notify({
-                    color: 'positive',
-                    icon: 'check',
-                    message: `${this.transactionType.name} update successfully`
-                })
-                this.request({
-                    pagination: this.serverPagination,
-                    filter: this.filter
-                })
+                    this.$q.notify({
+                        color: 'positive',
+                        icon: 'check',
+                        message: `This transaction has been updated successfully`
+                    })
+                   
                 })
                 .catch()
+        },
+        totalAmount(generalLedgers) {
+            let debit_amount = _.sumBy(generalLedgers, function (i) {
+                return i.debit_amount;
+            })
+            this.debit_amount = debit_amount
+
+            let credit_amount = _.sumBy(generalLedgers, function (i) {
+                return i.credit_amount;
+            })
+            this.credit_amount = credit_amount
+            let tax = _.sumBy(generalLedgers, function (i) {
+                return i.tax;
+            })
+            this.tax = tax
+
+            console.log(this.transactionType.taccount_id)
+            //Disbursement Selected Normal balance is debit
+            //contra account credit
+            if (this.transactionType.taccount_id === 1) {
+                let total_amount = parseFloat(credit_amount) + parseFloat(tax);
+                this.$store.dispatch('transactions/transactionTotalAmount', total_amount)
+
+                //Reciept Selected Normal balance is credit
+                //contrac account debit
+            } else if (this.transactionType.taccount_id === 2) {
+                let total_amount = parseFloat(debit_amount) + parseFloat(tax);
+                this.$store.dispatch('transactions/transactionTotalAmount', total_amount)
+
+                //Debit or credit should be balance
+            } else if (this.transactionType.taccount_id === 3) {
+                let total_amount = parseFloat(debit_amount) - parseFloat(credit_amount);
+                if(debit_amount === credit_amount){
+                    this.$store.dispatch('transactions/transactionTotalAmount', parseFloat(debit_amount))
+                }else{
+                    this.$store.dispatch('transactions/transactionTotalAmount', 0)
+                }
+                
+                
+            }
+
         }
     },
-    created() {
+    mounted() {
         this.getTransactionTypes()
+
     },
     components: {
         inputPrice,
         negativePrice
+    },
+    watch: {
+        'transaction.transaction_type_id'(val) {
+            this.$axios.get(`transactions-get-transaction-type?id=${val}`)
+                .then(res => {
+                    this.$store.dispatch('transactions/transactionType', res.data.transactionType)
+                    this.totalAmount(this.generalLedgers)
+                })
+            this.$store.dispatch('transactions/transactionTypeId', val)
+
+        },
+        generalLedgers: {
+            handler: function (after, before) {
+                this.totalAmount(after)
+            },
+            deep: true,
+        }
     }
 }
 </script>
