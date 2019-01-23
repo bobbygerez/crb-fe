@@ -60,224 +60,215 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import _ from 'lodash'
 import inputPrice from 'components/inputs/price'
 import negativePrice from 'components/inputs/negativePrice'
 import {
-    mapState
+  mapState
 } from 'vuex'
 
 export default {
-    data() {
-        return {
-            debit_amount: 0,
-            credit_amount: 0,
-            tax: 0,
-            generalLedgers: [{
-                    particulars: '',
-                    chart_account_id: '',
-                    debit_amount: 0,
-                    tax: 0,
-                    credit_amount: 0
-                }
-            ],
-            selectedChartAccount: 0
-        }
-    },
-    computed: {
-        ...mapState('transactions', ['company', 'transaction', 'selectedEntity', 'selectedUserEntity', 'payee', 'transactionType']),
-
-        transactionTypes() {
-            return this.$store.getters['transactions/transactionTypes'].map(e => {
-                return {
-                    label: e.name,
-                    value: e.id
-                }
-            })
-        },
-        chartAccounts() {
-            let chartAccounts = _.values(this.$store.getters['transactions/chartAccounts'])
-
-            let res = []
-            const cb = (e) => {
-                res.push({
-                    value: e.id,
-                    label: `(${e.account_code})  ${e.name}`,
-                });
-                e.all_children && e.all_children.forEach(cb);
-            }
-            chartAccounts.forEach(cb);
-            return res
-
-        },
-        createdBy() {
-            return `${this.transaction.created_by.firstname} ${this.transaction.created_by.lastname}`
-        }
-    },
-    methods: {
-        removeGl(index) {
-            if (this.generalLedgers[index].id != '') {
-                this.$q.notify({
-                    color: 'negative',
-                    icon: 'delete',
-                    message: `Delete ${this.generalLedgers[index].particulars}?`,
-                    actions: [
-
-                        {
-                            label: 'OK',
-                            handler: () => {
-                                var generalLedger = _.head(this.generalLedgers.splice(index, 1))
-                                this.$axios.delete(`/general_ledgers/${generalLedger.id}?id=${generalLedger.id}`)
-                                    .then((res) => {
-                                        this.$q.notify({
-                                            color: 'positive',
-                                            icon: 'check',
-                                            message: `${generalLedger.particulars} deleted successfully`
-                                        })
-
-                                    })
-                                    .catch((err) => {
-                                        this.$q.notify({
-                                            color: 'negative',
-                                            icon: 'warning',
-                                            message: `${err.response.data.message}`
-                                        })
-                                    })
-                            }
-                        }
-                    ]
-                })
-            } else {
-                this.generalLedgers.splice(index, 1)
-            }
-
-        },
-        addGl() {
-            this.generalLedgers.push({
-                id: '',
-                particulars: '',
-                chart_account_id: '',
-                debit_amount: 0,
-                tax: 0,
-                credit_amount: 0
-            })
-        },
-        getTransactionTypes() {
-            this.$axios.get(`transactions/${this.$route.params.id}/edit?id=${this.$route.params.id}&modelType=${this.selectedEntity}&modelId=${this.selectedUserEntity}`)
-                .then(res => {
-                    this.$store.dispatch('transactions/transactionTypes', res.data.transactionTypes)
-                    this.$store.dispatch('transactions/transaction', res.data.transaction)
-                    this.generalLedgers = res.data.transaction.general_ledgers
-                    this.$store.dispatch('transactions/chartAccounts', res.data.chartAccounts)
-                    this.$store.dispatch('transactions/payee', res.data.payee)
-                })
-
-        },
-        update() {
-            if (this.transactionType.taccount_id === 3) {
-                if (this.debit_amount != this.credit_amount) {
-                    this.$q.notify({
-                        color: 'negative',
-                        icon: 'warning',
-                        message: `Debit and Credit amount should be equal`
-                    })
-                } else {
-                    this.updateTransaction()
-                }
-            } else {
-                this.updateTransaction()
-            }
-
-        },
-        updateTransaction() {
-            this.$axios
-                .put(`/transactions/${this.transaction.id}?id=${this.transaction.id}`, {
-                    transaction: {
-                        transactable_id: this.transaction.transactable_id,
-                        transactable_type: this.transaction.transactable_type,
-                        transaction_type_id: this.transaction.transaction_type_id,
-                        chart_account_id: this.transaction.chart_account_id,
-                        total_amount: this.transaction.total_amount,
-                        remarks: this.transaction.remarks
-                    },
-                    generalLedgers: this.generalLedgers
-                })
-                .then(res => {
-                    this.$q.notify({
-                        color: 'positive',
-                        icon: 'check',
-                        message: `This transaction has been updated successfully`
-                    })
-                   
-                })
-                .catch()
-        },
-        totalAmount(generalLedgers) {
-            let debit_amount = _.sumBy(generalLedgers, function (i) {
-                return i.debit_amount;
-            })
-            this.debit_amount = debit_amount
-
-            let credit_amount = _.sumBy(generalLedgers, function (i) {
-                return i.credit_amount;
-            })
-            this.credit_amount = credit_amount
-            let tax = _.sumBy(generalLedgers, function (i) {
-                return i.tax;
-            })
-            this.tax = tax
-
-            console.log(this.transactionType.taccount_id)
-            //Disbursement Selected Normal balance is debit
-            //contra account credit
-            if (this.transactionType.taccount_id === 1) {
-                let total_amount = parseFloat(credit_amount) + parseFloat(tax);
-                this.$store.dispatch('transactions/transactionTotalAmount', total_amount)
-
-                //Reciept Selected Normal balance is credit
-                //contrac account debit
-            } else if (this.transactionType.taccount_id === 2) {
-                let total_amount = parseFloat(debit_amount) + parseFloat(tax);
-                this.$store.dispatch('transactions/transactionTotalAmount', total_amount)
-
-                //Debit or credit should be balance
-            } else if (this.transactionType.taccount_id === 3) {
-                let total_amount = parseFloat(debit_amount) - parseFloat(credit_amount);
-                if(debit_amount === credit_amount){
-                    this.$store.dispatch('transactions/transactionTotalAmount', parseFloat(debit_amount))
-                }else{
-                    this.$store.dispatch('transactions/transactionTotalAmount', 0)
-                }
-                
-                
-            }
-
-        }
-    },
-    mounted() {
-        this.getTransactionTypes()
-
-    },
-    components: {
-        inputPrice,
-        negativePrice
-    },
-    watch: {
-        'transaction.transaction_type_id'(val) {
-            this.$axios.get(`transactions-get-transaction-type?id=${val}`)
-                .then(res => {
-                    this.$store.dispatch('transactions/transactionType', res.data.transactionType)
-                    this.totalAmount(this.generalLedgers)
-                })
-            this.$store.dispatch('transactions/transactionTypeId', val)
-
-        },
-        generalLedgers: {
-            handler: function (after, before) {
-                this.totalAmount(after)
-            },
-            deep: true,
-        }
+  data () {
+    return {
+      debit_amount: 0,
+      credit_amount: 0,
+      tax: 0,
+      generalLedgers: [{
+        particulars: '',
+        chart_account_id: '',
+        debit_amount: 0,
+        tax: 0,
+        credit_amount: 0
+      }
+      ],
+      selectedChartAccount: 0
     }
+  },
+  computed: {
+    ...mapState('transactions', ['company', 'transaction', 'selectedEntity', 'selectedUserEntity', 'payee', 'transactionType']),
+
+    transactionTypes () {
+      return this.$store.getters['transactions/transactionTypes'].map(e => {
+        return {
+          label: e.name,
+          value: e.id
+        }
+      })
+    },
+    chartAccounts () {
+      let chartAccounts = _.values(this.$store.getters['transactions/chartAccounts'])
+
+      let res = []
+      const cb = (e) => {
+        res.push({
+          value: e.id,
+          label: `(${e.account_code})  ${e.name}`
+        })
+        e.all_children && e.all_children.forEach(cb)
+      }
+      chartAccounts.forEach(cb)
+      return res
+    },
+    createdBy () {
+      return `${this.transaction.created_by.firstname} ${this.transaction.created_by.lastname}`
+    }
+  },
+  methods: {
+    removeGl (index) {
+      if (this.generalLedgers[index].id !== '') {
+        this.$q.notify({
+          color: 'negative',
+          icon: 'delete',
+          message: `Delete ${this.generalLedgers[index].particulars}?`,
+          actions: [
+
+            {
+              label: 'OK',
+              handler: () => {
+                var generalLedger = _.head(this.generalLedgers.splice(index, 1))
+                this.$axios.delete(`/general_ledgers/${generalLedger.id}?id=${generalLedger.id}`)
+                  .then((res) => {
+                    this.$q.notify({
+                      color: 'positive',
+                      icon: 'check',
+                      message: `${generalLedger.particulars} deleted successfully`
+                    })
+                  })
+                  .catch((err) => {
+                    this.$q.notify({
+                      color: 'negative',
+                      icon: 'warning',
+                      message: `${err.response.data.message}`
+                    })
+                  })
+              }
+            }
+          ]
+        })
+      } else {
+        this.generalLedgers.splice(index, 1)
+      }
+    },
+    addGl () {
+      this.generalLedgers.push({
+        id: '',
+        particulars: '',
+        chart_account_id: '',
+        debit_amount: 0,
+        tax: 0,
+        credit_amount: 0
+      })
+    },
+    getTransactionTypes () {
+      this.$axios.get(`transactions/${this.$route.params.id}/edit?id=${this.$route.params.id}&modelType=${this.selectedEntity}&modelId=${this.selectedUserEntity}`)
+        .then(res => {
+          this.$store.dispatch('transactions/transactionTypes', res.data.transactionTypes)
+          this.$store.dispatch('transactions/transaction', res.data.transaction)
+          this.generalLedgers = res.data.transaction.general_ledgers
+          this.$store.dispatch('transactions/chartAccounts', res.data.chartAccounts)
+          this.$store.dispatch('transactions/payee', res.data.payee)
+        })
+    },
+    update () {
+      if (this.transactionType.taccount_id === 3) {
+        if (this.debit_amount !== this.credit_amount) {
+          this.$q.notify({
+            color: 'negative',
+            icon: 'warning',
+            message: `Debit and Credit amount should be equal`
+          })
+        } else {
+          this.updateTransaction()
+        }
+      } else {
+        this.updateTransaction()
+      }
+    },
+    updateTransaction () {
+      this.$axios
+        .put(`/transactions/${this.transaction.id}?id=${this.transaction.id}`, {
+          transaction: {
+            transactable_id: this.transaction.transactable_id,
+            transactable_type: this.transaction.transactable_type,
+            transaction_type_id: this.transaction.transaction_type_id,
+            chart_account_id: this.transaction.chart_account_id,
+            total_amount: this.transaction.total_amount,
+            remarks: this.transaction.remarks
+          },
+          generalLedgers: this.generalLedgers
+        })
+        .then(res => {
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `This transaction has been updated successfully`
+          })
+        })
+        .catch()
+    },
+    /* eslint-disable */
+    totalAmount (generalLedgers) {
+      let debit_amount = _.sumBy(generalLedgers, function (i) {
+        return i.debit_amount
+      })
+      this.debit_amount = debit_amount
+
+      let credit_amount = _.sumBy(generalLedgers, function (i) {
+        return i.credit_amount
+      })
+      this.credit_amount = credit_amount
+      let tax = _.sumBy(generalLedgers, function (i) {
+        return i.tax
+      })
+      this.tax = tax
+
+      console.log(this.transactionType.taccount_id)
+      // Disbursement Selected Normal balance is debit
+      // contra account credit
+      if (this.transactionType.taccount_id === 1) {
+        let total_amount = parseFloat(credit_amount) + parseFloat(tax)
+        this.$store.dispatch('transactions/transactionTotalAmount', total_amount)
+
+        // Reciept Selected Normal balance is credit
+        // contrac account debit
+      } else if (this.transactionType.taccount_id === 2) {
+        let total_amount = parseFloat(debit_amount) + parseFloat(tax)
+        this.$store.dispatch('transactions/transactionTotalAmount', total_amount)
+
+        // Debit or credit should be balance
+      } else if (this.transactionType.taccount_id === 3) {
+        let total_amount = parseFloat(debit_amount) - parseFloat(credit_amount)
+        if (debit_amount === credit_amount) {
+          this.$store.dispatch('transactions/transactionTotalAmount', parseFloat(debit_amount))
+        } else {
+          this.$store.dispatch('transactions/transactionTotalAmount', 0)
+        }
+      }
+    }
+    /* eslint-enable */
+  },
+  mounted () {
+    this.getTransactionTypes()
+  },
+  components: {
+    inputPrice,
+    negativePrice
+  },
+  watch: {
+    'transaction.transaction_type_id' (val) {
+      this.$axios.get(`transactions-get-transaction-type?id=${val}`)
+        .then(res => {
+          this.$store.dispatch('transactions/transactionType', res.data.transactionType)
+          this.totalAmount(this.generalLedgers)
+        })
+      this.$store.dispatch('transactions/transactionTypeId', val)
+    },
+    generalLedgers: {
+      handler: function (after, before) {
+        this.totalAmount(after)
+      },
+      deep: true
+    }
+  }
 }
 </script>

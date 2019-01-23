@@ -44,17 +44,15 @@ export default {
         return `${fieldname} ${message.email}`
       }
 
-      console.log('validating =>', val)
+      // console.log('validating =>', val)
       if (this.asyncErrorMessage !== null && this.asyncErrorMessage !== '' && !val.$pending) {
         return this.asyncErrorMessage
       }
       // if validator not covered on what described above
       // just extract all the message
-      console.log('validation ===', Object.keys(message))
-      console.log('validation ===', message)
       // get validator params
       if (Object.keys(message).length) {
-        return `${fieldname} ${Object.keys(message).map(v => val[v] ? message[v] : '').join(', ')}`
+        return `${fieldname} ${Object.keys(message).map(v => val[v] ? message[v] : '').join(' ')}`
       }
       // else return an anoymous error message
       return `${fieldname} has invalid value.`

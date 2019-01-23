@@ -79,19 +79,9 @@ const asyncValidator = (param, api) =>
         param.id = comp[data].id
       }
       return debounce()
-        .then(() => {
-          // console.log('param', param)
-          // console.log('ref', parentVm)
-          // console.log('this', b)
-          // console.log('ref =>', helpers.ref(param, this, parentVm))
-          return api(param,value)
-        })
-        .then(result => {
-          console.log('debounce res=>', result)
-          return result.data.success === 1
-        })
+        .then(() => api(param, value))
+        .then(result => result.data.success === 1)
         .catch(error => {
-          console.log('error =>', error.message)
           if (error.response) {
             console.log('error =>', error.response.data.message)
           }
@@ -100,8 +90,12 @@ const asyncValidator = (param, api) =>
     }, 500)
   )
 
-const createApi = (param, value) => axios.get(`/async-holding-validation-create/${param.field}/${value}`)
-const updateApi = (param, value) => axios.get(`/async-holding-validation-update/${param.field}/${value}/${param.id}`)
+const asyncValidationApi = (param, value) => axios.get(`/async-holding-form-validation`, {
+  params: {
+    ...param,
+    value
+  }
+})
 
 // TODO: refine validation rules
 const anon = () => true
@@ -166,15 +160,19 @@ const commons = {
   },
   //id = null,
   // images = [SomeImage()],
-  name: {
-    required,
-    _$Holding_name: anon,
-    asyncValidate: asyncValidator({ field: 'name' }, createApi)
-  }
+
 }
 export const newHoldingFormValidationRule = () => {
   return {
-    ...commons
+    ...commons,
+    name: {
+      required,
+      _$Holding_name: anon,
+      asyncValidate: asyncValidator({
+        field: 'name',
+        type: 'create'
+      }, asyncValidationApi)
+    }
   }
 }
 
@@ -189,7 +187,11 @@ export const editHoldingFormValidationRule = () => {
     name: {
       required,
       _$Holding_name: anon,
-      asyncValidate: asyncValidator({ field: 'name', id: null }, updateApi)
+      asyncValidate: asyncValidator({
+        field: 'name',
+        id: null,
+        type: 'update'
+      }, asyncValidationApi)
     }
   }
 }
