@@ -71,11 +71,19 @@ const asyncValidator = (param, api) =>
   helpers.withParams({
       type: 'asyncValidator'
     },
-    debounceAsyncValidator((value, debounce) => {
+    debounceAsyncValidator(function (value, debounce) {
       if (value === '') return true
+      const comp = this
+      if (param.hasOwnProperty('id')) {
+        const data = Object.keys(comp.$v.$params).reduce(v => comp.$v[v])
+        param.id = comp[data].id
+      }
       return debounce()
         .then(() => {
-          console.log('param', param)
+          // console.log('param', param)
+          // console.log('ref', parentVm)
+          // console.log('this', b)
+          // console.log('ref =>', helpers.ref(param, this, parentVm))
           return api(param,value)
         })
         .then(result => {
@@ -164,7 +172,7 @@ const commons = {
     asyncValidate: asyncValidator({ field: 'name' }, createApi)
   }
 }
-export const newHoldingFormValidationRule = (asyncValidation) => {
+export const newHoldingFormValidationRule = () => {
   return {
     ...commons
   }
@@ -178,5 +186,10 @@ export const editHoldingFormValidationRule = () => {
       required,
       _$Holding_id: anon
     },
+    name: {
+      required,
+      _$Holding_name: anon,
+      asyncValidate: asyncValidator({ field: 'name', id: null }, updateApi)
+    }
   }
 }

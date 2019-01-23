@@ -252,6 +252,7 @@
                 @click="update(editHolding.id)"
                 label="Update"
                 class="q-ml-sm"
+                :loading="loading"
               />
             </div>
           </div>
@@ -282,9 +283,10 @@ import CityTable from 'components/location-provider/city-view'
 import LocationMixin from 'components/mixins/location-mixin'
 import CommonsMixin from 'components/mixins/commons-mixin'
 import { editHoldingFormValidationRule } from '../model/Holding'
+import AsyncValidationMixin from 'components/mixins/async-validation-mixin'
 
 export default {
-  mixins: [LocationMixin, CommonsMixin],
+  mixins: [LocationMixin, CommonsMixin, AsyncValidationMixin],
   components: {
     BarangayTable,
     CityTable,
@@ -293,17 +295,14 @@ export default {
   },
   data () {
     return {
-      addressType: 'home'
+      addressType: 'home',
+      loading: false
     }
   },
   computed: {
-    ...mapHoldingFields(['editHolding', 'editHoldingView'])
+    ...mapHoldingFields(['editHolding', 'editHoldingView', 'serverResponseMessage'])
   },
   validations () {
-    // editHolding: {
-    //   name: { required }
-    // }
-    // some condition or whatever
     return {
       editHolding: editHoldingFormValidationRule()
     }
@@ -321,10 +320,15 @@ export default {
     },
     update (id) {
       this.$v.editHolding.$touch()
-      if (this.$v.editHolding.$error) {
-        console.log('validations => ', this.$v)
+      if (this.$v.$invalid) {
+        console.log('validations => invalid', this.$v.editHolding)
         return
       }
+      if (this.$v.editHolding.$error) {
+        console.log('validations => error', this.$v.editHolding)
+        return
+      }
+      console.log('validations => submitting', this.$v.editHolding)
       this.$axios
         .put(`/holdings/${this.editHolding.id}`, {
           id: this.editHolding.id,
@@ -347,11 +351,19 @@ export default {
           this.$q.notify({
             color: 'positive',
             icon: 'check',
-            message: `${this.editHolding.name} update successfully`
+            // message: `${this.editHolding.name} update successfully`
+            message: res.data.message // `${this.newHolding.name} Successfully added.`
           })
           this.$router.replace('/dashboard/holdings')
         })
-        .catch()
+        .catch(err => {
+          this.$q.notify({
+            type: 'negative',
+            message: err.response
+              ? Object.keys(err.response.data.message).map(v => err.response.data.message[v]).join(' ')
+              : err.message
+          })
+        })
     }
   },
   mounted () {

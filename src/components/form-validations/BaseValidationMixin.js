@@ -54,7 +54,7 @@ export default {
       console.log('validation ===', message)
       // get validator params
       if (Object.keys(message).length) {
-        return Object.keys(message).map(v => val[v] ? message[v] : '').join(' ')
+        return `${fieldname} ${Object.keys(message).map(v => val[v] ? message[v] : '').join(', ')}`
       }
       // else return an anoymous error message
       return `${fieldname} has invalid value.`
