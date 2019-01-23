@@ -82,6 +82,19 @@
             <q-btn color="primary" @click="update()" label="Update" class="q-ml-sm" />
         </div>
     </q-modal>
+    <q-page-sticky
+      position="bottom"
+        :offset="$q.theme === 'mat' ? [16, 16] : [16, 16]"
+        v-bind="$attrs"
+    >
+      <q-btn
+        rounded
+        color="primary"
+        @click="newTransaction()"
+      >
+        <q-icon name="add"></q-icon>New Transaction
+      </q-btn>
+    </q-page-sticky>
 </div>
 </template>
 
@@ -146,7 +159,7 @@ export default {
     },
     computed: {
         ...mapState('transactionTypes', ['editTransactionType', 'transactionType', 'newTransactionType']),
-        ...mapState('transactions', ['entity', 'company', 'transaction', 'titleTransaction', 'entities']),
+        ...mapState('transactions', ['entity', 'company', 'transaction', 'titleTransaction', 'entities', 'selectedEntity', 'selectedUserEntity']),
         userEntities() {
             return this.$store.getters['transactions/userEntities'].map(e => {
                 return {
@@ -174,6 +187,18 @@ export default {
 
     },
     methods: {
+        newTransaction(){
+            if (this.selectedEntity !== '' && this.selectedUserEntity !== ''){
+                this.$router.push(`/dashboard/transactions/create`)
+            }else{
+                this.$q.notify({
+                        color: 'negative',
+                        icon: 'warning',
+                        message: `Please select entity type and entity name`
+                    })
+            }
+            
+        },
         store() {
 
             this.$axios

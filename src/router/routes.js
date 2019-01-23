@@ -83,6 +83,18 @@ const routes = [{
     { path: '', component: () => import('pages/dashboard/submenu/transactions/edit.vue') },
     { path: '/' }
   ]
+}, {
+  path: '/dashboard/transactions/create',
+  meta: {
+    title: name.endsWith('s') ? name : name.concat('s'),
+    needAuth: true,
+    section: 'index'
+  },
+  component: () => import('layouts/MainLayout.vue'),
+  children: [
+    { path: '', component: () => import('pages/dashboard/submenu/transactions/create.vue') },
+    { path: '/' }
+  ]
 }]
 
 const dashBoardModules = (appModules) => {

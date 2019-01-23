@@ -2,7 +2,7 @@
 <div class="q-pa-sm">
     <div class="row">
         <div class="col-xs-12">
-            <div class="q-title q-mb-md">Edit Transaction </div>
+            <div class="q-title q-mb-md">New Transaction </div>
         </div>
         <div class="col-xs-3">
             <q-select v-model="transaction.transaction_type_id" :options="transactionTypes" float-label="Transaction Type" clearable />
@@ -62,10 +62,9 @@
             <q-btn color="primary" size="sm" icon="close" flat round class="float-right" @click="removeGl(index)" />
             <negative-price label="Credit Amount" :value="gl.credit_amount" v-model="gl.credit_amount"></negative-price>
         </div>
-
     </div>
     <br />
-    <q-btn color="primary" label="Update" class="float-left" @click="update" />
+    <q-btn color="primary" label="Submit" class="float-left" @click="store" />
     <q-btn color="primary" flat class="float-right" @click="addGl">
         <q-icon name="more_vert"></q-icon> More
     </q-btn>
@@ -92,15 +91,7 @@ export default {
             debit_amount: 0,
             credit_amount: 0,
             tax: 0,
-            generalLedgers: [{
-                    product_id: '',
-                    qty: '',
-                    particulars: '',
-                    chart_account_id: '',
-                    debit_amount: 0,
-                    tax: 0,
-                    credit_amount: 0
-                }
+            generalLedgers: [
             ],
             selectedChartAccount: 0
         }
@@ -175,6 +166,8 @@ export default {
         },
         addGl() {
             this.generalLedgers.push({
+                ledgerable_id: this.selectedUserEntity,
+                ledgerable_type: this.selectedEntity,
                 id: '',
                 particulars: '',
                 chart_account_id: '',
@@ -184,17 +177,18 @@ export default {
             })
         },
         getTransactionTypes() {
-            this.$axios.get(`transactions/${this.$route.params.id}/edit?id=${this.$route.params.id}&modelType=${this.selectedEntity}&modelId=${this.selectedUserEntity}`)
+            this.$axios.get(`transactions/create?modelType=${this.selectedEntity}&modelId=${this.selectedUserEntity}`)
                 .then(res => {
                     this.$store.dispatch('transactions/transactionTypes', res.data.transactionTypes)
-                    this.$store.dispatch('transactions/transaction', res.data.transaction)
-                    this.generalLedgers = res.data.transaction.general_ledgers
                     this.$store.dispatch('transactions/chartAccounts', res.data.chartAccounts)
-                    this.$store.dispatch('transactions/payee', res.data.payee)
+                    this.$store.dispatch('transactions/createdBy', res.data.createdBy)
+                    // this.$store.dispatch('transactions/transaction', res.data.transaction)
+                    // this.generalLedgers = res.data.transaction.general_ledgers
+                    // this.$store.dispatch('transactions/payee', res.data.payee)
                 })
 
         },
-        update() {
+        store() {
             if (this.transactionType.taccount_id === 3) {
                 if (this.debit_amount != this.credit_amount) {
                     this.$q.notify({
@@ -203,19 +197,19 @@ export default {
                         message: `Debit and Credit amount must be equal.`
                     })
                 } else {
-                    this.updateTransaction()
+                    this.createTransaction()
                 }
             } else {
-                this.updateTransaction()
+                this.createTransaction()
             }
 
         },
-        updateTransaction() {
+        createTransaction() {
             this.$axios
-                .put(`/transactions/${this.transaction.id}?id=${this.transaction.id}`, {
+                .post(`/transactions`, {
                     transaction: {
-                        transactable_id: this.transaction.transactable_id,
-                        transactable_type: this.transaction.transactable_type,
+                        transactable_id: this.selectedUserEntity,
+                        transactable_type: this.selectedEntity,
                         transaction_type_id: this.transaction.transaction_type_id,
                         chart_account_id: this.transaction.chart_account_id,
                         total_amount: this.transaction.total_amount,
@@ -282,7 +276,7 @@ export default {
     },
     mounted() {
         this.getTransactionTypes()
-       
+        this.addGl()
 
     },
     components: {
@@ -290,6 +284,9 @@ export default {
         negativePrice
     },
     watch: {
+        'transaction.chart_account_id'(val){
+            this.$store.dispatch('transactions/chartAccountId', val)
+        },
         'transaction.transaction_type_id'(val) {
             this.$axios.get(`transactions-get-transaction-type?id=${val}`)
                 .then(res => {
