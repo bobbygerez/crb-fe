@@ -82,10 +82,16 @@
             <q-btn color="primary" @click="update()" label="Update" class="q-ml-sm" />
         </div>
     </q-modal>
+    <rounded-action-fab
+        @fab-click="addTransaction()"
+        label="New Transaction"
+        :show="true"
+      />
 </div>
 </template>
 
 <script>
+import RoundedActionFab from 'components/actions-generic/rounded-action-fab'
 import slug from 'components/mixins/slug'
 import _ from 'lodash';
 import {
@@ -93,6 +99,9 @@ import {
 } from 'vuex'
 export default {
     mixins: [slug],
+    components: {
+      RoundedActionFab
+    },
     data() {
         return {
             companyId: '',
@@ -172,6 +181,17 @@ export default {
         }
     },
     methods: {
+        addTransaction(){
+          if(this.selectedEntity != '' && this.selectedUserEntity != ''){
+            this.$router.push(`/dashboard/transactions/add`)
+          }else{
+             this.$q.notify({
+                        color: 'negative',
+                        icon: 'warning',
+                        message: `Please select entity type and entity name.`
+                    })
+          }
+        },
         store() {
             this.$axios
                 .post(`/transaction_types`, this.transactionType)

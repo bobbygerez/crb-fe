@@ -84,7 +84,7 @@ const routes = [{
     { path: '/' }
   ]
 }, {
-  path: '/dashboard/transactions/create',
+  path: '/dashboard/transactions/add',
   meta: {
     title: name.endsWith('s') ? name : name.concat('s'),
     needAuth: true,
@@ -92,7 +92,7 @@ const routes = [{
   },
   component: () => import('layouts/MainLayout.vue'),
   children: [
-    { path: '', component: () => import('pages/dashboard/submenu/transactions/create.vue') },
+    { path: '', component: () => import('pages/dashboard/submenu/transactions/add.vue') },
     { path: '/' }
   ]
 }]

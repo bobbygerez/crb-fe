@@ -67,6 +67,9 @@ module.exports = function (ctx) {
       // all: true,
       // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
       components: [
+        'QTab',
+        'QTabs',
+        'QTabPane',
         'QBtnGroup',
         'QModal',
         'QPopupEdit',

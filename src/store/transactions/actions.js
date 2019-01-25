@@ -94,11 +94,37 @@ export const transactionCheckNumber = ({
   commit('transactionCheckNumber', payload)
 }
 
+export const transactionRemarks = ({
+  commit
+}, payload) => {
+  commit('transactionRemarks', payload)
+}
+
 export const createdBy = ({
   commit
 }, payload) => {
   commit('createdBy', payload)
 }
+
+export const vendorableNames = ({
+  commit
+}, payload) => {
+  commit('vendorableNames', payload)
+}
+
+export const purchases = ({
+  commit
+}, payload) => {
+  commit('purchases', payload)
+}
+
+export const entityItems = ({
+  commit
+}, payload) => {
+  commit('entityItems', payload)
+}
+
+
 
 
 

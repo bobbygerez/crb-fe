@@ -302,6 +302,9 @@ export default {
         'transaction.checknumber'(val) {
             this.$store.dispatch('transactions/transactionCheckNumber', val)
         },
+        'transaction.remarks'(val){
+            this.$store.dispatch('transactions/transactionRemarks', val)
+        },
         generalLedgers: {
             handler: function (after, before) {
                 this.totalAmount(after)
