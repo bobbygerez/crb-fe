@@ -73,6 +73,7 @@ export default {
                     if ((i == 5 && value != 0) || (i == 4 && value != 0 && n_array[i + 1] == 0)) {
                         words_string += "Thousand ";
                     }
+
                     if (i == 6 && value != 0 && (n_array[i + 1] != 0 && n_array[i + 2] != 0)) {
                         words_string += "Hundred and ";
                     } else if (i == 6 && value != 0) {

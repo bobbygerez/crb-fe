@@ -49,22 +49,23 @@
         <div class="col-xs-2">
             <q-input float-label="Item" :value="item.name" disable/>
         </div>
-        <div class="col-xs-1" >
-            <q-input float-label="Qty" :value="item.pivot.qty" disable/>
-        </div>
+        
         <div class="col-xs-3">
             <q-input :value="item.desc" float-label="Description"  disable/>
         </div>
         <div class="col-xs-3">
             <q-input :value="item.chart_account.name" float-label="Chart Account" disable/>
         </div>
-        
+        <div class="col-xs-1" >
+            <q-input float-label="Qty" :value="item.pivot.qty" disable/>
+        </div>
+        <div class="col-xs-1" >
+            <negative-price label="Price" :value="item.pivot_price" v-model="item.pivot_price" :disabled="true"></negative-price>
+        </div>
         <div class="col-xs-2" >
-            <negative-price label="Debit Amount" :value="item.pivot_price" v-model="item.pivot_price" :disabled="true"></negative-price>
+            <negative-price label="Debit Amount" :value="item.total_amount" v-model="item.total_amount" :disabled="true"></negative-price>
         </div>
-        <div class="col-xs-1">
-            <negative-price label="Tax" :value="waiting" v-model="waiting" :disabled="true"></negative-price>
-        </div>
+        
     </div>
     <span v-if="selectedPurchase == null">
      <div class="row" v-for="(gl, index) in generalLedgers" :key="index" >
@@ -135,6 +136,8 @@ export default {
     },
     computed: {
         ...mapState('transactions', ['company', 'transaction', 'selectedEntity', 'selectedUserEntity', 'payee', 'transactionType', 'entities']),
+
+        
         entityItems() {
             return this.$store.getters['transactions/entityItems'].map(e => {
                 return {
@@ -273,7 +276,27 @@ export default {
 
         },
         createTransaction() {
-            this.$axios
+
+            if(this.selectedPurchase != null){
+
+                this.generalLedgers = this.purchasesItems.items.map( i => {
+                     return {
+                        ledgerable_id: this.selectedUserEntity,
+                        ledgerable_type: this.selectedEntity,
+                        id: '',
+                        particulars: i.desc,
+                        chart_account_id: i.chart_account_id,
+                        debit_amount: i.total_amount,
+                        tax: 0,
+                        
+                    }
+                })
+
+
+                
+
+            }
+                this.$axios
                 .post(`/transactions`, {
                     transaction: {
                         transactable_id: this.selectedUserEntity,
@@ -284,7 +307,11 @@ export default {
                         checknumber: this.transaction.checknumber,
                         remarks: this.transaction.remarks
                     },
-                    generalLedgers: this.generalLedgers
+                    generalLedgers: this.generalLedgers,
+                    payee: {
+                        vendorableType: this.selectedVendorableType,
+                        vendorableName: this.selectedVendorableName
+                    }
                 })
                 .then(res => {
                     this.$q.notify({
@@ -300,6 +327,7 @@ export default {
                     
                 })
                 .catch()
+            
         },
         totalAmount(generalLedgers) {
             let debit_amount = _.sumBy(generalLedgers, function (i) {
@@ -405,14 +433,27 @@ export default {
             this.$axios.get(`transactions-get-purchases?modelType=${this.selectedVendorableType}&modelId=${val}`)
                         .then(res => {
                             this.$store.dispatch('transactions/purchases', res.data.purchases)
-                            this.$store.dispatch('transactions/entityItems', res.data.entityItems)
+                            // this.$store.dispatch('transactions/entityItems', res.data.entityItems)
                         })
         },
         'selectedPurchase'(val){
           if(val !== null){
-              this.purchasesItems = _.find(this.purchases, function (x)  { 
-                return x.value === val
-             }) 
+              this.purchasesItems = _.head(
+                   _.filter(this.purchases, function (x)  { 
+                        return x.value === val
+                    })
+              )
+
+             let total_amount = _.sumBy(this.purchasesItems.items, function (i) {
+
+                return i.pivot_price * i.pivot.qty;
+            })
+
+            this.$store.dispatch('transactions/transactionTotalAmount', total_amount)
+            this.numToWords = this.withDecimal(total_amount)
+            
+           
+
           }else{
               this.purchasesItems = []
           }
