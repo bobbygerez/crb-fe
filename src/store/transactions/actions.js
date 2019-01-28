@@ -76,11 +76,55 @@ export const transactionType = ({
   commit('transactionType', payload)
 }
 
+export const chartAccountId = ({
+  commit
+}, payload) => {
+  commit('chartAccountId', payload)
+}
+
 export const transactionTotalAmount = ({
   commit
 }, payload) => {
   commit('transactionTotalAmount', payload)
 }
+
+export const transactionCheckNumber = ({
+  commit
+}, payload) => {
+  commit('transactionCheckNumber', payload)
+}
+
+export const transactionRemarks = ({
+  commit
+}, payload) => {
+  commit('transactionRemarks', payload)
+}
+
+export const createdBy = ({
+  commit
+}, payload) => {
+  commit('createdBy', payload)
+}
+
+export const vendorableNames = ({
+  commit
+}, payload) => {
+  commit('vendorableNames', payload)
+}
+
+export const purchases = ({
+  commit
+}, payload) => {
+  commit('purchases', payload)
+}
+
+export const entityItems = ({
+  commit
+}, payload) => {
+  commit('entityItems', payload)
+}
+
+
 
 
 

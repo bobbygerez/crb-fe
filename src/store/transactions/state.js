@@ -28,7 +28,12 @@ export default {
   transaction: {
     transaction_type_id: '',
     chart_account_id: 0,
-    total_amount: 0
+    total_amount: 0,
+    remarks: '',
+    created_by: {
+      firstname: '',
+      lastname: ''
+    }
   },
   transactionTypes: [],
   transactionType: {
@@ -38,5 +43,8 @@ export default {
   userEntities: [],
   payee: {
     name: ''
-  }
+  },
+  vendorableNames: [],
+  purchases: [],
+  entityItems:[]
 }

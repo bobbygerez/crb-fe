@@ -50,8 +50,36 @@ export const transactionType = (state, payload) => {
   state.transactionType = payload
 }
 
+export const chartAccountId = (state, payload) => {
+  state.transaction.chart_account_id = payload
+}
+
 export const transactionTotalAmount = (state, payload) => {
   state.transaction.total_amount = payload
+}
+
+export const transactionCheckNumber = (state, payload) => {
+  state.transaction.checknumber = payload
+}
+
+export const transactionRemarks = (state, payload) => {
+  state.transaction.remarks = payload
+}
+
+export const createdBy = (state, payload) => {
+  state.transaction.created_by = payload
+}
+
+export const vendorableNames = (state, payload) => {
+  state.vendorableNames = payload
+}
+
+export const purchases = (state, payload) => {
+  state.purchases = payload
+}
+
+export const entityItems = (state, payload) => {
+  state.entityItems = payload
 }
 
 
