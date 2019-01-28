@@ -240,7 +240,7 @@ export default {
   },
   methods: {
     removeGl (index) {
-      if (this.generalLedgers[index].id != '') {
+      if (this.generalLedgers[index].id !== '') {
         this.$q.notify({
           color: 'negative',
           icon: 'delete',
@@ -295,7 +295,7 @@ export default {
     },
     update () {
       if (this.transactionType.taccount_id === 3) {
-        if (this.debit_amount != this.credit_amount) {
+        if (this.debit_amount !== this.credit_amount) {
           this.$q.notify({
             color: 'negative',
             icon: 'warning',
@@ -332,6 +332,7 @@ export default {
         .catch()
     },
     totalAmount (generalLedgers) {
+      /* eslint-disable */
       let debit_amount = _.sumBy(generalLedgers, function (i) {
         return i.debit_amount
       })
@@ -368,6 +369,7 @@ export default {
           this.$store.dispatch('transactions/transactionTotalAmount', 0)
         }
       }
+      /* eslint-enable */
     }
   },
   mounted () {
