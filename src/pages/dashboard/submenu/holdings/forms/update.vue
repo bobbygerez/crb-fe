@@ -10,7 +10,11 @@
             <q-card-separator />
             <div class="row">
               <div class="col-12">
-                <form-field-validator :validate="$v.editHolding.name">
+                <form-field-validator
+                  :field-name="'Holding name'"
+                  :async-error-message="serverErrorResponse ? serverErrorResponse.name.map(v=>v).join(' ') : ''"
+                  :validate="$v.editHolding.name"
+                >
                   <q-input
                     @input="$v.editHolding.name.$touch"
                     :error="$v.editHolding.name.$error"
