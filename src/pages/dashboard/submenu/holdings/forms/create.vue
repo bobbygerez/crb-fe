@@ -6,14 +6,11 @@
         <div class="column col-12 col-lg-6">
           <q-card class="q-pa-lg">
             <q-card-title>
-              <!-- <p class="caption"> -->
               Holding Info
-              <!-- </p> -->
             </q-card-title>
             <q-card-separator />
             <div class="row">
               <div class="col-12">
-                <!-- <form-field-validator :validate="$v.newHolding.name"> -->
                 <form-field-validator
                   :field-name="'Holding name'"
                   :async-error-message="serverErrorResponse ? serverErrorResponse.name.map(v=>v).join(' ') : ''"

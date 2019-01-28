@@ -128,7 +128,9 @@ module.exports = function (ctx) {
         'QChip',
         'QTree',
         'QDatetime',
-        'QDatetimePicker'
+        'QDatetimePicker',
+        'QFab',
+        'QFabAction'
       ],
       directives: [
         'Ripple', 'CloseOverlay', 'BackToTop'

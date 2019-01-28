@@ -75,12 +75,12 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import _ from 'lodash'
 import inputPrice from 'components/inputs/price'
 import negativePrice from 'components/inputs/negativePrice'
 import numberToWords from 'components/mixins/numberToWords'
 import {
-    mapState
+  mapState
 } from 'vuex'
 
 export default {
@@ -107,7 +107,6 @@ export default {
     },
     computed: {
         ...mapState('transactions', ['company', 'transaction', 'selectedEntity', 'selectedUserEntity', 'payee', 'transactionType']),
-
         transactionTypes() {
             return this.$store.getters['transactions/transactionTypes'].map(e => {
                 return {
@@ -118,7 +117,6 @@ export default {
         },
         chartAccounts() {
             let chartAccounts = _.values(this.$store.getters['transactions/chartAccounts'])
-
             let res = []
             const cb = (e) => {
                 res.push({
@@ -129,7 +127,6 @@ export default {
             }
             chartAccounts.forEach(cb);
             return res
-
         },
         createdBy() {
             return `${this.transaction.created_by.firstname} ${this.transaction.created_by.lastname}`
@@ -143,7 +140,6 @@ export default {
                     icon: 'delete',
                     message: `Delete ${this.generalLedgers[index].particulars}?`,
                     actions: [
-
                         {
                             label: 'OK',
                             handler: () => {
@@ -155,7 +151,6 @@ export default {
                                             icon: 'check',
                                             message: `${generalLedger.particulars} deleted successfully`
                                         })
-
                                     })
                                     .catch((err) => {
                                         this.$q.notify({
@@ -171,7 +166,6 @@ export default {
             } else {
                 this.generalLedgers.splice(index, 1)
             }
-
         },
         addGl() {
             this.generalLedgers.push({
@@ -192,7 +186,6 @@ export default {
                     this.$store.dispatch('transactions/chartAccounts', res.data.chartAccounts)
                     this.$store.dispatch('transactions/payee', res.data.payee)
                 })
-
         },
         update() {
             if (this.transactionType.taccount_id === 3) {
@@ -208,7 +201,6 @@ export default {
             } else {
                 this.updateTransaction()
             }
-
         },
         updateTransaction() {
             this.$axios
@@ -239,7 +231,6 @@ export default {
                 return i.debit_amount;
             })
             this.debit_amount = debit_amount
-
             let credit_amount = _.sumBy(generalLedgers, function (i) {
                 return i.credit_amount;
             })
@@ -250,20 +241,17 @@ export default {
             this.tax = tax
             //Disbursement Selected Normal balance is debit
             //contra account credit
-
             
             if (this.transactionType.taccount_id === 1) {
                 let total_amount = parseFloat(credit_amount) + parseFloat(tax);
                  this.numToWords = this.withDecimal(total_amount)
                 this.$store.dispatch('transactions/transactionTotalAmount', total_amount)
-
                 //Reciept Selected Normal balance is credit
                 //contrac account debit
             } else if (this.transactionType.taccount_id === 2) {
                 let total_amount = parseFloat(debit_amount) + parseFloat(tax);
                  this.numToWords = this.withDecimal(total_amount)
                 this.$store.dispatch('transactions/transactionTotalAmount', total_amount)
-
                 //Debit or credit should be balance
             } else if (this.transactionType.taccount_id === 3) {
                 let total_amount = parseFloat(debit_amount) - parseFloat(credit_amount);
@@ -277,13 +265,11 @@ export default {
                 
                 
             }
-
         }
     },
     mounted() {
         this.getTransactionTypes()
        
-
     },
     components: {
         inputPrice,
@@ -297,7 +283,6 @@ export default {
                     this.totalAmount(this.generalLedgers)
                 })
             this.$store.dispatch('transactions/transactionTypeId', val)
-
         },
         'transaction.checknumber'(val) {
             this.$store.dispatch('transactions/transactionCheckNumber', val)

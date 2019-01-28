@@ -13,6 +13,27 @@
         label="New Holding"
         :show="showFab"
       />
+      <q-fab
+  color="primary"
+  active-icon="alarm"
+  direction="up"
+>
+  <q-tooltip
+    slot="tooltip"
+    anchor="center left"
+    self="center right"
+    :offset="[20, 0]"
+  >
+    Tooltip in FAB
+  </q-tooltip>
+
+  <q-fab-action color="purple" @click="toast('mail')" icon="mail">
+    <q-tooltip anchor="center left" self="center right" :offset="[20, 0]">Mail</q-tooltip>
+  </q-fab-action>
+  <q-fab-action color="secondary" @click="toast('alarm')" icon="alarm">
+    <q-tooltip anchor="center left" self="center right" :offset="[20, 0]">Alarm</q-tooltip>
+  </q-fab-action>
+</q-fab>
     </q-page>
   </div>
 </template>

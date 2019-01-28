@@ -41,9 +41,7 @@
                     clearable
                     placeholder="Start typing a holding name"
                   >
-                    <q-autocomplete
-                      @search="searchHoldings"
-                    />
+                    <q-autocomplete @search="searchHoldings" />
                   </q-search>
                 </form-field-validator>
               </div>
