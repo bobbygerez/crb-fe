@@ -82,47 +82,13 @@
         <div class="q-title q-mb-md">General Ledgers</div>
       </div>
     </div>
-<<<<<<< HEAD
-    <div class="row" v-for="(gl, index) in generalLedgers" :key="index">
-        
-        
-        <div class="col-xs-3">
-            <q-input v-model="gl.particulars" float-label="Particulars" />
-        </div>
-        <div class="col-xs-3">
-            <q-select v-model="gl.chart_account_id" filter :options="chartAccounts" float-label="GL account" clearable />
-        </div>
-        <div class="col-xs-1" v-if="transactionType.taccount_id !== 3">
-             <negative-price label="Amount" :value="gl.debit_amount" v-model="gl.debit_amount"></negative-price>
-        </div>
-        <div class="col-xs-1" v-if="transactionType.taccount_id !== 3">
-            <q-input float-label="Qty" />
-        </div>
-        <div class="col-xs-2" v-if="transactionType.taccount_id === 2 || transactionType.taccount_id === 3">
-            <negative-price label="Debit Amount" :value="gl.debit_amount" v-model="gl.debit_amount"></negative-price>
-        </div>
-        
-        <div class="col-xs-1" v-if="transactionType.taccount_id != 3">
-             <q-btn color="primary" size="sm" icon="close" flat round class="float-right" @click="removeGl(index)" v-if="transactionType.taccount_id === 2" />
-            <input-price label="Tax" :value="gl.tax" v-model="gl.tax"></input-price>
-        </div>
-        <div class="col-xs-2" v-if="transactionType.taccount_id === 1 || transactionType.taccount_id === 3">
-            <q-btn color="primary" size="sm" icon="close" flat round class="float-right" @click="removeGl(index)" />
-            <negative-price label="Credit Amount" :value="gl.credit_amount" v-model="gl.credit_amount"></negative-price>
-        </div>
-=======
     <div
       class="row"
       v-for="(gl, index) in generalLedgers"
       :key="index"
     >
-      <!-- <div class="col-xs-2" v-if="transactionType.taccount_id !== 3">
-            <q-input float-label="Item" />
-        </div>
-        <div class="col-xs-1" v-if="transactionType.taccount_id !== 3">
-            <q-input float-label="Qty" />
-        </div> -->
-      <div class="col-xs-4">
+
+      <div class="col-xs-3">
         <q-input
           v-model="gl.particulars"
           float-label="Particulars"
@@ -137,7 +103,22 @@
           clearable
         />
       </div>
-
+      <div
+        class="col-xs-1"
+        v-if="transactionType.taccount_id !== 3"
+      >
+        <negative-price
+          label="Amount"
+          :value="gl.debit_amount"
+          v-model="gl.debit_amount"
+        ></negative-price>
+      </div>
+      <div
+        class="col-xs-1"
+        v-if="transactionType.taccount_id !== 3"
+      >
+        <q-input float-label="Qty" />
+      </div>
       <div
         class="col-xs-2"
         v-if="transactionType.taccount_id === 2 || transactionType.taccount_id === 3"
@@ -148,6 +129,7 @@
           v-model="gl.debit_amount"
         ></negative-price>
       </div>
+
       <div
         class="col-xs-1"
         v-if="transactionType.taccount_id != 3"
@@ -187,7 +169,6 @@
           v-model="gl.credit_amount"
         ></negative-price>
       </div>
->>>>>>> 6d1560189ef4b0265e7c54f0d9e5e5a53e885d89
 
     </div>
     <br />
