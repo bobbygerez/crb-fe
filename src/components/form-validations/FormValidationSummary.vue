@@ -50,7 +50,6 @@ export default {
         return arr
       }
       let keys = Object.keys(obj.$params)
-      // console.log('current param =>', obj.$params[keys[0]])
       if (obj.$params[keys[0]] !== null) {
         if (obj.$error) {
           arr.push(this.getErrMessage(obj))

@@ -123,6 +123,7 @@ const commons = {
     _$Company_description: anon
   },
   holding_id: {
+    required,
     _$Holding: anon
   },
   name: {

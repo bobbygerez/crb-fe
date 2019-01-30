@@ -23,8 +23,6 @@ export default {
     replaceAll,
     getErrMessage (val) {
       if (!val.$error) return ''
-      // console.log('async message', this.asyncErrorMessage)
-
       const filteredVals = this.fieldName || Object.keys(val).filter(v => v.startsWith('_$'))
       if (filteredVals.length < 1) {
         return ''
@@ -57,30 +55,5 @@ export default {
       // else return an anoymous error message
       return `${fieldname} has invalid value.`
     }
-  },
-  computed: {
-    // errMessage () {
-    //   if (!val.$error) return ''
-
-    //   const filteredVals = fieldName || Object.keys(val).filter(v => v.startsWith('_$'))
-    //   if (filteredVals.length < 1) {
-    //     return ''
-    //   }
-    //   const fieldname = fieldName || replaceAll(filteredVals[0].replace('_$', ''), '_', ' ')
-    //   const message = localMessage || errorMessages
-    //   if (val.hasOwnProperty('required') && !val.required) {
-    //     return `${fieldname} ${message.required}`
-    //   }
-    //   if (val.hasOwnProperty('maxLength') && !val.maxLength) {
-    //     return `${fieldname} ${message.maxLength} ${val.$params.maxLength.max}.`
-    //   }
-    //   if (val.hasOwnProperty('minLength') && !val.minLength) {
-    //     return `${fieldname} ${message.minLength} ${val.$params.minLength.min}.`
-    //   }
-    //   if (val.hasOwnProperty('email') && !val.email) {
-    //     return `${fieldname} ${message.email}`
-    //   }
-    //   return `${fieldname} has invalid value.`
-    // }
   }
 }

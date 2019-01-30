@@ -25,23 +25,24 @@
                   <q-autocomplete @search="searchHoldings" @selected="selected" />
                 </q-search> -->
                 <form-field-validator :validate="$v.newCompany.holding_id">
-                  <!-- <q-select
-                    @input="$v.newCompany.holding_id.$touch"
-                    :error="$v.newCompany.holding_id.$error"
-                    v-model="newCompany.holding_id"
-                    :options="holdingOptions"
-                    float-label="Holdings"
-                    clearable
-                  /> -->
                   <q-search
                     @input="$v.newCompany.holding_id.$touch"
                     :error="$v.newCompany.holding_id.$error"
-                    v-model="newCompany.holding_id"
+                    v-model="holdingDisplay"
                     float-label="Holding"
                     clearable
                     placeholder="Start typing a holding name"
+                    @clear="holdingCleared"
+                    @keyup.escape="holdingDisplay = ''; newCompany.holding_id = ''"
+                    no-parent-field
+                    @keyup.delete="editing"
                   >
-                    <q-autocomplete @search="searchHoldings" />
+                    <q-autocomplete
+                      @search="searchHoldings"
+                      @selected="onSelect"
+                      @keydown="cancelled"
+                      value-field="label"
+                    />
                   </q-search>
                 </form-field-validator>
               </div>
@@ -320,7 +321,8 @@ export default {
   },
   data () {
     return {
-      addressType: 'home'
+      addressType: 'home',
+      holdingDisplay: ''
     }
   },
   computed: {
@@ -347,13 +349,40 @@ export default {
     }
   },
   methods: {
+    editing (v) {
+      console.log('editing', v)
+    },
+    holdingCleared (val) {
+      console.log('holdingCLeared', val)
+      this.newCompany.holding_id = ''
+      this.$v.newCompany.holding_id.$touch()
+    },
+    cancelled () {
+      this.newCompany.holding_id = ''
+      console.log('id cancelled', this.newCompany.holding_id)
+    },
+    onSelect (selected) {
+      console.log('selected', selected)
+      this.holdingDisplay = selected.label
+      this.newCompany.holding_id = selected.value
+      console.log('id =>', this.newCompany.holding_id)
+    },
     searchHoldings (terms, done) {
-      done([])
-      // make an AJAX call
-      // then call done(Array results)
-
-      // DO NOT forget to call done! When no results or an error occurred,
-      // just call with empty array as param. Example: done([])
+      console.log('terms', terms)
+      this.$axios.get(`get-holdings-by-name/${terms}/5`)
+        .then(res => {
+          console.log('result =>', res)
+          done(res.data.map(holding => {
+            return {
+              label: holding.name,
+              sublabel: 'Desc: ' + holding.desc,
+              // icon: getRandomIcon(),
+              // stamp: getRandomStamp(),
+              value: holding.id
+            }
+          }))
+        })
+        .catch(() => done([]))
     },
     ...mapActions('pattys', ['setHoldings']),
     locationSelected (loc, where) {
@@ -369,6 +398,7 @@ export default {
     create () {
       this.$v.newCompany.$touch()
       if (this.$v.newCompany.$error) {
+        console.log('validations', this.$v)
         return
       }
       console.log('validations', this.$v)

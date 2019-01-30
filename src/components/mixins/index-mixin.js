@@ -30,7 +30,5 @@ export default {
         this.showFab = true
       }
     }
-
   }
-
 }

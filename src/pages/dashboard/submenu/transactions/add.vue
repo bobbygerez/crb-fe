@@ -48,6 +48,7 @@
         </div>
     </div>
 
+<<<<<<< HEAD
     <div class="row" v-for="(item, index) in purchasesItems.items" :key="index">
         <div class="col-xs-3">
             <q-select v-model="item.id" filter :options="entityItems" float-label="Item Name" clearable class="q-ml-sm" />
@@ -75,6 +76,58 @@
             </div>
         </div>
 
+=======
+    <div
+      class="row"
+      v-for="(item) in purchasesItems.items"
+      :key="item.id"
+    >
+      <div class="col-xs-2">
+        <q-input
+          float-label="Item"
+          :value="item.name"
+          disable
+        />
+      </div>
+      <div class="col-xs-1">
+        <q-input
+          float-label="Qty"
+          :value="item.pivot.qty"
+          disable
+        />
+      </div>
+      <div class="col-xs-3">
+        <q-input
+          :value="item.desc"
+          float-label="Description"
+          disable
+        />
+      </div>
+      <div class="col-xs-3">
+        <q-input
+          :value="item.chart_account.name"
+          float-label="Chart Account"
+          disable
+        />
+      </div>
+
+      <div class="col-xs-2">
+        <negative-price
+          label="Debit Amount"
+          :value="item.pivot_price"
+          v-model="item.pivot_price"
+          :disabled="true"
+        ></negative-price>
+      </div>
+      <div class="col-xs-1">
+        <negative-price
+          label="Tax"
+          :value="waiting"
+          v-model="waiting"
+          :disabled="true"
+        ></negative-price>
+      </div>
+>>>>>>> 89f5b4dd4a678ca2bf35ffdc7253e91b30ba2dba
     </div>
     <span v-if="selectedPurchase == null">
      <div class="row" v-for="(gl, index) in generalLedgers" :key="index" >
@@ -144,6 +197,7 @@ export default {
             selectedChartAccount: 0
         }
     },
+<<<<<<< HEAD
     computed: {
         ...mapState('transactions', ['company', 'transaction', 'selectedEntity', 'selectedUserEntity', 'payee', 'transactionType', 'entities']),
         entityItems() {
@@ -201,6 +255,15 @@ export default {
         },
         createdBy() {
             return `${this.transaction.created_by.firstname} ${this.transaction.created_by.lastname}`
+=======
+    purchases () {
+      return this.$store.getters['transactions/purchases'].map(e => {
+        let invoice = e.invoice_no
+        return {
+          label: `${invoice.substring(1, 21)} (Invoice No.) `,
+          value: e.id,
+          items: e.items
+>>>>>>> 89f5b4dd4a678ca2bf35ffdc7253e91b30ba2dba
         }
     },
     methods: {
@@ -278,6 +341,7 @@ export default {
                         icon: 'warning',
                         message: `Debit and Credit amount must be equal.`
                     })
+<<<<<<< HEAD
                 } else {
                     // this.createTransaction()
                 }
@@ -319,11 +383,16 @@ export default {
                     }
                 })
                 .then(res => {
+=======
+                  })
+                  .catch((err) => {
+>>>>>>> 89f5b4dd4a678ca2bf35ffdc7253e91b30ba2dba
                     this.$q.notify({
                         color: 'positive',
                         icon: 'check',
                         message: `This transaction has been updated successfully`
                     })
+<<<<<<< HEAD
                     this.generalLedgers = []
                     this.addGl()
                     this.intialize()
@@ -346,6 +415,87 @@ export default {
             this.tax = tax
             //Disbursement Selected Normal balance is debit
             //contra account credit
+=======
+                  })
+              }
+            }
+          ]
+        })
+      } else {
+        this.generalLedgers.splice(index, 1)
+      }
+    },
+    addGl () {
+      this.generalLedgers.push({
+        ledgerable_id: this.selectedUserEntity,
+        ledgerable_type: this.selectedEntity,
+        id: '',
+        particulars: '',
+        chart_account_id: '',
+        debit_amount: 0,
+        tax: 0,
+        credit_amount: 0
+      })
+    },
+    getTransactionTypes () {
+      this.$axios.get(`transactions/create?modelType=${this.selectedEntity}&modelId=${this.selectedUserEntity}`)
+        .then(res => {
+          this.$store.dispatch('transactions/transactionTypes', res.data.transactionTypes)
+          this.$store.dispatch('transactions/chartAccounts', res.data.chartAccounts)
+          this.$store.dispatch('transactions/createdBy', res.data.createdBy)
+          // this.$store.dispatch('transactions/transaction', res.data.transaction)
+          // this.generalLedgers = res.data.transaction.general_ledgers
+          // this.$store.dispatch('transactions/payee', res.data.payee)
+        })
+    },
+    store () {
+      if (this.transactionType.taccount_id === 3) {
+        if (this.debit_amount !== this.credit_amount) {
+          this.$q.notify({
+            color: 'negative',
+            icon: 'warning',
+            message: `Debit and Credit amount must be equal.`
+          })
+        } else {
+          this.createTransaction()
+        }
+      } else {
+        this.createTransaction()
+      }
+    },
+    createTransaction () {
+      this.$axios
+        .post(`/transactions`, {
+          transaction: {
+            transactable_id: this.selectedUserEntity,
+            transactable_type: this.selectedEntity,
+            transaction_type_id: this.transaction.transaction_type_id,
+            chart_account_id: this.transaction.chart_account_id,
+            total_amount: this.transaction.total_amount,
+            checknumber: this.transaction.checknumber,
+            remarks: this.transaction.remarks
+          },
+          generalLedgers: this.generalLedgers
+        })
+        .then(res => {
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `This transaction has been updated successfully`
+          })
+          this.generalLedgers = []
+          this.addGl()
+          this.intialize()
+        })
+        .catch()
+    },
+    totalAmount (generalLedgers) {
+      /* eslint-disable */
+      let debit_amount = _.sumBy(generalLedgers, function (i) {
+        return i.debit_amount
+      })
+      this.debit_amount = debit_amount
+>>>>>>> 89f5b4dd4a678ca2bf35ffdc7253e91b30ba2dba
 
             if (this.transactionType.taccount_id === 1) {
                 let total_amount = parseFloat(credit_amount) + parseFloat(tax);
@@ -389,6 +539,7 @@ export default {
         inputPrice,
         negativePrice
     },
+<<<<<<< HEAD
     watch: {
         'transaction.chart_account_id'(val) {
             this.$store.dispatch('transactions/chartAccountId', val)
@@ -500,6 +651,47 @@ export default {
                 this.purchasesItems = []
             }
         }
+=======
+    'transaction.remarks' (val) {
+      this.$store.dispatch('transactions/transactionRemarks', val)
+    },
+    'transaction.checknumber' (val) {
+      this.$store.dispatch('transactions/transactionCheckNumber', val)
+    },
+    generalLedgers: {
+      handler: function (after, before) {
+        this.totalAmount(after)
+      },
+      deep: true
+    },
+    'selectedVendorableType' (val) {
+      if (val !== '') {
+        this.$axios
+          .get(
+            `/transactions-entities?modelType=${val}`
+          )
+          .then(res => {
+            this.$store.dispatch('transactions/vendorableNames', res.data.userEntities)
+            // this.$store.dispatch('transactions/selectedUserEntity', '')
+          })
+      }
+    },
+    'selectedVendorableName' (val) {
+      this.$axios.get(`transactions-get-purchases?modelType=${this.selectedVendorableType}&modelId=${val}`)
+        .then(res => {
+          this.$store.dispatch('transactions/purchases', res.data.purchases)
+          this.$store.dispatch('transactions/entityItems', res.data.entityItems)
+        })
+    },
+    'selectedPurchase' (val) {
+      if (val !== null) {
+        this.purchasesItems = _.find(this.purchases, function (x) {
+          return x.value === val
+        })
+      } else {
+        this.purchasesItems = []
+      }
+>>>>>>> 89f5b4dd4a678ca2bf35ffdc7253e91b30ba2dba
     }
 }
 </script>
