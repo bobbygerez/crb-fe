@@ -2,30 +2,40 @@
 <div class="q-pa-sm">
     <div class="row">
         <div class="col-xs-12">
-            <div class="q-title q-mb-md">Edit Transaction </div>
+            <div class="q-title q-mb-md">New Transaction </div>
         </div>
         <div class="col-xs-3">
             <q-select v-model="transaction.transaction_type_id" :options="transactionTypes" float-label="Transaction Type" clearable />
             <q-select v-model="transaction.chart_account_id" filter :options="chartAccounts" float-label="GL account" clearable />
+             <input-price label="Vatable Sales" :value="vatable" v-model="vatable"></input-price>
+            <input-price label="Zero Rated Sales" :value="zeroRated" v-model="zeroRated"></input-price>
             <q-input v-model="transaction.remarks" type="textarea" float-label="Remarks" :max-height="100" rows="2" hide-underline />
         </div>
         <div class="col-xs-3">
             <input-price label="Total Amount" :value="transaction.total_amount" v-model="transaction.total_amount" class="q-ml-sm" :disabled="true"></input-price>
             <q-input v-model="createdBy" float-label="Created By" disable class="q-ml-sm" />
+            <input-price label="VAT-Exempt Sales" :value="vatExempt" v-model="vatExempt"></input-price>
+            <input-price label="VAT Amount" :value="vatAmount" v-model="vatAmount"></input-price>
         </div>
         <div class="col-xs-6" v-if="transactionType.taccount_id != 3">
             <div class="row">
-                 <div class="col-xs-12">
-                    <q-input  v-model="payee.name" float-label="Pay To" class="q-ml-sm" disable/>
+                <div class="col-xs-6">
+                    <q-select v-model="selectedVendorableType" filter :options="entities" float-label="Vendor Type" clearable class="q-ml-sm" />
+                </div>
+                <div class="col-xs-6">
+                    <q-select v-model="selectedVendorableName" filter :options="vendorableNames" float-label="Vendor Name" clearable class="q-ml-sm" />
                 </div>
                 <div class="col-xs-12">
-                    <q-input v-model="numToWords" float-label="In Words" class="q-ml-sm"/>
+                    <q-select v-model="selectedPurchase" filter :options="purchases" float-label="Invoice No." clearable class="q-ml-sm" />
                 </div>
                 <div class="col-xs-12">
-                    <q-input v-model="transaction.checknumber" float-label="Check number" class="q-ml-sm"/>
-                </div>    
+                    <q-input v-model="numToWords" float-label="In Words" class="q-ml-sm" />
+                </div>
+                <div class="col-xs-12">
+                    <q-input v-model="transaction.checknumber" float-label="Check number" class="q-ml-sm" />
+                </div>
             </div>
-            
+
         </div>
 
     </div>
@@ -37,20 +47,50 @@
             <div class="q-title q-mb-md">General Ledgers</div>
         </div>
     </div>
-    <div class="row" v-for="(gl, index) in generalLedgers" :key="index">
-        <!-- <div class="col-xs-2" v-if="transactionType.taccount_id !== 3">
-            <q-input float-label="Item" />
+
+    <div class="row" v-for="(item, index) in purchasesItems.items" :key="index">
+        <div class="col-xs-3">
+            <q-select v-model="item.id" filter :options="entityItems" float-label="Item Name" clearable class="q-ml-sm" />
+        </div>
+
+        <div class="col-xs-3">
+            <q-input :value="item.desc" float-label="Particulars" disable />
+        </div>
+        <div class="col-xs-2">
+            <q-select v-model="item.chart_account_id" filter :options="chartAccounts" float-label="GL account" clearable />
+        </div>
+        <div class="col-xs-1">
+           <q-input :value="item.tax_type.name" float-label="Tax Type" disable />
+        </div>
+      
+        <div class="col-xs-1">
+            <negative-price label="Price" :value="item.pivot_price" v-model="item.pivot_price" :disabled="true"></negative-price>
+        </div>
+        <div class="col-xs-1">
+            <negative-price label="Debit Amount" :value="item.total_amount" v-model="item.total_amount" :disabled="true"></negative-price>
+        </div>
+          <div class="col-xs-1">
+            <div class="col-xs-1">
+                <negative-price label="Input Tax" :value="item.purchase_tax" v-model="item.purchase_tax" :disabled="true"></negative-price>
+            </div>
+        </div>
+
+    </div>
+    <span v-if="selectedPurchase == null">
+     <div class="row" v-for="(gl, index) in generalLedgers" :key="index" >
+        <div class="col-xs-2" v-if="transactionType.taccount_id !== 3">
+            <q-select v-model="gl.item_id" filter :options="entityItems" float-label="Item" class="q-ml-sm"/>
         </div>
         <div class="col-xs-1" v-if="transactionType.taccount_id !== 3">
-            <q-input float-label="Qty" />
-        </div> -->
-        <div class="col-xs-4">
+            <q-input float-label="Qty" value=""/>
+        </div>
+        <div :class="transactionType.taccount_id != 3 ? 'col-xs-3' : 'col-xs-5'">
             <q-input v-model="gl.particulars" float-label="Particulars" />
         </div>
         <div class="col-xs-3">
             <q-select v-model="gl.chart_account_id" filter :options="chartAccounts" float-label="GL account" clearable />
         </div>
-        
+
         <div class="col-xs-2" v-if="transactionType.taccount_id === 2 || transactionType.taccount_id === 3">
             <negative-price label="Debit Amount" :value="gl.debit_amount" v-model="gl.debit_amount"></negative-price>
         </div>
@@ -62,11 +102,11 @@
             <q-btn color="primary" size="sm" icon="close" flat round class="float-right" @click="removeGl(index)" />
             <negative-price label="Credit Amount" :value="gl.credit_amount" v-model="gl.credit_amount"></negative-price>
         </div>
-
     </div>
+    </span>
     <br />
-    <q-btn color="primary" label="Update" class="float-left" @click="update" />
-    <q-btn color="primary" flat class="float-right" @click="addGl">
+    <q-btn color="primary" label="Submit" class="float-left" @click="store" />
+    <q-btn color="primary" flat class="float-right" @click="addGl" v-if="selectedPurchase == null">
         <q-icon name="more_vert"></q-icon> More
     </q-btn>
     <br />
