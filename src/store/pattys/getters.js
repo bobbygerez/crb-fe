@@ -33,5 +33,3 @@ export const getStores = (state) => state.stores
 export const getItems = (state) => state.items
 
 export const getCategories = (state) => state.categories
-
-//

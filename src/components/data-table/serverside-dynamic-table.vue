@@ -207,7 +207,7 @@
       <q-btn
         :color="theme"
         fab
-        v-back-to-top.animate="{offset: 400, duration: 200}"
+        v-back-to-top.animate="{offset: 400, duration: 100}"
         class="animate-pop"
         icon="mdi-chevron-up"
       />
