@@ -22,8 +22,18 @@ export default {
     companyName: ''
   },
   entity: {
-    entity: '',
-    name: ''
+    name: '',
+    address: {
+      brgy: {
+        description: ''
+      },
+      city: {
+        description: ''
+      },
+      province: {
+        description: ''
+      }
+    }
   },
   transaction: {
     transaction_type_id: '',
