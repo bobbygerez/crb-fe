@@ -24,7 +24,7 @@ export const transactionType = (state) => state.transactionType
 
 export const vendorableNames = (state) => state.vendorableNames
 
-export const purchases = (state) => state.purchases
+export const purchaseReceived = (state) => state.purchaseReceived
 
 export const entityItems = (state) => state.entityItems
 

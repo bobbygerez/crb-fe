@@ -112,10 +112,10 @@ export const vendorableNames = ({
   commit('vendorableNames', payload)
 }
 
-export const purchases = ({
+export const purchaseReceived = ({
   commit
 }, payload) => {
-  commit('purchases', payload)
+  commit('purchaseReceived', payload)
 }  
 
 export const entityItems = ({

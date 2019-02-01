@@ -55,6 +55,6 @@ export default {
     name: ''
   },
   vendorableNames: [],
-  purchases: [],
+  purchaseReceived: [],
   entityItems:[]
 }

@@ -74,8 +74,8 @@ export const vendorableNames = (state, payload) => {
   state.vendorableNames = payload
 }
 
-export const purchases = (state, payload) => {
-  state.purchases = payload
+export const purchaseReceived = (state, payload) => {
+  state.purchaseReceived = payload
 }
 
 export const entityItems = (state, payload) => {

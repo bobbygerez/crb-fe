@@ -19,14 +19,15 @@
                 <q-card-main>
                     <div class="row">
                         <div class="col-xs-4">
+                            <q-select v-model="transaction.transaction_type_id" :options="transactionTypes" float-label="Transaction Type" clearable />
+                        </div>
+                        <div class="col-xs-4">
                             <q-select v-model="selectedVendorableType" filter :options="entities" float-label="Vendor Type" clearable class="q-ml-sm" />
                         </div>
                         <div class="col-xs-4">
                             <q-select v-model="selectedVendorableName" filter :options="vendorableNames" float-label="Vendor Name" clearable class="q-ml-sm" />
                         </div>
-                        <div class="col-xs-4">
-                            <q-select v-model="transaction.transaction_type_id" :options="transactionTypes" float-label="Transaction Type" clearable />
-                        </div>
+
                     </div>
                     <div class="row">
                         <div class="col-xs-12">
@@ -88,10 +89,10 @@
                 <q-tab-pane name="invoices">
                     <div class="row" v-for="(invoice, key) in invoices" :key="key">
                         <div class="col-xs-3">
-                            <q-btn color="primary" flat class="float-right" >
-                                <q-icon name="pageview"></q-icon> 
+                            <q-btn color="primary" flat class="float-right">
+                                <q-icon name="pageview"></q-icon>
                             </q-btn>
-                            <q-select v-model="invoice.purchase_id" filter :options="purchases" float-label="Invoice No." clearable class="q-ml-sm" />
+                            <q-select v-model="invoice.purchase_received_id" filter :options="purchaseReceived" float-label="Invoice No." clearable class="q-ml-sm" />
                         </div>
                         <div class="col-xs-2">
                             <q-datetime v-model="invoice.due_date" type="date" float-label="Date Due" />
@@ -106,15 +107,10 @@
                             <q-input v-model="invoice.discount" float-label="Discount" class="q-ml-sm" />
                         </div>
                         <div class="col-xs-1">
-                            <q-input v-model="invoice.amount_paid" float-label="Amount Paid" class="q-ml-sm" />
+                              <input-price label="Amount Paid" :value="invoice.amount_paid" v-model="invoice.amount_paid" class="q-ml-sm"></input-price>
                         </div>
                         <div class="col-xs-1">
-                            <q-checkbox
-                                class="q-mt-lg"
-                                v-model="invoice.pay"
-                                checked-icon="check"
-                                unchecked-icon="close"
-                            />
+                            <q-checkbox class="q-mt-lg" v-model="invoice.pay" checked-icon="check" unchecked-icon="close" />
                             <q-btn color="primary" size="sm" icon="close" flat round class="float-right" @click="removeInvoice(key)" />
                         </div>
                     </div>
@@ -234,13 +230,15 @@ export default {
                 }
             })
         },
-        purchases() {
-            return this.$store.getters['transactions/purchases'].map(e => {
+        purchaseReceived() {
+            return this.$store.getters['transactions/purchaseReceived'].map(e => {
                 let invoice = e.invoice_no
                 return {
                     label: `${invoice.substring(1, 21)}`,
                     value: e.id,
-                    items: e.items
+                    items: e.items,
+                    grand_total: e.grand_total,
+                    received_date: e.received_date
                 }
             })
         },
@@ -284,8 +282,8 @@ export default {
         }
     },
     methods: {
-        removeInvoice(index){
-             this.invoices.splice(index, 1)
+        removeInvoice(index) {
+            this.invoices.splice(index, 1)
         },
         removeGl(index) {
             if (this.generalLedgers[index].id != '') {
@@ -319,7 +317,7 @@ export default {
                 this.generalLedgers.splice(index, 1)
             }
         },
-        addInvoice(){
+        addInvoice() {
 
             let id = 1
             if (this.invoices.length > 0) {
@@ -330,7 +328,7 @@ export default {
 
             this.invoices.push({
                 id: id,
-                purchase_id: '',
+                purchase_received_id: '',
                 due_date: '',
                 amount_due: 0,
                 description: '',
@@ -508,7 +506,7 @@ export default {
         },
         invoices: {
             handler: function (after, before) {
-                 var vm = this;
+                var vm = this;
 
                 let changed = after.filter(function (p, idx) {
                     return Object.keys(p).some(function (prop) {
@@ -519,12 +517,20 @@ export default {
                 console.log(changed)
                 if (changed.length === 1) {
 
-                    var invoice = _.head(changed)
-                    this.$axios.get(`/transactions-get-purchase?purchaseId=${invoice.purchase_id}`)
-                        .then(function (res) {
+                let purchaseReceived =  _.find(vm.purchaseReceived, {value:_.head(changed).purchase_received_id});
 
-                        })
-                    
+                console.log(purchaseReceived)
+                    Object.keys(vm.invoices).forEach(function (key) {
+
+                        if (vm.invoices[key].id === _.head(changed).id) {
+
+                            vm.invoices[key].amount_due = purchaseReceived.grand_total
+                            vm.invoices[key].amount_paid = purchaseReceived.grand_total
+                           
+
+                        }
+                    });
+
                 }
             },
             deep: true,
@@ -603,15 +609,15 @@ export default {
             }
         },
         'selectedVendorableName'(val) {
-            this.$axios.get(`transactions-get-purchases?modelType=${this.selectedVendorableType}&modelId=${val}`)
+            this.$axios.get(`transactions-get-purchase-received?modelType=${this.selectedVendorableType}&modelId=${val}`)
                 .then(res => {
-                    this.generalLedgers.length = 0;
-                    this.addGl()
-                    this.setValue();
-                    this.$store.dispatch('transactions/purchases', res.data.purchases)
-                    this.$store.dispatch('transactions/entityItems', res.data.entityItems)
+                    // this.generalLedgers.length = 0;
+                    // this.addGl()
+                    // this.setValue();
+                    // this.$store.dispatch('transactions/purchaseReceived', res.data.purchaseReceived)
+                    // this.$store.dispatch('transactions/entityItems', res.data.entityItems)
                     this.$store.dispatch('transactions/entity', res.data.entity)
-                    console.log('res.data')
+                    // console.log('res.data')
                 })
         },
         'selectedPurchase'(val) {
