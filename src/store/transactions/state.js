@@ -35,10 +35,18 @@ export default {
       }
     }
   },
+
   transaction: {
+    transactable_type: '',
+    transactable_id: '',
     transaction_type_id: '',
     chart_account_id: 0,
     total_amount: 0,
+    total_discount: 0,
+    vatable_sales: 0,
+    vat_exempt_sales: 0,
+    zero_rated_sales: 0,
+    vat_amount: 0,
     remarks: '',
     created_by: {
       firstname: '',

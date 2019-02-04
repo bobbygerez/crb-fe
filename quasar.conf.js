@@ -50,9 +50,9 @@ module.exports = function (ctx) {
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules|quasar)/,
-          options: {
-            fix: true
-          }
+          // options: {
+          //   fix: true
+          // }
         })
       }
     },

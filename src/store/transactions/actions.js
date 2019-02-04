@@ -82,6 +82,48 @@ export const chartAccountId = ({
   commit('chartAccountId', payload)
 }
 
+export const transactionVatableSales = ({
+  commit
+}, payload) => {
+  commit('transactionVatableSales', payload)
+}
+
+export const transactionVatExemptSales = ({
+  commit
+}, payload) => {
+  commit('transactionVatExemptSales', payload)
+}
+
+export const transactionZeroRatedSales = ({
+  commit
+}, payload) => {
+  commit('transactionZeroRatedSales', payload)
+}
+
+export const transactionVatAmount = ({
+  commit
+}, payload) => {
+  commit('transactionVatAmount', payload)
+}
+
+export const transactionTransactableType = ({
+  commit
+}, payload) => {
+  commit('transactionTransactableType', payload)
+}
+
+export const transactionTransactableId = ({
+  commit
+}, payload) => {
+  commit('transactionTransactableId', payload)
+}
+
+export const transactionDiscount = ({
+  commit
+}, payload) => {
+  commit('transactionDiscount', payload)
+}
+
 export const transactionTotalAmount = ({
   commit
 }, payload) => {

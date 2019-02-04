@@ -54,6 +54,35 @@ export const chartAccountId = (state, payload) => {
   state.transaction.chart_account_id = payload
 }
 
+
+export const transactionVatableSales = (state, payload) => {
+  state.transaction.vatable_sales = payload
+}
+
+export const transactionVatExemptSales = (state, payload) => {
+  state.transaction.vat_exempt_sales = payload
+}
+
+export const transactionZeroRatedSales = (state, payload) => {
+  state.transaction.zero_rated_sales = payload
+}
+
+export const transactionVatAmount = (state, payload) => {
+  state.transaction.vat_amount = payload
+}
+
+export const transactionTransactableType = (state, payload) => {
+  state.transaction.transactable_type = payload
+}
+
+export const transactionTransactableId = (state, payload) => {
+  state.transaction.transactable_id = payload
+}
+
+export const transactionDiscount = (state, payload) => {
+  state.transaction.total_discount = payload
+}
+
 export const transactionTotalAmount = (state, payload) => {
   state.transaction.total_amount = payload
 }

@@ -185,16 +185,35 @@
         />
       </div>
     </q-modal>
-    <rounded-action-fab
-      @fab-click="addTransaction()"
-      label="New Transaction"
-      :show="true"
-    />
+     <q-page-sticky
+    position="bottom"
+    :offset="$q.theme === 'mat' ? [16, 16] : [16, 16]"
+    v-bind="$attrs"
+  >
+    <transition
+      appear
+      enter-active-class="animated fadeInUpBig"
+      leave-active-class="animated fadeOutDownBig"
+    >
+      <q-btn-group rounded >
+        <q-btn rounded icon="payment" color="primary"  @click="addTransaction">
+          <q-tooltip :delay="1000" :offset="[0, 10]">Disbursement Journal</q-tooltip>
+        </q-btn>
+        <q-btn rounded icon="receipt" color="primary">
+          <q-tooltip :delay="1000" :offset="[0, 10]">Receipt Journal</q-tooltip>
+        </q-btn>
+        <q-btn rounded icon="account_balance_wallet" color="primary">
+          <q-tooltip :delay="1000" :offset="[0, 10]"> General Journal</q-tooltip>
+        </q-btn>
+      </q-btn-group>
+    </transition>
+  </q-page-sticky>
+
+   
   </div>
 </template>
 
 <script>
-import RoundedActionFab from 'components/actions-generic/rounded-action-fab'
 import slug from 'components/mixins/slug'
 import _ from 'lodash'
 import {
@@ -202,9 +221,6 @@ import {
 } from 'vuex'
 export default {
   mixins: [slug],
-  components: {
-    RoundedActionFab
-  },
   data () {
     return {
       companyId: '',
@@ -286,7 +302,7 @@ export default {
   methods: {
     addTransaction () {
       if (this.selectedEntity !== '' && this.selectedUserEntity !== '') {
-        this.$router.push(`/dashboard/transactions/add`)
+        this.$router.push(`/dashboard/transactions/disbursement`)
       } else {
         this.$q.notify({
           color: 'negative',
