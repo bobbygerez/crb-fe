@@ -105,29 +105,6 @@
       </div>
     </div>
 
-<<<<<<< HEAD
-     <div class="row" v-for="(item) in purchasesItems.items" :key="item.id">
-        <div class="col-xs-2">
-            <q-input float-label="Item" :value="item.name" disable/>
-        </div>
-        
-        <div class="col-xs-3">
-            <q-input :value="item.desc" float-label="Description"  disable/>
-        </div>
-        <div class="col-xs-3">
-            <q-input :value="item.chart_account.name" float-label="Chart Account" disable/>
-        </div>
-        <div class="col-xs-1" >
-            <q-input float-label="Qty" :value="item.pivot.qty" disable/>
-        </div>
-        <div class="col-xs-1" >
-            <negative-price label="Price" :value="item.pivot_price" v-model="item.pivot_price" :disabled="true"></negative-price>
-        </div>
-        <div class="col-xs-2" >
-            <negative-price label="Debit Amount" :value="item.total_amount" v-model="item.total_amount" :disabled="true"></negative-price>
-        </div>
-        
-=======
     <div
       class="row"
       v-for="(item) in purchasesItems.items"
@@ -178,7 +155,6 @@
           :disabled="true"
         ></negative-price>
       </div>
->>>>>>> 6d1560189ef4b0265e7c54f0d9e5e5a53e885d89
     </div>
     <span v-if="selectedPurchase == null">
       <div
@@ -334,69 +310,6 @@ export default {
         }
       })
     },
-<<<<<<< HEAD
-    computed: {
-        ...mapState('transactions', ['company', 'transaction', 'selectedEntity', 'selectedUserEntity', 'payee', 'transactionType', 'entities']),
-
-        
-        entityItems() {
-            return this.$store.getters['transactions/entityItems'].map(e => {
-                return {
-                    label: e.name,
-                    value: e.id
-                }
-            })
-        },
-        purchases() {
-            return this.$store.getters['transactions/purchases'].map(e => {
-                let invoice = e.invoice_no
-                return {
-                    label: `${invoice.substring(1, 21)} (Invoice No.) `,
-                    value: e.id,
-                    items: e.items
-                }
-            })
-        },
-        vendorableNames() {
-            return this.$store.getters['transactions/vendorableNames'].map(e => {
-                return {
-                    label: e.name,
-                    value: e.id
-                }
-            })
-        },
-        payeeName(){
-            if(this.payee !== null){
-                return this.payee.name
-            }
-            return ''
-        },
-        transactionTypes() {
-            return this.$store.getters['transactions/transactionTypes'].map(e => {
-                return {
-                    label: e.name,
-                    value: e.id
-                }
-            })
-        },
-        chartAccounts() {
-            let chartAccounts = _.values(this.$store.getters['transactions/chartAccounts'])
-
-            let res = []
-            const cb = (e) => {
-                res.push({
-                    value: e.id,
-                    label: `(${e.account_code})  ${e.name}`,
-                });
-                e.all_children && e.all_children.forEach(cb);
-            }
-            chartAccounts.forEach(cb);
-            return res
-
-        },
-        createdBy() {
-            return `${this.transaction.created_by.firstname} ${this.transaction.created_by.lastname}`
-=======
     purchases () {
       return this.$store.getters['transactions/purchases'].map(e => {
         let invoice = e.invoice_no
@@ -404,7 +317,6 @@ export default {
           label: `${invoice.substring(1, 21)} (Invoice No.) `,
           value: e.id,
           items: e.items
->>>>>>> 6d1560189ef4b0265e7c54f0d9e5e5a53e885d89
         }
       })
     },
@@ -468,91 +380,13 @@ export default {
                       icon: 'check',
                       message: `${generalLedger.particulars} deleted successfully`
                     })
-<<<<<<< HEAD
-                } else {
-                    this.createTransaction()
-                }
-            } else {
-                this.createTransaction()
-            }
-
-        },
-        createTransaction() {
-
-            if(this.selectedPurchase != null){
-
-                this.generalLedgers = this.purchasesItems.items.map( i => {
-                     return {
-                        ledgerable_id: this.selectedUserEntity,
-                        ledgerable_type: this.selectedEntity,
-                        id: '',
-                        particulars: i.desc,
-                        chart_account_id: i.chart_account_id,
-                        debit_amount: i.total_amount,
-                        tax: 0,
-                        
-                    }
-                })
-
-
-                
-
-            }
-                this.$axios
-                .post(`/transactions`, {
-                    transaction: {
-                        transactable_id: this.selectedUserEntity,
-                        transactable_type: this.selectedEntity,
-                        transaction_type_id: this.transaction.transaction_type_id,
-                        chart_account_id: this.transaction.chart_account_id,
-                        total_amount: this.transaction.total_amount,
-                        checknumber: this.transaction.checknumber,
-                        remarks: this.transaction.remarks
-                    },
-                    generalLedgers: this.generalLedgers,
-                    payee: {
-                        vendorableType: this.selectedVendorableType,
-                        vendorableName: this.selectedVendorableName
-                    }
-                })
-                .then(res => {
-=======
                   })
                   .catch((err) => {
->>>>>>> 6d1560189ef4b0265e7c54f0d9e5e5a53e885d89
                     this.$q.notify({
                       color: 'negative',
                       icon: 'warning',
                       message: `${err.response.data.message}`
                     })
-<<<<<<< HEAD
-                    this.generalLedgers = []
-                    this.addGl()
-                    this.intialize()
-                   
-
-                    
-                })
-                .catch()
-            
-        },
-        totalAmount(generalLedgers) {
-            let debit_amount = _.sumBy(generalLedgers, function (i) {
-                return i.debit_amount;
-            })
-            this.debit_amount = debit_amount
-
-            let credit_amount = _.sumBy(generalLedgers, function (i) {
-                return i.credit_amount;
-            })
-            this.credit_amount = credit_amount
-            let tax = _.sumBy(generalLedgers, function (i) {
-                return i.tax;
-            })
-            this.tax = tax
-            //Disbursement Selected Normal balance is debit
-            //contra account credit
-=======
                   })
               }
             }
@@ -632,7 +466,6 @@ export default {
         return i.debit_amount
       })
       this.debit_amount = debit_amount
->>>>>>> 6d1560189ef4b0265e7c54f0d9e5e5a53e885d89
 
       let credit_amount = _.sumBy(generalLedgers, function (i) {
         return i.credit_amount
@@ -698,76 +531,6 @@ export default {
       this.addGl()
       this.$store.dispatch('transactions/transactionTypeId', val)
     },
-<<<<<<< HEAD
-    watch: {
-        'transaction.chart_account_id'(val){
-            this.$store.dispatch('transactions/chartAccountId', val)
-        },
-        'transaction.transaction_type_id'(val) {
-            this.$axios.get(`transactions-get-transaction-type?id=${val}`)
-                .then(res => {
-                    this.$store.dispatch('transactions/transactionType', res.data.transactionType)
-                    this.totalAmount(this.generalLedgers)
-                })
-            this.generalLedgers = []
-            this.addGl()
-            this.$store.dispatch('transactions/transactionTypeId', val)
-
-        },
-        'transaction.remarks'(val){
-            this.$store.dispatch('transactions/transactionRemarks', val)
-        },
-        'transaction.checknumber'(val) {
-            this.$store.dispatch('transactions/transactionCheckNumber', val)
-        },
-        generalLedgers: {
-            handler: function (after, before) {
-                this.totalAmount(after)
-            },
-            deep: true,
-        },
-        'selectedVendorableType'(val) {
-            if (val !== '') {
-                this.$axios
-                    .get(
-                        `/transactions-entities?modelType=${val}`
-                    )
-                    .then(res => {
-                        this.$store.dispatch('transactions/vendorableNames', res.data.userEntities)
-                        // this.$store.dispatch('transactions/selectedUserEntity', '')
-                    })
-            }
-        },
-        'selectedVendorableName'(val){
-            this.$axios.get(`transactions-get-purchases?modelType=${this.selectedVendorableType}&modelId=${val}`)
-                        .then(res => {
-                            this.$store.dispatch('transactions/purchases', res.data.purchases)
-                            // this.$store.dispatch('transactions/entityItems', res.data.entityItems)
-                        })
-        },
-        'selectedPurchase'(val){
-          if(val !== null){
-              this.purchasesItems = _.head(
-                   _.filter(this.purchases, function (x)  { 
-                        return x.value === val
-                    })
-              )
-
-             let total_amount = _.sumBy(this.purchasesItems.items, function (i) {
-
-                return i.pivot_price * i.pivot.qty;
-            })
-
-            this.$store.dispatch('transactions/transactionTotalAmount', total_amount)
-            this.numToWords = this.withDecimal(total_amount)
-            
-           
-
-          }else{
-              this.purchasesItems = []
-          }
-        }
-=======
     'transaction.remarks' (val) {
       this.$store.dispatch('transactions/transactionRemarks', val)
     },
@@ -807,7 +570,6 @@ export default {
       } else {
         this.purchasesItems = []
       }
->>>>>>> 6d1560189ef4b0265e7c54f0d9e5e5a53e885d89
     }
   }
 }
