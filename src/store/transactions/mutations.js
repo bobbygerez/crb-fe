@@ -42,6 +42,14 @@ export const payee = (state, payload) => {
   state.payee = payload
 }
 
+export const payeePayableType = (state, payload) => {
+  state.payee.payable_type = payload
+}
+
+export const payeePayableId = (state, payload) => {
+  state.payee.payable_id = payload
+}
+
 export const transactionTypeId = (state, payload) => {
   state.transaction.transaction_type_id = payload
 }
@@ -110,6 +118,15 @@ export const purchaseReceived = (state, payload) => {
 export const entityItems = (state, payload) => {
   state.entityItems = payload
 }
+
+export const setTax = (state, payload) => {
+  state.tax = payload
+}
+
+export const setEditTransaction = (state, payload) => {
+  state.editTransaction = payload
+}
+
 
 
 

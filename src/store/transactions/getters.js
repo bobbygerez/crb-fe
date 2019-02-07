@@ -28,3 +28,6 @@ export const purchaseReceived = (state) => state.purchaseReceived
 
 export const entityItems = (state) => state.entityItems
 
+export const getTax = (state) => state.tax
+
+export const getEditTransaction = (state) => state.editTransaction

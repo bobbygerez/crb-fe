@@ -72,18 +72,6 @@ const routes = [{
     { path: '/' }
   ]
 }, {
-  path: '/dashboard/transactions/:id/edit',
-  meta: {
-    title: name.endsWith('s') ? name : name.concat('s'),
-    needAuth: true,
-    section: 'index'
-  },
-  component: () => import('layouts/MainLayout.vue'),
-  children: [
-    { path: '', component: () => import('pages/dashboard/submenu/transactions/edit.vue') },
-    { path: '/' }
-  ]
-}, {
   path: '/dashboard/transactions/disbursement',
   meta: {
     title: name.endsWith('s') ? name : name.concat('s'),
@@ -93,6 +81,18 @@ const routes = [{
   component: () => import('layouts/MainLayout.vue'),
   children: [
     { path: '', component: () => import('pages/dashboard/submenu/transactions/disbursement.vue') },
+    { path: '/' }
+  ]
+}, {
+  path: '/dashboard/transactions/disbursement/edit',
+  meta: {
+    title: name.endsWith('s') ? name : name.concat('s'),
+    needAuth: true,
+    section: 'index'
+  },
+  component: () => import('layouts/MainLayout.vue'),
+  children: [
+    { path: '', component: () => import('pages/dashboard/submenu/transactions/edit-disbursement.vue') },
     { path: '/' }
   ]
 }]

@@ -1,4 +1,9 @@
 export default {
+  editTransaction: {
+  },
+  tax:{
+    percentage: 0
+  },
   titleTransaction: {
     name: ''
   },
@@ -60,7 +65,8 @@ export default {
   chartAccounts: [],
   userEntities: [],
   payee: {
-    name: ''
+    payable_id: '',
+    payable_type: ''
   },
   vendorableNames: [],
   purchaseReceived: [],

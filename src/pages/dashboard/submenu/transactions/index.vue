@@ -5,7 +5,7 @@
       <div class="col-xs-6">
         <div class="q-display-1 q-mb-md">
           <q-select
-            v-model="selectedEntity"
+            v-model="transaction.transactable_type"
             :options="entities"
             float-label="Entity Type"
             clearable
@@ -16,7 +16,7 @@
         <div class="q-display-1 q-mb-md">
           <q-select
             filter
-            v-model="selectedUserEntity"
+            v-model="transaction.transactable_id"
             :options="userEntities"
             float-label="Entity Name"
             clearable
@@ -217,7 +217,7 @@
 import slug from 'components/mixins/slug'
 import _ from 'lodash'
 import {
-  mapState
+  mapState, mapActions
 } from 'vuex'
 export default {
   mixins: [slug],
@@ -281,27 +281,12 @@ export default {
           value: e.id
         }
       })
-    },
-    selectedEntity: {
-      get () {
-        return this.$store.getters['transactions/selectedEntity']
-      },
-      set (val) {
-        this.$store.dispatch('transactions/selectedEntity', val)
-      }
-    },
-    selectedUserEntity: {
-      get () {
-        return this.$store.getters['transactions/selectedUserEntity']
-      },
-      set (val) {
-        this.$store.dispatch('transactions/selectedUserEntity', val)
-      }
     }
   },
   methods: {
+    ...mapActions('transactions', ['setEditTransaction']),
     addTransaction () {
-      if (this.selectedEntity !== '' && this.selectedUserEntity !== '') {
+      if (this.transaction.transactable_id !== '' && this.transaction.transactable_type !== '') {
         this.$router.push(`/dashboard/transactions/disbursement`)
       } else {
         this.$q.notify({
@@ -353,7 +338,7 @@ export default {
     },
     request (props) {
       this.loading = true
-      this.$axios.get(`transactions-transactable?modelType=${this.selectedEntity}&id=${this.selectedUserEntity}&filter=${this.filter}&page=${props.pagination.page}&perPage=${props.pagination.rowsPerPage}`)
+      this.$axios.get(`transactions?modelType=${this.transaction.transactable_type}&id=${this.transaction.transactable_id}&filter=${this.filter}&page=${props.pagination.page}&perPage=${props.pagination.rowsPerPage}`)
         .then(res => {
           this.serverPagination = props.pagination
           this.serverData = _.values(res.data.transactions.data)
@@ -370,7 +355,7 @@ export default {
 
   },
   mounted () {
-    if (this.selectedEntity !== '' && this.selectedUserEntity !== '') {
+    if (this.transaction.transactable_id !== '' && this.transaction.transactable_type !== '') {
       this.request({
         pagination: this.serverPagination,
         filter: this.filter
@@ -378,19 +363,24 @@ export default {
     }
 
     this.$on('edit', function (obj) {
-      this.$router.push(`/dashboard/transactions/${obj.id}/edit`)
+      this.setEditTransaction(obj)
+      if(obj.transaction_type_id === 1){
+        this.$router.push(`/dashboard/transactions/disbursement/edit`)
+      }
+      
     })
   },
   watch: {
-    'selectedUserEntity' (val) {
+    'transaction.transactable_id' (val) {
       if (val !== '') {
         this.request({
           pagination: this.serverPagination,
           filter: this.filter
         })
+        this.$store.dispatch("transactions/transactionTransactableId", val);
       }
     },
-    'selectedEntity' (val) {
+    'transaction.transactable_type' (val) {
       if (val !== '') {
         this.$axios
           .get(
@@ -398,7 +388,7 @@ export default {
           )
           .then(res => {
             this.$store.dispatch('transactions/userEntities', res.data.userEntities)
-            this.$store.dispatch('transactions/selectedUserEntity', '')
+            this.$store.dispatch("transactions/transactionTransactableType", val);
           })
       }
     }

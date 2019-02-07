@@ -6,7 +6,7 @@
                 <q-card-title>
                     <div class="row">
                         <div class="col-xs-9">
-                            <div class="q-title">New Transaction</div>
+                            <div class="q-title">Edit Transaction</div>
                         </div>
                         <div class="col-xs-3">
                             <q-datetime v-model="date" type="date" float-label="Date" />
@@ -16,13 +16,13 @@
                 <q-card-main>
                     <div class="row">
                         <div class="col-xs-4">
-                            <q-select v-model="payee.payable_type" filter :options="entities" float-label="Vendor Type" clearable class="q-ml-sm" />
+                            <q-select v-model="editTransaction.payee.payable_type" filter :options="entities" float-label="Vendor Type" clearable class="q-ml-sm" />
                         </div>
                         <div class="col-xs-4">
-                            <q-select v-model="payee.payable_id" filter :options="vendorableNames" float-label="Vendor Name" clearable class="q-ml-sm" />
+                            <q-select v-model="editTransaction.payee.payable_id" filter :options="vendorableNames" float-label="Vendor Name" clearable class="q-ml-sm" />
                         </div>
                         <div class="col-xs-4">
-                            <q-input v-model="transaction.checknumber" float-label="Check number" class="q-ml-sm" />
+                            <q-input v-model="editTransaction.checknumber" float-label="Check number" class="q-ml-sm" />
                         </div>
                     </div>
                     <div class="row">
@@ -39,12 +39,12 @@
                             <div class="caption q-ml-md">{{ entity.address.brgy.description}} {{ entity.address.city.description }} {{ entity.address.province.description }}</div>
                         </div>
                         <div class="col-xs-3">
-                            <input-price label="Vatable Sales" :value="transaction.vatable_sales" v-model="transaction.vatable_sales"></input-price>
-                            <input-price label="Zero Rated Sales" :value="transaction.zero_rated_sales" v-model="transaction.zero_rated_sales"></input-price>
+                            <input-price label="Vatable Sales" :value="editTransaction.vatable_sales" v-model="editTransaction.vatable_sales"></input-price>
+                            <input-price label="Zero Rated Sales" :value="editTransaction.zerorated_sales" v-model="editTransaction.zerorated_sales"></input-price>
                         </div>
                         <div class="col-xs-3">
-                            <input-price label="VAT-Exempt Sales" :value="transaction.vat_exempt_sales" v-model="transaction.vat_exempt_sales"></input-price>
-                            <input-price label="VAT Amount" :value="transaction.vat_amount" v-model="transaction.vat_amount"></input-price>
+                            <input-price label="VAT-Exempt Sales" :value="editTransaction.vatexempt_sales" v-model="editTransaction.vatexempt_sales"></input-price>
+                            <input-price label="VAT Amount" :value="editTransaction.vat_amount" v-model="editTransaction.vat_amount"></input-price>
                         </div>
                     </div>
                 </q-card-main>
@@ -182,7 +182,8 @@ export default {
             "transactionType",
             "entities",
             "entity",
-            "tax"
+            "tax",
+            "editTransaction"
         ]),
         entityItems() {
             return this.$store.getters["transactions/entityItems"].map(e => {
@@ -456,9 +457,13 @@ export default {
             var m = now.getMonth() + 1;
             var d = now.getDate();
             return "" + y + (m < 10 ? "0" : "") + m + "/" + (d < 10 ? "0" : "") + d;
+        },
+        edit(){
+            this.$axios.get(`/transactions/${this.editTransaction.id}/edit?modelType=${this.editTransaction.transactable_type}&modelId=${this.editTransaction.transactable_id}&id=${this.editTransaction.id}`)
         }
     },
     mounted() {
+        this.edit()
         this.taxPercentage()
         this.getChartAccounts()
         this.intialize();
