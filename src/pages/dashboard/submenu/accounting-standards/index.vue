@@ -20,7 +20,7 @@ import accountingStandards from 'components/data-table/accounting-standards.vue'
 export default {
 
   methods: {
-    
+
     newAccountingStandard () {
       this.$store.dispatch('accountingStandards/newAccountingStandard', true)
       this.$store.dispatch('accountingStandards/accountingStandard', {

@@ -1,39 +1,73 @@
 <template>
-<div>
+  <div>
 
-    <q-table ref="table" color="primary" title="Company's Transaction Types" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
-        <template slot="top-right" slot-scope="props">
-            <q-search hide-underline v-model="filter" />
-        </template>
+    <q-table
+      ref="table"
+      color="primary"
+      title="Company's Transaction Types"
+      :data="serverData"
+      :columns="columns"
+      :filter="filter"
+      row-key="name"
+      :pagination.sync="serverPagination"
+      :rows-per-page-options="options"
+      @request="request"
+      :loading="loading"
+    >
+      <template
+        slot="top-right"
+        slot-scope="props"
+      >
+        <q-search
+          hide-underline
+          v-model="filter"
+        />
+      </template>
 
-        <template slot="body" slot-scope="props">
-            <q-tr :props="props">
-                <q-td key="name">
-                    {{props.row.name}}
-                    <q-popover touch-position v-if="actions">
-                        <q-list link style="min-width: 100px">
-                            <template v-for="(action, idx) in actions">
-                                <q-item :key="idx" @click.native="$emit(action, { id: props.row.id, companyName: props.row.name })" v-close-overlay>
-                                    <q-item-main :label="action" />
-                                </q-item>
-                            </template>
-                        </q-list>
-                    </q-popover>
-                </q-td>
-                <q-td key="desc">
-                    {{props.row.desc}}
-                </q-td>
-                <q-td key="created" :props="props">
-                    {{props.row.created_at}}
-                </q-td>
+      <template
+        slot="body"
+        slot-scope="props"
+      >
+        <q-tr :props="props">
+          <q-td key="name">
+            {{props.row.name}}
+            <q-popover
+              touch-position
+              v-if="actions"
+            >
+              <q-list
+                link
+                style="min-width: 100px"
+              >
+                <template v-for="(action, idx) in actions">
+                  <q-item
+                    :key="idx"
+                    @click.native="$emit(action, { id: props.row.id, companyName: props.row.name })"
+                    v-close-overlay
+                  >
+                    <q-item-main :label="action" />
+                  </q-item>
+                </template>
+              </q-list>
+            </q-popover>
+          </q-td>
+          <q-td key="desc">
+            {{props.row.desc}}
+          </q-td>
+          <q-td
+            key="created"
+            :props="props"
+          >
+            {{props.row.created_at}}
+          </q-td>
 
-            </q-tr>
+        </q-tr>
 
-        </template>
+      </template>
 
     </q-table>
 
-</div>
+  </div>
 </template>
 
 <script>

@@ -27,4 +27,3 @@ export const vendorableNames = (state) => state.vendorableNames
 export const purchaseReceived = (state) => state.purchaseReceived
 
 export const entityItems = (state) => state.entityItems
-

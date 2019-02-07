@@ -115,10 +115,14 @@ export const setPageMeta = ({
   commit('SET_PAGE_META', payload)
 }
 
-export const setServerErrorResponse = ({commit}, payload) => {
+export const setServerErrorResponse = ({
+  commit
+}, payload) => {
   commit('SET_SERVER__ERROR_RESPONSE', payload)
 }
 
-export const setHandleAsyncValidation = ({commit}, payload) => {
+export const setHandleAsyncValidation = ({
+  commit
+}, payload) => {
   commit('SET_HANDLE_ASYNC_VALIDATION', payload)
 }

@@ -99,4 +99,3 @@ export const newCommissaryModal = ({
 }, payload) => {
   commit('newCommissaryModal', payload)
 }
-

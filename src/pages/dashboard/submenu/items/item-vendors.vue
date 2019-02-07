@@ -1,12 +1,18 @@
 <template>
-<div class="q-pa-sm">
+  <div class="q-pa-sm">
     <item-vendors></item-vendors>
-    <q-page-sticky position="bottom-left" :offset="[16, 16]">
-        <q-btn color="primary" @click="showVendorableModal()">
-            <q-icon name="add"></q-icon>Add Vendor
-        </q-btn>
+    <q-page-sticky
+      position="bottom-left"
+      :offset="[16, 16]"
+    >
+      <q-btn
+        color="primary"
+        @click="showVendorableModal()"
+      >
+        <q-icon name="add"></q-icon>Add Vendor
+      </q-btn>
     </q-page-sticky>
-</div>
+  </div>
 </template>
 
 <script>
@@ -22,7 +28,7 @@ export default {
   methods: {
     showVendorableModal () {
       this.$store.dispatch('vendorables/vendorableModal', true)
-            this.$store.dispatch('vendorables/vendorable', {
+      this.$store.dispatch('vendorables/vendorable', {
         item_id: this.item.id,
         dis_percentage: '',
         end_date: '',

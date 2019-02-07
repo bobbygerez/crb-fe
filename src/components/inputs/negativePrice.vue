@@ -25,20 +25,19 @@ export default {
           return this.value.toString()
         } else {
           // User is not modifying now. Format display value for user interface
-          if(this.value === '-'){
+          if (this.value === '-') {
             return this.value
-          }else{
+          } else {
             return this.value.toFixed(2).replace(/(?!^-)(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1,')
           }
-          
         }
       },
       set: function (modifiedValue) {
         // Recalculate value after ignoring "$" and "," in user input
         // (?!^-) Accept Negative Value
-        if(modifiedValue === '-'){
+        if (modifiedValue === '-') {
           this.$emit('input', modifiedValue)
-        }else{
+        } else {
           let newValue = parseFloat(modifiedValue.replace(/(?!^-)[^\d.]/g, ''))
           // Ensure that it is not NaN
           if (isNaN(newValue)) {
@@ -48,7 +47,6 @@ export default {
           // $emit the event so that parent component gets it
           this.$emit('input', newValue)
         }
-        
       }
     }
   }

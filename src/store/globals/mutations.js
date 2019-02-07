@@ -43,8 +43,14 @@ export const SET_PAGE_META = (state, payload) => {
   state.pageMeta = payload
 }
 
-export const SET_ADDRESS_INNER_LOADING = (state, payload) => { state.addressInnerLoading = payload }
+export const SET_ADDRESS_INNER_LOADING = (state, payload) => {
+  state.addressInnerLoading = payload
+}
 
-export const SET_SERVER__ERROR_RESPONSE = (state, payload) => { state.serverErrorResponse = payload }
+export const SET_SERVER__ERROR_RESPONSE = (state, payload) => {
+  state.serverErrorResponse = payload
+}
 
-export const SET_HANDLE_ASYNC_VALIDATION = (state, payload) => { state.handleAsyncValidation = payload }
+export const SET_HANDLE_ASYNC_VALIDATION = (state, payload) => {
+  state.handleAsyncValidation = payload
+}

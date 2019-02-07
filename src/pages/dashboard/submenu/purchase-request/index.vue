@@ -1,5 +1,5 @@
 <template>
-<div class="q-pa-sm">
+  <div class="q-pa-sm">
     <purchase-request></purchase-request>
 
     <q-page-sticky
@@ -22,47 +22,47 @@ export default {
   created () {
     this.packages()
   },
-    
-    methods: {
-      packages () {
-        this.$axios.get('packages-all')
-          .then(res => {
-            this.$store.dispatch('items/packages', res.data.packages)
-          })
-        },
-        showNewPurchasRequestModal() {
-            this.$store.dispatch('purchaseRequests/purchaseRequest', {
-                name: '',
-                purchasable_id: '',
-                purchasable_type: '',
-                created_at: '',
-                purchasable: {
-                    name: ''
-                },
-                prepared_by: {
-                    firstname: '',
-                    middlename: '',
-                    lastname: ''
-                },
-                noted_by: {
-                    firstname: '',
-                    middlename: '',
-                    lastname: ''
-                },
-                noted_date: '',
-                approved_by: {
-                    firstname: '',
-                    middlename: '',
-                    lastname: ''
-                },
-                approved_date: ''
 
-            });
-            this.$store.dispatch('purchaseRequests/newPurchaseRequestModal', true)
-        }
+  methods: {
+    packages () {
+      this.$axios.get('packages-all')
+        .then(res => {
+          this.$store.dispatch('items/packages', res.data.packages)
+        })
     },
-    components: {
-        purchaseRequest
+    showNewPurchasRequestModal () {
+      this.$store.dispatch('purchaseRequests/purchaseRequest', {
+        name: '',
+        purchasable_id: '',
+        purchasable_type: '',
+        created_at: '',
+        purchasable: {
+          name: ''
+        },
+        prepared_by: {
+          firstname: '',
+          middlename: '',
+          lastname: ''
+        },
+        noted_by: {
+          firstname: '',
+          middlename: '',
+          lastname: ''
+        },
+        noted_date: '',
+        approved_by: {
+          firstname: '',
+          middlename: '',
+          lastname: ''
+        },
+        approved_date: ''
+
+      })
+      this.$store.dispatch('purchaseRequests/newPurchaseRequestModal', true)
     }
+  },
+  components: {
+    purchaseRequest
+  }
 }
 </script>

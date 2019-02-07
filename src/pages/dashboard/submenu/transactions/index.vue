@@ -185,31 +185,52 @@
         />
       </div>
     </q-modal>
-     <q-page-sticky
-    position="bottom"
-    :offset="$q.theme === 'mat' ? [16, 16] : [16, 16]"
-    v-bind="$attrs"
-  >
-    <transition
-      appear
-      enter-active-class="animated fadeInUpBig"
-      leave-active-class="animated fadeOutDownBig"
+    <q-page-sticky
+      position="bottom"
+      :offset="$q.theme === 'mat' ? [16, 16] : [16, 16]"
+      v-bind="$attrs"
     >
-      <q-btn-group rounded >
-        <q-btn rounded icon="payment" color="primary"  @click="addTransaction">
-          <q-tooltip :delay="1000" :offset="[0, 10]">Disbursement Journal</q-tooltip>
-        </q-btn>
-        <q-btn rounded icon="receipt" color="primary">
-          <q-tooltip :delay="1000" :offset="[0, 10]">Receipt Journal</q-tooltip>
-        </q-btn>
-        <q-btn rounded icon="account_balance_wallet" color="primary">
-          <q-tooltip :delay="1000" :offset="[0, 10]"> General Journal</q-tooltip>
-        </q-btn>
-      </q-btn-group>
-    </transition>
-  </q-page-sticky>
+      <transition
+        appear
+        enter-active-class="animated fadeInUpBig"
+        leave-active-class="animated fadeOutDownBig"
+      >
+        <q-btn-group rounded>
+          <q-btn
+            rounded
+            icon="payment"
+            color="primary"
+            @click="addTransaction"
+          >
+            <q-tooltip
+              :delay="1000"
+              :offset="[0, 10]"
+            >Disbursement Journal</q-tooltip>
+          </q-btn>
+          <q-btn
+            rounded
+            icon="receipt"
+            color="primary"
+          >
+            <q-tooltip
+              :delay="1000"
+              :offset="[0, 10]"
+            >Receipt Journal</q-tooltip>
+          </q-btn>
+          <q-btn
+            rounded
+            icon="account_balance_wallet"
+            color="primary"
+          >
+            <q-tooltip
+              :delay="1000"
+              :offset="[0, 10]"
+            > General Journal</q-tooltip>
+          </q-btn>
+        </q-btn-group>
+      </transition>
+    </q-page-sticky>
 
-   
   </div>
 </template>
 

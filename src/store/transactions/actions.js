@@ -158,18 +158,10 @@ export const purchaseReceived = ({
   commit
 }, payload) => {
   commit('purchaseReceived', payload)
-}  
+}
 
 export const entityItems = ({
   commit
 }, payload) => {
   commit('entityItems', payload)
-} 
-
-
-
-
-
-
-
-
+}
