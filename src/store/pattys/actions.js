@@ -171,6 +171,8 @@ export const setCategories = ({
   commit('SET_CATEGORIES', payload)
 }
 
-export const setServerResponseMessage = ({commit}, payload) => {
+export const setServerResponseMessage = ({
+  commit
+}, payload) => {
   commit('SET_SERVER_MESSAGE', payload)
 }

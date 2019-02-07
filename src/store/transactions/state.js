@@ -70,5 +70,5 @@ export default {
   },
   vendorableNames: [],
   purchaseReceived: [],
-  entityItems:[]
+  entityItems: []
 }

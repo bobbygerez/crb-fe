@@ -170,12 +170,13 @@ export const purchaseReceived = ({
   commit
 }, payload) => {
   commit('purchaseReceived', payload)
-}  
+}
 
 export const entityItems = ({
   commit
 }, payload) => {
   commit('entityItems', payload)
+<<<<<<< HEAD
 } 
 
 export const setTax = ({
@@ -198,3 +199,6 @@ export const setEditTransaction = ({
 
 
 
+=======
+}
+>>>>>>> eaac3fc273f31bf894ff5e941da75839013e1f1a

@@ -13,9 +13,7 @@
       @request="request"
       :loading="loading"
     >
-      <template
-        slot="top-right"
-      >
+      <template slot="top-right">
         <q-search
           hide-underline
           v-model="filter"

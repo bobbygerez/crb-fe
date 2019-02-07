@@ -62,7 +62,6 @@ export const chartAccountId = (state, payload) => {
   state.transaction.chart_account_id = payload
 }
 
-
 export const transactionVatableSales = (state, payload) => {
   state.transaction.vatable_sales = payload
 }
@@ -118,6 +117,7 @@ export const purchaseReceived = (state, payload) => {
 export const entityItems = (state, payload) => {
   state.entityItems = payload
 }
+<<<<<<< HEAD
 
 export const setTax = (state, payload) => {
   state.tax = payload
@@ -131,3 +131,5 @@ export const setEditTransaction = (state, payload) => {
 
 
 
+=======
+>>>>>>> eaac3fc273f31bf894ff5e941da75839013e1f1a

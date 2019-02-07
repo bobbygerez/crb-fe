@@ -1,6 +1,7 @@
 <template>
 <div class="q-pa-sm">
     <div class="row">
+<<<<<<< HEAD
         <div class="col-xs-9">
             <q-card inline class="full-width">
                 <q-card-title>
@@ -63,6 +64,32 @@
                     </q-card-main>
                     <q-card-separator />
                 </q-card>
+=======
+      <div class="col-xs-9">
+        <q-card
+          inline
+          class="full-width"
+        >
+          <q-card-title>
+            <div class="row">
+              <div class="col-xs-6">
+                <div class="q-title">New Transaction</div>
+              </div>
+              <div class="col-xs-3">
+                <q-datetime
+                  v-model="date"
+                  type="date"
+                  float-label="Date"
+                />
+              </div>
+              <div class="col-xs-3">
+                <q-input
+                  v-model="transaction.checknumber"
+                  float-label="Check number"
+                  class="q-ml-sm"
+                />
+              </div>
+>>>>>>> eaac3fc273f31bf894ff5e941da75839013e1f1a
             </div>
         </div>
 
@@ -71,6 +98,7 @@
     <br>
     <hr>
     <div class="row">
+<<<<<<< HEAD
         <div class="col-xs-12">
             <q-tabs animated swipeable inverted color="primary" align="left">
                 <q-tab default name="invoices" slot="title" icon="assignment" label="Apply to Invoices" />
@@ -137,6 +165,137 @@
                 </q-tab-pane>
             </q-tabs>
         </div>
+=======
+      <div class="col-xs-12">
+        <q-tabs
+          animated
+          swipeable
+          inverted
+          color="primary"
+          align="left"
+        >
+          <q-tab
+            default
+            name="invoices"
+            slot="title"
+            icon="assignment"
+            label="Apply to Invoices"
+          />
+          <q-tab
+            name="expenses"
+            slot="title"
+            icon="library_books"
+            label="Apply to Expenses"
+          />
+          <q-tab-pane name="invoices">
+            <div
+              class="row"
+              v-for="(invoice, key) in invoices"
+              :key="key"
+            >
+              <div class="col-xs-3">
+                <q-btn
+                  color="primary"
+                  flat
+                  class="float-right"
+                >
+                  <q-icon name="pageview"></q-icon>
+                </q-btn>
+                <q-select
+                  v-model="invoice.purchase_received_id"
+                  filter
+                  :options="purchaseReceived"
+                  float-label="Invoice No."
+                  clearable
+                  class="q-ml-sm"
+                />
+              </div>
+              <div class="col-xs-2">
+                <q-datetime
+                  v-model="invoice.due_date"
+                  type="date"
+                  float-label="Date Due"
+                />
+              </div>
+              <div class="col-xs-1">
+                <input-price
+                  label="Amount Due"
+                  :value="invoice.amount_due"
+                  v-model="invoice.amount_due"
+                  class="q-ml-sm"
+                ></input-price>
+              </div>
+              <div class="col-xs-3">
+                <q-input
+                  v-model="invoice.description"
+                  float-label="Description"
+                  class="q-ml-sm"
+                />
+              </div>
+              <div class="col-xs-1">
+                <q-input
+                  v-model="invoice.discount"
+                  float-label="Discount"
+                  class="q-ml-sm"
+                />
+              </div>
+              <div class="col-xs-1">
+                <input-price
+                  label="Amount Paid"
+                  :value="invoice.amount_paid"
+                  v-model="invoice.amount_paid"
+                  class="q-ml-sm"
+                ></input-price>
+              </div>
+              <div class="col-xs-1">
+                <q-checkbox
+                  class="q-mt-lg"
+                  v-model="invoice.pay"
+                  checked-icon="check"
+                  unchecked-icon="close"
+                />
+                <q-btn
+                  color="primary"
+                  size="sm"
+                  icon="close"
+                  flat
+                  round
+                  class="float-right"
+                  @click="removeInvoice(key)"
+                />
+              </div>
+            </div>
+          </q-tab-pane>
+          <q-tab-pane name="expenses">Alarms tab</q-tab-pane>
+        </q-tabs>
+      </div>
+    </div>
+
+    <!-- <div class="row" v-for="(item, index) in purchasesItems.items" :key="index">
+        <div class="col-xs-3">
+            <q-select v-model="item.id" filter :options="entityItems" float-label="Item Name" clearable class="q-ml-sm" />
+        </div>
+
+        <div class="col-xs-2">
+            <q-input :value="item.desc" float-label="Particulars" disable />
+        </div>
+        <div class="col-xs-2">
+            <q-select v-model="item.chart_account_id" filter :options="chartAccounts" float-label="GL account" clearable />
+        </div>
+        <div class="col-xs-2">
+            <q-input :value="item.tax_type.name" float-label="Tax Type" disable />
+        </div>
+        <div class="col-xs-1" v-if="transactionType.taccount_id !== 3">
+            <q-input float-label="Qty" v-model="item.pivot.qty" disable />
+        </div>
+        <div class="col-xs-1">
+            <negative-price label="Price" :value="item.pivot_price" v-model="item.pivot_price" :disabled="true"></negative-price>
+        </div>
+        <div class="col-xs-1">
+            <negative-price label="Credit Amount" :value="item.total_amount" v-model="item.total_amount" :disabled="true"></negative-price>
+        </div>
+
+>>>>>>> eaac3fc273f31bf894ff5e941da75839013e1f1a
     </div>
     <br>
     <q-btn color="primary" label="Submit" class="float-left" @click="store" />
@@ -158,6 +317,7 @@ export default {
     mixins: [numberToWords],
     data() {
         return {
+<<<<<<< HEAD
             additionalItems: [],
             oldAdditionalItems: [],
             date: "",
@@ -254,8 +414,33 @@ export default {
             return `${this.transaction.created_by.firstname} ${
         this.transaction.created_by.lastname
       }`;
+=======
+          label: e.name,
+          value: e.id
+        }
+      })
+    },
+    purchaseReceived () {
+      return this.$store.getters['transactions/purchaseReceived'].map(e => {
+        let invoice = e.invoice_no
+        return {
+          label: `${invoice.substring(1, 21)}`,
+          value: e.id,
+          items: e.items,
+          grand_total: e.grand_total,
+          received_date: e.received_date
+        }
+      })
+    },
+    vendorableNames () {
+      return this.$store.getters['transactions/vendorableNames'].map(e => {
+        return {
+          label: e.name,
+          value: e.id
+>>>>>>> eaac3fc273f31bf894ff5e941da75839013e1f1a
         }
     },
+<<<<<<< HEAD
     methods: {
         ...mapActions('transactions', ['setTax']),
         applyToExpenses() {
@@ -367,6 +552,54 @@ export default {
           
           let invoiceVatableSales =   _.sumBy(this.invoices, i => {
                     return i.vatable_sales;
+=======
+    transactionTypes () {
+      return this.$store.getters['transactions/transactionTypes'].map(e => {
+        return {
+          label: e.name,
+          value: e.id
+        }
+      })
+    },
+    chartAccounts () {
+      let chartAccounts = _.values(this.$store.getters['transactions/chartAccounts'])
+      let res = []
+      const cb = (e) => {
+        res.push({
+          value: e.id,
+          label: `(${e.account_code})  ${e.name}`
+        })
+        e.all_children && e.all_children.forEach(cb)
+      }
+      chartAccounts.forEach(cb)
+      return res
+    },
+    createdBy () {
+      return `${this.transaction.created_by.firstname} ${this.transaction.created_by.lastname}`
+    }
+  },
+  methods: {
+    removeInvoice (index) {
+      this.invoices.splice(index, 1)
+    },
+    removeGl (index) {
+      if (this.generalLedgers[index].id !== '') {
+        this.$q.notify({
+          color: 'negative',
+          icon: 'delete',
+          message: `Delete ${this.generalLedgers[index].particulars}?`,
+          actions: [{
+            label: 'OK',
+            handler: () => {
+              var generalLedger = _.head(this.generalLedgers.splice(index, 1))
+              this.$axios.delete(`/general_ledgers/${generalLedger.id}?id=${generalLedger.id}`)
+                .then((res) => {
+                  this.$q.notify({
+                    color: 'positive',
+                    icon: 'check',
+                    message: `${generalLedger.particulars} deleted successfully`
+                  })
+>>>>>>> eaac3fc273f31bf894ff5e941da75839013e1f1a
                 })
           
           let  vatableItems= _.filter(this.additionalItems, (i) => {
@@ -417,6 +650,7 @@ export default {
                     return i.amount;
                 })
 
+<<<<<<< HEAD
             let totalZeroRated = zeroRated + additionalZeroRatedItems
 
             this.$store.dispatch(
@@ -456,8 +690,18 @@ export default {
             var m = now.getMonth() + 1;
             var d = now.getDate();
             return "" + y + (m < 10 ? "0" : "") + m + "/" + (d < 10 ? "0" : "") + d;
+=======
+              let zeroRated = _.filter(vm.generalLedgers, (i) => {
+                return i.tax_type_id === 3
+              })
+              vm.zeroRated = _.sumBy(zeroRated, (i) => {
+                return i.price * i.qty
+              })
+            })
+>>>>>>> eaac3fc273f31bf894ff5e941da75839013e1f1a
         }
     },
+<<<<<<< HEAD
     mounted() {
         this.taxPercentage()
         this.getChartAccounts()
@@ -467,11 +711,25 @@ export default {
         this.date = this.dateNow();
         this.$store.dispatch('transactions/transactionTypeId', 1)
 
+=======
+    'selectedVendorableType' (val) {
+      if (val !== '') {
+        this.$axios
+          .get(
+            `/transactions-entities?modelType=${val}`
+          )
+          .then(res => {
+            this.$store.dispatch('transactions/vendorableNames', res.data.userEntities)
+            // this.$store.dispatch('transactions/selectedUserEntity', '')
+          })
+      }
+>>>>>>> eaac3fc273f31bf894ff5e941da75839013e1f1a
     },
     components: {
         inputPrice,
         negativePrice
     },
+<<<<<<< HEAD
     watch: {
         "transaction.chart_account_id"(val) {
             this.$store.dispatch("transactions/chartAccountId", val);
@@ -594,6 +852,43 @@ export default {
                 });
             this.$store.dispatch('transactions/payeePayableId', val)
         }
+=======
+    'selectedPurchase' (val) {
+      if (val !== null) {
+        this.purchasesItems = _.find(this.purchases, (x) => {
+          return x.value === val
+        })
+        // eslint-disable-next-line
+        let total_amount = _.sumBy(this.purchasesItems.items, (i) => {
+          return i.total_amount
+        })
+        let vatableItems = _.filter(this.purchasesItems.items, (i) => {
+          return i.tax_type_id === 1
+        })
+        this.vatable = _.sumBy(vatableItems, (i) => {
+          return i.total_amount
+        })
+        this.vatAmount = _.sumBy(vatableItems, (i) => {
+          return i.purchase_tax
+        })
+        let vatExemptItems = _.filter(this.purchasesItems.items, (i) => {
+          return i.tax_type_id === 2
+        })
+        this.vatExempt = _.sumBy(vatExemptItems, (i) => {
+          return i.total_amount
+        })
+        let zeroRated = _.filter(this.purchasesItems.items, (i) => {
+          return i.tax_type_id === 3
+        })
+        this.zeroRated = _.sumBy(zeroRated, (i) => {
+          return i.total_amount
+        })
+        this.$store.dispatch('transactions/transactionTotalAmount', total_amount)
+        this.numToWords = this.withDecimal(total_amount)
+      } else {
+        this.purchasesItems = []
+      }
+>>>>>>> eaac3fc273f31bf894ff5e941da75839013e1f1a
     }
 };
 </script>

@@ -297,7 +297,7 @@ export default {
     inputPrice
   },
   computed: {
-    
+
     ...mapState('purchaseRequests', ['purchaseRequest', 'purchaseItem', 'item']),
     itemLists () {
       return this.$store.getters['purchaseRequests/itemLists'].map(e => {
@@ -341,21 +341,21 @@ export default {
     }
   },
   methods: {
-    disabled(props){
-      let items = props.row.items;
-       if (props.row.items.length > 0){
-         if (items[0].purchases.length > 0){
-           return items[0].purchases[0].pivot.approved_by != null
-         }
-       }
-       return true;
+    disabled (props) {
+      let items = props.row.items
+      if (props.row.items.length > 0) {
+        if (items[0].purchases.length > 0) {
+          return items[0].purchases[0].pivot.approved_by != null
+        }
+      }
+      return true
     },
-    price(props){
-      let items = props.row;
-      if (props.row.items.length > 0){
-          return parseFloat(items[0].purchases[0].pivot.price)
-       }
-      return 0;
+    price (props) {
+      let items = props.row
+      if (props.row.items.length > 0) {
+        return parseFloat(items[0].purchases[0].pivot.price)
+      }
+      return 0
     },
     notedBy (purchaseRequestId) {
       this.$axios.get(`purchases-noted-by?id=${purchaseRequestId}`)

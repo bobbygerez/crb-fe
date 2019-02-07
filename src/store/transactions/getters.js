@@ -27,7 +27,10 @@ export const vendorableNames = (state) => state.vendorableNames
 export const purchaseReceived = (state) => state.purchaseReceived
 
 export const entityItems = (state) => state.entityItems
+<<<<<<< HEAD
 
 export const getTax = (state) => state.tax
 
 export const getEditTransaction = (state) => state.editTransaction
+=======
+>>>>>>> eaac3fc273f31bf894ff5e941da75839013e1f1a

@@ -1,45 +1,94 @@
 <template>
-<div>
-    <q-table ref="table" color="primary" :title="`${item.name} vendors`" :data="serverData" :columns="columns" :filter="filter" row-key="name" :pagination.sync="serverPagination" :rows-per-page-options="options" @request="request" :loading="loading">
-        <template slot="body" slot-scope="props">
-            <q-tr :props="props">
-                <q-td key="name">
-                    {{props.row.name}}
-                    <q-popover touch-position v-if="actions">
-                        <q-list link style="min-width: 100px">
-                            <template v-for="(action, idx) in actions">
-                                <q-item :key="idx" @click.native="myFunction(action, props.row.pivot.id, props.row.pivot.vendorable_id, props.row.pivot.vendorable_type)" v-close-overlay>
-                                    <q-item-main :label="capitalize(action)" />
-                                </q-item>
-                            </template>
-                        </q-list>
-                    </q-popover>
-                </q-td>
-                <q-td key="type" :props="props">
-                    {{ props.row.pivot.vendorable_type.substring(10) }}
-                </q-td>
-                <q-td key="price" :props="props">
-                    {{ props.row.pivot.price|currency('₱ ') }}
-                </q-td>
-                 <q-td key="price" :props="props">
-                    {{ props.row.pivot.freight|currency('₱ ') }}
-                </q-td>
-                <q-td key="start_date" :props="props">
-                    {{ props.row.pivot.start_date }}
-                </q-td>
-                <q-td key="end_date" :props="props">
-                    {{ props.row.pivot.end_date }}
-                </q-td>
-                <q-td key="volume" :props="props">
-                    {{ props.row.pivot.volume }}
-                </q-td>
-                <q-td key="rank" :props="props">
-                    {{ props.row.pivot.rank }}
-                </q-td>
-                <q-td key="dis_percentage" :props="props">
-                    {{ `${props.row.pivot.dis_percentage}%`  }}
-                </q-td>
-            </q-tr>
+  <div>
+    <q-table
+      ref="table"
+      color="primary"
+      :title="`${item.name} vendors`"
+      :data="serverData"
+      :columns="columns"
+      :filter="filter"
+      row-key="name"
+      :pagination.sync="serverPagination"
+      :rows-per-page-options="options"
+      @request="request"
+      :loading="loading"
+    >
+      <template
+        slot="body"
+        slot-scope="props"
+      >
+        <q-tr :props="props">
+          <q-td key="name">
+            {{props.row.name}}
+            <q-popover
+              touch-position
+              v-if="actions"
+            >
+              <q-list
+                link
+                style="min-width: 100px"
+              >
+                <template v-for="(action, idx) in actions">
+                  <q-item
+                    :key="idx"
+                    @click.native="myFunction(action, props.row.pivot.id, props.row.pivot.vendorable_id, props.row.pivot.vendorable_type)"
+                    v-close-overlay
+                  >
+                    <q-item-main :label="capitalize(action)" />
+                  </q-item>
+                </template>
+              </q-list>
+            </q-popover>
+          </q-td>
+          <q-td
+            key="type"
+            :props="props"
+          >
+            {{ props.row.pivot.vendorable_type.substring(10) }}
+          </q-td>
+          <q-td
+            key="price"
+            :props="props"
+          >
+            {{ props.row.pivot.price|currency('₱ ') }}
+          </q-td>
+          <q-td
+            key="price"
+            :props="props"
+          >
+            {{ props.row.pivot.freight|currency('₱ ') }}
+          </q-td>
+          <q-td
+            key="start_date"
+            :props="props"
+          >
+            {{ props.row.pivot.start_date }}
+          </q-td>
+          <q-td
+            key="end_date"
+            :props="props"
+          >
+            {{ props.row.pivot.end_date }}
+          </q-td>
+          <q-td
+            key="volume"
+            :props="props"
+          >
+            {{ props.row.pivot.volume }}
+          </q-td>
+          <q-td
+            key="rank"
+            :props="props"
+          >
+            {{ props.row.pivot.rank }}
+          </q-td>
+          <q-td
+            key="dis_percentage"
+            :props="props"
+          >
+            {{ `${props.row.pivot.dis_percentage}%` }}
+          </q-td>
+        </q-tr>
 
       </template>
 
@@ -372,96 +421,96 @@ export default {
     userEntities () {
       return this.$store.getters['items/userEntities'].map(e => {
         return {
-            vendorableType: [{
-                    value: 'App\\Model\\Logistic',
-                    label: 'Logistic'
-                },
-                {
-                    value: 'App\\Model\\Branch',
-                    label: 'Branch'
-                },
-                {
-                    value: 'App\\Model\\Commissary',
-                    label: 'Commissary'
-                },
-                {
-                    value: 'App\\Model\\OtherVendor',
-                    label: 'Other Vendor'
-                },
-            ],
-            placeholderVendorableType: '',
-            terms: '',
-            createdBy: '',
-            approvedBy: '',
-            vendorType: '',
-            vendorName: '',
-            actions: ['edit', 'delete'],
-            editVendorableModal: false,
-            options: [5, 10, 15, 20],
-            lastPage: '',
-            serverData: [],
-            serverPagination: {
-                page: 1,
-                rowsNumber: 10,
-                rowsPerPage: 10 // specifying this determines pagination is server-side
-            },
-            columns: [{
-                    name: 'name',
-                    label: 'Company Name',
-                    field: 'name',
-                    align: 'left'
-                },
-                {
-                    name: 'type',
-                    label: 'Type',
-                    field: 'type',
-                    align: 'left'
-                },
-                {
-                    name: 'price',
-                    label: 'Price',
-                    field: 'price',
-                    align: 'left'
-                },
-                {
-                    name: 'freight',
-                    label: 'Freight',
-                    field: 'freight',
-                    align: 'left'
-                },
-                {
-                    name: 'start_date',
-                    label: 'Start date',
-                    field: 'start_date',
-                    align: 'left'
-                },
-                {
-                    name: 'end_date',
-                    label: 'End date',
-                    field: 'end_date',
-                    align: 'left'
-                },
-                {
-                    name: 'volume',
-                    label: 'Volume',
-                    field: 'volume',
-                    align: 'left'
-                },
-                {
-                    name: 'rank',
-                    label: 'Prospect Level',
-                    field: 'rank',
-                    align: 'left'
-                },
-                {
-                    name: 'dis_percentage',
-                    label: 'Distribution Percentage',
-                    field: 'dis_percentage',
-                    align: 'left'
-                }
-            ],
-            filter: '',
-            loading: false
+          vendorableType: [{
+            value: 'App\\Model\\Logistic',
+            label: 'Logistic'
+          },
+          {
+            value: 'App\\Model\\Branch',
+            label: 'Branch'
+          },
+          {
+            value: 'App\\Model\\Commissary',
+            label: 'Commissary'
+          },
+          {
+            value: 'App\\Model\\OtherVendor',
+            label: 'Other Vendor'
+          }
+          ],
+          placeholderVendorableType: '',
+          terms: '',
+          createdBy: '',
+          approvedBy: '',
+          vendorType: '',
+          vendorName: '',
+          actions: ['edit', 'delete'],
+          editVendorableModal: false,
+          options: [5, 10, 15, 20],
+          lastPage: '',
+          serverData: [],
+          serverPagination: {
+            page: 1,
+            rowsNumber: 10,
+            rowsPerPage: 10 // specifying this determines pagination is server-side
+          },
+          columns: [{
+            name: 'name',
+            label: 'Company Name',
+            field: 'name',
+            align: 'left'
+          },
+          {
+            name: 'type',
+            label: 'Type',
+            field: 'type',
+            align: 'left'
+          },
+          {
+            name: 'price',
+            label: 'Price',
+            field: 'price',
+            align: 'left'
+          },
+          {
+            name: 'freight',
+            label: 'Freight',
+            field: 'freight',
+            align: 'left'
+          },
+          {
+            name: 'start_date',
+            label: 'Start date',
+            field: 'start_date',
+            align: 'left'
+          },
+          {
+            name: 'end_date',
+            label: 'End date',
+            field: 'end_date',
+            align: 'left'
+          },
+          {
+            name: 'volume',
+            label: 'Volume',
+            field: 'volume',
+            align: 'left'
+          },
+          {
+            name: 'rank',
+            label: 'Prospect Level',
+            field: 'rank',
+            align: 'left'
+          },
+          {
+            name: 'dis_percentage',
+            label: 'Distribution Percentage',
+            field: 'dis_percentage',
+            align: 'left'
+          }
+          ],
+          filter: '',
+          loading: false
         }
       })
     }
