@@ -16,10 +16,10 @@
                 <q-card-main>
                     <div class="row">
                         <div class="col-xs-4">
-                            <q-select v-model="editTransaction.payee.payable_type" filter :options="entities" float-label="Vendor Type" clearable class="q-ml-sm" />
+                            <q-select v-model="editTransaction.payee.payable_type" filter :options="entities" float-label="Vendor Type" clearable class="q-ml-sm" disable/>
                         </div>
                         <div class="col-xs-4">
-                            <q-select v-model="editTransaction.payee.payable_id" filter :options="vendorableNames" float-label="Vendor Name" clearable class="q-ml-sm" />
+                            <q-select v-model="editTransaction.payee.payable_id" filter :options="vendorableNames" float-label="Vendor Name" clearable class="q-ml-sm" disable/>
                         </div>
                         <div class="col-xs-4">
                             <q-input v-model="editTransaction.checknumber" float-label="Check number" class="q-ml-sm" />
@@ -40,10 +40,10 @@
                         </div>
                         <div class="col-xs-3">
                             <input-price label="Vatable Sales" :value="editTransaction.vatable_sales" v-model="editTransaction.vatable_sales"></input-price>
-                            <input-price label="Zero Rated Sales" :value="editTransaction.zerorated_sales" v-model="editTransaction.zerorated_sales"></input-price>
+                            <input-price label="Zero Rated Sales" :value="editTransaction.zerorated_sales" v-model="editTransaction.zero_rated_sales"></input-price>
                         </div>
                         <div class="col-xs-3">
-                            <input-price label="VAT-Exempt Sales" :value="editTransaction.vatexempt_sales" v-model="editTransaction.vatexempt_sales"></input-price>
+                            <input-price label="VAT-Exempt Sales" :value="editTransaction.vatexempt_sales" v-model="editTransaction.vat_exempt_sales"></input-price>
                             <input-price label="VAT Amount" :value="editTransaction.vat_amount" v-model="editTransaction.vat_amount"></input-price>
                         </div>
                     </div>
@@ -55,11 +55,11 @@
             <div class="col-xs-8">
                 <q-card inline class="q-ml-sm">
                     <q-card-main>
-                        <q-select v-model="transaction.chart_account_id" filter :options="chartAccounts" float-label="CASH ACCOUNT" clearable />
+                        <q-select v-model="editTransaction.chart_account_id" filter :options="chartAccounts" float-label="CASH ACCOUNT" clearable />
                         <br>
-                        <input-price label="Total Discount" :value="transaction.total_discount" v-model="transaction.total_discount" class="q-ml-sm"></input-price>
-                        <input-price label="Cash Account Balance" :value="transaction.total_amount" v-model="transaction.total_amount" class="q-ml-sm"></input-price>
-                        <q-input v-model="transaction.remarks" type="textarea" float-label="Remarks" :max-height="150" rows="4" hide-underline />
+                        <input-price label="Total Discount" :value="editTransaction.total_discount" v-model="editTransaction.total_discount" class="q-ml-sm"></input-price>
+                        <input-price label="Cash Account Balance" :value="editTransaction.total_amount" v-model="editTransaction.total_amount" class="q-ml-sm"></input-price>
+                        <q-input v-model="editTransaction.remarks" type="textarea" float-label="Remarks" :max-height="150" rows="4" hide-underline />
                     </q-card-main>
                     <q-card-separator />
                 </q-card>
@@ -78,7 +78,7 @@
                 <q-tab-pane name="invoices">
                     <div class="row" v-for="(invoice, key) in invoices" :key="key">
                         <div class="col-xs-3">
-                            <q-btn color="primary" flat class="float-right">
+                            <q-btn color="primary" flat class="float-right" @click="getPurchaseReceived(invoice.purchase_received_id)">
                                 <q-icon name="pageview"></q-icon>
                             </q-btn>
                             <q-select v-model="invoice.purchase_received_id" filter :options="purchaseReceived" float-label="Invoice No." clearable class="q-ml-sm" />
@@ -138,8 +138,7 @@
             </q-tabs>
         </div>
     </div>
-    <br>
-    <q-btn color="primary" label="Submit" class="float-left" @click="store" />
+    <q-btn color="primary" label="Update" class="float-left" @click="update" />
 
     <br>
     <br>
@@ -152,7 +151,8 @@ import inputPrice from "components/inputs/price";
 import negativePrice from "components/inputs/negativePrice";
 import numberToWords from "components/mixins/numberToWords";
 import {
-    mapState, mapActions
+    mapState,
+    mapActions
 } from "vuex";
 export default {
     mixins: [numberToWords],
@@ -250,15 +250,10 @@ export default {
             };
             chartAccounts.forEach(cb);
             return res;
-        },
-        createdBy() {
-            return `${this.transaction.created_by.firstname} ${
-        this.transaction.created_by.lastname
-      }`;
         }
     },
     methods: {
-        ...mapActions('transactions', ['setTax']),
+        ...mapActions('transactions', ['setTax', 'setEditTransaction', 'setEditTransactionTotalAmount', 'setEditTransactionZeroRatedSales', 'setEditTransactionVatableSales', 'setEditTransactionVatExemptSales', 'setEditTransactionVatAmount']),
         applyToExpenses() {
             if (this.additionalItems.length < 1) {
                 this.addAdditionalItems()
@@ -314,10 +309,10 @@ export default {
             });
             this.setValue();
         },
-        taxPercentage(){
-          this.$axios.get('/tax-percentage').then(res => {
-            this.setTax(res.data.tax)
-          })
+        taxPercentage() {
+            this.$axios.get('/tax-percentage').then(res => {
+                this.setTax(res.data.tax)
+            })
         },
         getChartAccounts() {
             this.$axios
@@ -334,23 +329,19 @@ export default {
 
                 });
         },
-        store() {
+        update() {
             this.$axios
-                .post(`/transactions`, {
+                .put(`/disbursement_transaction/${this.editTransaction.id}?id=${this.editTransaction.id}`, {
                     invoices: this.invoices,
                     additionalItems: this.additionalItems,
-                    transaction: this.transaction,
-                    payee: this.payee
+                    transaction: this.editTransaction
                 })
                 .then(res => {
                     this.$q.notify({
                         color: "positive",
                         icon: "check",
-                        message: `Transaction created successfully.`
+                        message: `Transaction updated successfully.`
                     });
-                    this.invoice = [];
-                    this.addInvoice();
-                    this.intialize();
                 })
                 .catch();
         },
@@ -364,74 +355,58 @@ export default {
             this.$data.oldAdditionalItems = _.cloneDeep(this.$data.additionalItems);
         },
         overAllTotal() {
-          var vm = this
-          
-          let invoiceVatableSales =   _.sumBy(this.invoices, i => {
-                    return i.vatable_sales;
-                })
-          
-          let  vatableItems= _.filter(this.additionalItems, (i) => {
-                    return i.tax_type_id === 1
-                })
+            var vm = this
 
-           
-          let additionalVatableItems = _.sumBy(vatableItems, (i) => {
-                    return i.amount;
-                })
+            let invoiceVatableSales = _.sumBy(this.invoices, i => {
+                return i.vatable_sales;
+            })
 
-          let totalVatableSales =  additionalVatableItems + invoiceVatableSales
-            this.$store.dispatch(
-                "transactions/transactionVatableSales",
-               parseFloat(totalVatableSales)
-            );
+            let vatableItems = _.filter(this.additionalItems, (i) => {
+                return i.tax_type_id === 1
+            })
 
+            let additionalVatableItems = _.sumBy(vatableItems, (i) => {
+                return i.amount;
+            })
+
+            let totalVatableSales = additionalVatableItems + invoiceVatableSales
+            this.setEditTransactionVatableSales(parseFloat(totalVatableSales));
 
             let invoiceVatExemptSales = _.sumBy(this.invoices, i => {
-                    return i.vat_exempt_sales;
-                })
+                return i.vat_exempt_sales;
+            })
 
             let vatExemptItems = _.filter(this.additionalItems, (i) => {
-                    return i.tax_type_id === 2
-                })
-            
+                return i.tax_type_id === 2
+            })
+
             let additionalVatExemptItems = _.sumBy(vatExemptItems, (i) => {
-                    return i.amount;
-                })
+                return i.amount;
+            })
 
-            let totalVatExemptitems =  invoiceVatExemptSales + additionalVatExemptItems
+            let totalVatExemptitems = invoiceVatExemptSales + additionalVatExemptItems
 
-            this.$store.dispatch(
-                "transactions/transactionVatExemptSales",
-                totalVatExemptitems
-            );
+            this.setEditTransactionVatExemptSales(totalVatExemptitems);
 
+            let zeroRated = _.sumBy(this.invoices, i => {
+                return i.zero_rated_sales;
+            })
 
-           let zeroRated = _.sumBy(this.invoices, i => {
-                    return i.zero_rated_sales;
-                })
-          
-           let zeroRatedItems = _.filter(this.additionalItems, (i) => {
-                    return i.tax_type_id === 3
-                })
+            let zeroRatedItems = _.filter(this.additionalItems, (i) => {
+                return i.tax_type_id === 3
+            })
 
-          let additionalZeroRatedItems = _.sumBy(zeroRatedItems, (i) => {
-                    return i.amount;
-                })
+            let additionalZeroRatedItems = _.sumBy(zeroRatedItems, (i) => {
+                return i.amount;
+            })
 
             let totalZeroRated = zeroRated + additionalZeroRatedItems
 
-            this.$store.dispatch(
-                "transactions/transactionZeroRatedSales",
-                totalZeroRated
-            );
+            this.setEditTransactionZeroRatedSales(totalZeroRated);
 
+            let totalVatAmount = totalVatableSales * (this.tax.percent / 100)
 
-            let totalVatAmount = totalVatableSales * (this.tax.percent/100)
-
-            this.$store.dispatch(
-                "transactions/transactionVatAmount",
-               totalVatAmount
-            );
+            this.setEditTransactionVatAmount(totalVatAmount);
 
             this.$store.dispatch(
                 "transactions/transactionDiscount",
@@ -447,8 +422,8 @@ export default {
                 return i.amount;
             });
 
-            let totalAmount  = totalInvoiceAmount + totalAdditionalItemsAmount
-            this.$store.dispatch("transactions/transactionTotalAmount", totalAmount);
+            let totalAmount = totalInvoiceAmount + totalAdditionalItemsAmount
+            this.setEditTransactionTotalAmount(totalAmount)
             this.numToWords = this.withDecimal(totalAmount);
         },
         dateNow() {
@@ -458,8 +433,54 @@ export default {
             var d = now.getDate();
             return "" + y + (m < 10 ? "0" : "") + m + "/" + (d < 10 ? "0" : "") + d;
         },
-        edit(){
+        edit() {
             this.$axios.get(`/transactions/${this.editTransaction.id}/edit?modelType=${this.editTransaction.transactable_type}&modelId=${this.editTransaction.transactable_id}&id=${this.editTransaction.id}`)
+                .then(res => {
+                    this.setEditTransaction(res.data.transaction)
+                    let vm = this
+                    this.$store.dispatch('transactions/purchaseReceived', res.data.transaction.purchase_received)
+                    res.data.transaction.purchase_received.forEach(function (p, i) {
+                        vm.invoices.push({
+                            id: i + 1,
+                            purchase_received_id: p.id,
+                            date_due: p.date_due,
+                            amount_due: p.pivot_amount_due,
+                            description: p.description,
+                            discount: p.pivot_discount,
+                            amount_paid: p.pivot_amount_paid,
+                            vatable_sales: p.pivot_vatable_sales,
+                            vat_exempt_sales: p.pivot_vat_exempt_sales,
+                            zero_rated_sales: p.pivot_zero_rated_sales,
+                            vat_amount: p.pivot_vat_amount,
+                            pay: p.pivot_pay
+                        })
+                        vm.setValue()
+                    })
+                    res.data.transaction.items.forEach(function(item, i){
+                        vm.additionalItems.push({
+                            id: i + 1,
+                            item_id: item.id,
+                            tax_type_id: item.tax_type_id,
+                            desc: item.desc,
+                            chart_account_id: item.chart_account_id,
+                            tax_type: item.pivot_tax_type,
+                            qty: item.pivot_qty,
+                            price: item.price,
+                            amount: item.total_amount
+                        })
+                        vm.setValue()
+                    })
+
+                    this.$store.dispatch(
+                        "transactions/vendorableNames",
+                        res.data.userEntities
+                    );
+                    this.$store.dispatch(
+                        "transactions/payee",
+                        res.data.payee
+                    );
+                    this.$store.dispatch("transactions/entityItems", res.data.entityItems);
+                })
         }
     },
     mounted() {
@@ -467,8 +488,6 @@ export default {
         this.taxPercentage()
         this.getChartAccounts()
         this.intialize();
-        this.addInvoice();
-        this.setValue();
         this.date = this.dateNow();
         this.$store.dispatch('transactions/transactionTypeId', 1)
 
@@ -506,12 +525,13 @@ export default {
 
                     if (headChange != null) {
                         Object.keys(vm.additionalItems).forEach(function (key) {
+
                             if (vm.additionalItems[key].id === headChange.id) {
                                 vm.additionalItems[key].price = entityItem.price;
                                 vm.additionalItems[key].desc = entityItem.label;
                                 vm.additionalItems[key].chart_account_id = entityItem.chart_account_id;
                                 vm.additionalItems[key].tax_type = entityItem.tax_type;
-                                 vm.additionalItems[key].tax_type_id = entityItem.tax_type_id;
+                                vm.additionalItems[key].tax_type_id = entityItem.tax_type_id;
                                 if (parseInt(headChange.qty) > 0) {
                                     vm.additionalItems[key].amount = parseFloat(parseInt(headChange.qty) * entityItem.price);
                                 } else {
@@ -520,7 +540,6 @@ export default {
                             }
                         });
 
-                      
                     }
                     vm.overAllTotal()
                 }
@@ -564,7 +583,7 @@ export default {
             },
             deep: true
         },
-        "payee.payable_type"(val) {
+        "editTransaction.payee.payable_type"(val) {
             if (val !== "") {
                 this.$axios.get(`/transactions-entities?modelType=${val}`).then(res => {
                     this.$store.dispatch(
@@ -575,11 +594,11 @@ export default {
             }
             this.$store.dispatch("transactions/payeePayableType", val);
         },
-        "payee.payable_id"(val) {
+        "editTransaction.payee.payable_id"(val) {
             this.$axios
                 .get(
                     `transactions-get-purchase-received?modelType=${
-            this.payee.payable_type
+            this.editTransaction.payee.payable_type
           }&modelId=${val}`
                 )
                 .then(res => {

@@ -200,7 +200,7 @@
             rounded
             icon="payment"
             color="primary"
-            @click="addTransaction"
+            @click="addDisbursement"
           >
             <q-tooltip
               :delay="1000"
@@ -211,6 +211,7 @@
             rounded
             icon="receipt"
             color="primary"
+            @click="addReceipt"
           >
             <q-tooltip
               :delay="1000"
@@ -306,7 +307,18 @@ export default {
   },
   methods: {
     ...mapActions('transactions', ['setEditTransaction']),
-    addTransaction () {
+    addReceipt(){
+      if (this.transaction.transactable_id !== '' && this.transaction.transactable_type !== '') {
+        this.$router.push(`/dashboard/transactions/receipt`)
+      } else {
+        this.$q.notify({
+          color: 'negative',
+          icon: 'warning',
+          message: `Please select entity type and entity name.`
+        })
+      }
+    },
+    addDisbursement () {
       if (this.transaction.transactable_id !== '' && this.transaction.transactable_type !== '') {
         this.$router.push(`/dashboard/transactions/disbursement`)
       } else {
@@ -388,7 +400,9 @@ export default {
       if(obj.transaction_type_id === 1){
         this.$router.push(`/dashboard/transactions/disbursement/edit`)
       }
-      
+      if(obj.transaction_type_id === 2){
+        this.$router.push(`/dashboard/transactions/receipt/edit`)
+      }
     })
   },
   watch: {

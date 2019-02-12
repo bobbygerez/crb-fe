@@ -6,7 +6,7 @@
           <q-card-title>
             <div class="row">
               <div class="col-xs-9">
-                <div class="q-title">Disbursement Transaction</div>
+                <div class="q-title">Receipt Transaction</div>
               </div>
               <div class="col-xs-3">
                 <q-datetime v-model="date" type="date" float-label="Date"/>
@@ -15,6 +15,9 @@
           </q-card-title>
           <q-card-main>
             <div class="row">
+              <div class="col-xs-3">
+                <q-datetime v-model="date" type="date" float-label="Deposit Ticket Id"/>
+              </div>
               <div class="col-xs-4">
                 <q-select
                   v-model="payee.payable_type"

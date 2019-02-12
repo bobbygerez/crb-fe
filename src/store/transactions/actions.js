@@ -100,10 +100,22 @@ export const transactionVatableSales = ({
   commit('transactionVatableSales', payload)
 }
 
+export const setEditTransactionVatableSales = ({
+  commit
+}, payload) => {
+  commit('setEditTransactionVatableSales', payload)
+}
+
 export const transactionVatExemptSales = ({
   commit
 }, payload) => {
   commit('transactionVatExemptSales', payload)
+}
+
+export const setEditTransactionVatExemptSales = ({
+  commit
+}, payload) => {
+  commit('setEditTransactionVatExemptSales', payload)
 }
 
 export const transactionZeroRatedSales = ({
@@ -112,12 +124,22 @@ export const transactionZeroRatedSales = ({
   commit('transactionZeroRatedSales', payload)
 }
 
+export const setEditTransactionZeroRatedSales = ({
+  commit
+}, payload) => {
+  commit('setEditTransactionZeroRatedSales', payload)
+}
+
 export const transactionVatAmount = ({
   commit
 }, payload) => {
   commit('transactionVatAmount', payload)
 }
-
+export const setEditTransactionVatAmount = ({
+  commit
+}, payload) => {
+  commit('setEditTransactionVatAmount', payload)
+}
 export const transactionTransactableType = ({
   commit
 }, payload) => {
@@ -140,6 +162,12 @@ export const transactionTotalAmount = ({
   commit
 }, payload) => {
   commit('transactionTotalAmount', payload)
+}
+
+export const setEditTransactionTotalAmount = ({
+  commit
+}, payload) => {
+  commit('setEditTransactionTotalAmount', payload)
 }
 
 export const transactionCheckNumber = ({
@@ -170,13 +198,12 @@ export const purchaseReceived = ({
   commit
 }, payload) => {
   commit('purchaseReceived', payload)
-}
+}  
 
 export const entityItems = ({
   commit
 }, payload) => {
   commit('entityItems', payload)
-<<<<<<< HEAD
 } 
 
 export const setTax = ({
@@ -190,15 +217,3 @@ export const setEditTransaction = ({
 }, payload) => {
   commit('setEditTransaction', payload)
 }
-
-
-
-
-
-
-
-
-
-=======
-}
->>>>>>> eaac3fc273f31bf894ff5e941da75839013e1f1a

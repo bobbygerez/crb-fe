@@ -1,5 +1,9 @@
 export default {
   editTransaction: {
+    payee : {
+      payable_type: '',
+      payable_id: ''
+    }
   },
   tax:{
     percentage: 0
