@@ -16,10 +16,10 @@
                 <q-card-main>
                     <div class="row">
                         <div class="col-xs-4">
-                            <q-select v-model="editTransaction.payee.payable_type" filter :options="entities" float-label="Vendor Type" clearable class="q-ml-sm" disable/>
+                            <q-select v-model="editTransaction.payee.payable_type" filter :options="entities" float-label="Vendor Type" class="q-ml-sm" disable />
                         </div>
                         <div class="col-xs-4">
-                            <q-select v-model="editTransaction.payee.payable_id" filter :options="vendorableNames" float-label="Vendor Name" clearable class="q-ml-sm" disable/>
+                            <q-select v-model="editTransaction.payee.payable_id" filter :options="vendorableNames" float-label="Vendor Name"  class="q-ml-sm" disable />
                         </div>
                         <div class="col-xs-4">
                             <q-input v-model="editTransaction.checknumber" float-label="Check number" class="q-ml-sm" />
@@ -40,11 +40,11 @@
                         </div>
                         <div class="col-xs-3">
                             <input-price label="Vatable Sales" :value="editTransaction.vatable_sales" v-model="editTransaction.vatable_sales"></input-price>
-                            <input-price label="Zero Rated Sales" :value="editTransaction.zerorated_sales" v-model="editTransaction.zero_rated_sales"></input-price>
+                            <input-price label="Zero Rated Sales" :value="editTransaction.zerorated_sales" v-model="editTransaction.zerorated_sales"></input-price>
                         </div>
                         <div class="col-xs-3">
-                            <input-price label="VAT-Exempt Sales" :value="editTransaction.vatexempt_sales" v-model="editTransaction.vat_exempt_sales"></input-price>
-                            <input-price label="VAT Amount" :value="editTransaction.vat_amount" v-model="editTransaction.vat_amount"></input-price>
+                            <input-price label="VAT-Exempt Sales" :value="editTransaction.vatexempt_sales" v-model="editTransaction.vatexempt_sales"></input-price>
+                            <input-price label="VAT Amount" :value="editTransaction.vat_amount" v-model="editTransaction.vatexempt_sales"></input-price>
                         </div>
                     </div>
                 </q-card-main>
@@ -55,7 +55,7 @@
             <div class="col-xs-8">
                 <q-card inline class="q-ml-sm">
                     <q-card-main>
-                        <q-select v-model="editTransaction.chart_account_id" filter :options="chartAccounts" float-label="CASH ACCOUNT" clearable />
+                        <q-select v-model="editTransaction.chart_account_id" filter :options="chartAccounts" float-label="CASH ACCOUNT"  />
                         <br>
                         <input-price label="Total Discount" :value="editTransaction.total_discount" v-model="editTransaction.total_discount" class="q-ml-sm"></input-price>
                         <input-price label="Cash Account Balance" :value="editTransaction.total_amount" v-model="editTransaction.total_amount" class="q-ml-sm"></input-price>
@@ -81,7 +81,7 @@
                             <q-btn color="primary" flat class="float-right" @click="getPurchaseReceived(invoice.purchase_received_id)">
                                 <q-icon name="pageview"></q-icon>
                             </q-btn>
-                            <q-select v-model="invoice.purchase_received_id" filter :options="purchaseReceived" float-label="Invoice No." clearable class="q-ml-sm" />
+                            <q-select v-model="invoice.purchase_received_id" filter :options="purchaseReceived" float-label="Invoice No."  class="q-ml-sm" />
                         </div>
                         <div class="col-xs-2">
                             <q-datetime v-model="invoice.date_due" type="date" float-label="Date Due" />
@@ -109,17 +109,17 @@
                 </q-tab-pane>
                 <q-tab-pane name="expenses">
                     <div class="row" v-for="(item, index) in additionalItems" :key="index">
-                        <div class="col-xs-3">
-                            <q-select v-model="item.item_id" filter :options="entityItems" float-label="Item Name" clearable class="q-mr-sm" />
+                        <div class="col-xs-2">
+                            <q-select v-model="item.item_id" filter :options="entityItems" float-label="Item Name"  class="q-mr-sm" />
                         </div>
                         <div class="col-xs-2">
                             <q-input v-model="item.desc" float-label="Particulars" class="q-mr-sm" />
                         </div>
                         <div class="col-xs-2">
-                            <q-select v-model="item.chart_account_id" filter :options="chartAccounts" float-label="GL account" clearable class="q-mr-sm" />
+                            <q-select v-model="item.chart_account_id" filter :options="chartAccounts" float-label="GL account"  class="q-mr-sm" />
                         </div>
                         <div class="col-xs-2">
-                            <q-input :value="item.tax_type" float-label="Tax Type" class="q-mr-sm" />
+                            <q-select v-model="item.tax_type_id" filter :options="taxTypes" float-label="Tax types"  class="q-mr-sm" />
                         </div>
                         <div class="col-xs-1">
                             <q-input float-label="Qty" v-model="item.qty" class="q-mr-sm" />
@@ -128,7 +128,12 @@
                             <negative-price label="Price" :value="item.price" v-model="item.price" class="q-mr-sm"></negative-price>
                         </div>
                         <div class="col-xs-1">
+                            <negative-price label="Discount Amt" :value="item.discount_amt" v-model="item.discount_amt" class="q-mr-sm"></negative-price>
+                        </div>
+                        <div class="col-xs-1">
+                            <q-btn color="primary" size="sm" icon="close" flat round class="float-right" @click="removeAddtionalItems(index)" />
                             <negative-price label="Credit Amount" :value="item.amount" v-model="item.amount"></negative-price>
+
                         </div>
                     </div>
                     <q-btn color="primary" flat class="float-right" @click="addAdditionalItems">
@@ -138,11 +143,35 @@
             </q-tabs>
         </div>
     </div>
-    <q-btn color="primary" label="Update" class="float-left" @click="update" />
+    <q-btn color="primary" label="Update" class="float-left q-ml-sm" @click="update" />
 
-    <br>
-    <br>
-  </div>
+    <q-modal v-model="modalPurchaseReceived">
+        <div class="q-pa-md">
+            <p class="q-title">Invoice: {{ purchaseReceivedItems.label }}</p>
+            <q-table ref="table" color="primary" :data="purchaseReceivedItems.items" :columns="columns" hide-header hide-bottom class="no-shadow">
+                <q-tr slot="bottom-row" slot-scope="props">
+                    <q-td colspan="100%" align="right">
+                        <strong>{{ purchaseReceivedItems.grand_total |  currency('₱') }}</strong>
+                    </q-td>
+                </q-tr>
+                <template slot="body" slot-scope="props">
+                    <q-tr :props="props">
+                        <q-td key="name" :props="props">
+                            {{ props.row.name}}
+                        </q-td>
+                        <q-td key="price" :props="props">
+                            {{ props.row.price | currency('₱') }}
+                        </q-td>
+
+                    </q-tr>
+
+                </template>
+
+            </q-table>
+            <q-btn color="primary" @click="modalPurchaseReceived = false" label="Close" class="q-mt-sm" />
+        </div>
+    </q-modal>
+</div>
 </template>
 
 <script>
@@ -158,6 +187,20 @@ export default {
     mixins: [numberToWords],
     data() {
         return {
+            columns: [{
+                    name: 'name',
+                    label: 'Name',
+                    field: 'name',
+                    align: 'left'
+                },
+                {
+                    name: 'price',
+                    label: 'Price',
+                    field: 'price',
+                    align: 'left'
+                }
+            ],
+            modalPurchaseReceived: false,
             additionalItems: [],
             oldAdditionalItems: [],
             date: "",
@@ -171,7 +214,8 @@ export default {
             credit_amount: 0,
             invoices: [],
             oldInvoices: [],
-            selectedChartAccount: 0
+            selectedChartAccount: 0,
+            purchaseReceivedItems: {}
         };
     },
     computed: {
@@ -183,7 +227,8 @@ export default {
             "entities",
             "entity",
             "tax",
-            "editTransaction"
+            "editTransaction",
+            "taxTypes"
         ]),
         entityItems() {
             return this.$store.getters["transactions/entityItems"].map(e => {
@@ -191,6 +236,7 @@ export default {
                     label: e.name,
                     value: e.id,
                     price: e.price,
+                    discount_amt: e.discount_amt,
                     chart_account_id: e.chart_account_id,
                     tax_type: e.tax_type.name,
                     tax_type_id: e.tax_type_id
@@ -250,15 +296,34 @@ export default {
             };
             chartAccounts.forEach(cb);
             return res;
+        },
+        taxTypes() {
+            return this.$store.getters["transactions/taxTypes"].map(e => {
+                return {
+                    label: e.name,
+                    value: e.id
+                }
+            })
         }
     },
     methods: {
-        ...mapActions('transactions', ['setTax', 'setEditTransaction', 'setEditTransactionTotalAmount', 'setEditTransactionZeroRatedSales', 'setEditTransactionVatableSales', 'setEditTransactionVatExemptSales', 'setEditTransactionVatAmount']),
+        ...mapActions('transactions', ['setTax', 'setEditTransaction', 'setEditTransactionTotalAmount', 'setEditTransactionZeroRatedSales', 'setEditTransactionVatableSales', 'setEditTransactionVatExemptSales', 'setEditTransactionVatAmount', 'setTaxTypes']),
+        getPurchaseReceived(purchaseReceivedId) {
+
+            this.purchaseReceivedItems = _.find(this.purchaseReceived, {
+                value: purchaseReceivedId
+            });
+            this.modalPurchaseReceived = true
+
+        },
         applyToExpenses() {
             if (this.additionalItems.length < 1) {
                 this.addAdditionalItems()
                 this.setValue()
             }
+        },
+         removeAddtionalItems(index) {
+            this.additionalItems.splice(index, 1);
         },
         addAdditionalItems() {
             let id = 1;
@@ -277,6 +342,7 @@ export default {
                 tax_type: '',
                 qty: 0,
                 price: 0,
+                discount_amt: 0,
                 amount: 0
 
             })
@@ -440,35 +506,46 @@ export default {
                     let vm = this
                     this.$store.dispatch('transactions/purchaseReceived', res.data.transaction.purchase_received)
                     res.data.transaction.purchase_received.forEach(function (p, i) {
-                        vm.invoices.push({
-                            id: i + 1,
-                            purchase_received_id: p.id,
-                            date_due: p.date_due,
-                            amount_due: p.pivot_amount_due,
-                            description: p.description,
-                            discount: p.pivot_discount,
-                            amount_paid: p.pivot_amount_paid,
-                            vatable_sales: p.pivot_vatable_sales,
-                            vat_exempt_sales: p.pivot_vat_exempt_sales,
-                            zero_rated_sales: p.pivot_zero_rated_sales,
-                            vat_amount: p.pivot_vat_amount,
-                            pay: p.pivot_pay
-                        })
-                        vm.setValue()
+                        if (res.data.transaction.purchase_received.length > 0) {
+                            vm.invoices.push({
+                                id: i + 1,
+                                purchase_received_id: p.id,
+                                date_due: p.date_due,
+                                amount_due: p.pivot_amount_due,
+                                description: p.description,
+                                discount: p.pivot_discount,
+                                amount_paid: p.pivot_amount_paid,
+                                vatable_sales: p.pivot_vatable_sales,
+                                vat_exempt_sales: p.pivot_vat_exempt_sales,
+                                zero_rated_sales: p.pivot_zero_rated_sales,
+                                vat_amount: p.pivot_vat_amount,
+                                pay: p.pivot_pay
+                            })
+                            vm.setValue()
+                        }
+
                     })
-                    res.data.transaction.items.forEach(function(item, i){
-                        vm.additionalItems.push({
-                            id: i + 1,
-                            item_id: item.id,
-                            tax_type_id: item.tax_type_id,
-                            desc: item.desc,
-                            chart_account_id: item.chart_account_id,
-                            tax_type: item.pivot_tax_type,
-                            qty: item.pivot_qty,
-                            price: item.price,
-                            amount: item.total_amount
-                        })
-                        vm.setValue()
+
+                    let itemTransaction = res.data.transaction.item_transaction;
+                    res.data.transaction.item_transaction.forEach(function (item, i) {
+
+                        if (res.data.transaction.item_transaction.length > 0) {
+                            vm.additionalItems.push({
+                                id: i + 1,
+                                item_id: item.item_id,
+                                tax_type_id: item.tax_type_id,
+                                desc: item.desc,
+                                chart_account_id: item.chart_account_id,
+                                tax_type: item.tax_type,
+                                qty: item.qty,
+                                price: item.price,
+                                discount_amt: item.discount_amt,
+                                amount: item.amount
+                            })
+                            vm.setValue()
+
+                        }
+
                     })
 
                     this.$store.dispatch(
@@ -480,6 +557,7 @@ export default {
                         res.data.payee
                     );
                     this.$store.dispatch("transactions/entityItems", res.data.entityItems);
+                    this.setTaxTypes(res.data.taxTypes)
                 })
         }
     },
@@ -508,32 +586,47 @@ export default {
         },
         additionalItems: {
             handler: function (after, before) {
-
+                
                 var vm = this;
                 let changed = after.filter(function (p, idx) {
                     return Object.keys(p).some(function (prop) {
                         return p[prop] !== vm.$data.oldAdditionalItems[idx][prop];
                     });
                 });
-
-                if (changed.length === 1) {
+                
+                if (changed.length > 0) {
                     let entityItem = _.find(vm.entityItems, {
                         value: _.head(changed).item_id
                     });
 
                     let headChange = _.head(changed);
-
                     if (headChange != null) {
                         Object.keys(vm.additionalItems).forEach(function (key) {
-
                             if (vm.additionalItems[key].id === headChange.id) {
-                                vm.additionalItems[key].price = entityItem.price;
-                                vm.additionalItems[key].desc = entityItem.label;
-                                vm.additionalItems[key].chart_account_id = entityItem.chart_account_id;
-                                vm.additionalItems[key].tax_type = entityItem.tax_type;
-                                vm.additionalItems[key].tax_type_id = entityItem.tax_type_id;
+
+                                if (vm.additionalItems[key].item_id === "" || vm.additionalItems[key].item_id === null) {
+                                    vm.additionalItems[key].price = headChange.price;
+                                    vm.additionalItems[key].discount_amt = headChange.discount_amt;
+                                    vm.additionalItems[key].tax_type_id = headChange.tax_type_id;
+                                } else {
+                                    vm.additionalItems[key].price = entityItem.price;
+                                    vm.additionalItems[key].discount_amt = entityItem.discount_amt;
+                                    vm.additionalItems[key].desc = entityItem.label;
+                                    vm.additionalItems[key].chart_account_id = entityItem.chart_account_id;
+                                    vm.additionalItems[key].tax_type_id = entityItem.tax_type_id;
+                                }
+
                                 if (parseInt(headChange.qty) > 0) {
-                                    vm.additionalItems[key].amount = parseFloat(parseInt(headChange.qty) * entityItem.price);
+                                    if (vm.additionalItems[key].item_id === "" || vm.additionalItems[key].item_id === null) {
+                                        vm.additionalItems[key].amount = parseFloat(
+                                            (parseInt(headChange.qty) * headChange.price) - headChange.discount_amt
+                                        );
+                                    } else {
+                                        vm.additionalItems[key].amount = parseFloat(
+                                            (parseInt(headChange.qty) * entityItem.price) - entityItem.discount_amt
+                                        );
+                                    }
+
                                 } else {
                                     vm.additionalItems[key].amount = 0;
                                 }
@@ -541,8 +634,9 @@ export default {
                         });
 
                     }
-                    vm.overAllTotal()
                 }
+                this.setValue()
+                vm.overAllTotal()
 
             },
             deep: true

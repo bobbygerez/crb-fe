@@ -24,7 +24,6 @@
                   filter
                   :options="entities"
                   float-label="Vendor Type"
-                  clearable
                   class="q-ml-sm"
                 />
               </div>
@@ -34,7 +33,6 @@
                   filter
                   :options="vendorableNames"
                   float-label="Vendor Name"
-                  clearable
                   class="q-ml-sm"
                 />
               </div>
@@ -99,7 +97,6 @@
                 filter
                 :options="chartAccounts"
                 float-label="CASH ACCOUNT"
-                clearable
               />
               <br>
               <input-price
@@ -153,7 +150,6 @@
                   filter
                   :options="purchaseReceived"
                   float-label="Invoice No."
-                  clearable
                   class="q-ml-sm"
                 />
               </div>
@@ -217,7 +213,6 @@
                   filter
                   :options="entityItems"
                   float-label="Item Name"
-                  clearable
                   class="q-mr-sm"
                 />
               </div>
@@ -230,7 +225,6 @@
                   filter
                   :options="chartAccounts"
                   float-label="GL account"
-                  clearable
                   class="q-mr-sm"
                 />
               </div>

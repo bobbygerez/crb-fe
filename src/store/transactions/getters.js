@@ -31,3 +31,5 @@ export const entityItems = (state) => state.entityItems
 export const getTax = (state) => state.tax
 
 export const getEditTransaction = (state) => state.editTransaction
+
+export const taxTypes = (state) => state.taxTypes

@@ -145,3 +145,7 @@ export const setTax = (state, payload) => {
 export const setEditTransaction = (state, payload) => {
   state.editTransaction = payload
 }
+
+export const setTaxTypes = (state, payload) => {
+  state.taxTypes = payload
+}

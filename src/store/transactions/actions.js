@@ -217,3 +217,9 @@ export const setEditTransaction = ({
 }, payload) => {
   commit('setEditTransaction', payload)
 }
+
+export const setTaxTypes = ({
+  commit
+}, payload) => {
+  commit('setTaxTypes', payload)
+}

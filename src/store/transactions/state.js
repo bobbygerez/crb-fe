@@ -1,4 +1,5 @@
 export default {
+  taxTypes: [],
   editTransaction: {
     payee : {
       payable_type: '',
