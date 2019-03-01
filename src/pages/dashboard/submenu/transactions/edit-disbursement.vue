@@ -19,7 +19,7 @@
                             <q-select v-model="editTransaction.payee.payable_type" filter :options="entities" float-label="Vendor Type" class="q-ml-sm" disable />
                         </div>
                         <div class="col-xs-4">
-                            <q-select v-model="editTransaction.payee.payable_id" filter :options="vendorableNames" float-label="Vendor Name"  class="q-ml-sm" disable />
+                            <q-select v-model="editTransaction.payee.payable_id" filter :options="vendorableNames" float-label="Vendor Name" class="q-ml-sm" disable />
                         </div>
                         <div class="col-xs-4">
                             <q-input v-model="editTransaction.checknumber" float-label="Check number" class="q-ml-sm" />
@@ -55,7 +55,7 @@
             <div class="col-xs-8">
                 <q-card inline class="q-ml-sm">
                     <q-card-main>
-                        <q-select v-model="editTransaction.chart_account_id" filter :options="chartAccounts" float-label="CASH ACCOUNT"  />
+                        <q-select v-model="editTransaction.chart_account_id" filter :options="chartAccounts" float-label="CASH ACCOUNT" />
                         <br>
                         <input-price label="Total Discount" :value="editTransaction.total_discount" v-model="editTransaction.total_discount" class="q-ml-sm"></input-price>
                         <input-price label="Cash Account Balance" :value="editTransaction.total_amount" v-model="editTransaction.total_amount" class="q-ml-sm"></input-price>
@@ -81,15 +81,15 @@
                             <q-btn color="primary" flat class="float-right" @click="getPurchaseReceived(invoice.purchase_received_id)">
                                 <q-icon name="pageview"></q-icon>
                             </q-btn>
-                            <q-select v-model="invoice.purchase_received_id" filter :options="purchaseReceived" float-label="Invoice No."  class="q-ml-sm" />
+                            <q-select v-model="invoice.purchase_received_id" filter :options="purchaseReceived" float-label="Invoice No." class="q-ml-sm" />
                         </div>
-                        <div class="col-xs-2">
+                        <div class="col-xs-1">
                             <q-datetime v-model="invoice.date_due" type="date" float-label="Date Due" />
                         </div>
                         <div class="col-xs-1">
                             <input-price label="Amount Due" :value="invoice.amount_due" v-model="invoice.amount_due" class="q-ml-sm"></input-price>
                         </div>
-                        <div class="col-xs-3">
+                        <div class="col-xs-2">
                             <q-input v-model="invoice.description" float-label="Description" class="q-ml-sm" />
                         </div>
                         <div class="col-xs-1">
@@ -98,9 +98,13 @@
                         <div class="col-xs-1">
                             <input-price label="Amount Paid" :value="invoice.amount_paid" v-model="invoice.amount_paid" class="q-ml-sm"></input-price>
                         </div>
+                        <div class="col-xs-2">
+                            <q-select v-model="invoice.job_id" filter :options="jobs" float-label="Jobs" class="q-mr-sm" />
+                        </div>
                         <div class="col-xs-1">
                             <q-checkbox class="q-mt-lg" v-model="invoice.pay" checked-icon="check" unchecked-icon="close" />
                             <q-btn color="primary" size="sm" icon="close" flat round class="float-right" @click="removeInvoice(key)" />
+
                         </div>
                     </div>
                     <q-btn color="primary" flat class="float-right" @click="addInvoice">
@@ -110,16 +114,16 @@
                 <q-tab-pane name="expenses">
                     <div class="row" v-for="(item, index) in additionalItems" :key="index">
                         <div class="col-xs-2">
-                            <q-select v-model="item.item_id" filter :options="entityItems" float-label="Item Name"  class="q-mr-sm" />
+                            <q-select v-model="item.item_id" filter :options="entityItems" float-label="Item Name" class="q-mr-sm" />
                         </div>
-                        <div class="col-xs-2">
+                        <div class="col-xs-1">
                             <q-input v-model="item.desc" float-label="Particulars" class="q-mr-sm" />
                         </div>
                         <div class="col-xs-2">
-                            <q-select v-model="item.chart_account_id" filter :options="chartAccounts" float-label="GL account"  class="q-mr-sm" />
+                            <q-select v-model="item.chart_account_id" filter :options="chartAccounts" float-label="GL account" class="q-mr-sm" />
                         </div>
                         <div class="col-xs-2">
-                            <q-select v-model="item.tax_type_id" filter :options="taxTypes" float-label="Tax types"  class="q-mr-sm" />
+                            <q-select v-model="item.tax_type_id" filter :options="taxTypes" float-label="Tax types" class="q-mr-sm" />
                         </div>
                         <div class="col-xs-1">
                             <q-input float-label="Qty" v-model="item.qty" class="q-mr-sm" />
@@ -131,9 +135,12 @@
                             <negative-price label="Discount Amt" :value="item.discount_amt" v-model="item.discount_amt" class="q-mr-sm"></negative-price>
                         </div>
                         <div class="col-xs-1">
-                            <q-btn color="primary" size="sm" icon="close" flat round class="float-right" @click="removeAddtionalItems(index)" />
-                            <negative-price label="Credit Amount" :value="item.amount" v-model="item.amount"></negative-price>
+                            <negative-price label="Amount" :value="item.amount" v-model="item.amount"></negative-price>
 
+                        </div>
+                        <div class="col-xs-1">
+                            <q-btn color="primary" size="sm" icon="close" flat round class="float-right" @click="removeAddtionalItems(index)" />
+                            <q-select v-model="item.job_id" filter :options="jobs" float-label="Jobs" class="q-mr-sm" />
                         </div>
                     </div>
                     <q-btn color="primary" flat class="float-right" @click="addAdditionalItems">
@@ -260,6 +267,14 @@ export default {
                 };
             });
         },
+        jobs() {
+            return this.$store.getters["transactions/jobs"].map(e => {
+                return {
+                    label: e.name,
+                    value: e.id
+                };
+            });
+        },
         vendorableNames() {
             return this.$store.getters["transactions/vendorableNames"].map(e => {
                 return {
@@ -322,7 +337,7 @@ export default {
                 this.setValue()
             }
         },
-         removeAddtionalItems(index) {
+        removeAddtionalItems(index) {
             this.additionalItems.splice(index, 1);
         },
         addAdditionalItems() {
@@ -519,7 +534,8 @@ export default {
                                 vat_exempt_sales: p.pivot_vat_exempt_sales,
                                 zero_rated_sales: p.pivot_zero_rated_sales,
                                 vat_amount: p.pivot_vat_amount,
-                                pay: p.pivot_pay
+                                pay: p.pivot_pay,
+                                job_id: p.pivot_job_id
                             })
                             vm.setValue()
                         }
@@ -540,7 +556,8 @@ export default {
                                 qty: item.qty,
                                 price: item.price,
                                 discount_amt: item.discount_amt,
-                                amount: item.amount
+                                amount: item.amount,
+                                job_id: item.job_id
                             })
                             vm.setValue()
 
@@ -586,14 +603,14 @@ export default {
         },
         additionalItems: {
             handler: function (after, before) {
-                
+
                 var vm = this;
                 let changed = after.filter(function (p, idx) {
                     return Object.keys(p).some(function (prop) {
                         return p[prop] !== vm.$data.oldAdditionalItems[idx][prop];
                     });
                 });
-                
+
                 if (changed.length > 0) {
                     let entityItem = _.find(vm.entityItems, {
                         value: _.head(changed).item_id

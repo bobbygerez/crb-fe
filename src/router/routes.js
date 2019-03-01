@@ -107,6 +107,18 @@ const routes = [{
     { path: '', component: () => import('pages/dashboard/submenu/transactions/receipt.vue') },
     { path: '/' }
   ]
+}, {
+  path: '/dashboard/transactions/receipt/edit',
+  meta: {
+    title: name.endsWith('s') ? name : name.concat('s'),
+    needAuth: true,
+    section: 'index'
+  },
+  component: () => import('layouts/MainLayout.vue'),
+  children: [
+    { path: '', component: () => import('pages/dashboard/submenu/transactions/edit-receipt.vue') },
+    { path: '/' }
+  ]
 }]
 
 const dashBoardModules = (appModules) => {

@@ -1,3 +1,5 @@
+import {axios} from 'plugins/axios'
+
 export const company = ({
   commit
 }, payload) => {
@@ -64,18 +66,6 @@ export const payee = ({
   commit('payee', payload)
 }
 
-export const payeePayableType = ({
-  commit
-}, payload) => {
-  commit('payeePayableType', payload)
-} 
-
-export const payeePayableId = ({
-  commit
-}, payload) => {
-  commit('payeePayableId', payload)
-} 
-
 export const transactionTypeId = ({
   commit
 }, payload) => {
@@ -87,6 +77,7 @@ export const transactionType = ({
 }, payload) => {
   commit('transactionType', payload)
 }
+
 
 export const chartAccountId = ({
   commit
@@ -135,6 +126,19 @@ export const transactionVatAmount = ({
 }, payload) => {
   commit('transactionVatAmount', payload)
 }
+
+export const payeePayableId = ({
+  commit
+}, payload) => {
+  commit('payeePayableId', payload)
+}
+
+export const payeePayableType = ({
+  commit
+}, payload) => {
+  commit('payeePayableType', payload)
+}
+
 export const setEditTransactionVatAmount = ({
   commit
 }, payload) => {
@@ -223,3 +227,169 @@ export const setTaxTypes = ({
 }, payload) => {
   commit('setTaxTypes', payload)
 }
+
+export const setPaymentMethods = ({
+  commit
+}) => {
+  axios.get('/payment_methods').then(res =>{
+    commit('setPaymentMethods', res.data.paymentMethods)
+  })
+  
+}
+
+export const setJobs = ({
+  commit
+}, payload) => {
+  commit('setJobs', payload)
+}
+export const setChartAccountId = ({
+  commit
+}, payload) => {
+  commit('setChartAccountId', payload)
+}
+
+export const setRemarks = ({
+  commit
+}, payload) => {
+  commit('setRemarks', payload)
+}
+
+export const setTransactionTypeId = ({
+  commit
+}, payload) => {
+  commit('setTransactionTypeId', payload)
+}
+
+
+/***
+ * RECEIPT TRANSACTION
+ */
+export const setReference = ({
+  commit
+}, payload) => {
+  commit('setReference', payload)
+}
+
+export const setReceiptNumber = ({
+  commit
+}, payload) => {
+  commit('setReceiptNumber', payload)
+}
+
+export const setCreatedAt = ({
+  commit
+}, payload) => {
+  commit('setCreatedAt', payload)
+}
+
+export const setDepositDate = ({
+  commit
+}, payload) => {
+  commit('setDepositDate', payload)
+}
+
+export const setPayableType = ({
+  commit
+}, payload) => {
+  commit('setPayableType', payload)
+}
+
+export const setPayableId = ({
+  commit
+}, payload) => {
+  commit('setPayableId', payload)
+}
+
+export const setPaymentMethodId = ({
+  commit
+}, payload) => {
+  commit('setPaymentMethodId', payload)
+}
+
+export const setReceiptEntity = ({
+  commit
+}, payload) => {
+  commit('setReceiptEntity', payload)
+}
+
+export const setSaleInvoices = ({
+  commit
+}, payload) => {
+  commit('setSaleInvoices', payload)
+}
+
+export const setVatableSales = ({
+  commit
+}, payload) => {
+  commit('setVatableSales', payload)
+}
+
+export const setVatExemptSales = ({
+  commit
+}, payload) => {
+  commit('setVatExemptSales', payload)
+}
+
+export const setZeroRatedSales = ({
+  commit
+}, payload) => {
+  commit('setZeroRatedSales', payload)
+}
+
+export const setVatAmount = ({
+  commit
+}, payload) => {
+  commit('setVatAmount', payload)
+}
+
+export const setTotalDiscount = ({
+  commit
+}, payload) => {
+  commit('setTotalDiscount', payload)
+}
+
+export const setReceiptAmount = ({
+  commit
+}, payload) => {
+  commit('setReceiptAmount', payload)
+}
+
+export const setProducts = ({
+  commit
+}, payload) => {
+  commit('setProducts', payload)
+}
+
+export const setReceiptTransactableType = ({
+  commit
+}, payload) => {
+  commit('setReceiptTransactableType', payload)
+}
+
+export const setReceiptTransactableId = ({
+  commit
+}, payload) => {
+  commit('setReceiptTransactableId', payload)
+}
+
+export const setReceiptTrans = ({
+  commit
+}, payload) => {
+  commit('setReceiptTrans', payload)
+}
+
+export const setPayor = ({
+  commit
+}, payload) => {
+  commit('setPayor', payload)
+}
+
+export const setReceiptTotalAmount = ({
+  commit
+}, payload) => {
+  commit('setReceiptTotalAmount', payload)
+}
+
+
+
+

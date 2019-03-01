@@ -306,7 +306,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('transactions', ['setEditTransaction']),
+    ...mapActions('transactions', ['setEditTransaction',  "setReceiptTransactableType", "setReceiptTransactableId",]),
     addReceipt(){
       if (this.transaction.transactable_id !== '' && this.transaction.transactable_type !== '') {
         this.$router.push(`/dashboard/transactions/receipt`)
@@ -413,6 +413,7 @@ export default {
           filter: this.filter
         })
         this.$store.dispatch("transactions/transactionTransactableId", val);
+        this.setReceiptTransactableId(val)
       }
     },
     'transaction.transactable_type' (val) {
@@ -424,6 +425,7 @@ export default {
           .then(res => {
             this.$store.dispatch('transactions/userEntities', res.data.userEntities)
             this.$store.dispatch("transactions/transactionTransactableType", val);
+            this.setReceiptTransactableType(val)
           })
       }
     }

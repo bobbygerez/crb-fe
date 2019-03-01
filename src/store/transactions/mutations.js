@@ -149,3 +149,107 @@ export const setEditTransaction = (state, payload) => {
 export const setTaxTypes = (state, payload) => {
   state.taxTypes = payload
 }
+
+export const setPaymentMethods = (state, payload) => {
+  state.paymentMethods = payload
+}
+
+export const setJobs = (state, payload) => {
+  state.jobs = payload
+}
+
+export const setReference = (state, payload) => {
+  state.receiptTrans.reference = payload
+}
+
+export const setChartAccountId = (state, payload) => {
+  state.receiptTrans.chart_account_id = payload
+}
+
+export const setRemarks = (state, payload) => {
+  state.receiptTrans.remarks = payload
+}
+
+export const setTransactionTypeId = (state, payload) => {
+  state.receiptTrans.transaction_type_id = payload
+}
+
+export const setReceiptNumber = (state, payload) => {
+  state.receiptTrans.receipt_number = payload
+}
+
+export const setCreatedAt = (state, payload) => {
+  state.receiptTrans.created_at = payload
+}
+
+export const setDepositDate = (state, payload) => {
+  state.receiptTrans.deposit_date = payload
+}
+
+export const setPaymentMethodId = (state, payload) => {
+  state.receiptTrans.payment_method_id = payload
+}
+
+export const setVatableSales = (state, payload) => {
+  state.receiptTrans.vatable_sales = payload
+}
+
+export const setVatExemptSales = (state, payload) => {
+  state.receiptTrans.vat_exempt_sales = payload
+}
+
+export const setZeroRatedSales = (state, payload) => {
+  state.receiptTrans.zero_rated_sales = payload
+}
+
+export const setVatAmount = (state, payload) => {
+  state.receiptTrans.vat_amount = payload
+}
+
+export const setReceiptAmount = (state, payload) => {
+  state.receiptTrans.receipt_amount = payload
+}
+
+export const setReceiptTransactableType = (state, payload) => {
+  state.receiptTrans.transactable_type = payload
+}
+
+export const setReceiptTransactableId = (state, payload) => {
+  state.receiptTrans.transactable_id = payload
+}
+
+export const setTotalDiscount = (state, payload) => {
+  state.receiptTrans.total_discount = payload
+}
+
+
+export const setReceiptTotalAmount = (state, payload) => {
+  state.receiptTrans.total_amount = payload
+}
+
+export const setReceiptEntity = (state, payload) => {
+  state.receiptEntity = payload
+}
+
+export const setSaleInvoices = (state, payload) => {
+  state.saleInvoices = payload
+}
+
+export const setProducts = (state, payload) => {
+  state.products = payload
+}
+
+export const setPayor = (state, payload) => {
+  state.payor = payload
+}
+
+export const setReceiptTrans = (state, payload) => {
+  state.receiptTrans = payload
+}
+
+
+
+
+
+
+

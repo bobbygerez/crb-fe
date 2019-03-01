@@ -33,3 +33,17 @@ export const getTax = (state) => state.tax
 export const getEditTransaction = (state) => state.editTransaction
 
 export const taxTypes = (state) => state.taxTypes
+
+export const paymentMethods = (state) => state.paymentMethods
+
+export const jobs = (state) => state.jobs
+
+export const receiptTrans = (state) => state.receiptTrans
+
+export const receiptEntity = (state) => state.receiptEntity
+
+export const saleInvoices = (state) => state.saleInvoices
+
+export const products = (state) => state.products
+
+export const payor = (state) => state.payor
