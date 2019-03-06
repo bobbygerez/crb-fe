@@ -1,9 +1,24 @@
 <template>
-  <span>dashboard</span>
+<div>
+    Dashboard
+</div>
 </template>
 
-<script type="text/javascript">
+<script>
+import { mapActions } from 'vuex'
 export default {
-  created () { }
+
+  methods: {
+    ...mapActions('menus', ['setMenus']),
+    getMenus () {
+      this.$axios.get('/menus')
+        .then(res => {
+          this.setMenus(res.data.menus)
+        })
+    }
+  },
+  mounted () {
+    this.getMenus()
+  }
 }
 </script>

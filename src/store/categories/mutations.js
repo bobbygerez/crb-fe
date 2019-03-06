@@ -1,15 +1,7 @@
-export const categories = (state, payload) => {
+export const setCategories = (state, payload) => {
   state.categories = payload
 }
 
-export const category = (state, payload) => {
+export const setCategory = (state, payload) => {
   state.category = payload
-}
-
-export const categoryName = (state, payload) => {
-  state.category.name = payload
-}
-
-export const categoryDesc = (state, payload) => {
-  state.category.desc = payload
 }

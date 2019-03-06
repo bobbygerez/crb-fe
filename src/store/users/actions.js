@@ -1,135 +1,122 @@
-import {
-  axios
-} from 'plugins/axios'
 
-export const getCivilStatuses = ({
-  commit,
-  state
-}) => {
-  if (state.civilStatuses.length > 0) {
-    return
-  }
-  axios.get('/civil_status')
-    .then(function (res) {
-      commit('SET_CIVIL_STATUSES', res.data.civilStatus)
-    })
+export const setUsers = ({ commit }, payload) => {
+  commit('setUsers', payload)
+}
+export const setUser = ({ commit }, payload) => {
+  commit('setUser', payload)
+}
+export const setEditUser = ({ commit }, payload) => {
+  commit('setEditUser', payload)
 }
 
-export const getGenders = ({
-  commit,
-  state
-}) => {
-  if (state.genders.length > 0) {
-    return
-  }
-  axios.get('/genders')
-    .then(function (res) {
-      commit('SET_GENDERS', res.data.genders)
-    })
+export const setToken = ({ commit }, payload) => {
+  commit('setToken', payload)
 }
 
-export const setUsers = (state, payload) => {
-  state.commit('SET_USERS', payload)
+export const setPage = ({ commit }, payload) => {
+  commit('setPage', payload)
 }
 
-export const setUser = (state, payload) => {
-  state.commit('SET_USER', payload)
+export const setPerPage = ({ commit }, payload) => {
+  commit('setPerPage', payload)
 }
 
-export const newUser = (state, payload) => {
-  state.commit('newUser', {
-    roles: [],
-    address: {
-      country_id: '',
-      region_id: '',
-      province_id: '',
-      city_id: '',
-      brgy_id: '',
-      street_lot_blk: ''
-    },
-    information: {
-      birthdate: '',
-      employee_id: ''
-    }
-  })
+export const setFullname = ({ commit }, payload) => {
+  commit('setFullname', payload)
 }
 
-export const setRoles = (state, payload) => {
-  state.commit('SET_ROLES', payload)
+export const setDelFullname = ({ commit }, payload) => {
+  commit('setDelFullname', payload)
 }
 
-export const setUserStatus = (state, payload) => {
-  state.commit('SET_USER_STATUS', payload)
+export const setMobile = ({ commit }, payload) => {
+  commit('setMobile', payload)
 }
 
-export const setUsername = (state, payload) => {
-  state.commit('SET_USERNAME', payload)
+export const setDelMobile = ({ commit }, payload) => {
+  commit('setDelMobile', payload)
 }
 
-export const setUserEmail = (state, payload) => {
-  state.commit('SET_USER_EMAIL', payload)
+export const setNotes = ({ commit }, payload) => {
+  commit('setNotes', payload)
 }
 
-export const setUserPassword = (state, payload) => {
-  state.commit('SET_USER_PASSWORD', payload)
+export const setDelNotes = ({ commit }, payload) => {
+  commit('setDelNotes', payload)
 }
 
-export const setUserFirstname = (state, payload) => {
-  state.commit('SET_USER_FIRSTNAME', payload)
+export const setProvinceId = ({ commit }, payload) => {
+  commit('setProvinceId', payload)
 }
 
-export const setUserMiddlename = (state, payload) => {
-  state.commit('SET_USER_MIDDLENAME', payload)
+export const setDelProvId = ({ commit }, payload) => {
+  commit('setDelProvId', payload)
 }
 
-export const setUserLastname = (state, payload) => {
-  state.commit('SET_USER_LASTNAME', payload)
+export const setDelCityId = ({ commit }, payload) => {
+  commit('setDelCityId', payload)
 }
 
-export const setUserBirthdate = (state, payload) => {
-  state.commit('SET_USER_BIRTHDATE', payload)
+export const setCityId = ({ commit }, payload) => {
+  commit('setCityId', payload)
 }
 
-export const setUserEmployeeId = (state, payload) => {
-  state.commit('SET_USER_EMP_ID', payload)
+export const setDelBrgyId = ({ commit }, payload) => {
+  commit('setDelBrgyId', payload)
 }
 
-export const setUserMobile = (state, payload) => {
-  state.commit('SET_USER_MOBILE', payload)
+export const setBrgyId = ({ commit }, payload) => {
+  commit('setBrgyId', payload)
 }
 
-export const setUserNationality = (state, payload) => {
-  state.commit('SET_USER_NATIONALITY', payload)
+export const setDelStreetLotBlk = ({ commit }, payload) => {
+  commit('setDelStreetLotBlk', payload)
 }
 
-export const setUserCivilStatus = (state, payload) => {
-  state.commit('SET_USER_CIVIL_STATUS', payload)
+export const setStreetLotBlk = ({ commit }, payload) => {
+  commit('setStreetLotBlk', payload)
 }
 
-export const setUserGender = (state, payload) => {
-  state.commit('SET_USER_GENDER', payload)
+export const setDelivery = ({ commit }, payload) => {
+  commit('setDelivery', payload)
 }
 
-export const setUserCountry = (state, payload) => {
-  state.commit('SET_USER_COUNTRY', payload)
+export const setRoles = ({ commit }, payload) => {
+  commit('setRoles', payload)
 }
 
-export const setUserRegion = (state, payload) => {
-  state.commit('SET_USER_REGION', payload)
+export const setEditProvinces = ({ commit }, payload) => {
+  commit('setEditProvinces', payload)
 }
 
-export const setUserProvince = (state, payload) => {
-  state.commit('SET_USER_PROVINCE', payload)
+export const setEditRoleIds = ({ commit }, payload) => {
+  commit('setEditRoleIds', payload)
 }
 
-export const setUserCity = (state, payload) => {
-  state.commit('SET_USER_CITY', payload)
+export const setEditProvinceId = ({ commit }, payload) => {
+  commit('setEditProvinceId', payload)
 }
 
-export const setUserBrgy = (state, payload) => {
-  state.commit('SET_USER_BRGY', payload)
+export const setEditCities = ({ commit }, payload) => {
+  commit('setEditCities', payload)
 }
 
-export const setNewUserModal = (state, payload) => {
-  state.commit('SET_NEW_USER_MODAL', payload)
+export const setEditCityId = ({ commit }, payload) => {
+  commit('setEditCityId', payload)
+}
+
+export const setEditBrgys = ({ commit }, payload) => {
+  commit('setEditBrgys', payload)
+}
+
+export const setEditBrgyId = ({ commit }, payload) => {
+  commit('setEditBrgyId', payload)
+}
+
+export const setEditStreetLotBlk = ({ commit }, payload) => {
+  commit('setEditStreetLotBlk', payload)
+}
+
+export const setDialogChangePassword = ({ commit }, payload) => {
+  commit('setDialogChangePassword', payload)
 }

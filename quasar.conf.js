@@ -1,165 +1,138 @@
-/* eslint-disable no-dupe-keys */
 // Configuration for your app
 
 module.exports = function (ctx) {
   return {
-    preFetch: true,
-    htmlVariables: {
-      title: 'test name'
-    },
-
-    // app plugins (/src/plugins)
-    plugins: [
-      // 'i18n',
-      'vue2-filters',
+    // app boot file (/src/boot)
+    // --> boot files are part of "main.js"
+    boot: [
+      'i18n',
       'axios',
       'vuelidate',
-      'app-validation-rules'
-      // 'holding_validation'
-      // 'vue-signature-pad'
+      'vue2-filters'
     ],
+
     css: [
       'app.styl'
     ],
-    extras: [
-      ctx.theme.mat ? 'roboto-font' : null,
-      'material-icons', // optional, you are not bound to it
-      // 'ionicons',
-      'mdi',
-      'fontawesome',
-      ctx.theme.ios ? 'ionicons' : null
-    ],
-    supportIE: true,
-    build: {
-      // env: ctx.dev
-      //   ? { // so on dev we'll have
-      //     API: JSON.stringify('http://localhost:8099/api')
-      //   }
-      //   : { // and on build (production):
-      //     API: JSON.stringify('http://localhost:8099/api')
-      //   },
-      scopeHoisting: true,
-      vueRouterMode: 'history',
-      // vueCompiler: true,
-      // gzip: true,
-      // analyze: true,
-      // extractCSS: false,
-      extendWebpack (cfg) {
-        cfg.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules|quasar)/,
-          // options: {
-          //   fix: true
-          // }
-        })
-      }
-    },
-    devServer: {
-      // https: true,
-      port: ctx.mode.spa ? 8080 : (ctx.mode.cordova ? 8080 : 8082),
-      open: true // opens browser window automatically
-    },
-    // framework: 'all' --- includes everything; for dev only!
 
+    extras: [
+      'roboto-font',
+      'material-icons' // optional, you are not bound to it
+    // 'ionicons-v4',
+    // 'mdi-v3',
+    // 'fontawesome-v5',
+    // 'eva-icons'
+    ],
+
+    // framework: 'all', // --- includes everything; for dev only!
     framework: {
-      // all: true,
-      // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
+      config: {
+        cordova: {
+          iosStatusBarPadding: true, // add the dynamic top padding on iOS mobile devices
+          backButtonExit: true // Quasar handles app exit on mobile phone back button
+        }
+      },
       components: [
-        'QTab',
-        'QTabs',
-        'QTabPane',
-        'QBtnGroup',
-        'QModal',
-        'QPopupEdit',
-        'QTh',
-        'QCheckbox',
-        'QTd',
-        'QTr',
-        'QTable',
-        'QTableColumns',
+        'QChip',
+        'QTree',
+        'QAjaxBar',
+        'QBanner',
+        'QTooltip',
+        'QSpace',
         'QSelect',
-        'QAlert',
-        'QAutocomplete',
-        'QSearch',
-        'QCard',
-        'QCardTitle',
-        'QCardMain',
-        'QCardMedia',
-        'QCardSeparator',
+        'QStepperNavigation',
+        'QStep',
+        'QStepper',
+        'QPopupEdit',
+        'QImg',
+        'QTr',
+        'QTd',
+        'QTable',
+        'QBadge',
+        'QSeparator',
+        'QCarouselSlide',
+        'QCarousel',
+        'QBreadcrumbsEl',
+        'QBreadcrumbs',
         'QCardActions',
-        'QInput',
+        'QPageScroller',
+        'QPagination',
+        'QPageSticky',
+        'QRating',
         'QDialog',
-        'QField',
+        'QInput',
+        'QAvatar',
         'QBtnDropdown',
+        'QCardSection',
+        'QCard',
+        'QExpansionItem',
         'QLayout',
-        'QLayoutHeader',
-        'QLayoutDrawer',
+        'QHeader',
+        'QDrawer',
         'QPageContainer',
         'QPage',
         'QToolbar',
         'QToolbarTitle',
         'QBtn',
         'QIcon',
-        'QItemTile',
         'QList',
-        'QListHeader',
-        'QCollapsible',
         'QItem',
-        'QItemMain',
-        'QItemSide',
-        'QItemSeparator',
-        'QRating',
-        'QTooltip',
-        'QScrollObservable',
-        'QPopover',
-        'QInnerLoading',
+        'QItemSection',
+        'QItemLabel'
+      ],
 
-        // ... if using custom spinner, add it too
-        // whatever that is
-        'QSpinnerGears',
-        'QSpinnerMat',
-        'QSpinnerIos',
-        'QPageSticky',
-        'QModalLayout',
-        'QSpinner',
-        'QAjaxBar',
-        'QChip',
-        'QTree',
-        'QDatetime',
-        'QDatetimePicker',
-        'QFab',
-        'QFabAction'
-      ],
       directives: [
-        'Ripple', 'CloseOverlay', 'BackToTop'
+        'Ripple',
+        'CloseMenu',
+        'CloseDialog'
       ],
+
       // Quasar plugins
       plugins: [
+        'Meta',
         'Notify',
-        'LocalStorage',
-        'SessionStorage',
-        'Platform',
-        'Screen',
-        'LoadingBar',
-        'Dialog'
-      ],
-      // config: {
-      //   loadingBar: {
-      //     skipHijack: true
-      //   }
-      // },
-      iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
-      // i18n: 'de' // Quasar language
+        'LocalStorage'
+      ]
+
+    // iconSet: 'ionicons-v4'
+    // lang: 'de' // Quasar language
+    },
+
+    supportIE: true,
+
+    build: {
+      scopeHoisting: true,
+      vueRouterMode: 'history',
+      // vueCompiler: true,
+      // gzip: true,
+      // analyze: true,
+      // extractCSS: false,
+      extendWebpack(cfg) {
+        cfg.module.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader: 'eslint-loader',
+          exclude: /node_modules/,
+          options: {
+            fix: true
+          }
+        })
+      }
+    },
+
+    devServer: {
+      // https: true,
+      // port: 8080,
+      open: true // opens browser window automatically
     },
 
     // animations: 'all' --- includes all animations
-    animations: 'all',
-    // [],
+    animations: [],
+
     ssr: {
       pwa: false
     },
+
     pwa: {
       // workboxPluginMode: 'InjectManifest',
       // workboxOptions: {},
@@ -171,40 +144,43 @@ module.exports = function (ctx) {
         orientation: 'portrait',
         background_color: '#ffffff',
         theme_color: '#027be3',
-        icons: [{
-          'src': 'statics/icons/icon-128x128.png',
-          'sizes': '128x128',
-          'type': 'image/png'
-        },
-        {
-          'src': 'statics/icons/icon-192x192.png',
-          'sizes': '192x192',
-          'type': 'image/png'
-        },
-        {
-          'src': 'statics/icons/icon-256x256.png',
-          'sizes': '256x256',
-          'type': 'image/png'
-        },
-        {
-          'src': 'statics/icons/icon-384x384.png',
-          'sizes': '384x384',
-          'type': 'image/png'
-        },
-        {
-          'src': 'statics/icons/icon-512x512.png',
-          'sizes': '512x512',
-          'type': 'image/png'
-        }
+        icons: [
+          {
+            'src': 'statics/icons/icon-128x128.png',
+            'sizes': '128x128',
+            'type': 'image/png'
+          },
+          {
+            'src': 'statics/icons/icon-192x192.png',
+            'sizes': '192x192',
+            'type': 'image/png'
+          },
+          {
+            'src': 'statics/icons/icon-256x256.png',
+            'sizes': '256x256',
+            'type': 'image/png'
+          },
+          {
+            'src': 'statics/icons/icon-384x384.png',
+            'sizes': '384x384',
+            'type': 'image/png'
+          },
+          {
+            'src': 'statics/icons/icon-512x512.png',
+            'sizes': '512x512',
+            'type': 'image/png'
+          }
         ]
       }
     },
+
     cordova: {
       // id: 'org.cordova.quasar.app'
     },
+
     electron: {
       // bundler: 'builder', // or 'packager'
-      extendWebpack (cfg) {
+      extendWebpack(cfg) {
         // do something with Electron process Webpack cfg
       },
       packager: {

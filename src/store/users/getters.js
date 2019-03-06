@@ -1,17 +1,24 @@
-export {
-  getField
-}
-  from 'vuex-map-fields'
-// export const getField = (state) => getField(state)
 
-// export const getUsers = (state) => state.users
+export const users = (state) => state.users
 
-// export const getUser = (state) => state.user
+export const user = (state) => state.user
 
-// export const getRoles = (state) => state.roles
+export const editUser = (state) => state.editUser
 
-// export const getCivilStatuses = (state) => state.civilStatus
+export const token = (state) => state.token
 
-// export const getGenders = (state) => state.genders
+export const page = (state) => state.page
 
-// export const getNewUserModal = (state) => state.newUserModal
+export const perPage = (state) => state.perPage
+
+export const delivery = (state) => state.delivery
+
+export const roles = (state) => state.roles
+
+export const editProvinces = (state) => state.editProvinces
+
+export const editCities = (state) => state.editCities
+
+export const editBrgys = (state) => state.editBrgys
+
+export const dialogChangePassword = (state) => state.dialogChangePassword

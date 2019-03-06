@@ -1,7 +1,6 @@
 export default {
   categories: [],
   category: {
-    id: '',
-    label: ''
+    name: ''
   }
 }
