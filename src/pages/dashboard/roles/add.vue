@@ -9,33 +9,37 @@
             <q-input outlined v-model="role.name" label="Role Name" class="q-ma-sm" />
         </div>
         <div class="col-12">
-            <q-select outlined v-model="selectedRole" :options="roles" label="Supervisor" class="q-ma-sm" />
-        </div>
-        <div class="col-12" v-if="subordinates.length > 0">
-            <p class="title q-ml-sm">Subordinates: </p>
-            <q-chip  outline  v-for="(sub, i) in subordinates" :key="i"  color="grey-8" >{{ sub }}</q-chip>
+            <q-select outlined v-model="selectedRoles" :options="roles" label="Supervisor" class="q-ma-sm" />
         </div>
         <div class="col-12">
             <q-input type="textarea" outlined v-model="role.description" label="Description" class="q-ma-sm" />
         </div>
-
         <div class="col-12">
             <q-btn @click="cancel" color="secondary" label="Cancel" class="q-ma-sm" />
-            <q-btn @click="update" color="primary" label="Update" class="q-ma-sm" />
+            <q-btn @click="add" color="primary" label="Submit" class="q-ma-sm" />
         </div>
     </div>
 </div>
 </template>
 
 <script>
-import { find, head } from 'lodash'
+import {
+  head
+} from 'lodash'
 import {
   mapState,
   mapActions
 } from 'vuex'
 export default {
+  data () {
+    return {
+      selectedRoles: {
+        value: 0
+      }
+    }
+  },
   methods: {
-    ...mapActions('roles', ['setRoles', 'setRoleParentId']),
+    ...mapActions('roles', ['setRoles']),
     cancel () {
       this.$router.go(-1)
     },
@@ -45,14 +49,22 @@ export default {
           this.setRoles(res.data.roles)
         })
     },
-    update () {
+    add () {
+      if (this.selectedRoles.value === 0) {
+        this.$q.notify({
+          color: 'negative',
+          icon: 'warning',
+          message: `Please select a supervisor role.`
+        })
+        return
+      }
       let role = []
       role.push({
         name: this.role.name,
         description: this.role.description,
-        parent_id: this.role.parent_id.value
+        parent_id: this.selectedRoles.value
       })
-      this.$axios.put(`/dashboard_role/${this.role.optimus_id}?id=${this.role.optimus_id}`, head(role)).then(res => {
+      this.$axios.post(`/dashboard_role`, head(role)).then(res => {
         this.$q.notify({
           color: 'positive',
           icon: 'check',
@@ -70,31 +82,6 @@ export default {
           value: e.id
         }
       })
-    },
-    subordinates () {
-      var res = []
-      const cb = (e) => {
-        res.push(e.name)
-        e.all_children && e.all_children.forEach(cb)
-      }
-      this.role.all_children.forEach(cb)
-      return res
-    },
-    selectedRole: {
-      get () {
-        if (typeof this.role.parent_id === 'object') {
-          return find(this.roles, {
-            value: this.role.parent_id.value
-          })
-        } else {
-          return find(this.roles, {
-            value: this.role.parent_id
-          })
-        }
-      },
-      set (val) {
-        this.setRoleParentId(val)
-      }
     }
   },
   mounted () {

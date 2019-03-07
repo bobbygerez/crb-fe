@@ -33,6 +33,7 @@ module.exports = function (ctx) {
         }
       },
       components: [
+        'QBtnGroup',
         'QChip',
         'QTree',
         'QAjaxBar',

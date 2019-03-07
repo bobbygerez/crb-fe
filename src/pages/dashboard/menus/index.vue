@@ -1,7 +1,7 @@
 <template>
 <div>
     <div>
-        <generic-table :data="serverData" :columns="columns" :pagination="serverPagination" @serverside-request="request" @search-change="filter = $event" :search-field="filter" @selected="selected" ref="roleTable" :title="'All Roles'" :loading="loading">
+        <generic-table :data="serverData" :columns="columns" :pagination="serverPagination" @serverside-request="request" @search-change="filter = $event" :search-field="filter" @selected="selected" ref="table" :title="'All Menus'">
         </generic-table>
         <q-page-sticky position="bottom" :offset="$q.theme === 'mat' ? [16, 16] : [16, 16]" v-bind="$attrs">
             <transition appear enter-active-class="animated fadeInUpBig" leave-active-class="animated fadeOutDownBig">
@@ -61,16 +61,9 @@ export default {
         align: 'left'
       },
       {
-        name: 'description',
-        label: 'Description',
+        name: 'subcategory',
+        label: 'Subcategory',
         align: 'left',
-        field: 'description'
-      },
-      {
-        name: 'subordinate',
-        label: 'Subordinates',
-        align: 'left',
-        style: 'word-wrap: break-word;',
         field: (row) => this.allchildren(row)
 
       }
@@ -82,7 +75,7 @@ export default {
     ...mapState('roles', ['role'])
   },
   methods: {
-    ...mapActions('roles', ['setRole']),
+    ...mapActions('menus', ['setMenu']),
     allchildren (row) {
       var res = []
       const cb = (e) => {
@@ -99,7 +92,7 @@ export default {
       if (this.selectedValue.length > 0) {
         let optimusId = head(this.selectedValue).optimus_id
         this.$axios
-          .get(`/dashboard_role/${optimusId}/edit?id=${optimusId}`)
+          .get(`/dashboard_menus/${optimusId}/edit?id=${optimusId}`)
           .then(res => {
             this.setRole(res.data.role)
             this.$q.notify({
@@ -155,11 +148,11 @@ export default {
     edit () {
       if (this.selectedValue.length > 0) {
         let optimusId = head(this.selectedValue).optimus_id
-        this.$axios.get(`/dashboard_role/${optimusId}/edit?id=${optimusId}`)
+        this.$axios.get(`/dashboard_menus/${optimusId}/edit?id=${optimusId}`)
           .then(res => {
-            this.setRole(res.data.role)
+            this.setMenu(res.data.menu)
             this.$router.push({
-              path: `/dashboard/role/${optimusId}`
+              path: `/dashboard/menus/${optimusId}`
             })
           })
       } else {
@@ -177,7 +170,7 @@ export default {
   mounted () {
     this.debouncedFunction = debounce((props) => {
       this.loading = true
-      this.$axios.get(`/dashboard_role?page=${props.pagination.page}&perPage=${props.pagination.rowsPerPage}&filter=${this.filter}`)
+      this.$axios.get(`/dashboard_menus?page=${props.pagination.page}&perPage=${props.pagination.rowsPerPage}&filter=${this.filter}`)
         .then(res => {
           this.serverPagination = props.pagination
           this.serverData = values(res.data.roles.data)

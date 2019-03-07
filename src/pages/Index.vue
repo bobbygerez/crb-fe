@@ -117,7 +117,11 @@ export default {
     }
   },
   mounted () {
-    this.setLeftDrawer(false)
+    if (this.$store.getters['users/token']) {
+      this.$router.push({
+        path: '/dashboard'
+      })
+    }
   }
 }
 </script>

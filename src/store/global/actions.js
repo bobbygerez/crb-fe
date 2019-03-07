@@ -45,3 +45,7 @@ export const setDelBrgys = ({ commit }, payload) => {
 export const setBrgys = ({ commit }, payload) => {
   commit('setBrgys', payload)
 }
+
+export const setServerPagination = ({ commit }, payload) => {
+  commit('setServerPagination', payload)
+}

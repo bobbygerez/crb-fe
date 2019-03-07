@@ -9,5 +9,10 @@ export default {
   cities: [],
   delCities: [],
   delBrgys: [],
-  brgys: []
+  brgys: [],
+  serverPagination: {
+    page: 1,
+    rowsNumber: 10,
+    rowsPerPage: 10 // specifying this determines pagination is server-side
+  }
 }

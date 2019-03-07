@@ -100,6 +100,16 @@ const routes = [
     ]
   },
   {
+    path: '/dashboard/role',
+    meta: {
+      needAuth: true
+    },
+    component: () => import('layouts/Dashboard.vue'),
+    children: [
+      { path: '', component: () => import('pages/dashboard/roles/add.vue') }
+    ]
+  },
+  {
     path: '/dashboard/role/:id',
     meta: {
       needAuth: true
@@ -107,6 +117,46 @@ const routes = [
     component: () => import('layouts/Dashboard.vue'),
     children: [
       { path: '', component: () => import('pages/dashboard/roles/edit.vue') }
+    ]
+  },
+  {
+    path: '/dashboard/menus',
+    meta: {
+      needAuth: true
+    },
+    component: () => import('layouts/Dashboard.vue'),
+    children: [
+      { path: '', component: () => import('pages/dashboard/menus/index.vue') }
+    ]
+  },
+  {
+    path: '/dashboard/menus/:id',
+    meta: {
+      needAuth: true
+    },
+    component: () => import('layouts/Dashboard.vue'),
+    children: [
+      { path: '', component: () => import('pages/dashboard/roles/edit.vue') }
+    ]
+  },
+  {
+    path: '/dashboard/access-rights',
+    meta: {
+      needAuth: true
+    },
+    component: () => import('layouts/Dashboard.vue'),
+    children: [
+      { path: '', component: () => import('pages/dashboard/access-rights/index.vue') }
+    ]
+  },
+  {
+    path: '/dashboard/access-right/:id',
+    meta: {
+      needAuth: true
+    },
+    component: () => import('layouts/Dashboard.vue'),
+    children: [
+      { path: '', component: () => import('pages/dashboard/access-rights/edit.vue') }
     ]
   },
   {

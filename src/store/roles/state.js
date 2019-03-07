@@ -1,4 +1,10 @@
 export default {
-    roles: []
+  roles: [],
+  role: {
+    name: '',
+    description: '',
+    parent_id: {
+      value: ''
+    }
   }
-  
+}

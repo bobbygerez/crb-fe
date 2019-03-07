@@ -6,6 +6,7 @@ import categories from './categories'
 import products from './products'
 import global from './global'
 import menus from './menus'
+import roles from './roles'
 import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex)
 
@@ -21,7 +22,8 @@ export default function (/* { ssrContext } */) {
       users,
       products,
       global,
-      menus
+      menus,
+      roles
     },
     plugins: [createPersistedState()]
   })

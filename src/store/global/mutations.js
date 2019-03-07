@@ -45,3 +45,7 @@ export const setBrgys = (state, payload) => {
 export const setDelBrgys = (state, payload) => {
   state.delBrgys = payload
 }
+
+export const setServerPagination = (state, payload) => {
+  state.serverPagination = payload
+}

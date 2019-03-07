@@ -19,3 +19,5 @@ export const brgys = (state) => state.brgys
 export const delCities = (state) => state.delCities
 
 export const delBrgys = (state) => state.delBrgys
+
+export const serverPagination = (state) => state.serverPagination
