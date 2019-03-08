@@ -6,37 +6,37 @@
                 <q-icon name="edit" color="grey" /> {{ editUser.fullname }}</p>
         </div>
         <div class="col-4">
-            <q-input outlined v-model="editUser.username" label="Username" class="q-ma-sm" />
+            <q-input outlined v-model="$v.editUser.username.$model" bottom-slots error-message="Username is required." :error="!$v.editUser.username.required" label="Username" class="q-ma-sm" />
         </div>
         <div class="col-4">
-            <q-input outlined v-model="editUser.email" label="Email" class="q-ma-sm" />
+            <q-input outlined v-model="$v.editUser.email.$model" bottom-slots error-message="Email must be valid and required." label="Email" class="q-ma-sm" :error="!$v.editUser.email.required || !$v.editUser.email.email" />
         </div>
         <div class="col-4">
-            <q-input outlined v-model="editUser.mobile" label="Mobile" class="q-ma-sm" />
+            <q-input outlined v-model="$v.editUser.mobile.$model" bottom-slots error-message="Mobile must be 11 digits and required." label="Mobile" class="q-ma-sm" :error="!$v.editUser.mobile.required || !$v.editUser.mobile.integer|| !$v.editUser.mobile.minLength" />
         </div>
         <div class="col-4">
-            <q-input outlined v-model="editUser.firstname" label="Firstname" class="q-ma-sm" />
+            <q-input outlined v-model="$v.editUser.firstname.$model" bottom-slots error-message="Firstname is required." label="Firstname" class="q-ma-sm" :error="!$v.editUser.firstname.required" />
         </div>
         <div class="col-4">
-            <q-input outlined v-model="editUser.middlename" label="Middlename" class="q-ma-sm" />
+            <q-input outlined v-model="$v.editUser.middlename.$model" bottom-slots error-message="Middlename is required." label="Middlename" class="q-ma-sm" :error="!$v.editUser.middlename.required" />
         </div>
         <div class="col-4">
-            <q-input outlined v-model="editUser.lastname" label="Lastname" class="q-ma-sm" />
+            <q-input outlined v-model="$v.editUser.lastname.$model" bottom-slots error-message="Lastname is required." label="Lastname" class="q-ma-sm" :error="!$v.editUser.lastname.required" />
         </div>
         <div class="col-12">
-            <q-select outlined v-model="selectedRoles" multiple :options="roles" label="Roles" class="q-ma-sm" use-chips />
+            <q-select outlined v-model="$v.selectedRoles.$model" multiple :options="roles" label="Roles" class="q-ma-sm" use-chips :error="!$v.selectedRoles.role" bottom-slots error-message="Please add role/s." />
         </div>
         <div class="col-4">
-            <q-select outlined v-model="selectedProvince" :options="editProvinces" label="Province" class="q-ma-sm" use-chips emit-value />
+            <q-select outlined v-model="$v.selectedProvince.$model" :options="editProvinces" label="Province" class="q-ma-sm" use-chips emit-value :error="!$v.selectedProvince.places" bottom-slots error-message="Province is required." />
         </div>
         <div class="col-4">
-            <q-select outlined v-model="selectedCity" :options="editCities" label="City" class="q-ma-sm" use-chips emit-value />
+            <q-select outlined v-model="$v.selectedCity.$model" :options="editCities" label="City" class="q-ma-sm" use-chips emit-value :error="!$v.selectedCity.places" bottom-slots error-message="City is required." />
         </div>
         <div class="col-4">
-            <q-select outlined v-model="selectedBrgy" :options="editBrgys" label="Brgys" class="q-ma-sm" use-chips emit-value />
+            <q-select outlined v-model="$v.selectedBrgy.$model" :options="editBrgys" label="Brgys" class="q-ma-sm" use-chips emit-value :error="!$v.selectedBrgy.places" bottom-slots error-message="Barangay is required." />
         </div>
         <div class="col-12">
-            <q-input type="textarea" outlined v-model="editUser.address.street_lot_blk" label="Blk, Lot and Street No." class="q-ma-sm" />
+            <q-input type="textarea" outlined v-model="$v.editUser.address.street_lot_blk.$model" label="Blk, Lot and Street No." class="q-ma-sm" :error="!$v.editUser.address.street_lot_blk.required" bottom-slots error-message="Street, lot and block is required." />
         </div>
         <div class="col-12">
             <q-btn @click="cancel" color="secondary" label="Cancel" class="q-ma-sm" />
@@ -49,15 +49,58 @@
 <script>
 import _ from 'lodash'
 import {
+  integer,
+  email,
+  required,
+  minLength
+} from 'vuelidate/lib/validators'
+import {
   mapState,
   mapActions
 } from 'vuex'
+const role = (value) => value.length > 0
+const places = (value) => typeof value === 'object'
 export default {
-  data () {
-    return {
-      options: [
-        'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
-      ]
+  validations: {
+    editUser: {
+      username: {
+        required
+      },
+      email: {
+        required,
+        email
+      },
+      mobile: {
+        required,
+        integer,
+        minLength: minLength(11)
+      },
+      firstname: {
+        required
+      },
+      middlename: {
+        required
+      },
+      lastname: {
+        required
+      },
+      address: {
+        street_lot_blk: {
+          required
+        }
+      }
+    },
+    selectedRoles: {
+      role
+    },
+    selectedProvince: {
+      places
+    },
+    selectedCity: {
+      places
+    },
+    selectedBrgy: {
+      places
     }
   },
   methods: {
@@ -90,15 +133,22 @@ export default {
       this.$router.go(-1)
     },
     update () {
-      this.$axios.put(`/users/${this.editUser.optimus_id}?id=${this.editUser.optimus_id}`, {
-        user: this.editUser
-      }).then(res => {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
         this.$q.notify({
-          color: 'positive',
-          icon: 'check',
-          message: `User updated successfully.`
+          color: 'negative',
+          icon: 'warning',
+          message: `Please check the fields.`
         })
-      })
+      } else {
+        this.$axios.put(`/users/${this.editUser.optimus_id}?id=${this.editUser.optimus_id}`, this.editUser).then(res => {
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `User updated successfully.`
+          })
+        })
+      }
     }
   },
   computed: {
