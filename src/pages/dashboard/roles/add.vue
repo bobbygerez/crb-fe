@@ -1,27 +1,27 @@
 <template>
 <div class="q-ma-md">
-  <form @submit.prevent="add">
-    <div class="row">
-        <div class="col-12">
-            <p class="text-h5 q-ma-sm">
-                <q-icon name="edit" color="grey" /> {{ role.name }}</p>
-        </div>
-        <div class="col-12">
+    <form @submit.prevent="add">
+        <div class="row">
+            <div class="col-12">
+                <p class="text-h5 q-ma-sm">
+                    <q-icon name="edit" color="grey" /> {{ role.name }}</p>
+            </div>
+            <div class="col-12">
 
-            <q-input outlined v-model="$v.role.name.$model" label="Role Name" class="q-ma-sm" :error="$v.role.name.$dirty && !$v.role.name.required" bottom-slots error-message="Role name is required." />
+                <q-input outlined v-model="$v.role.name.$model" label="Role Name" class="q-ma-sm" :error="$v.role.name.$dirty && !$v.role.name.required" bottom-slots error-message="Role name is required." />
+            </div>
+            <div class="col-12">
+                <q-select outlined v-model="$v.selectedRoles.$model" :options="roles" label="Supervisor" class="q-ma-sm" :error="$v.selectedRoles.$dirty && !$v.selectedRoles.role" bottom-slots error-message="Supervisor role is required." />
+            </div>
+            <div class="col-12">
+                <q-input type="textarea" outlined v-model="$v.role.description.$model" label="Description" class="q-ma-sm" :error="$v.role.description.$dirty &&!$v.role.description.required" bottom-slots error-message="Description is required." />
+            </div>
+            <div class="col-12">
+                <q-btn @click="cancel" color="secondary" label="Cancel" class="q-ma-sm" />
+                <q-btn @click="add" color="primary" label="Submit" class="q-ma-sm" />
+            </div>
         </div>
-        <div class="col-12">
-            <q-select outlined v-model="$v.selectedRoles.$model" :options="roles" label="Supervisor" class="q-ma-sm" :error="$v.selectedRoles.$dirty && !$v.selectedRoles.role" bottom-slots error-message="Supervisor role is required." />
-        </div>
-        <div class="col-12">
-            <q-input type="textarea" outlined v-model="$v.role.description.$model" label="Description" class="q-ma-sm" :error="$v.role.description.$dirty &&!$v.role.description.required" bottom-slots error-message="Description is required." />
-        </div>
-        <div class="col-12">
-            <q-btn @click="cancel" color="secondary" label="Cancel" class="q-ma-sm" />
-            <q-btn @click="add" color="primary" label="Submit" class="q-ma-sm" />
-        </div>
-    </div>
-  </form>
+    </form>
 </div>
 </template>
 

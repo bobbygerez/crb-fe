@@ -1,33 +1,18 @@
 <template>
 <div class="q-ma-md">
-    <div class="row">
-        <div class="col-12">
-            <p class="text-h5 q-ma-sm">
-                <q-icon name="edit" color="grey" /> {{ role.name }}</p>
-        </div>
-        <div class="col-12">
-            <q-input outlined v-model="$v.role.name.$model" label="Role Name" class="q-ma-sm" :error="$v.role.name.$dirty && !$v.role.name.required" bottom-slots error-message="Role name is required." />
-        </div>
-        <div class="col-12">
-            <q-select outlined v-model="$v.selectedRoles.$model" :options="roles" label="Supervisor" class="q-ma-sm" :error="$v.selectedRoles.$dirty && !$v.selectedRoles.role" bottom-slots error-message="Supervisor role is required." />
-        </div>
-        <div class="col-12" v-if="subordinates.length > 0">
-            <p class="title q-ml-sm">Subordinates: </p>
-            <q-chip outline v-for="(sub, i) in subordinates" :key="i" color="grey-8">{{ sub }}</q-chip>
-        </div>
-        <div class="col-12">
-            <q-input type="textarea" outlined v-model="$v.role.description.$model" label="Description" class="q-ma-sm" :error="$v.role.description.$dirty &&!$v.role.description.required" bottom-slots error-message="Description is required." />
-        </div>
+    <generic-role :role="role" :selected-roles="selectedRoles" :change-sel-roles="changeSelRoles">
         <div class="col-12">
             <q-btn @click="cancel" color="secondary" label="Cancel" class="q-ma-sm" />
             <q-btn @click="update" color="primary" label="Update" class="q-ma-sm" />
         </div>
-    </div>
+    </generic-role>
 </div>
 </template>
 
 <script>
 const role = (value) => value.label !== undefined
+
+import genericRole from 'pages/dashboard/roles/form/generic-role'
 import {
   required
 } from 'vuelidate/lib/validators'
@@ -40,6 +25,9 @@ import {
   mapActions
 } from 'vuex'
 export default {
+  components: {
+    genericRole
+  },
   validations: {
     role: {
       name: {
@@ -55,6 +43,9 @@ export default {
   },
   methods: {
     ...mapActions('roles', ['setRoles', 'setRoleParentId']),
+    changeSelRoles (val) {
+      console.log(val)
+    },
     cancel () {
       this.$router.go(-1)
     },
@@ -116,7 +107,6 @@ export default {
         e.all_children && e.all_children.forEach(cb)
       }
       this.role.all_children.forEach(cb)
-      console.log(res)
       return res
     },
     selectedRoles: {

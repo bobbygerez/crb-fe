@@ -9,9 +9,6 @@
             <q-toolbar-title>
                 {{ user.firstname }} {{ user.lastname }}
             </q-toolbar-title>
-            <q-btn dense flat icon="shopping_cart" class="q-ml-md" to="/cart">
-                <q-badge color="negative" floating v-if="cartLength != ''">{{ cartLength }}</q-badge>
-            </q-btn>
             <q-btn flat v-if="token != ''" @click="dialog = true">
                 <q-icon name="power_settings_new" />
             </q-btn>
