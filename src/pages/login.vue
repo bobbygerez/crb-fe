@@ -6,8 +6,8 @@
             <p class="text-h6 q-pa-sm">
                 <q-icon name="lock"> </q-icon> USER LOGIN
             </p>
-            <q-input filled v-model="$v.email.$model" label="Username/Email" dark @keyup.enter="login" />
-            <q-input v-model="$v.password.$model" filled :type="isPwd ? 'password' : 'text'" dark class="q-mt-sm form__input" label="Password" @keyup.enter="login">
+            <q-input outlined v-model="$v.email.$model" label="Username/Email" dark @keyup.enter="login" />
+            <q-input v-model="$v.password.$model" outlined :type="isPwd ? 'password' : 'text'" dark class="q-mt-sm form__input" label="Password" @keyup.enter="login">
                 <template v-slot:append>
                     <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
                 </template>

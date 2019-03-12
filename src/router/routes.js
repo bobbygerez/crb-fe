@@ -178,6 +178,26 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/dashboard/category/index.vue') }
     ]
+  },
+  {
+    path: '/dashboard/chart-of-accounts',
+    meta: {
+      needAuth: true
+    },
+    component: () => import('layouts/Dashboard.vue'),
+    children: [
+      { path: '', component: () => import('pages/dashboard/chart-accounts/index.vue') }
+    ]
+  },
+  {
+    path: '/dashboard/chart-of-accounts/:id',
+    meta: {
+      needAuth: true
+    },
+    component: () => import('layouts/Dashboard.vue'),
+    children: [
+      { path: '', component: () => import('pages/dashboard/category/index.vue') }
+    ]
   }
 ]
 

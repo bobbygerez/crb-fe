@@ -71,7 +71,7 @@ export default {
         return this.selectedRoles
       },
       set (val) {
-        this.$emit('changeSelRoles', val)
+        this.$emit('change', val)
       }
     }
   }

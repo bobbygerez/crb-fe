@@ -1,6 +1,6 @@
 <template>
 <div class="q-ma-md">
-    <generic-role :role="role" :selected-roles="selectedRoles" :change-sel-roles="changeSelRoles">
+    <generic-role :role="role" :selected-roles="selectedRoles" @change="change">
         <div class="col-12">
             <q-btn @click="cancel" color="secondary" label="Cancel" class="q-ma-sm" />
             <q-btn @click="update" color="primary" label="Update" class="q-ma-sm" />
@@ -43,17 +43,17 @@ export default {
   },
   methods: {
     ...mapActions('roles', ['setRoles', 'setRoleParentId']),
-    changeSelRoles (val) {
-      console.log(val)
-    },
-    cancel () {
-      this.$router.go(-1)
+    change (val) {
+      this.setRoleParentId(val)
     },
     create () {
       this.$axios.get('/dashboard_role/create')
         .then(res => {
           this.setRoles(res.data.roles)
         })
+    },
+    cancel () {
+      this.$router.go(-1)
     },
     update () {
       this.$v.$touch()
@@ -65,10 +65,16 @@ export default {
         })
       } else {
         let role = []
+        let parentId = ''
+        if (typeof this.role.parent_id === 'object') {
+          parentId = this.role.parent_id.value
+        } else {
+          parentId = this.role.parent_id
+        }
         role.push({
           name: this.role.name,
           description: this.role.description,
-          parent_id: this.role.parent_id.value
+          parent_id: parentId
         })
         this.$axios.put(`/dashboard_role/${this.role.optimus_id}?id=${this.role.optimus_id}`, head(role)).then(res => {
           this.$q.notify({

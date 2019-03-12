@@ -144,10 +144,6 @@ export default {
       }
     },
     add () {
-      this.setRole({
-        name: '',
-        description: ''
-      })
       this.$router.push({
         path: `/dashboard/role`
       })

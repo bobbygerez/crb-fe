@@ -1,50 +1,28 @@
 <template>
 <div class="q-ma-md">
-    <form @submit.prevent="add">
-        <div class="row">
-            <div class="col-12">
-                <p class="text-h5 q-ma-sm">
-                    <q-icon name="edit" color="grey" /> {{ role.name }}</p>
-            </div>
-            <div class="col-12">
-
-                <q-input outlined v-model="$v.role.name.$model" label="Role Name" class="q-ma-sm" :error="$v.role.name.$dirty && !$v.role.name.required" bottom-slots error-message="Role name is required." />
-            </div>
-            <div class="col-12">
-                <q-select outlined v-model="$v.selectedRoles.$model" :options="roles" label="Supervisor" class="q-ma-sm" :error="$v.selectedRoles.$dirty && !$v.selectedRoles.role" bottom-slots error-message="Supervisor role is required." />
-            </div>
-            <div class="col-12">
-                <q-input type="textarea" outlined v-model="$v.role.description.$model" label="Description" class="q-ma-sm" :error="$v.role.description.$dirty &&!$v.role.description.required" bottom-slots error-message="Description is required." />
-            </div>
-            <div class="col-12">
-                <q-btn @click="cancel" color="secondary" label="Cancel" class="q-ma-sm" />
-                <q-btn @click="add" color="primary" label="Submit" class="q-ma-sm" />
-            </div>
+    <generic-role :role="role" :selected-roles="selectedRoles" @change="change">
+        <div class="col-12">
+            <q-btn @click="cancel" color="secondary" label="Cancel" class="q-ma-sm" />
+            <q-btn @click="add" color="primary" label="Submit" class="q-ma-sm" />
         </div>
-    </form>
+    </generic-role>
 </div>
 </template>
 
 <script>
 const role = (value) => value.label !== undefined
+import genericRole from 'pages/dashboard/roles/form/generic-role'
 import {
   required
 } from 'vuelidate/lib/validators'
 import {
-  head
+  head, find
 } from 'lodash'
 import {
   mapState,
   mapActions
 } from 'vuex'
 export default {
-  data () {
-    return {
-      selectedRoles: {
-        value: 0
-      }
-    }
-  },
   validations: {
     role: {
       name: {
@@ -58,16 +36,22 @@ export default {
       role
     }
   },
+  components: {
+    genericRole
+  },
   methods: {
-    ...mapActions('roles', ['setRoles']),
-    cancel () {
-      this.$router.go(-1)
+    ...mapActions('roles', ['setRoles', 'setRoleParentId']),
+    change (val) {
+      this.setRoleParentId(val)
     },
     create () {
       this.$axios.get('/dashboard_role/create')
         .then(res => {
           this.setRoles(res.data.roles)
         })
+    },
+    cancel () {
+      this.$router.go(-1)
     },
     add () {
       this.$v.$touch()
@@ -113,10 +97,31 @@ export default {
       }
       this.$store.getters['roles/roles'].all_children.forEach(cb)
       return res
+    },
+    selectedRoles: {
+      get () {
+        if (typeof this.role.parent_id === 'object') {
+          var x = find(this.roles, {
+            value: this.role.parent_id.value
+          })
+
+          if (typeof x === 'object') {
+            return x
+          } else {
+            return {
+              value: ''
+            }
+          }
+        } else {
+          return find(this.roles, {
+            value: this.role.parent_id
+          })
+        }
+      },
+      set (val) {
+        this.setRoleParentId(val)
+      }
     }
-  },
-  mounted () {
-    this.create()
   }
 }
 </script>

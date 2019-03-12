@@ -4,7 +4,8 @@ export default {
     name: '',
     description: '',
     parent_id: {
-      value: ''
+      label: '',
+      value: 0
     }
   }
 }
