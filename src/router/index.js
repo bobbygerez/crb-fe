@@ -38,8 +38,6 @@ export default function ({ store }/* { store, ssrContext } */) {
         LocalStorage.clear()
         next('/login')
       } else {
-        // console.log('to', to)
-        // store.dispatch('globals/setPageMeta', to.meta)
         next()
       }
     } else {

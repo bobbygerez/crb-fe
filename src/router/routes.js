@@ -190,13 +190,13 @@ const routes = [
     ]
   },
   {
-    path: '/dashboard/chart-of-accounts/:id',
+    path: '/dashboard/chart-of-account',
     meta: {
       needAuth: true
     },
     component: () => import('layouts/Dashboard.vue'),
     children: [
-      { path: '', component: () => import('pages/dashboard/category/index.vue') }
+      { path: '', component: () => import('pages/dashboard/chart-accounts/add.vue') }
     ]
   }
 ]

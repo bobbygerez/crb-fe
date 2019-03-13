@@ -144,6 +144,14 @@ export default {
       }
     },
     add () {
+      this.setRole({
+        name: '',
+        description: '',
+        parent_id: {
+          label: '',
+          value: 0
+        }
+      })
       this.$router.push({
         path: `/dashboard/role`
       })

@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-12">
                 <p class="text-h5 q-ma-sm">
-                    <q-icon name="edit" color="grey" /> {{ role.name }}
+                    <q-icon :name="icon" color="grey" /> {{ role.name }}
                 </p>
             </div>
             <div class="col-12">
@@ -37,6 +37,10 @@ export default {
     },
     selectedRoles: {
       type: [Array, Object],
+      default: null
+    },
+    icon: {
+      type: [String],
       default: null
     }
   },

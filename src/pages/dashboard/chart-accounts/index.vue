@@ -1,30 +1,37 @@
 <template>
-<div>
-    <div>
-        <q-tree accordion :nodes="chartAccounts" :selected.sync="selectedChartAccount" node-key="id" label-key="label">
-            <div slot="default-body" slot-scope="prop">
-                <div class="text-weight-thin">Account display: {{ prop.node.account_display }}</div>
-                <div class="text-weight-thin">T-Account: {{ prop.node.taccount }}</div>
-            </div>
+<div class="q-ma-md">
+    <div class="row">
+        <div class="col-6">
+            <q-select outlined v-model="selectedCompany" :options="companies" bottom-slots error-message="Select a company." label="Select a company"/>
+        </div>
+        <div class="col-12">
+            <q-tree color="primary" :nodes="chartAccountTree" :selected.sync="selectedChartAccount" node-key="id" label-key="label">
+                <div slot="default-body" slot-scope="prop" v-if="prop.node.taccount !== ''">
+                    <div class="text-weight-thin">Account display: {{ prop.node.account_display }}</div>
+                    <div class="text-weight-thin">T-Account: {{ prop.node.taccount }}</div>
+                </div>
 
-        </q-tree>
-        <q-pagination v-model="current" :max="5">
-        </q-pagination>
-        <q-page-sticky position="bottom" :offset="$q.theme === 'mat' ? [16, 16] : [16, 16]" v-bind="$attrs">
-            <transition appear enter-active-class="animated fadeInUpBig" leave-active-class="animated fadeOutDownBig">
-                <q-btn-group>
-                    <q-btn icon="add" color="primary">
-                        <q-tooltip :delay="1000" :offset="[0, 10]">Add User</q-tooltip>
-                    </q-btn>
-                    <q-btn icon="edit" color="primary" >
-                        <q-tooltip :delay="1000" :offset="[0, 10]">Edit User</q-tooltip>
-                    </q-btn>
-                    <q-btn icon="delete" color="primary" >
-                        <q-tooltip :delay="1000" :offset="[0, 10]">Delete User</q-tooltip>
-                    </q-btn>
-                </q-btn-group>
-            </transition>
-        </q-page-sticky>
+            </q-tree>
+        </div>
+        <div class="col-12">
+            <q-pagination v-model="current" :max="chartAccounts.last_page" color="primary" class="q-mt-md" v-if="chartAccounts.last_page > 1">
+            </q-pagination>
+            <q-page-sticky position="bottom" :offset="$q.theme === 'mat' ? [16, 16] : [16, 16]" v-bind="$attrs">
+                <transition appear enter-active-class="animated fadeInUpBig" leave-active-class="animated fadeOutDownBig">
+                    <q-btn-group>
+                        <q-btn icon="add" color="primary" @click="add">
+                            <q-tooltip :delay="1000" :offset="[0, 10]">Add User</q-tooltip>
+                        </q-btn>
+                        <q-btn icon="edit" color="primary">
+                            <q-tooltip :delay="1000" :offset="[0, 10]">Edit User</q-tooltip>
+                        </q-btn>
+                        <q-btn icon="delete" color="primary">
+                            <q-tooltip :delay="1000" :offset="[0, 10]">Delete User</q-tooltip>
+                        </q-btn>
+                    </q-btn-group>
+                </transition>
+            </q-page-sticky>
+        </div>
     </div>
 </div>
 </template>
@@ -40,49 +47,30 @@ import {
 export default {
   data () {
     return {
-      current: 3,
-      selectedChartAccount: 0,
-      // Chart Account End here!
-      selectedValue: [],
-      debouncedFunction: '',
+      selectedCompany: {
+        value: '',
+        label: ''
+      },
+      current: 1,
+      perPage: 10,
       loading: false,
-      options: [5, 10, 15, 20],
-      serverPagination: {
-        page: 1,
-        rowsNumber: 10,
-        rowsPerPage: 10 // specifying this determines pagination is server-side
-      },
-      serverData: [],
-      columns: [{
-        name: 'name',
-        label: 'Name',
-        field: 'name',
-        align: 'left'
-      },
-      {
-        name: 'account_display',
-        label: 'Account Display',
-        align: 'left',
-        field: 'account_display'
-      },
-      {
-        name: 'subordinate',
-        label: 'Subordinates',
-        align: 'left',
-        style: 'word-wrap: break-word;',
-        field: (row) => this.allchildren(row)
-
-      }
-      ],
       filter: ''
     }
   },
   computed: {
-    ...mapState('roles', ['role']),
-    chartAccounts () {
-      let chartAccounts = values(this.$store.getters['chartAccounts/chartAccounts'].data)
+    ...mapState('chartAccounts', ['chartAccounts']),
+    selectedChartAccount: {
+      get () {
+        return this.$store.getters['chartAccounts/selectedChartAccount']
+      },
+      set (val) {
+        this.setSelectedChartAccount(val)
+      }
+    },
+    chartAccountTree () {
+      let chartAccounts = values(this.chartAccounts.data)
       const map = e => ({
-          id: e.id,
+          id: e.optimus_id,
           label: e.name,
           remarks: e.remarks,
           taccount: e.t_account.name,
@@ -91,24 +79,57 @@ export default {
         }),
         tree = chartAccounts.map(map)
 
-      console.log(tree)
       return tree
+    },
+    companies () {
+      return this.$store.getters['companies/companies'].map(e => {
+        return {
+          label: e.name,
+          value: e.optimus_id
+        }
+      })
     }
   },
   methods: {
-    ...mapActions('chartAccounts', ['setChartAccounts']),
-    ...mapActions('roles', ['setRole']),
+    ...mapActions('chartAccounts', ['setChartAccounts', 'setSelectedChartAccount']),
+    ...mapActions('companies', ['setCompanies', 'setSelectedCompany']),
     add () {
-      this.$router.push({
-        path: `/dashboard/role`
-      })
+      if (this.selectedChartAccount === 0 || this.selectedChartAccount === null) {
+        this.$q.notify({
+          color: 'negative',
+          icon: 'warning',
+          message: 'Please select a parent Chart of Account.'
+        })
+      } else {
+        this.$router.push({
+          path: `/dashboard/chart-of-account`
+        })
+      }
+    },
+    getCompanyChartAccounts () {
+      this.$axios.get(`/company_chart_accounts`)
+        .then(res => {
+          this.setCompanies(res.data.companies)
+        })
+    },
+    getChartAccounts () {
+      this.$axios.get(`/chart_accounts?page=${this.current}&perPage=${this.perPage}&filter=${this.filter}&companyId=${this.selectedCompany.value}`)
+        .then(res => {
+          this.setChartAccounts(res.data.chartAccounts)
+        })
     }
   },
   mounted () {
-    this.$axios.get(`/chart_accounts?page=1&perPage=10&filter=${this.filter}`)
-      .then(res => {
-        this.setChartAccounts(res.data.chartAccounts)
-      })
+    this.getCompanyChartAccounts()
+  },
+  watch: {
+    selectedCompany (val) {
+      this.setSelectedCompany(val)
+      this.getChartAccounts()
+    },
+    current (val) {
+      this.getChartAccounts()
+    }
   }
 }
 </script>
