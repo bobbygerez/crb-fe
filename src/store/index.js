@@ -9,6 +9,7 @@ import menus from './menus'
 import roles from './roles'
 import chartAccounts from './chart-accounts'
 import companies from './companies'
+import tAccounts from './t-accounts'
 import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex)
 
@@ -27,7 +28,8 @@ export default function (/* { ssrContext } */) {
       menus,
       roles,
       chartAccounts,
-      companies
+      companies,
+      tAccounts
     },
     plugins: [createPersistedState()]
   })

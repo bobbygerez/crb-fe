@@ -10,3 +10,7 @@ export const setSelectedChartAccount = (state, payload) => {
 export const setChartAccount = (state, payload) => {
   state.chartAccount = payload
 }
+
+export const setParentAccount = (state, payload) => {
+  state.parentAccount = payload
+}

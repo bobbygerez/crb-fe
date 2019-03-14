@@ -6,8 +6,8 @@
             <p class="text-h6 q-pa-sm">
                 <q-icon name="lock"> </q-icon> USER LOGIN
             </p>
-            <q-input filled v-model="$v.email.$model" label="Username/Email" dark @keyup.enter="login" />
-            <q-input v-model="$v.password.$model" filled :type="isPwd ? 'password' : 'text'" dark class="q-mt-sm form__input" label="Password" @keyup.enter="login">
+            <q-input outlined v-model="$v.email.$model" label="Username/Email" dark @keyup.enter="login" />
+            <q-input v-model="$v.password.$model" outlined :type="isPwd ? 'password' : 'text'" dark class="q-mt-sm form__input" label="Password" @keyup.enter="login">
                 <template v-slot:append>
                     <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
                 </template>
@@ -21,9 +21,15 @@
                 <div class="row">
                     <transition enter-active-class="animated flipInX" leave-active-class="animated flipOutX" appear>
                         <q-banner inline-actions class="text-white bg-red">
-                            <div v-if="$v.email.$dirty && !$v.email.required"><q-icon name="email"> </q-icon> Email is required.</div>
-                            <div v-if="$v.password.$dirty && !$v.password.required"><q-icon name="lock"> </q-icon> Password is required</div>
-                            <div v-if="!$v.password.minLength"><q-icon name="lock"> </q-icon> Password must have at least {{$v.password.$params.minLength.min}} characters.</div>
+                            <div v-if="$v.email.$dirty && !$v.email.required">
+                                <q-icon name="email"> </q-icon> Email is required.
+                            </div>
+                            <div v-if="$v.password.$dirty && !$v.password.required">
+                                <q-icon name="lock"> </q-icon> Password is required
+                            </div>
+                            <div v-if="!$v.password.minLength">
+                                <q-icon name="lock"> </q-icon> Password must have at least {{$v.password.$params.minLength.min}} characters.
+                            </div>
                         </q-banner>
                     </transition>
                 </div>
@@ -49,6 +55,11 @@ import {
 } from 'vuex'
 
 export default {
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      console.log(vm.$store.getters['users/token'] === '')
+    })
+  },
   data () {
     return {
       email: '',
@@ -82,7 +93,7 @@ export default {
         this.loading = false
       } else {
         this.$axios.post('/login', {
-          email: this.email,
+          username: this.email,
           password: this.password
         })
           .then(res => {

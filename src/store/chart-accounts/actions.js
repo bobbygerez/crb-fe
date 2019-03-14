@@ -10,3 +10,7 @@ export const setChartAccount = ({ commit }, payload) => {
 export const setSelectedChartAccount = ({ commit }, payload) => {
   commit('setSelectedChartAccount', payload)
 }
+
+export const setParentAccount = ({ commit }, payload) => {
+  commit('setParentAccount', payload)
+}
