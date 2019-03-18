@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-12">
             <p class="text-h5 q-ma-sm">
-                <q-icon name="edit" color="grey" /> {{ role.name }}</p>
+                <q-icon name="add_circle" color="grey" /> {{ role.name }}</p>
         </div>
         <div class="col-4">
             <q-input outlined v-model="role.name" label="Role Name" class="q-ma-sm" />

@@ -49,3 +49,15 @@ export const setDelBrgys = (state, payload) => {
 export const setServerPagination = (state, payload) => {
   state.serverPagination = payload
 }
+
+export const setPage = (state, payload) => {
+  state.page = payload
+}
+
+export const setPerPage = (state, payload) => {
+  state.perPage = payload
+}
+
+export const setFilter = (state, payload) => {
+  state.filter = payload
+}

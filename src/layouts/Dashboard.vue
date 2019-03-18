@@ -27,16 +27,16 @@
             <template v-for="(menu, i) in menus">
                 <q-expansion-item  expand-separator :label="menu.name" :key="i" v-if="menu.all_children.length > 0" >
                     <template v-for="(submenu, a) in menu.all_children">
-                        <q-expansion-item  :header-inset-level="1" expand-separator :label="submenu.name" :key="a" v-if="submenu.all_children.length > 0" :to="`/dashboard/${submenu.slug_name}`" exact>
+                        <q-expansion-item  :header-inset-level=".5" expand-separator :label="submenu.name" :key="a" v-if="submenu.all_children.length > 0" :to="`/dashboard/${submenu.slug_name}`" exact>
                             <template v-for="(furtherMenu, b) in submenu.all_children">
                                 <q-expansion-item  switch-toggle-side dense-toggle :label="furtherMenu.name" :header-inset-level="1" :content-inset-level="2" :key="b" v-if="furtherMenu.all_children.length > 0">
                                 </q-expansion-item>
-                                <q-item  clickable v-ripple v-else :key="b" side :inset-level="2">
+                                <q-item  clickable v-ripple v-else :key="b" side :inset-level="1" :to="`/dashboard/${furtherMenu.path}`" exact>
                                     <q-item-section>{{ furtherMenu.name }}</q-item-section>
                                 </q-item>
                             </template>
                         </q-expansion-item>
-                        <q-item  clickable v-ripple v-else :key="a" side :inset-level="1" :to="`/dashboard/${submenu.slug_name}`" exact>
+                        <q-item  clickable v-ripple v-else :key="a" side :inset-level=".5" :to="`/dashboard/${submenu.slug_name}`" exact>
                             <q-item-section>{{ submenu.name }}</q-item-section>
                         </q-item>
                     </template>

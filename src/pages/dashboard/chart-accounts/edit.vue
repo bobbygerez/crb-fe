@@ -1,15 +1,16 @@
 <template>
 <div class="q-ma-md">
-    <generic-form :parent-account="parentAccount" :chart-account="chartAccount" :selected-chart-account="selectedChartAccount" :show="true">
+    <generic-form :parent-account="parentAccount" :chart-account="chartAccount" :selected-chart-account="selectedChartAccount" :show="false">
         <div class="col-12">
-            <q-btn @click="cancel" color="secondary" label="Back" class="q-ma-sm" />
-            <q-btn @click="add" color="primary" label="Submit" class="q-ma-sm" />
+            <q-btn @click="back" color="secondary" label="Back" class="q-ma-sm" />
+            <q-btn @click="update" color="primary" label="Update" class="q-ma-sm" />
         </div>
     </generic-form>
 </div>
 </template>
 
 <script>
+import { find } from 'lodash'
 import genericForm from 'pages/dashboard/chart-accounts/form/generic-form'
 import {
   required,
@@ -57,7 +58,7 @@ export default {
 
   },
   methods: {
-    ...mapActions('chartAccounts', ['setChartAccount', 'setParentAccount', 'setChartAccounts']),
+    ...mapActions('chartAccounts', ['setChartAccount', 'setParentAccount', 'setChartAccounts', 'setTAccountId']),
     ...mapActions('tAccounts', ['setTAccounts']),
     getChartAccounts () {
       this.$axios.get(`/chart_accounts?page=${this.page}&perPage=${this.perPage}&filter=${this.filter}&companyId=${this.selectedCompany.value}`)
@@ -65,10 +66,10 @@ export default {
           this.setChartAccounts(res.data.chartAccounts)
         })
     },
-    cancel () {
+    back () {
       this.$router.go(-1)
     },
-    add () {
+    update () {
       this.$v.$touch()
       if (this.$v.$invalid) {
         this.$q.notify({
@@ -77,10 +78,10 @@ export default {
           message: `Please check the form fields.`
         })
       } else {
-        this.$axios.post(`chart_accounts`, {
-          company_id: this.selectedCompany.value,
+        this.$axios.put(`chart_accounts/${this.selectedChartAccount}?id=${this.selectedChartAccount}`, {
+          company_id: this.chartAccount.company_id,
           taccount_id: this.chartAccount.taccount_id.value,
-          parent_id: this.selectedChartAccount,
+          parent_id: this.chartAccount.parent_id,
           name: this.chartAccount.name,
           account_code: this.chartAccount.account_code,
           account_display: this.chartAccount.account_display
@@ -88,16 +89,16 @@ export default {
           this.$q.notify({
             color: 'positive',
             icon: 'check',
-            message: `${this.chartAccount.name} created successfully.`
+            message: `${this.chartAccount.name} update successfully.`
           })
           this.getChartAccounts()
-          this.setChartAccount({
-            name: '',
-            account_code: '',
-            account_display: '',
-            remarks: '',
-            taccount_id: ''
-          })
+          // this.setChartAccount({
+          //   name: '',
+          //   account_code: '',
+          //   account_display: '',
+          //   remarks: '',
+          //   taccount_id: ''
+          // })
         })
       }
     },
@@ -106,6 +107,13 @@ export default {
         .then(res => {
           this.setParentAccount(res.data.parentAccount)
           this.setTAccounts(res.data.tAccounts)
+        })
+      this.$axios.get(`chart_accounts/${this.selectedChartAccount}/edit?id=${this.selectedChartAccount}`)
+        .then(res => {
+          this.setChartAccount(res.data.chartAccount)
+          this.setTAccountId(
+            find(this.tAccounts, { 'value': res.data.chartAccount.taccount_id })
+          )
         })
     }
   },

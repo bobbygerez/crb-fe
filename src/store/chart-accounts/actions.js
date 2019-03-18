@@ -7,6 +7,10 @@ export const setChartAccount = ({ commit }, payload) => {
   commit('setChartAccount', payload)
 }
 
+export const setTAccountId = ({ commit }, payload) => {
+  commit('setTAccountId', payload)
+}
+
 export const setSelectedChartAccount = ({ commit }, payload) => {
   commit('setSelectedChartAccount', payload)
 }

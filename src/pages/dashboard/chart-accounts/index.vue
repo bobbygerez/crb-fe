@@ -22,7 +22,7 @@
                         <q-btn icon="add" color="primary" @click="add">
                             <q-tooltip :delay="1000" :offset="[0, 10]">Add User</q-tooltip>
                         </q-btn>
-                        <q-btn icon="edit" color="primary">
+                        <q-btn icon="edit" color="primary" @click="edit">
                             <q-tooltip :delay="1000" :offset="[0, 10]">Edit User</q-tooltip>
                         </q-btn>
                         <q-btn icon="delete" color="primary">
@@ -103,6 +103,19 @@ export default {
       } else {
         this.$router.push({
           path: `/dashboard/chart-of-account`
+        })
+      }
+    },
+    edit () {
+      if (this.selectedChartAccount === 0 || this.selectedChartAccount === null) {
+        this.$q.notify({
+          color: 'negative',
+          icon: 'warning',
+          message: 'Please select a parent Chart of Account.'
+        })
+      } else {
+        this.$router.push({
+          path: `/dashboard/chart-of-accounts/${this.selectedChartAccount}`
         })
       }
     },

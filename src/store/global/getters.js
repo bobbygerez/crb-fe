@@ -21,3 +21,9 @@ export const delCities = (state) => state.delCities
 export const delBrgys = (state) => state.delBrgys
 
 export const serverPagination = (state) => state.serverPagination
+
+export const page = (state) => state.serverPagination
+
+export const perPage = (state) => state.serverPagination
+
+export const filter = (state) => state.filter

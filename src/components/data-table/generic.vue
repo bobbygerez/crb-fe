@@ -12,7 +12,7 @@
      :title="title"
      :loading="loading">
         <template v-slot:top-right>
-            <q-input borderless dense debounce="300" v-model="filterOpts" placeholder="Search user..." outlined class="q-ma-sm">
+            <q-input borderless dense debounce="300" v-model="filterOpts" :placeholder="searchPlaceholder" outlined class="q-ma-sm">
                 <template v-slot:append>
                     <q-icon name="search" />
                 </template>
@@ -28,6 +28,10 @@
 export default {
   props: {
     // the table data
+    searchPlaceholder: {
+      type: [String],
+      default: null
+    },
     data: {
       type: [Array, Object],
       default: null

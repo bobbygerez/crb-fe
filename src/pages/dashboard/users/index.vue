@@ -1,6 +1,6 @@
 <template>
 <div>
-    <generic-table :data="serverData" :columns="columns" :pagination="serverPagination" @serverside-request="request" @search-change="filter = $event" :search-field="filter" @selected="selected" ref="userTable" :title="'All Users'" :loading="loading">
+    <generic-table :data="serverData" :columns="columns" :pagination="serverPagination" @serverside-request="request" @search-change="filter = $event" :search-field="filter" @selected="selected" ref="userTable" :title="'All Users'" :loading="loading" :search-placeholder="'Search Users...'">
     </generic-table>
     <q-page-sticky position="bottom" :offset="$q.theme === 'mat' ? [16, 16] : [16, 16]" v-bind="$attrs">
         <transition appear enter-active-class="animated fadeInUpBig" leave-active-class="animated fadeOutDownBig">

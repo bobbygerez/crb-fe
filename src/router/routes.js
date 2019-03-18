@@ -143,13 +143,13 @@ const routes = [
     ]
   },
   {
-    path: '/dashboard/access-right/:id',
+    path: '/dashboard/transactions/access-right/create',
     meta: {
       needAuth: true
     },
     component: () => import('layouts/Dashboard.vue'),
     children: [
-      { path: '', component: () => import('pages/dashboard/access-rights/edit.vue') }
+      { path: '', component: () => import('pages/dashboard/access-rights/add.vue') }
     ]
   },
   {
@@ -190,6 +190,26 @@ const routes = [
     component: () => import('layouts/Dashboard.vue'),
     children: [
       { path: '', component: () => import('pages/dashboard/chart-accounts/add.vue') }
+    ]
+  },
+  {
+    path: '/dashboard/chart-of-accounts/:id',
+    meta: {
+      needAuth: true
+    },
+    component: () => import('layouts/Dashboard.vue'),
+    children: [
+      { path: '', component: () => import('pages/dashboard/chart-accounts/edit.vue') }
+    ]
+  },
+  {
+    path: '/dashboard/transactions/general-ledgers',
+    meta: {
+      needAuth: true
+    },
+    component: () => import('layouts/Dashboard.vue'),
+    children: [
+      { path: '', component: () => import('pages/dashboard/accounting/transactions/general-ledger.vue') }
     ]
   }
 ]

@@ -49,3 +49,15 @@ export const setBrgys = ({ commit }, payload) => {
 export const setServerPagination = ({ commit }, payload) => {
   commit('setServerPagination', payload)
 }
+
+export const setPage = ({ commit }, payload) => {
+  commit('setPage', payload)
+}
+
+export const setPerPage = ({ commit }, payload) => {
+  commit('setPerPage', payload)
+}
+
+export const setFilter = ({ commit }, payload) => {
+  commit('setFilter', payload)
+}

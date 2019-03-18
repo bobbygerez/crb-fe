@@ -11,6 +11,10 @@ export const setChartAccount = (state, payload) => {
   state.chartAccount = payload
 }
 
+export const setTAccountId = (state, payload) => {
+  state.chartAccount.taccount_id = payload
+}
+
 export const setParentAccount = (state, payload) => {
   state.parentAccount = payload
 }

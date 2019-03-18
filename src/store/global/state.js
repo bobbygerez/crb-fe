@@ -1,4 +1,7 @@
 export default {
+  filter: '',
+  page: 1,
+  perPage: 20,
   leftDrawer: true,
   breadCrumbs: [],
   cart: [],
