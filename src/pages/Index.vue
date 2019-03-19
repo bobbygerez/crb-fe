@@ -55,11 +55,6 @@ import {
 } from 'vuex'
 
 export default {
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      console.log(vm.$store.getters['users/token'] === '')
-    })
-  },
   data () {
     return {
       email: '',
@@ -127,7 +122,7 @@ export default {
       }
     }
   },
-  mounted () {
+  created () {
     if (this.$store.getters['users/token']) {
       this.$router.push({
         path: '/dashboard'

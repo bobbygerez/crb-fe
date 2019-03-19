@@ -1,5 +1,6 @@
 
 const routes = [
+
   {
     path: '/',
     component: () => import('layouts/MyLayout.vue'),
@@ -210,6 +211,13 @@ const routes = [
     component: () => import('layouts/Dashboard.vue'),
     children: [
       { path: '', component: () => import('pages/dashboard/accounting/transactions/general-ledger.vue') }
+    ]
+  },
+  {
+    path: '/dashboard/cis/add-client/new-account',
+    component: () => import('layouts/Dashboard.vue'),
+    children: [
+      { path: '', component: () => import('pages/dashboard/cis/add-client/new-account.vue') }
     ]
   }
 ]
