@@ -1,9 +1,9 @@
 <template>
 <div class="q-ma-md">
-    <access-rights  :access-right="accessRight" :title="'New Access Right'" :icon="'add_circle'"></access-rights>
+    <access-rights  :access-right="accessRight" :title="` Edit ${accessRight.name}`" :icon="'edit'"></access-rights>
     <div class="col-12">
         <q-btn @click="cancel" color="secondary" label="Back" class="q-ma-sm" />
-        <q-btn @click="add" color="primary" label="Create" class="q-ma-sm" />
+        <q-btn @click="update" color="primary" label="Update" class="q-ma-sm" />
     </div>
 </div>
 </template>
@@ -23,16 +23,12 @@ export default {
     cancel () {
       this.$router.go(-1)
     },
-    add () {
-      this.$axios.post(`/access_rights`, this.accessRight).then(res => {
+    update () {
+      this.$axios.put(`/access_rights/${this.accessRight.optimus_id}?id=${this.accessRight.optimus_id}`, this.accessRight).then(res => {
         this.$q.notify({
           color: 'positive',
           icon: 'check',
-          message: `${this.accessRight.name} created successfully.`
-        })
-        this.setAccessRight({
-          name: '',
-          description: ''
+          message: `${this.accessRight.name} updated successfully.`
         })
       })
     }

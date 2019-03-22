@@ -2,7 +2,7 @@
 <div class="q-ma-md">
     <generic-role :role="role" :selected-roles="selectedRoles" @change="change" icon="add_circle">
         <div class="col-12">
-            <q-btn @click="cancel" color="secondary" label="Cancel" class="q-ma-sm" />
+            <q-btn @click="cancel" color="secondary" label="Back" class="q-ma-sm" />
             <q-btn @click="add" color="primary" label="Submit" class="q-ma-sm" />
         </div>
     </generic-role>

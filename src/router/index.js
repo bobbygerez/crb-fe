@@ -36,7 +36,7 @@ export default function ({ store }/* { store, ssrContext } */) {
           message: 'You need to login.'
         })
         LocalStorage.clear()
-        next('/login')
+        next('/')
       } else {
         next()
       }

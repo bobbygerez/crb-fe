@@ -10,6 +10,10 @@ import roles from './roles'
 import chartAccounts from './chart-accounts'
 import companies from './companies'
 import tAccounts from './t-accounts'
+import accessRights from './access-rights'
+import branches from './branches'
+import provinces from './provinces'
+import cities from './cities'
 import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex)
 
@@ -29,7 +33,11 @@ export default function (/* { ssrContext } */) {
       roles,
       chartAccounts,
       companies,
-      tAccounts
+      tAccounts,
+      accessRights,
+      branches,
+      provinces,
+      cities
     },
     plugins: [createPersistedState()]
   })

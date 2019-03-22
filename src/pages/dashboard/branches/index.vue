@@ -1,21 +1,24 @@
 <template>
 <div>
-    <generic-table :data="serverData" :columns="columns" :pagination="serverPagination" @serverside-request="request" @search-change="filter = $event" :search-field="filter" @selected="selected" ref="accessRightTable" :title="'All Access Rights'" :loading="loading" :search-placeholder="'Search Access Rights...'" />
-    <q-page-sticky position="bottom" :offset="$q.theme === 'mat' ? [16, 16] : [16, 16]" v-bind="$attrs">
-        <transition appear enter-active-class="animated fadeInUpBig" leave-active-class="animated fadeOutDownBig">
-            <q-btn-group>
-                <q-btn icon="add" color="primary" @click="add">
-                    <q-tooltip :delay="1000" :offset="[0, 10]">New Access Right</q-tooltip>
-                </q-btn>
-                <q-btn icon="edit" color="primary" @click="edit">
-                    <q-tooltip :delay="1000" :offset="[0, 10]">Edit User</q-tooltip>
-                </q-btn>
-                <q-btn icon="delete" color="primary" @click="del">
-                    <q-tooltip :delay="1000" :offset="[0, 10]">Delete User</q-tooltip>
-                </q-btn>
-            </q-btn-group>
-        </transition>
-    </q-page-sticky>
+    <div>
+        <generic-table :data="serverData" :columns="columns" :pagination="serverPagination" @serverside-request="request" @search-change="filter = $event" :search-field="filter" @selected="selected" ref="roleTable" :title="'All Branches'" :loading="loading" :search-placeholder="'Search Branch...'">
+        </generic-table>
+        <q-page-sticky position="bottom" :offset="$q.theme === 'mat' ? [16, 16] : [16, 16]" v-bind="$attrs">
+            <transition appear enter-active-class="animated fadeInUpBig" leave-active-class="animated fadeOutDownBig">
+                <q-btn-group>
+                    <q-btn icon="add" color="primary" @click="add">
+                        <q-tooltip :delay="1000" :offset="[0, 10]">Add User</q-tooltip>
+                    </q-btn>
+                    <q-btn icon="edit" color="primary" @click="edit">
+                        <q-tooltip :delay="1000" :offset="[0, 10]">Edit User</q-tooltip>
+                    </q-btn>
+                    <q-btn icon="delete" color="primary" @click="del">
+                        <q-tooltip :delay="1000" :offset="[0, 10]">Delete User</q-tooltip>
+                    </q-btn>
+                </q-btn-group>
+            </transition>
+        </q-page-sticky>
+    </div>
 </div>
 </template>
 
@@ -25,17 +28,21 @@ import {
   debounce
 } from 'quasar'
 import {
-  values,
-  head
+  head,
+  values
 } from 'lodash'
 import {
-  mapActions, mapState
+  mapState,
+  mapActions
 } from 'vuex'
 export default {
+  components: {
+    genericTable
+  },
   data () {
     return {
-      debouncedFunction: '',
       selectedValue: [],
+      debouncedFunction: '',
       loading: false,
       options: [5, 10, 15, 20],
       serverPagination: {
@@ -51,23 +58,38 @@ export default {
         align: 'left'
       },
       {
-        name: 'description',
-        label: 'Description',
-        field: 'description',
+        name: 'initial',
+        label: 'Initial',
+        field: 'initial',
+        align: 'left'
+      },
+      {
+        name: 'bir',
+        label: 'BIR',
+        field: 'bir',
+        align: 'left'
+      },
+      {
+        name: 'tel',
+        label: 'Tel. #',
+        field: 'tel',
+        align: 'left'
+      },
+      {
+        name: 'created_at',
+        label: 'Created At',
+        field: 'created_at',
         align: 'left'
       }
       ],
       filter: ''
     }
   },
-  components: {
-    genericTable
-  },
   computed: {
-    ...mapState('accessRights', ['accessRight'])
+    ...mapState('roles', ['role'])
   },
   methods: {
-    ...mapActions('accessRights', ['setAccessRight']),
+    ...mapActions('branches', ['setBranch']),
     selected (val) {
       this.selectedValue = val
     },
@@ -75,30 +97,30 @@ export default {
       if (this.selectedValue.length > 0) {
         let optimusId = head(this.selectedValue).optimus_id
         this.$axios
-          .get(`/access_rights/${optimusId}?id=${optimusId}`)
+          .get(`/dashboard_role/${optimusId}/edit?id=${optimusId}`)
           .then(res => {
-            this.setAccessRight(res.data.accessRight)
+            this.setRole(res.data.role)
             this.$q.notify({
               color: 'negative',
               icon: 'delete',
-              message: `Delete ${res.data.accessRight.name}?`,
+              message: `Delete ${this.role.name}?`,
               actions: [{
                 label: 'OK',
                 textColor: 'white',
                 handler: () => {
                   this.$axios
-                    .delete(`/access_rights/${this.accessRight.optimus_id}?id=${this.accessRight.optimus_id}`)
+                    .delete(`/dashboard_role/${this.role.optimus_id}?id=${this.role.optimus_id}`)
                     .then(res => {
                       this.$q.notify({
                         color: 'positive',
                         icon: 'check',
-                        message: `${this.accessRight.name}  deleted successfully`
+                        message: `${this.role.name}  deleted successfully`
                       })
                       this.request({
                         pagination: this.serverPagination,
                         filter: this.filter
                       })
-                      this.$refs.accessRightTable.selected = []
+                      this.$refs.roleTable.selected = []
                     })
                     .catch(err => {
                       console.log(`${err.response.data.message}`)
@@ -116,30 +138,37 @@ export default {
         this.$q.notify({
           color: 'negative',
           icon: 'warning',
-          message: 'Please select Access Right to delete.'
+          message: 'Please select a role to delete.'
         })
       }
     },
     add () {
+      this.setBranch({
+        name: '',
+        code: '',
+        initial: '',
+        bir: '',
+        created_at: ''
+      })
       this.$router.push({
-        path: `/dashboard/settings/access-rights/create`
+        path: `/dashboard/settings/branches/create`
       })
     },
     edit () {
       if (this.selectedValue.length > 0) {
         let optimusId = head(this.selectedValue).optimus_id
-        this.$axios.get(`/access_rights/${optimusId}/edit?id=${optimusId}`)
+        this.$axios.get(`/dashboard_role/${optimusId}/edit?id=${optimusId}`)
           .then(res => {
-            this.setAccessRight(res.data.accessRight)
+            this.setRole(res.data.role)
             this.$router.push({
-              path: `/dashboard/settings/access-rights/${optimusId}`
+              path: `/dashboard/settings/roles/${optimusId}`
             })
           })
       } else {
         this.$q.notify({
           color: 'negative',
           icon: 'warning',
-          message: 'Please select Access Right to edit.'
+          message: 'Please select a role to edit.'
         })
       }
     },
@@ -150,12 +179,12 @@ export default {
   mounted () {
     this.debouncedFunction = debounce((props) => {
       this.loading = true
-      this.$axios.get(`/access_rights?page=${props.pagination.page}&perPage=${props.pagination.rowsPerPage}&filter=${this.filter}`)
+      this.$axios.get(`/branches?page=${props.pagination.page}&perPage=${props.pagination.rowsPerPage}&filter=${this.filter}`)
         .then(res => {
           this.serverPagination = props.pagination
-          this.serverData = values(res.data.accessRights.data)
-          this.serverPagination.rowsNumber = res.data.accessRights.total
-          this.lastPage = res.data.accessRights.last_page
+          this.serverData = values(res.data.branches.data)
+          this.serverPagination.rowsNumber = res.data.branches.total
+          this.lastPage = res.data.branches.last_page
           this.loading = false
         })
         .catch(error => {

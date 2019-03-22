@@ -8,10 +8,10 @@ export default {
     name: '',
     account_code: '',
     account_display: '',
-    remarks: '',
     taccount_id: ''
   },
   parentAccount: {
     name: ''
-  }
+  },
+  searchChartAccount: ''
 }

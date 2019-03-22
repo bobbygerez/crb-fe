@@ -18,3 +18,7 @@ export const setTAccountId = (state, payload) => {
 export const setParentAccount = (state, payload) => {
   state.parentAccount = payload
 }
+
+export const setSearchChartAccount = (state, payload) => {
+  state.searchChartAccount = payload
+}

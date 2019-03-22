@@ -104,10 +104,11 @@ export default {
             this.setRole(res.data.role)
             this.$q.notify({
               color: 'negative',
-              icon: 'warning',
+              icon: 'delete',
               message: `Delete ${this.role.name}?`,
               actions: [{
                 label: 'OK',
+                textColor: 'white',
                 handler: () => {
                   this.$axios
                     .delete(`/dashboard_role/${this.role.optimus_id}?id=${this.role.optimus_id}`)
@@ -153,7 +154,7 @@ export default {
         }
       })
       this.$router.push({
-        path: `/dashboard/role`
+        path: `/dashboard/settings/roles/create`
       })
     },
     edit () {
@@ -163,7 +164,7 @@ export default {
           .then(res => {
             this.setRole(res.data.role)
             this.$router.push({
-              path: `/dashboard/role/${optimusId}`
+              path: `/dashboard/settings/roles/${optimusId}`
             })
           })
       } else {

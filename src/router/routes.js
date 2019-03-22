@@ -9,6 +9,11 @@ const routes = [
     ]
   },
   {
+    path: '/dashboard/home',
+    redirect: '/dashboard'
+  },
+
+  {
     path: '/catalog',
     component: () => import('layouts/MyLayout.vue'),
     children: [
@@ -84,7 +89,7 @@ const routes = [
     ]
   },
   {
-    path: '/dashboard/roles',
+    path: '/dashboard/settings/roles',
     meta: {
       needAuth: true
     },
@@ -94,7 +99,7 @@ const routes = [
     ]
   },
   {
-    path: '/dashboard/role',
+    path: '/dashboard/settings/roles/create',
     meta: {
       needAuth: true
     },
@@ -104,7 +109,7 @@ const routes = [
     ]
   },
   {
-    path: '/dashboard/role/:id',
+    path: '/dashboard/settings/roles/:id',
     meta: {
       needAuth: true
     },
@@ -134,7 +139,7 @@ const routes = [
     ]
   },
   {
-    path: '/dashboard/access-rights',
+    path: '/dashboard/settings/access-rights',
     meta: {
       needAuth: true
     },
@@ -144,13 +149,23 @@ const routes = [
     ]
   },
   {
-    path: '/dashboard/transactions/access-right/create',
+    path: '/dashboard/settings/access-rights/create',
     meta: {
       needAuth: true
     },
     component: () => import('layouts/Dashboard.vue'),
     children: [
       { path: '', component: () => import('pages/dashboard/access-rights/add.vue') }
+    ]
+  },
+  {
+    path: '/dashboard/settings/access-rights/:id',
+    meta: {
+      needAuth: true
+    },
+    component: () => import('layouts/Dashboard.vue'),
+    children: [
+      { path: '', component: () => import('pages/dashboard/access-rights/edit.vue') }
     ]
   },
   {
@@ -174,7 +189,7 @@ const routes = [
     ]
   },
   {
-    path: '/dashboard/chart-of-accounts',
+    path: '/dashboard/settings/chart-of-accounts',
     meta: {
       needAuth: true
     },
@@ -184,7 +199,7 @@ const routes = [
     ]
   },
   {
-    path: '/dashboard/chart-of-account',
+    path: '/dashboard/settings/chart-of-accounts/create',
     meta: {
       needAuth: true
     },
@@ -194,13 +209,33 @@ const routes = [
     ]
   },
   {
-    path: '/dashboard/chart-of-accounts/:id',
+    path: '/dashboard/settings/chart-of-accounts/:id',
     meta: {
       needAuth: true
     },
     component: () => import('layouts/Dashboard.vue'),
     children: [
       { path: '', component: () => import('pages/dashboard/chart-accounts/edit.vue') }
+    ]
+  },
+  {
+    path: '/dashboard/settings/branches',
+    meta: {
+      needAuth: true
+    },
+    component: () => import('layouts/Dashboard.vue'),
+    children: [
+      { path: '', component: () => import('pages/dashboard/branches/index.vue') }
+    ]
+  },
+  {
+    path: '/dashboard/settings/branches/create',
+    meta: {
+      needAuth: true
+    },
+    component: () => import('layouts/Dashboard.vue'),
+    children: [
+      { path: '', component: () => import('pages/dashboard/branches/add.vue') }
     ]
   },
   {

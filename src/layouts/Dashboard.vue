@@ -7,7 +7,7 @@
             </q-btn>
 
             <q-toolbar-title>
-                {{ user.firstname }} {{ user.lastname }}
+                CRB PLUS
             </q-toolbar-title>
             <q-btn flat v-if="token != ''" @click="dialog = true">
                 <q-icon name="power_settings_new" />
@@ -22,27 +22,31 @@
     </q-header>
 
     <q-drawer v-model="leftDrawer" bordered content-class="bg-grey-2">
-
-        <q-list bordered class="q-mt-md">
+        <q-input dense debounce="500" class="q-pa-sm" label="Search Menu..." v-model="searchMenu">
+            <template v-slot:append>
+                <q-icon name="search" />
+            </template>
+        </q-input>
+        <q-list>
             <template v-for="(menu, i) in menus">
-                <q-expansion-item  expand-separator :label="menu.name" :key="i" v-if="menu.all_children.length > 0" >
+                <q-expansion-item expand-separator :label="menu.name" :key="i" v-if="menu.all_children.length > 0" >
                     <template v-for="(submenu, a) in menu.all_children">
-                        <q-expansion-item  :header-inset-level=".5" expand-separator :label="submenu.name" :key="a" v-if="submenu.all_children.length > 0" :to="`/dashboard/${submenu.slug_name}`" exact>
+                        <q-expansion-item :header-inset-level=".5" expand-separator :label="submenu.name" :key="a" v-if="submenu.all_children.length > 0" :to="`/dashboard/${submenu.path}`" exact>
                             <template v-for="(furtherMenu, b) in submenu.all_children">
-                                <q-expansion-item  switch-toggle-side dense-toggle :label="furtherMenu.name" :header-inset-level="1" :content-inset-level="2" :key="b" v-if="furtherMenu.all_children.length > 0">
+                                <q-expansion-item switch-toggle-side dense-toggle :label="furtherMenu.name" :header-inset-level="1" :content-inset-level="2" :key="b" v-if="furtherMenu.all_children.length > 0">
                                 </q-expansion-item>
-                                <q-item  clickable v-ripple v-else :key="b" side :inset-level="1" :to="`/dashboard/${furtherMenu.path}`" exact>
+                                <q-item clickable v-ripple v-else :key="b" side :inset-level="1" :to="`/dashboard/${furtherMenu.path}`" exact>
                                     <q-item-section>{{ furtherMenu.name }}</q-item-section>
                                 </q-item>
                             </template>
                         </q-expansion-item>
-                        <q-item  clickable v-ripple v-else :key="a" side :inset-level=".5" :to="`/dashboard/${submenu.slug_name}`" exact>
+                        <q-item clickable v-ripple v-else :key="a" side :inset-level=".5" :to="`/dashboard/${submenu.path}`" exact>
                             <q-item-section>{{ submenu.name }}</q-item-section>
                         </q-item>
                     </template>
 
                 </q-expansion-item>
-                <q-item  clickable v-ripple v-else :key="i" >
+                <q-item clickable v-ripple v-else :key="i" :to="`/dashboard/${menu.path}`" exact>
                     <q-item-section>{{ menu.name }}</q-item-section>
                 </q-item>
             </template>
@@ -151,12 +155,21 @@ export default {
       } else {
         return cartLength
       }
+    },
+    searchMenu: {
+      get () {
+        return this.$store.getters['menus/searchMenu']
+      },
+      set (val) {
+        this.setSearchMenu(val)
+      }
     }
   },
   methods: {
     openURL,
     ...mapActions('global', ['setLeftDrawer']),
     ...mapActions('users', ['setToken', 'setUser', 'setDialogChangePassword']),
+    ...mapActions('menus', ['setSearchMenu', 'setMenus']),
     showPasswordModal () {
       this.setDialogChangePassword(true)
     },
@@ -178,6 +191,14 @@ export default {
           unSetAuthHeader()
           this.setToken('')
           this.setUser({})
+        })
+    }
+  },
+  watch: {
+    searchMenu (val) {
+      this.$axios.get(`/search-menus?string=${val}`)
+        .then(res => {
+          this.setMenus(res.data.menus)
         })
     }
   }

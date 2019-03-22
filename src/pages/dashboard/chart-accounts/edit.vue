@@ -45,7 +45,6 @@ export default {
   },
   computed: {
     ...mapState('chartAccounts', ['chartAccount', 'selectedChartAccount', 'parentAccount']),
-    ...mapState('companies', ['selectedCompany']),
     ...mapState('global', ['page', 'perPage', 'filter']),
     tAccounts () {
       return this.$store.getters['tAccounts/tAccounts'].map(e => {
@@ -61,7 +60,7 @@ export default {
     ...mapActions('chartAccounts', ['setChartAccount', 'setParentAccount', 'setChartAccounts', 'setTAccountId']),
     ...mapActions('tAccounts', ['setTAccounts']),
     getChartAccounts () {
-      this.$axios.get(`/chart_accounts?page=${this.page}&perPage=${this.perPage}&filter=${this.filter}&companyId=${this.selectedCompany.value}`)
+      this.$axios.get(`/chart_accounts?page=${this.page}&perPage=${this.perPage}&filter=${this.filter}`)
         .then(res => {
           this.setChartAccounts(res.data.chartAccounts)
         })
@@ -78,10 +77,9 @@ export default {
           message: `Please check the form fields.`
         })
       } else {
-        this.$axios.put(`chart_accounts/${this.selectedChartAccount}?id=${this.selectedChartAccount}`, {
-          company_id: this.chartAccount.company_id,
+        this.$axios.put(`chart_accounts/${this.selectedChartAccount}?account_codee=${this.selectedChartAccount}`, {
           taccount_id: this.chartAccount.taccount_id.value,
-          parent_id: this.chartAccount.parent_id,
+          parent_code: this.chartAccount.parent_code,
           name: this.chartAccount.name,
           account_code: this.chartAccount.account_code,
           account_display: this.chartAccount.account_display
@@ -103,12 +101,12 @@ export default {
       }
     },
     getParentChartAccount () {
-      this.$axios.get(`chart_accounts/create?id=${this.selectedChartAccount}`)
+      this.$axios.get(`chart_accounts/create?account_code=${this.selectedChartAccount}`)
         .then(res => {
           this.setParentAccount(res.data.parentAccount)
           this.setTAccounts(res.data.tAccounts)
         })
-      this.$axios.get(`chart_accounts/${this.selectedChartAccount}/edit?id=${this.selectedChartAccount}`)
+      this.$axios.get(`chart_accounts/${this.selectedChartAccount}/edit?account_code=${this.selectedChartAccount}`)
         .then(res => {
           this.setChartAccount(res.data.chartAccount)
           this.setTAccountId(
