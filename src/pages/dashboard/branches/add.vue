@@ -7,61 +7,85 @@
             </p>
         </div>
         <div class="col-6">
-            <q-input outlined v-model="branch.name" label="Name" class="q-ma-sm" />
+            <q-input outlined v-model="$v.branch.name.$model" label="Name" class="q-ma-sm" :error="$v.branch.name.$dirty&& !$v.branch.name.required" bottom-slots error-message="Branch name is required." />
         </div>
         <div class="col-6">
-            <q-input outlined v-model="branch.initial" label="Initial" class="q-ma-sm" />
-        </div>
-        <div class="col-6">
-            <q-input outlined v-model="branch.tel" label="Tel. #" class="q-ma-sm" />
-        </div>
-        <div class="col-6">
-            <q-input outlined v-model="branch.code" label="Branch Code" class="q-ma-sm" />
+            <q-input outlined v-model="$v.branch.initial.$model" label="Initial" class="q-ma-sm" :error="$v.branch.initial.$dirty&& !$v.branch.initial.required" bottom-slots error-message="Initial is required." />
         </div>
         <div class="col-4">
-            <q-select outlined v-model="branch.address.province_id" :options="provinces" label="Province" class="q-ma-sm" use-chips emit-value />
+            <q-input outlined v-model="$v.branch.tel.$model" label="Tel. #" class="q-ma-sm" :error="$v.branch.tel.$dirty&& !$v.branch.tel.required" bottom-slots error-message="Tel. # is required."/>
         </div>
         <div class="col-4">
-            <q-select outlined v-model="branch.address.city_id" :options="cities" label="City" class="q-ma-sm" use-chips emit-value />
+            <q-input outlined v-model="$v.branch.code.$model" label="Branch Code" class="q-ma-sm" :error="$v.branch.code.$dirty&& !$v.branch.code.required" bottom-slots error-message="Branch code is required."/>
         </div>
         <div class="col-4">
-            <q-select outlined v-model="branch.address.brgy_id" :options="brgys" label="Brgys" class="q-ma-sm" use-chips emit-value />
+            <q-input outlined v-model="$v.branch.bir.$model" label="BIR #" class="q-ma-sm" :error="$v.branch.bir.$dirty&& !$v.branch.bir.required" bottom-slots error-message="BIR is required."/>
+        </div>
+        <div class="col-4">
+            <q-select outlined v-model="$v.selectedProvince.$model" :options="provinces" label="Province" class="q-ma-sm" use-chips emit-value :error="$v.selectedProvince.$dirty&& !$v.selectedProvince.required" bottom-slots error-message="Province is required."/>
+        </div>
+        <div class="col-4">
+            <q-select outlined v-model="$v.selectedCity.$model" :options="cities" label="City" class="q-ma-sm" use-chips emit-value :error="$v.selectedCity.$dirty&& !$v.selectedCity.required" bottom-slots error-message="City is required."/>
+        </div>
+        <div class="col-4">
+            <q-select outlined v-model="$v.selectedBrgy.$model" :options="brgys" label="Brgys" class="q-ma-sm" use-chips emit-value :error="$v.selectedBrgy.$dirty&& !$v.selectedBrgy.required" bottom-slots error-message="Brgy is required."/>
         </div>
         <div class="col-12">
-            <q-input type="textarea" outlined v-model="branch.address.street_lot_blk" label="Blk, Lot and Street No." class="q-ma-sm"/>
+            <q-input type="textarea" outlined v-model="$v.branch.address.street_lot_blk.$model" label="Blk, Lot and Street No." class="q-ma-sm" :error="$v.branch.address.street_lot_blk.$dirty&& !$v.branch.address.street_lot_blk.required" bottom-slots error-message="Brgy is required."/>
         </div>
+    </div>
+    <div class="col-12">
+        <q-btn @click="cancel" color="secondary" label="Back" class="q-ma-sm" />
+        <q-btn @click="add" color="primary" label="Submit" class="q-ma-sm" />
     </div>
 </div>
 </template>
 
 <script>
 import {
-  required,
-  numeric
+  required
 } from 'vuelidate/lib/validators'
 import {
   mapState,
   mapActions
 } from 'vuex'
-import { find } from 'lodash'
+import {
+  find
+} from 'lodash'
 export default {
   validations: {
-    chartAccount: {
+    branch: {
       name: {
         required
 
       },
-      account_code: {
-        required,
-        numeric
-      },
-      account_display: {
+      initial: {
         required
 
       },
-      taccount_id: {
+      tel: {
         required
+      },
+      code: {
+        required
+      },
+      bir: {
+        required
+      },
+      address: {
+        street_lot_blk: {
+          required
+        }
       }
+    },
+    selectedProvince: {
+      required
+    },
+    selectedCity: {
+      required
+    },
+    selectedBrgy: {
+      required
     }
   },
   computed: {
@@ -75,15 +99,52 @@ export default {
         }
       })
     },
+    cities () {
+      return this.$store.getters['cities/cities'].map(e => {
+        return {
+          label: e.description,
+          value: e.id
+        }
+      })
+    },
+    brgys () {
+      return this.$store.getters['brgys/brgys'].map(e => {
+        return {
+          label: e.description,
+          value: e.id
+        }
+      })
+    },
     selectedProvince: {
       get () {
-        return find(this.editProvinces, {
-          value: this.editUser.address.province_id
+        return find(this.provinces, {
+          value: this.branch.address.province_id
         })
       },
       set (val) {
-        this.setEditProvinceId(val)
+        this.setProvinceId(val)
         this.getCities(val)
+      }
+    },
+    selectedCity: {
+      get () {
+        return find(this.cities, {
+          value: this.branch.address.city_id
+        })
+      },
+      set (val) {
+        this.setCityId(val)
+        this.getBrgys(val)
+      }
+    },
+    selectedBrgy: {
+      get () {
+        return find(this.brgys, {
+          value: this.branch.address.brgy_id
+        })
+      },
+      set (val) {
+        this.setBrgyId(val)
       }
     }
 
@@ -91,6 +152,9 @@ export default {
   methods: {
     ...mapActions('chartAccounts', ['setChartAccount', 'setParentAccount', 'setChartAccounts']),
     ...mapActions('provinces', ['setProvinces']),
+    ...mapActions('cities', ['setCities']),
+    ...mapActions('brgys', ['setBrgys']),
+    ...mapActions('branches', ['setProvinceId', 'setCityId', 'setBrgyId']),
     getProvinces () {
       this.$axios.get('/provinces').then(res => {
         this.setProvinces(res.data.provinces)
@@ -118,26 +182,20 @@ export default {
           message: `Please check the form fields.`
         })
       } else {
-        this.$axios.post(`chart_accounts`, {
-          taccount_id: this.chartAccount.taccount_id.value,
-          parent_code: this.selectedChartAccount,
-          name: this.chartAccount.name,
-          account_code: this.chartAccount.account_code,
-          account_display: this.chartAccount.account_display
-        }).then(res => {
+        this.$axios.post(`branches`, this.branch).then(res => {
           this.$q.notify({
             color: 'positive',
             icon: 'check',
-            message: `${this.chartAccount.name} created successfully.`
+            message: `${this.branch.name} created successfully.`
           })
-          this.getChartAccounts()
-          this.setChartAccount({
-            name: '',
-            account_code: '',
-            account_display: '',
-            remarks: '',
-            taccount_id: ''
-          })
+          // this.getChartAccounts()
+          // this.setChartAccount({
+          //   name: '',
+          //   account_code: '',
+          //   account_display: '',
+          //   remarks: '',
+          //   taccount_id: ''
+          // })
         })
       }
     },

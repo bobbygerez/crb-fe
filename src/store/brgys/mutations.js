@@ -1,3 +1,3 @@
-export const setBranch = (state, payload) => {
-  state.branch = payload
+export const setBrgys = (state, payload) => {
+  state.brgys = payload
 }

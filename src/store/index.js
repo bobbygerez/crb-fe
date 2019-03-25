@@ -14,6 +14,7 @@ import accessRights from './access-rights'
 import branches from './branches'
 import provinces from './provinces'
 import cities from './cities'
+import brgys from './brgys'
 import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex)
 
@@ -37,7 +38,8 @@ export default function (/* { ssrContext } */) {
       accessRights,
       branches,
       provinces,
-      cities
+      cities,
+      brgys
     },
     plugins: [createPersistedState()]
   })

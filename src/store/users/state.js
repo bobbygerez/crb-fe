@@ -4,9 +4,7 @@ export default {
   editCities: [],
   editProvinces: [],
   roles: [],
-  editUser: {
-    fullname: ''
-  },
+
   users: {
     current_page: 1,
     data: []
