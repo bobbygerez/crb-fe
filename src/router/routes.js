@@ -69,7 +69,7 @@ const routes = [
     ]
   },
   {
-    path: '/dashboard/users',
+    path: '/dashboard/settings/users',
     meta: {
       needAuth: true
     },
@@ -230,6 +230,16 @@ const routes = [
   },
   {
     path: '/dashboard/settings/branches/create',
+    meta: {
+      needAuth: true
+    },
+    component: () => import('layouts/Dashboard.vue'),
+    children: [
+      { path: '', component: () => import('pages/dashboard/branches/add.vue') }
+    ]
+  },
+  {
+    path: '/dashboard/settings/branches/:id',
     meta: {
       needAuth: true
     },

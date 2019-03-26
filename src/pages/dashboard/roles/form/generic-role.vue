@@ -4,18 +4,17 @@
         <div class="row">
             <div class="col-12">
                 <p class="text-h5 q-ma-sm">
-                    <q-icon :name="icon" color="grey" /> {{ role.name }}
+                    <q-icon :name="icon" color="grey" /> {{ locRole.name }}
                 </p>
             </div>
             <div class="col-12">
-
-                <q-input outlined v-model="$v.role.name.$model" label="Role Name" class="q-ma-sm" :error="$v.role.name.$dirty && !$v.role.name.required" bottom-slots error-message="Role name is required." />
+                <q-input outlined debounced="500" v-model="$v.locRole.name.$model" label="Role Name" class="q-ma-sm" :error="$v.locRole.name.$dirty && !$v.locRole.name.required" bottom-slots error-message="Role name is required." />
             </div>
             <div class="col-12">
                 <q-select outlined v-model="$v.childSelectedRoles.$model" :options="roles" label="Supervisor" class="q-ma-sm" :error="$v.childSelectedRoles.$dirty && !$v.childSelectedRoles.valRole" bottom-slots error-message="Supervisor role is required." />
             </div>
             <div class="col-12">
-                <q-input type="textarea" outlined v-model="$v.role.description.$model" label="Description" class="q-ma-sm" :error="$v.role.description.$dirty &&!$v.role.description.required" bottom-slots error-message="Description is required." />
+                <q-input type="textarea" debounced="500" outlined v-model="$v.locRole.description.$model" label="Description" class="q-ma-sm" :error="$v.locRole.description.$dirty &&!$v.locRole.description.required" bottom-slots error-message="Description is required." />
             </div>
             <slot></slot>
         </div>
@@ -28,14 +27,13 @@ const valRole = (value) => value.label !== undefined
 import {
   required
 } from 'vuelidate/lib/validators'
+import {
+  find, head
+} from 'lodash'
 
 export default {
   props: {
     role: {
-      type: [Array, Object],
-      default: null
-    },
-    selectedRoles: {
       type: [Array, Object],
       default: null
     },
@@ -44,8 +42,13 @@ export default {
       default: null
     }
   },
+  data () {
+    return {
+      locRole: this.role
+    }
+  },
   validations: {
-    role: {
+    locRole: {
       name: {
         required
       },
@@ -55,6 +58,74 @@ export default {
     },
     childSelectedRoles: {
       valRole
+    }
+  },
+  methods: {
+    add () {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        this.$q.notify({
+          color: 'negative',
+          icon: 'warning',
+          message: `Please check the fields.`
+        })
+      } else {
+        let role = []
+        role.push({
+          name: this.role.name,
+          description: this.role.description,
+          parent_id: this.childSelectedRoles.value
+        })
+        this.$axios.post(`/dashboard_role`, head(role)).then(res => {
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `${this.role.name} updated successfully.`
+          })
+        }).catch(err => {
+          this.$q.notify({
+            color: 'negative',
+            icon: 'warning',
+            message: `${err.response.data.message}`
+          })
+        })
+      }
+    },
+    update () {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        this.$q.notify({
+          color: 'negative',
+          icon: 'warning',
+          message: `Please check the fields.`
+        })
+      } else {
+        let role = []
+        let parentId = ''
+        if (typeof this.role.parent_id === 'object') {
+          parentId = this.role.parent_id.value
+        } else {
+          parentId = this.role.parent_id
+        }
+        role.push({
+          name: this.role.name,
+          description: this.role.description,
+          parent_id: parentId
+        })
+        this.$axios.put(`/dashboard_role/${this.role.optimus_id}?id=${this.role.optimus_id}`, head(role)).then(res => {
+          this.$q.notify({
+            color: 'positive',
+            icon: 'check',
+            message: `${this.role.name} updated successfully.`
+          })
+        }).catch(err => {
+          this.$q.notify({
+            color: 'negative',
+            icon: 'warning',
+            message: err.response.data.message
+          })
+        })
+      }
     }
   },
   computed: {
@@ -67,16 +138,41 @@ export default {
         })
         e.all_children && e.all_children.forEach(cb)
       }
+
       this.$store.getters['roles/roles'].all_children.forEach(cb)
       return res
     },
     childSelectedRoles: {
       get () {
-        return this.selectedRoles
+        if (typeof this.role.parent_id === 'object') {
+          var x = find(this.roles, {
+            value: this.role.parent_id.value
+          })
+          if (typeof x === 'object') {
+            return x
+          } else {
+            return {
+              value: ''
+            }
+          }
+        } else {
+          return find(this.roles, {
+            value: this.role.parent_id
+          })
+        }
       },
       set (val) {
-        this.$emit('change', val)
+        this.$emit('selected', val)
       }
+
+    }
+  },
+  watch: {
+    locRole: {
+      handler (val) {
+        this.$emit('change', val)
+      },
+      deep: true
     }
   }
 }

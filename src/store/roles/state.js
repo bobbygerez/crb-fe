@@ -1,5 +1,7 @@
 export default {
-  roles: [],
+  roles: {
+    all_children: []
+  },
   role: {
     name: '',
     description: '',

@@ -148,7 +148,13 @@ export default {
         code: '',
         initial: '',
         bir: '',
-        created_at: ''
+        created_at: '',
+        address: {
+          province_id: '',
+          city_id: '',
+          brgy_id: '',
+          street_lot_blk: ''
+        }
       })
       this.$router.push({
         path: `/dashboard/settings/branches/create`
@@ -157,18 +163,18 @@ export default {
     edit () {
       if (this.selectedValue.length > 0) {
         let optimusId = head(this.selectedValue).optimus_id
-        this.$axios.get(`/dashboard_role/${optimusId}/edit?id=${optimusId}`)
+        this.$axios.get(`/branches/${optimusId}?id=${optimusId}`)
           .then(res => {
-            this.setRole(res.data.role)
+            this.setBranch(res.data.branch)
             this.$router.push({
-              path: `/dashboard/settings/roles/${optimusId}`
+              path: `/dashboard/settings/branches/${optimusId}`
             })
           })
       } else {
         this.$q.notify({
           color: 'negative',
           icon: 'warning',
-          message: 'Please select a role to edit.'
+          message: 'Please select a branch to edit.'
         })
       }
     },

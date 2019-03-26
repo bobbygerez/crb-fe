@@ -1,6 +1,6 @@
 <template>
 <div class="q-ma-md">
-    <generic-role :role="role" :selected-roles="selectedRoles" @change="change" icon="edit">
+    <generic-role :role="role" :selected-roles="selectedRoles" @change="change" icon="edit"  ref="roleGen">
         <div class="col-12">
             <q-btn @click="cancel" color="secondary" label="Back" class="q-ma-sm" />
             <q-btn @click="update" color="primary" label="Update" class="q-ma-sm" />
@@ -16,10 +16,6 @@ import genericRole from 'pages/dashboard/roles/form/generic-role'
 import {
   required
 } from 'vuelidate/lib/validators'
-import {
-  find,
-  head
-} from 'lodash'
 import {
   mapState,
   mapActions
@@ -42,9 +38,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions('roles', ['setRoles', 'setRoleParentId']),
-    change (val) {
+    ...mapActions('roles', ['setRoles', 'setRoleParentId', 'setRole']),
+    selected (val) {
       this.setRoleParentId(val)
+    },
+    change (val) {
+      this.setRole(val)
     },
     create () {
       this.$axios.get('/dashboard_role/create')
@@ -56,41 +55,9 @@ export default {
       this.$router.go(-1)
     },
     update () {
-      this.$v.$touch()
-      if (this.$v.$invalid) {
-        this.$q.notify({
-          color: 'negative',
-          icon: 'warning',
-          message: `Please check the fields.`
-        })
-      } else {
-        let role = []
-        let parentId = ''
-        if (typeof this.role.parent_id === 'object') {
-          parentId = this.role.parent_id.value
-        } else {
-          parentId = this.role.parent_id
-        }
-        role.push({
-          name: this.role.name,
-          description: this.role.description,
-          parent_id: parentId
-        })
-        this.$axios.put(`/dashboard_role/${this.role.optimus_id}?id=${this.role.optimus_id}`, head(role)).then(res => {
-          this.$q.notify({
-            color: 'positive',
-            icon: 'check',
-            message: `${this.role.name} updated successfully.`
-          })
-        }).catch(err => {
-          this.$q.notify({
-            color: 'negative',
-            icon: 'warning',
-            message: err.response.data.message
-          })
-        })
-      }
+      this.$refs.roleGen.update()
     }
+
   },
   computed: {
     ...mapState('roles', ['role']),

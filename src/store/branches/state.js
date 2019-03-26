@@ -1,6 +1,6 @@
 export default {
   branch: {
-    name: 'New Branch',
+    name: '',
     code: '',
     initial: '',
     bir: '',
