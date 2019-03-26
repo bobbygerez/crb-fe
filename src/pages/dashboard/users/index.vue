@@ -93,7 +93,7 @@ export default {
             this.$q.notify({
               color: 'negative',
               icon: 'warning',
-              message: `Delete ${this.editUser.firstname} ${this.editUser.lastname}?`,
+              message: `Delete ${this.editUser.information.firstname} ${this.editUser.information.lastname}?`,
               actions: [{
                 label: 'OK',
                 handler: () => {
@@ -103,7 +103,7 @@ export default {
                       this.$q.notify({
                         color: 'positive',
                         icon: 'check',
-                        message: `${this.editUser.firstname} ${this.editUser.lastname} deleted successfully`
+                        message: `${this.editUser.firstname} ${this.editUser.information.lastname} deleted successfully`
                       })
                       this.request({
                         pagination: this.serverPagination,
