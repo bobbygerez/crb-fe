@@ -53,7 +53,7 @@ const intercept = (isIntercept) => {
  */
 const appMode = (type) => ({
   'live': 'http://18.221.83.197:40/api',
-  'test': 'http://127.0.0.1:8099/api',
+  'test': 'http://127.0.0.1:8095/api',
   'local': 'http://192.168.254.2:90/api',
   get mobile () {
     return Platform.is.cordova ? this.local : this.test

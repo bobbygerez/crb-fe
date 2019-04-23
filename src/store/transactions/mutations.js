@@ -94,7 +94,6 @@ export const setEditTransactionVatAmount = (state, payload) => {
   state.editTransaction.vat_amount = payload
 }
 
-
 export const transactionTransactableType = (state, payload) => {
   state.transaction.transactable_type = payload
 }

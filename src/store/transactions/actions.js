@@ -68,13 +68,13 @@ export const payeePayableType = ({
   commit
 }, payload) => {
   commit('payeePayableType', payload)
-} 
+}
 
 export const payeePayableId = ({
   commit
 }, payload) => {
   commit('payeePayableId', payload)
-} 
+}
 
 export const transactionTypeId = ({
   commit
@@ -198,13 +198,13 @@ export const purchaseReceived = ({
   commit
 }, payload) => {
   commit('purchaseReceived', payload)
-}  
+}
 
 export const entityItems = ({
   commit
 }, payload) => {
   commit('entityItems', payload)
-} 
+}
 
 export const setTax = ({
   commit

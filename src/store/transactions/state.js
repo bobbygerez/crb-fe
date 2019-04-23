@@ -1,11 +1,11 @@
 export default {
   editTransaction: {
-    payee : {
+    payee: {
       payable_type: '',
       payable_id: ''
     }
   },
-  tax:{
+  tax: {
     percentage: 0
   },
   titleTransaction: {

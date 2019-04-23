@@ -307,7 +307,7 @@ export default {
   },
   methods: {
     ...mapActions('transactions', ['setEditTransaction']),
-    addReceipt(){
+    addReceipt () {
       if (this.transaction.transactable_id !== '' && this.transaction.transactable_type !== '') {
         this.$router.push(`/dashboard/transactions/receipt`)
       } else {
@@ -397,10 +397,10 @@ export default {
 
     this.$on('edit', function (obj) {
       this.setEditTransaction(obj)
-      if(obj.transaction_type_id === 1){
+      if (obj.transaction_type_id === 1) {
         this.$router.push(`/dashboard/transactions/disbursement/edit`)
       }
-      if(obj.transaction_type_id === 2){
+      if (obj.transaction_type_id === 2) {
         this.$router.push(`/dashboard/transactions/receipt/edit`)
       }
     })
@@ -412,7 +412,7 @@ export default {
           pagination: this.serverPagination,
           filter: this.filter
         })
-        this.$store.dispatch("transactions/transactionTransactableId", val);
+        this.$store.dispatch('transactions/transactionTransactableId', val)
       }
     },
     'transaction.transactable_type' (val) {
@@ -423,7 +423,7 @@ export default {
           )
           .then(res => {
             this.$store.dispatch('transactions/userEntities', res.data.userEntities)
-            this.$store.dispatch("transactions/transactionTransactableType", val);
+            this.$store.dispatch('transactions/transactionTransactableType', val)
           })
       }
     }
